@@ -9,8 +9,9 @@
 *.log
 *.opensdf
 /TestResults/
-Debug/
 /ConsoleTest/
+/*/Debug/
+/*/Release/
 /ipch/
 /docs/Reference/html
 /Xihad/math3d.*
