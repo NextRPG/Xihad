@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2A0C6990-6D8E-4508-A6D1-8093F2797328}</ProjectGuid>
+    <RootNamespace>ScriptEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_all.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Destroyable.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Geometry.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageListener.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_renderSystem.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_string.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaAnimationCallback.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaComponent.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaComponentSystem.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaEventReceiver.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaMessageListener.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaUtil.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\PushComponentVisitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_all.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Component.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Destroyable.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_FileSystem.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameObject.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameScene.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Geometry.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_macro.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageListener.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_renderSystem.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_string.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaAnimationCallback.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaComponentSystem.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaComponentSystemFactory.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaEventReceiver.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaMessageListener.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaScriptMacro.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaUtil.h" />
+    <ClInclude Include="..\src\ScriptEngine\PushComponentVisitor.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

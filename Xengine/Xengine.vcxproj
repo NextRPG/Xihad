@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}</ProjectGuid>
+    <RootNamespace>SRPGWorld</RootNamespace>
+    <ProjectName>Xengine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;../Include;../src/GameWorld;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\CppBase\StringUtil.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\BaseComponentSystem.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\Destroyer.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\EngineStats.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\InheritenceTree.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\ManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\GameScene.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\MapProperties.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
+    <ClCompile Include="..\src\GameWorld\Message\BaseMessageListener.cpp" />
+    <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
+    <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp" />
+    <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CppBase\BitOperation.h" />
+    <ClInclude Include="..\src\CppBase\IteratorPair.h" />
+    <ClInclude Include="..\src\CppBase\StdMap.h" />
+    <ClInclude Include="..\src\CppBase\StringUtil.h" />
+    <ClInclude Include="..\src\CppBase\xassert.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Destroyable.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Destroyer.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\InheritenceChain.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitable.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitor.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ComponentFactory.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\dimension2d.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\EngineStats.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\irr_ptr.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Properties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\GameObjectDepends.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\InheritenceTree.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ICompositeUpdateHandler.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Property.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\quaternion.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\SColor.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\UserEvent.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiver.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\vector3d.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\matrix.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\TagListener.h" />
+    <ClInclude Include="..\src\GameWorld\Message\BaseMessageListener.h" />
+    <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
+    <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
+    <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />
+    <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h" />
+    <ClInclude Include="..\src\GameWorld\Message\MessageDispatcher.h" />
+    <ClInclude Include="..\src\GameWorld\Message\MessageListener.h" />
+    <ClInclude Include="..\src\GameWorld\Message\SourceFilter.h" />
+    <ClInclude Include="..\src\GameWorld\Message\TagTree.h" />
+    <ClInclude Include="..\src\GameWorld\Message\TreeNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CppBase\XiAssert.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystem.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemRegistry.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\CompositeUpdateHandler.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Component.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\GameWorld.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\GameObject.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\GameScene.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Process.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Timeline.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\Transform.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\GameWorld\Engine\Component.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\ComponentSystemRegistry.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\CompositeUpdateHandler.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\GameWorld.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\GameObject.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\Process.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\Timeline.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\Transform.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

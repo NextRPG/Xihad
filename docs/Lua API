@@ -1,0 +1,43 @@
+-- 导出类、函数说明：
+_G.c = function(str) return cstr(str) end
+
+-- 注册：组件、更新器、消息接听者
+_G.scene = -- GameScene的实例
+{
+	-- push/pop controller
+	pushController(),
+	popController(),
+
+	-- for obj in scene:objectsWithTag(tag) do something end
+	objectsWithTag(tag), 
+	findObject(objID),
+}
+
+_G.Time = 
+{ 
+	global, -- 全局时间，以秒为单位
+	change, -- 距离上一帧的时间
+	paused, -- 是否处于暂停状态 if true then change == 0
+}
+
+-- 通过GameObject.appendComponent(c"AnimatedMesh")返回
+-- 或者GameObject.findComponent(c"AnimatedMesh")返回
+-- C++ class
+AnimatedMeshComponent =
+{
+	playAnimation(name, loop = true),	
+	playAnimation(name, callback), 		--此时loop = false
+}
+
+-- 通过scene:createObject(), scene:findObject, scene:objectsWithTag返回
+-- C++ class
+GameObject = 
+{
+	-- component
+	-- tag
+	-- transform
+	-- parent, child
+}
+
+-- 写Component子类时
+self.object

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystem.h" />
+    <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.h" />
+    <ClInclude Include="..\src\WorldRender3D\Geometry.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimatedMeshComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\BillboardComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\CameraComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\MeshComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\LightComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\ParticleSystemComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\RenderComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsCache.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\AnimationClips.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGuiHandle.h" />
+    <ClInclude Include="..\src\WorldRender3D\CeguiEventReceiver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimatedMeshComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ParticleSystemComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\RenderComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp">
+      <Filter>AnimationClip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGuiHandle.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CeguiEventReceiver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Component">
+      <UniqueIdentifier>{8c937aae-59ba-4671-9757-1de779ae3291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AnimationClip">
+      <UniqueIdentifier>{2f768c6a-7676-4417-a74d-e87b1e6e4763}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

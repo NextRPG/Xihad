@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\AudioEngine\AudioComponent.cpp" />
+    <ClCompile Include="..\src\AudioEngine\AudioComponentSystem.cpp" />
+    <ClCompile Include="..\src\AudioEngine\AudioComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\AudioEngine\MusicComponent.cpp" />
+    <ClCompile Include="..\src\AudioEngine\SoundComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\AudioEngine\AudioComponent.h" />
+    <ClInclude Include="..\src\AudioEngine\AudioComponentSystem.h" />
+    <ClInclude Include="..\src\AudioEngine\AudioComponentSystemFactory.h" />
+    <ClInclude Include="..\src\AudioEngine\AudioEngineDefine.h" />
+    <ClInclude Include="..\src\AudioEngine\MusicComponent.h" />
+    <ClInclude Include="..\src\AudioEngine\SoundComponent.h" />
+  </ItemGroup>
+</Project>

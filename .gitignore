@@ -1,0 +1,17 @@
+*.user
+*.exe
+*.ilk
+*.pdb
+*.sdf
+*.suo
+*.psess
+*.vsp
+*.log
+*.opensdf
+/TestResults/
+Debug/
+/ConsoleTest/
+/ipch/
+/docs/Reference/html
+/Xihad/math3d.*
+*sublime*

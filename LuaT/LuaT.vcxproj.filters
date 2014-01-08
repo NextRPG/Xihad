@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\src\luaT\cpp_adapter.h" />
+    <ClInclude Include="..\src\luaT\cpp_adapter_func.h" />
+    <ClInclude Include="..\src\luaT\cpp_adapter_sign.h" />
+    <ClInclude Include="..\src\luaT\cpp_call_lua.h" />
+    <ClInclude Include="..\src\luaT\lua_call_cpp.h" />
+    <ClInclude Include="..\src\luaT\lua_ref.h" />
+    <ClInclude Include="..\src\luaT\luaT.h" />
+    <ClInclude Include="..\src\luaT\metatable.h" />
+    <ClInclude Include="..\src\luaT\metatable_data.h" />
+    <ClInclude Include="..\src\luaT\metatable_factory.h" />
+    <ClInclude Include="..\src\luaT\new_userdata.h" />
+    <ClInclude Include="..\src\luaT\null_type.h" />
+    <ClInclude Include="..\src\luaT\package.h" />
+    <ClInclude Include="..\src\luaT\param_types.h" />
+    <ClInclude Include="..\src\luaT\reserved.h" />
+    <ClInclude Include="..\src\luaT\same_type.h" />
+    <ClInclude Include="..\src\luaT\stack_ops.h" />
+    <ClInclude Include="..\src\luaT\table_ops.h" />
+    <ClInclude Include="..\src\luaT\tuple.h" />
+    <ClInclude Include="..\src\luaT\type_checker.h" />
+    <ClInclude Include="..\src\luaT\type_traits.h" />
+    <ClInclude Include="..\src\luaT\userdata_checker.h" />
+    <ClInclude Include="..\src\luaT\stack_memo.h" />
+    <ClInclude Include="..\src\luaT\xassert.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\luaT\lua_ref.cpp" />
+    <ClCompile Include="..\src\luaT\metatable.cpp" />
+    <ClCompile Include="..\src\luaT\metatable_factory.cpp" />
+    <ClCompile Include="..\src\luaT\new_userdata.cpp" />
+    <ClCompile Include="..\src\luaT\package.cpp" />
+    <ClCompile Include="..\src\luaT\reserved.cpp" />
+    <ClCompile Include="..\src\luaT\userdata_checker.cpp" />
+    <ClCompile Include="..\src\luaT\metatable_data.cpp" />
+  </ItemGroup>
+</Project>
