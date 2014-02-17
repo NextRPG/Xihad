@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioEngine", "AudioEngine\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dialogue", "Dialogue\Dialogue.vcxproj", "{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcxproj", "{D612E66F-9058-4E94-8D43-D851A6FFFDF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -71,6 +73,10 @@ Global
 		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Debug|Win32.Build.0 = Debug|Win32
 		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Release|Win32.ActiveCfg = Release|Win32
 		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Release|Win32.Build.0 = Release|Win32
+		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Debug|Win32.Build.0 = Debug|Win32
+		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Release|Win32.ActiveCfg = Release|Win32
+		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

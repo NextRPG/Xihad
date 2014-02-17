@@ -110,6 +110,7 @@
     <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\position2d.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Properties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />

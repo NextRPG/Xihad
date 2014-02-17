@@ -15,16 +15,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Dialogue\Dialogue.h">
+    <ClCompile Include="..\src\Dialogue\CBaseDialogueBuilder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CBaseTickMethod.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CTimerCondition.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Dialogue\DialogueAlignmenter.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Dialogue\DialogueRenderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Dialogue\DialogueAlignmenter.h">
+    <ClInclude Include="..\src\Dialogue\CBaseDialogueBuilder.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CBaseTickMethod.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CDialogue.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CTimerCondition.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\IDialogueBuilder.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITextElement.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITextElementFactory.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Dialogue\ITickMethod.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\STextSection.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
