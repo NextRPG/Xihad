@@ -2,7 +2,7 @@ local ease = {
 	in2out = {},
 	in2inout = {},
 }
-setmetatable(ease, ease)
+setmetatable(ease, ease)	-- for ease.__call
 
 function ease.linear(percent)
 	return percent
@@ -17,11 +17,13 @@ function ease.cubic(percent)
 end
 
 function ease.quart(percent)
-	return percent*percent*percent*percent
+	local quad = percent*percent
+	return quad*quad
 end
 
 function ease.quint(percent)
-	return percent*percent*percent*percent*percent
+	local quad = percent*percent
+	return quad*quad*percent
 end
 
 function ease.expo(percent)

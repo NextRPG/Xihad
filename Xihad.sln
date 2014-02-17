@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUIIrrlichtRenderer", "CE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioEngine", "AudioEngine\AudioEngine.vcxproj", "{C71D65BE-BF71-4D02-89F6-F096006FADC4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dialogue", "Dialogue\Dialogue.vcxproj", "{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -65,6 +67,10 @@ Global
 		{C71D65BE-BF71-4D02-89F6-F096006FADC4}.Debug|Win32.Build.0 = Debug|Win32
 		{C71D65BE-BF71-4D02-89F6-F096006FADC4}.Release|Win32.ActiveCfg = Release|Win32
 		{C71D65BE-BF71-4D02-89F6-F096006FADC4}.Release|Win32.Build.0 = Release|Win32
+		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Debug|Win32.Build.0 = Debug|Win32
+		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Release|Win32.ActiveCfg = Release|Win32
+		{E6F12128-8B82-4D34-A8A9-7A6F5E7A44B9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

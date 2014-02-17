@@ -20,18 +20,18 @@ fcomp:setColor(0, 0, 255)
 floor:concatTranslate(-15, -2.5, 0)
 
 local param = { 
-	mesh = "Assets/model/man2_x/2.b3d"
-	-- mesh  = "Assets/model/ninja.b3d", 
-	-- clips = "Assets/model/ninja.clip" 
+	-- mesh = "Assets/model/man2_x/2.b3d"
+	mesh  = "Assets/model/ninja.b3d", 
+	clips = "Assets/model/ninja.clip" 
 }
 
 local ninja = nil
 local anim = nil
 
-for i = 1, 1, -1 do
+for i = 10, 1, -1 do
 	ninja = scene:createObject(c("ninja"..i))
 	anim = ninja:appendComponent(c"AnimatedMesh", param)
-	-- anim:playAnimation(c"idle 1")
+	anim:playAnimation(c"idle 1")
 	anim:setTransitionTime(0.1)
 	-- anim:setAnimationSpeed(0)
 	-- anim:addShadow(nil, "zfail")
@@ -45,7 +45,7 @@ for i = 1, 1, -1 do
 end
 
 -- anim:addDebugState("skeleton", "aabb")
-ninja:concatUniScale(0.3);
+-- ninja:concatUniScale(0.3);
 ninja:resetTranslate(1, 0, 1)
 
 local moveParam = { speed = 20 }

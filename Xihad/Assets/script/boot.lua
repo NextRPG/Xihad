@@ -39,3 +39,4 @@ BattleManager:init(HeroManager, AIManager)
 CameraManager:init()
 LightManager:init()
 
+cursor:setVisible(true)
