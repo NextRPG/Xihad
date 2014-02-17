@@ -97,6 +97,9 @@ function BattleManager:init( manager1, manager2 )
 end
 
 function BattleManager:onMouseEvent( e )
+	if e.type == "lPressed" then
+		print(getSelectedObject())
+	end
 	self.stateMachine:update(getSelectedObject(), e.type)
 	return true
 end

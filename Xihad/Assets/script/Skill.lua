@@ -36,15 +36,6 @@ local Skill = {
 
 -- private
 
-local function checkSkill( hero, skill, character )
-	if skill.property == "P" or skill.property == "M" or skill.property == "N" then
-		return checkAttack( hero, character )
-	elseif skill.property == "H" then
-		return checkHeal( hero, character )
-	end
-	error("don't have that kind of skill")
-end
-
 local function checkAttack( hero, character )
 	if character and hero.team ~= character.team then
 		return true
@@ -58,6 +49,17 @@ local function checkHeal( hero, character )
 	end
 	return false
 end
+
+local function checkSkill( hero, skill, character )
+	if skill.property == "P" or skill.property == "M" or skill.property == "N" then
+		return checkAttack( hero, character )
+	elseif skill.property == "H" then
+		return checkHeal( hero, character )
+	end
+	error("don't have that kind of skill")
+end
+
+
 
 -- public
 

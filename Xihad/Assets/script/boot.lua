@@ -27,7 +27,7 @@ require "SkillDatabase"
 
 -- load save files
 local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsub("[^\\\/]$", "%1\\")
-local battle = dofile(CUR_DIR .. "\\Save\\maptest.battle")
+local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 
 -- init battle related manager
 Chessboard:init(battle.chessboard)
@@ -39,3 +39,4 @@ BattleManager:init(HeroManager, AIManager)
 CameraManager:init()
 LightManager:init()
 
+cursor:setVisible(true)

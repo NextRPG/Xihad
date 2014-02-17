@@ -91,7 +91,7 @@ function initCharacters( name , characters )
 		local temp = {
 			name = character.name,
 			x = math.floor(character.x / width),
-			y = math.floor(character.y / height)
+			y = map.height - math.floor(character.y / height)
 		}
 		for i,v in ipairs(character.properties) do
 			if tonumber(v) ~= nil then

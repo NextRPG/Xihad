@@ -25,7 +25,6 @@ function RandomStrategy:judgeSkill(  )
 	local skills = self.object:findComponent(c"Character").skills
 	for i,id in ipairs(skills) do
 		local skill = SkillManager:getSkill(id):findComponent(c"Skill")
-		if skill:
 	end	
 end
 
