@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="15" height="17" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="山崖" tilewidth="32" tileheight="32">
+  <image source="cliff.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="texture" tilewidth="32" tileheight="32">
+  <image source="texture.png" width="96" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="terrain" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="terrain" value="2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="terrain" value="3"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="5" name="character" tilewidth="32" tileheight="32">
+  <image source="character.png" width="32" height="70"/>
+  <tile id="0">
+   <properties>
+    <property name="maxHP" value="100"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="7" name="物品" tilewidth="32" tileheight="23">
+  <image source="treasure.png" width="32" height="23"/>
+ </tileset>
+ <layer name="map" width="15" height="17">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYMSCmZAwNnl0NQOBcbkLHybHHhYoJlcfCxnuYyHTXpZhoJcZB4apxyWPDxOjd7CHFbo+SvUCAB5IAko=
+  </data>
+ </layer>
+ <objectgroup name="AIs" width="15" height="17">
+  <object gid="6" x="224" y="320"/>
+  <object gid="6" x="321" y="256"/>
+  <object gid="6" x="161" y="257"/>
+  <object gid="6" x="289" y="96"/>
+  <object gid="6" x="161" y="96"/>
+ </objectgroup>
+ <objectgroup name="heros" width="15" height="17">
+  <object gid="5" x="129" y="481"/>
+  <object gid="5" x="193" y="481"/>
+  <object gid="5" x="257" y="480"/>
+ </objectgroup>
+ <objectgroup name="elements" width="15" height="17">
+  <object gid="7" x="448" y="160"/>
+  <object gid="4" x="978" y="363"/>
+ </objectgroup>
+</map>
