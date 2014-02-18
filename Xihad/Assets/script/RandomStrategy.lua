@@ -1,5 +1,6 @@
 local PathFinder = require "PathFinder"
 local SkillManager = require "SkillManager"
+local ScoreBoard = require "ScoreBoard"
 
 local RandomStrategy = {
 
@@ -14,11 +15,25 @@ end
 
 function RandomStrategy:judgeTile(  )
 	local character = self.object:findComponent(c"Character")
-	for i, p in ipairs(PathFinder) do
-		if not table.equal(p , character:tile()) then
-			return p
-		end
+	local names, distances, HPs = {}, {}, {}
+	PathFinder:getAllReachableTiles(character:tile())
+	print("haha")
+	for hero in scene:objectsWithTag("Hero") do
+		names[#names + 1] = hero:getID()
+
+		local temp = hero:findComponent(c"Character")
+		
+		distances[#distances + 1] = PathFinder:getCostAP(temp:tile())
+
+		HPs[#HPs + 1] = - temp:getProperty("currentHP")
 	end
+	local board = ScoreBoard.new{}
+	board:appendKey( names )
+	board:appendValue( distances, 1 )
+	board:appendValue( HPs, 0 )
+	local name = board:getResult()
+	character = scene:findObject(c(name)):findComponent(c"Character")
+	return PathFinder:getEnemyTile(character:tile(), character:getProperty("maxAP") )
 end
 
 function RandomStrategy:judgeSkill(  )

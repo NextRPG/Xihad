@@ -23,7 +23,7 @@ end
 function CameraManager:init(  )
 	
 	local camera = self:createCamera("mainCamera")
-	camera:concatTranslate(50, 75, 45)
+	camera:concatTranslate(50, 175, 45)
 	camera.ccom:setUpVector(math3d.vector(0, 0, 1))
 	camera.ccom:setTarget(math3d.vector(50, 0, 45))
 	self.camera = camera

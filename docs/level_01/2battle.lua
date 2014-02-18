@@ -112,4 +112,6 @@ local battle = {}
 battle.chessboard = chessboard
 battle.heros = heros
 battle.AIs = AIs
+battle.chessboard.height = map.height
+battle.chessboard.width = map.width
 serialize(battle)

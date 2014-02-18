@@ -36,7 +36,7 @@ function CharacterManager:createCharacter( character, i, j )
 
 	local test = characterObject:appendComponent(c"Character", character)
 	assert(test)
-	local tile = {y = i - 1, x = j}
+	local tile = {y = i, x = j}
 
 	local location = getPixelLocation(tile)
 	characterObject:concatTranslate(location.x, 0, location.z)
