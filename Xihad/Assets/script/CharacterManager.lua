@@ -91,7 +91,8 @@ end
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
-function CharacterManager:onSelectTile( object )
+function CharacterManager:onSelectTile( object, finder )
+	finder = finder or PathFinder 
 	local tile = object:findComponent(c"Tile")
 	local path = PathFinder:constructPathAndClean(tile)
 	local directions = Consts.directions

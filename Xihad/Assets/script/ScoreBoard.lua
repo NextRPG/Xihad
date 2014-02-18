@@ -32,7 +32,16 @@ function ScoreBoard:appendKey( list )
 	end
 end
 
-
+local standard = {}
+local function getIndex( num )
+	local index = 1
+	for k,v in pairs(standard) do
+		if v > num then
+			index = index + 1
+		end
+	end
+	return index
+end
 
 ---
 -- 加上一个列表和它所对应的ratio
@@ -42,8 +51,9 @@ end
 function ScoreBoard:appendValue( list, ratio )
 	self.ratio[#self.ratio + 1] = ratio
 	local columnIndex = #self.ratio	
-	for i,v in ipairs(list) do
-		self.data[v.name][columnIndex] = i
+	standard = table.copy(list)
+	for k,v in pairs(list) do
+		self.data[k][columnIndex] = getIndex(v)
 	end
 end
 
@@ -61,10 +71,11 @@ function ScoreBoard:getResult(  )
 			list.result = list.result + ratio * list[i]
 		end
 	end
+
 	local minName = ""
 	local minScore = 100000
 	for k,list in pairs(self.data) do
-		if list.result < maxScore then
+		if list.result < minScore then
 			minName, minScore = k, list.result
 		end
 	end

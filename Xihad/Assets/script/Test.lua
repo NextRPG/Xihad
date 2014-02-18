@@ -17,8 +17,10 @@
 -- 	end
 -- 	io.write("}\n")
 -- end	
-local a = {4, 5, 1}
-table.sort( a )
-for i,v in ipairs(a) do
+local a = { a = 4, b = 5, c = 1}
+table.sort( a , function ( x, y )
+	return x > y
+end)
+for i,v in pairs(a) do
 	print(i,v)
 end

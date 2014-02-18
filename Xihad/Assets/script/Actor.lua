@@ -44,7 +44,6 @@ function Actor:initThread(  )
 
 			manager.currentCharacter = object
 
-			PathFinder:getReachableTiles(tile, character:getProperty("maxAP"))
 			local point = strategy:judgeTile()
 			-- runAsync
 			manager:onSelectTile(Chessboard:tileAt(point))

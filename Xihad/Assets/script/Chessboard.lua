@@ -64,8 +64,8 @@ function Chessboard:init( map )
 		tile.terrain = TerrainDatabase[id]
 		self:createTile(tile)
 	end
-	Consts.COLS = map.height
-	Consts.ROWS = map.width
+	Consts.ROWS = map.height
+	Consts.COLS = map.width
 end
 
 ---

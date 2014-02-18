@@ -1,6 +1,6 @@
 --- 
--- 处理游戏中有关寻路的情景
--- @module name
+-- 处理游戏中使用广度寻路的情景
+-- @module PathFinder
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
@@ -36,16 +36,16 @@ end
 -- @int maxAP
 local directions = Consts.directions
 function PathFinder:getReachableTiles( start, maxAP, predicate )
+
 	assert(start) assert(maxAP)
 	assert(self.start == nil, "must clean before getReachableTiles")
 	start.leftAP = maxAP
 	self.start = start 
-	self[hash(start)] = start
 	local openQueue = queue.new()
 	openQueue:push(start)
 	local count = 0
 	while openQueue:empty() == false do
-		currentPoint = openQueue:pop()
+		local currentPoint = openQueue:pop()
 		self[hash(currentPoint)] = currentPoint
 		for k,v in pairs(directions) do
 
@@ -55,14 +55,13 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 
 			if inbound(point.x, point.y) and Chessboard:tileAt(point):findComponent(c"Tile"):canPass()
 				 and point.leftAP > 0 and self[hash(point)] == nil  then
-				 	if not predicate or predicate(point) then
 				 		openQueue:push(point)
-					end
 			end
 			count = count + 1
 		end
 	end
-	print("loop is " .. count)
+			print(count)
+
 	assert(self.start)
 	for k,v in pairs(self) do
 		if type(v) == "table" and k ~= "start" then
@@ -71,22 +70,29 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 	end
 end
 
+
+
+
 --- 
 -- 获得到达所有敌人处的最短路径
 -- @tab start
 -- @tparam CharacterManager manager
 local fakeMaxAP = 100000
-function PathFinder:getAllReachableTiles( start ) 
+function PathFinder:getAllEnemyPaths( start, team ) 
 	local fakeMaxAP = 100000
 	self.start = nil
-	self:getReachableTiles(start, fakeMaxAP)
+	for characterObject in scene:objectsWithTag(team) do
+		local goal = characterObject:findComponent(c"Character"):tile()
+
+	end
 end
 
-function PathFinder:getEnemyTile( finalTile, maxAP )
-	while fakeMaxAP - finalTile.prev.leftAP > maxAP do
-		finalTile = finalTile.prev
+function PathFinder:getEnemyTile( location, maxAP )
+	local tile = findTile(location)	
+	while fakeMaxAP - tile.prev.leftAP > maxAP do
+		tile = tile.prev
 	end
-	return finalTile.prev
+	return tile.prev
 end
 
 ---
