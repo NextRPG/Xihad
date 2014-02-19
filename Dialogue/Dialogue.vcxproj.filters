@@ -24,14 +24,26 @@
     <ClCompile Include="..\src\Dialogue\CTimerCondition.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CDialogueAlignmenter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CTextSection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CAlignmentDialogueBuilder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CDialogue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\IMetrics.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CAlignedTextSection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Dialogue\DialogueAlignmenter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Dialogue\DialogueRenderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Dialogue\CBaseDialogueBuilder.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -56,7 +68,43 @@
     <ClInclude Include="..\src\Dialogue\ITickMethod.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Dialogue\STextSection.hpp">
+    <ClInclude Include="..\src\Dialogue\STickEvent.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CDialogueAlignmenter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITextSectionSplitter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CLineBreak.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CTextSection.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CAlignmentDialogueBuilder.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITextAppearance.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\IDialogue.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\IMetrics.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CTickEventRedirection.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITickEvent.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\ITextContent.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CAlignedTextSection.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

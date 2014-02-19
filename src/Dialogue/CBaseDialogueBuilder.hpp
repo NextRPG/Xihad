@@ -1,41 +1,63 @@
 #pragma once
 #include "IDialogueBuilder.hpp"
+#include "STickEvent.hpp"
 #include <list>
+#include <vector>
+#include <Engine/irr_ptr.h>
 
 namespace xihad { namespace dialogue
 {
 	class ITextElement;
 	class ITextElementFactory;
+	class CAlignedTextSection;
 	class CBaseDialogueBuilder : public IDialogueBuilder
 	{
 	public:
-		explicit CBaseDialogueBuilder(ITextElementFactory* factory, unsigned widthLimit);
+		CBaseDialogueBuilder(ITextElementFactory* factory, unsigned widthLimit);
 
-		virtual void setWidthLimit(unsigned limit)
+		virtual ~CBaseDialogueBuilder();
+
+		virtual void setWidthLimit(unsigned limit) override
 		{
 			mWidthLimit = limit;
 		}
 
-		virtual unsigned getWidthLimit()
+		virtual unsigned getWidthLimit() override
 		{
 			return mWidthLimit;
 		}
 
-		virtual void addParagraph(const STextSection& paragraph);
-		virtual void addText(const STextSection& text);
-		virtual void addTickEvent(const std::wstring& event);
+		virtual bool newParagraph() override;
+		virtual void addText(const CTextSection& text) override;
+		virtual void addTickEvent(ITickEvent* event) override;
+		virtual IDialogue* build() override;
 
 	protected:
-		ITextElement* createTextElement(const std::string& fontPath, const std::wstring& txt);
+		ITextElementFactory* getTextElementFactory() const
+		{
+			return mFactory.get();
+		}
+
+		virtual CAlignedTextSection* onLinkTextSections() = 0;
+
+		virtual void onCreateTextElements(
+			CAlignedTextSection* aligned,
+			std::list<irr_ptr<ITextElement>>& outElements);
+
+		virtual IDialogue* onCreateDialogue(
+			std::list<irr_ptr<ITextElement>>& elements);
+
+		virtual void reset();
+
+	protected:
+		typedef std::list<CTextSection> SParagraph;
+		std::vector<SParagraph*> mParagraphs;
+		std::list<STickEvent> mTickEvents;
 
 	private:
-		struct SParagraph 
-		{
-			std::list<STextSection> texts;
-		};
-
 		unsigned mWidthLimit;
-		ITextElementFactory* mFactory;
+		unsigned mSectionCount;
+		irr_ptr<ITextElementFactory> mFactory;
 	};
 }}
 
