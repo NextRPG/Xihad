@@ -9,6 +9,13 @@ local queue = require "Queue"
 
 local PathFinder = {}
 
+function PathFinder.new( o )
+	assert(type(o) == "table", "prototype must be a table")
+	setmetatable(o, {__index = PathFinder})
+
+	return o
+end
+
 function hash( tile )
 	assert(tile.x)
 	return tile.x .. " " .. tile.y
@@ -70,44 +77,13 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 	end
 end
 
-
-
-
---- 
--- 获得到达所有敌人处的最短路径
--- @tab start
--- @tparam CharacterManager manager
-local fakeMaxAP = 100000
-function PathFinder:getAllEnemyPaths( start, team ) 
-	local fakeMaxAP = 100000
-	self.start = nil
-	for characterObject in scene:objectsWithTag(team) do
-		local goal = characterObject:findComponent(c"Character"):tile()
-
-	end
-end
-
-function PathFinder:getEnemyTile( location, maxAP )
-	local tile = findTile(location)	
-	while fakeMaxAP - tile.prev.leftAP > maxAP do
-		tile = tile.prev
-	end
-	return tile.prev
-end
-
----
--- 获得到达所有敌人的路径后，找到一个最能走到范围内的目标点
-function PathFinder:getCostAP( finalTile )
-	return self[hash(finalTile)].leftAP
-end
-
 ---
 -- 通过终点构建路径，路径用direction组成
 -- @tab tile
 -- @treturn {string, ...} path 
 function PathFinder:constructPath( tile )
-	local path = {}
-	local tile = findTile(tile)
+	local path = {}	
+	local tile = self[hash(tile)]
 	assert(tile)
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction

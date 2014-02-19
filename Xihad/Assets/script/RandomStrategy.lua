@@ -15,14 +15,14 @@ end
 
 function RandomStrategy:judgeTile(  )
 
-	local character = self.object:findComponent(c"Character")
+	local actor = self.object:findComponent(c"Character")
 	local names, distances, HPs = {}, {}, {}
 
-	for hero in scene:objectsWithTag("Hero") do
-		names[#names + 1] = hero:getID()
-		local temp = hero:findComponent(c"Character")
-		distances[hero:getID()] = GoalFinder:getCostAP(character:tile() ,temp:tile())
-		HPs[hero:getID()] = - temp:getProperty("currentHP")
+	for object in scene:objectsWithTag("Hero") do
+		names[#names + 1] = object:getID()
+		local enemy = object:findComponent(c"Character")
+		distances[object:getID()] = GoalFinder:getCostAP(actor:tile() ,enemy:tile())
+		HPs[object:getID()] = - enemy:getProperty("currentHP")
 	end	
 
 	local board = ScoreBoard.new{}
@@ -32,7 +32,9 @@ function RandomStrategy:judgeTile(  )
 	board:appendValue( HPs, 0.9 )
 
 	local name = board:getResult()
-	return scene:findObject(c(name)):findComponent(c"Character"):tile()
+	local enemy = scene:findObject(c(name)):findComponent(c"Character")
+	local tile = GoalFinder:getTargetTile( actor:tile(), enemy:tile(), actor:getProperty("maxAP"))
+	return tile
 end
 
 function RandomStrategy:judgeSkill(  )

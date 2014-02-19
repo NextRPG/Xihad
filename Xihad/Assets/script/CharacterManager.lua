@@ -92,9 +92,11 @@ end
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
 function CharacterManager:onSelectTile( object, finder )
-	finder = finder or PathFinder 
+	finder = finder or PathFinder 	
 	local tile = object:findComponent(c"Tile")
-	local path = PathFinder:constructPathAndClean(tile)
+	
+	local path = finder:constructPathAndClean(tile)
+
 	local directions = Consts.directions
 	local sequence = self.currentCharacter:findComponent(c"Sequence")
 	-- TODO：优化路径

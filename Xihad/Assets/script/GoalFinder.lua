@@ -5,8 +5,9 @@
 -- @license MIT
 -- @copyright NextRPG
 local Chessboard = require "Chessboard"
+local PathFinder = require "PathFinder"
 
-local GoalFinder = {}
+local GoalFinder = PathFinder.new{}
 
 function hash( tile )
 	assert(tile.x)
@@ -15,6 +16,11 @@ end
 
 function inbound( x, y )
 	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
+end
+
+-- 这种遍历查找重复的方法没有哈希表的方法快，但是也有好处(其实也没什么好处)
+function findTile( location )
+	return self[hash(location)]
 end
 
 local function findMin( list, scores )
@@ -27,10 +33,13 @@ local function findMin( list, scores )
 	return point, minScore
 end
 
-function GoalFinder:Astar( start, goal, maxAP )
+local fakeMaxAP = 100000
+local directions = Consts.directions
+function GoalFinder:Astar( start, goal )
+
 	assert(start) assert(goal)
 	self:cleanUp()
-	start.leftAP = maxAP
+	start.leftAP = fakeMaxAP -- fake
 	self.start = start 
 	local openSet, g_score, h_score, f_score  = {}, {}, {}, {}
 	openSet[hash(start)] = start
@@ -41,39 +50,42 @@ function GoalFinder:Astar( start, goal, maxAP )
 
 	while next(openSet) ~= nil do
 		local currentPoint = findMin(openSet, f_score)
+		openSet[hash(currentPoint)] = nil
+		self[hash(currentPoint)] = currentPoint
 		if hash(currentPoint) == hash(goal) then
 			return true
 		end
-		openSet[hash(currentPoint)] = nil
-		self[hash(currentPoint)] = currentPoint
 		
 		for k,v in pairs(directions) do
+
 			repeat 
 			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if self[hash(point)] ~= nil or not inbound(point) then
+			if self[hash(point)] ~= nil or not inbound(point.x, point.y) or not Chessboard:tileAt(point):findComponent(c"Tile"):canPass() then
 				break
 			end
-			tentative_g_score = g_score[hash(point)] + 1
 
-			local tentative_is_better = true
+
+			local tentative_g_score = g_score[hash(currentPoint)] + 1
+
 			if openSet[hash(point)] == nil or tentative_g_score < g_score[hash(point)] then
 				openSet[hash(point)] = point
 				g_score[hash(point)] = tentative_g_score
 				h_score[hash(point)] = math.abs(goal.y - point.y) + math.abs(goal.x - point.x)
-			 	f_score[hash(start)] = h_score[hash(start)] + g_score[hash(point)]
+			 	f_score[hash(point)] = h_score[hash(point)] + g_score[hash(point)]
 			end
 			until true
+
 		end
+
 	end
 	error("not a connected graph")
 end
 
-local fakeMaxAP = 100000
 function GoalFinder:getCostAP( start, goal )
-	self:Astar(start, goal, fakeMaxAP)
+	self:Astar(start, goal)
 	return self[hash(goal)].leftAP
 end
 
@@ -86,23 +98,4 @@ function GoalFinder:getTargetTile( start, goal, maxAP )
 	return tile.prev
 end
 
-function GoalFinder:constructPath( tile )
-	local path = {}
-	local tile = self[hash(tile)]
-	assert(tile)
-	while tile ~= self.start do
-		path[#path + 1] = tile.direction
-		tile = tile.prev
-	end
-	table.reverse(path)
-	return path
-end
-
-function GoalFinder:cleanUp(  )
-	-- 一个教训，迭代器返回的是值而不是引用
-	for k,v in pairs(self) do
-		if (type(v) == "table") then
-			self[k] = nil
-		end
-	end
-end
+return GoalFinder
