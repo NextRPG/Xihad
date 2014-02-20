@@ -18,8 +18,6 @@
     <ClCompile Include="..\src\Dialogue\CDialogueAlignmenter.cpp" />
     <ClCompile Include="..\src\Dialogue\CAlignmentDialogueBuilder.cpp" />
     <ClCompile Include="..\src\Dialogue\CTimerCondition.cpp" />
-    <ClCompile Include="..\src\Dialogue\CTextSection.cpp" />
-    <ClCompile Include="..\src\Dialogue\IMetrics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Dialogue\CAlignedTextSection.hpp" />
@@ -27,21 +25,16 @@
     <ClInclude Include="..\src\Dialogue\CBaseTickMethod.hpp" />
     <ClInclude Include="..\src\Dialogue\CDialogue.hpp" />
     <ClInclude Include="..\src\Dialogue\CAlignmentDialogueBuilder.hpp" />
-    <ClInclude Include="..\src\Dialogue\CLineBreak.hpp" />
     <ClInclude Include="..\src\Dialogue\CTickEventRedirection.hpp" />
     <ClInclude Include="..\src\Dialogue\CTimerCondition.hpp" />
     <ClInclude Include="..\src\Dialogue\CDialogueAlignmenter.hpp" />
     <ClInclude Include="..\src\Dialogue\IDialogue.hpp" />
     <ClInclude Include="..\src\Dialogue\IDialogueBuilder.hpp" />
-    <ClInclude Include="..\src\Dialogue\IMetrics.hpp" />
-    <ClInclude Include="..\src\Dialogue\ITextAppearance.hpp" />
     <ClInclude Include="..\src\Dialogue\ITextContent.hpp" />
     <ClInclude Include="..\src\Dialogue\ITextElement.hpp" />
-    <ClInclude Include="..\src\Dialogue\ITextElementFactory.hpp" />
-    <ClInclude Include="..\src\Dialogue\ITextSectionSplitter.hpp" />
+    <ClInclude Include="..\src\Dialogue\IDialogueContext.hpp" />
     <ClInclude Include="..\src\Dialogue\ITickEvent.hpp" />
     <ClInclude Include="..\src\Dialogue\ITickMethod.hpp" />
-    <ClInclude Include="..\src\Dialogue\CTextSection.hpp" />
     <ClInclude Include="..\src\Dialogue\STickEvent.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

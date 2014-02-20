@@ -9,14 +9,14 @@ namespace xihad { namespace dialogue
 
 		bool satisfy(float delta);
 		
-		float getCycle()
+		float getCycle() const
 		{
 			return mCycle;
 		}
 
 		void setCycle(float cycle);
 
-		float getRatioInCycle()
+		float getRatioInCycle() const
 		{
 			return mElapsedTime / mCycle;
 		}

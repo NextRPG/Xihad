@@ -8,12 +8,12 @@
 namespace xihad { namespace dialogue
 {
 	class ITextElement;
-	class ITextElementFactory;
+	class IDialogueContext;
 	class CAlignedTextSection;
 	class CBaseDialogueBuilder : public IDialogueBuilder
 	{
 	public:
-		CBaseDialogueBuilder(ITextElementFactory* factory, unsigned widthLimit);
+		CBaseDialogueBuilder(IDialogueContext* factory, unsigned widthLimit);
 
 		virtual ~CBaseDialogueBuilder();
 
@@ -28,12 +28,12 @@ namespace xihad { namespace dialogue
 		}
 
 		virtual bool newParagraph() override;
-		virtual void addText(const CTextSection& text) override;
+		virtual void addText(ITextContent* text) override;
 		virtual void addTickEvent(ITickEvent* event) override;
 		virtual IDialogue* build() override;
 
 	protected:
-		ITextElementFactory* getTextElementFactory() const
+		IDialogueContext* getTextElementFactory() const
 		{
 			return mFactory.get();
 		}
@@ -50,14 +50,14 @@ namespace xihad { namespace dialogue
 		virtual void reset();
 
 	protected:
-		typedef std::list<CTextSection> SParagraph;
+		typedef std::list<irr_ptr<ITextContent>> SParagraph;
 		std::vector<SParagraph*> mParagraphs;
 		std::list<STickEvent> mTickEvents;
 
 	private:
 		unsigned mWidthLimit;
 		unsigned mSectionCount;
-		irr_ptr<ITextElementFactory> mFactory;
+		irr_ptr<IDialogueContext> mFactory;
 	};
 }}
 

@@ -25,7 +25,7 @@ namespace xihad { namespace dialogue
 		}
 	}
 
-	float CBaseTickMethod::getTickSpeed()
+	float CBaseTickMethod::getTickSpeed() const
 	{
 		float cycle = mTimer.getCycle();
 		return mStandardCycle/cycle;
@@ -47,7 +47,7 @@ namespace xihad { namespace dialogue
 		mEventEnabled = enable;
 	}
 
-	bool CBaseTickMethod::isEventEnabled()
+	bool CBaseTickMethod::isEventEnabled() const
 	{
 		return mEventEnabled;
 	}

@@ -1,15 +1,15 @@
 #include "CBaseDialogueBuilder.hpp"
 #include <cassert>
 #include "CDialogue.hpp"
+#include "ITextContent.hpp"
 #include "ITextElement.hpp"
-#include "ITextAppearance.hpp"
-#include "ITextElementFactory.hpp"
+#include "IDialogueContext.hpp"
 #include "CAlignedTextSection.hpp"
 
 namespace xihad { namespace dialogue
 {
 	CBaseDialogueBuilder::CBaseDialogueBuilder( 
-		ITextElementFactory* factory, unsigned widthLimit ) : 
+		IDialogueContext* factory, unsigned widthLimit ) : 
 		mWidthLimit(widthLimit), mFactory(factory), mSectionCount(0u)
 	{
 		assert(factory != 0);
@@ -31,7 +31,7 @@ namespace xihad { namespace dialogue
 		return false;
 	}
 
-	void CBaseDialogueBuilder::addText( const CTextSection& text )
+	void CBaseDialogueBuilder::addText( ITextContent* text )
 	{
 		if (mParagraphs.empty() && !newParagraph())
 			throw std::exception("Paragraph creation failed!");
@@ -73,7 +73,7 @@ namespace xihad { namespace dialogue
 		ngn::position2di offset;
 		while (aligned)
 		{
-			ITextElement* text = mFactory->create(aligned->getApperance(), aligned->getContent());
+			ITextElement* text = mFactory->create(aligned->getContent());
 			text->setOffset(offset);
 			offset += aligned->getOffset();
 			outElements.push_back(text);

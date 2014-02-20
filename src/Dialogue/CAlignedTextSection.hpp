@@ -1,15 +1,17 @@
 #pragma once
-#include "CTextSection.hpp"
 #include <Engine/position2d.h>
+#include <Engine/irr_ptr.h>
+#include <cassert>
 
 namespace xihad { namespace dialogue 
 {
-	class CAlignedTextSection : public CTextSection
+	class ITextContent;
+	class CAlignedTextSection
 	{
 	public:
-		CAlignedTextSection(const CTextSection& base);
+		CAlignedTextSection(ITextContent* content = 0);
 
-		CAlignedTextSection(const ITextAppearance* apperance = 0, ITextContent* content = 0);
+		~CAlignedTextSection();
 
 		/// Set relative offset to previous text section
 		void setOffset(ngn::position2di offset) 
@@ -22,11 +24,9 @@ namespace xihad { namespace dialogue
 			return mOffset;
 		}
 
-		void link(CAlignedTextSection* next, ngn::position2di nextRelativeToThis)
+		ITextContent* getContent() const
 		{
-			assert(!mNextSection);
-			mNextSection = next;
-			next->setOffset(nextRelativeToThis);
+			return mContent.get();
 		}
 
 		CAlignedTextSection* getNextSection() const 
@@ -34,9 +34,17 @@ namespace xihad { namespace dialogue
 			return mNextSection;
 		}
 
+		void link(CAlignedTextSection* next, ngn::position2di nextRelativeToThis)
+		{
+			assert(!mNextSection);
+			mNextSection = next;
+			next->setOffset(nextRelativeToThis);
+		}
+
 		CAlignedTextSection* split(unsigned index);
 
 	private:
+		irr_ptr<ITextContent> mContent;
 		CAlignedTextSection* mNextSection;
 		ngn::position2di mOffset;
 	};

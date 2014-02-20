@@ -1,14 +1,13 @@
 #pragma once
+#include <algorithm>
 #include <Engine/position2d.h>
 #include <Engine/dimension2d.h>
 #include <irrlicht/IReferenceCounted.h>
-#include <algorithm>
 
 namespace xihad { namespace dialogue 
 {
-	class CTextSection;
+	class ITextContent;
 	class CAlignedTextSection;
-	class ITextSectionSplitter;
 	class CDialogueAlignmenter : public virtual irr::IReferenceCounted
 	{
 	public:
@@ -19,7 +18,7 @@ namespace xihad { namespace dialogue
 
 		virtual void newLine();
 
-		virtual int insert(CTextSection& section);
+		virtual int insert(ITextContent* section);
 
 		virtual void reset();
 

@@ -6,6 +6,14 @@ namespace xihad { namespace dialogue
 {
 	class ITextContent : public virtual irr::IReferenceCounted
 	{
+	public:
+		struct SFillResult
+		{
+			int width;
+			int height;
+			unsigned splitIndex;
+		};
+
 	public:	
 		virtual ~ITextContent() {}
 		
@@ -25,6 +33,8 @@ namespace xihad { namespace dialogue
 		virtual unsigned endIndex() const = 0;
 
 		virtual bool empty() const = 0;
+
+		virtual SFillResult fillHorizontal(unsigned widthLimit, bool allowEmpty = true) const = 0;
 	};
 }}
 

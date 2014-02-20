@@ -10,10 +10,10 @@ namespace xihad { namespace dialogue
 		explicit CBaseTickMethod(float standardCycle, float initSpeed = 1.0f);
 
 		virtual void setTickSpeed(float speed) override;
-		virtual float getTickSpeed() override;
+		virtual float getTickSpeed() const override;
 
 		virtual void setEventEnabled(bool enable) override;
-		virtual bool isEventEnabled()  override;
+		virtual bool isEventEnabled()  const override;
 
 		virtual void tick(float delta) override;
 

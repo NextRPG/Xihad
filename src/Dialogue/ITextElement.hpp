@@ -14,7 +14,6 @@ namespace xihad { namespace dialogue
 
 		virtual void setVisible(bool visible) = 0;
 		virtual void setContent(const std::wstring& content) = 0;
-		virtual void setAppearance(const ITextAppearance* appearance) = 0;
 		virtual void setOffset(ngn::position2di pos) = 0;
 	};
 }}

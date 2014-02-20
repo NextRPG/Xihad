@@ -1,26 +1,22 @@
 #include "CAlignedTextSection.hpp"
+#include "ITextContent.hpp"
 
 namespace xihad { namespace dialogue 
 {
-	CAlignedTextSection::CAlignedTextSection( const CTextSection& base ) :
-		CTextSection(base.getApperance(), base.getContent()), mNextSection(0)
+	CAlignedTextSection::CAlignedTextSection(ITextContent* content) :
+		mContent(content), mNextSection(0)
 	{
-
 	}
 
-	CAlignedTextSection::CAlignedTextSection( const ITextAppearance* apperance, ITextContent* content) :
-		CTextSection(apperance, content), mNextSection(0)
+	CAlignedTextSection::~CAlignedTextSection()
 	{
 	}
 
 	CAlignedTextSection* CAlignedTextSection::split( unsigned index )
 	{
-		CTextSection buffer;
-		CTextSection::split(buffer, index);
-		if (buffer.getContent() != nullptr)
-			return new CAlignedTextSection(getApperance(), buffer.getContent());
+		ITextContent* splitted = mContent->split(index);
 
-		return 0;
+		return splitted ? new CAlignedTextSection(splitted) : nullptr;
 	}
 
 }}

@@ -2,7 +2,6 @@
 #include <vector>
 #include <list>
 #include "IDialogue.hpp"
-#include "CTextSection.hpp"
 #include "STickEvent.hpp"
 
 namespace xihad { namespace dialogue 

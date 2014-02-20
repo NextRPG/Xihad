@@ -3,6 +3,7 @@
 namespace xihad { namespace dialogue 
 {
 	class ITickMethod;
+	class IDialogueContext;
 	class IDialogue
 	{
 	public:
@@ -10,6 +11,7 @@ namespace xihad { namespace dialogue
 
 		virtual void setTickMethod(ITickMethod* method) = 0;
 		virtual ITickMethod* getTickMethod() const = 0;
+		virtual IDialogueContext* getContext() const = 0;
 	};
 }}
 

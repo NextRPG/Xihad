@@ -1,9 +1,6 @@
 #include "CDialogueAlignmenter.hpp"
 #include "CAlignedTextSection.hpp"
-#include "ITextSectionSplitter.hpp"
-#include "ITextAppearance.hpp"
 #include "ITextContent.hpp"
-#include "IMetrics.hpp"
 #include <cassert>
 
 namespace xihad { namespace dialogue 
@@ -36,11 +33,10 @@ namespace xihad { namespace dialogue
 		mOffset.Y += mKerningHeight + mKerningNewLine.Height;
 	}
 
-	int CDialogueAlignmenter::insert(CTextSection& section)
+	int CDialogueAlignmenter::insert(ITextContent* text)
 	{
-		ITextContent* text = section.getContent();
 		if (text != nullptr && !text->empty()) 
-			return insertNonEmptySection(new CAlignedTextSection(section));
+			return insertNonEmptySection(new CAlignedTextSection(text));
 		
 		return 0; // Ignore empty text
 	}
@@ -51,19 +47,18 @@ namespace xihad { namespace dialogue
 		while (inserting)
 		{
 			// compute alignment info for next section
-			IMetrics* metrics = inserting->getApperance()->getMetrics();
-			IMetrics::SFillResult fillResult = metrics->fillHorizontal(
-				inserting->getContent(), mWidthLimit-mOffset.X, mCurrentLineHead!=0);
+			ITextContent* content = inserting->getContent();
+			auto res = content->fillHorizontal(mWidthLimit-mOffset.X, mCurrentLineHead!=0);
 
-			unsigned idx = fillResult.splitIndex;
+			unsigned idx = res.splitIndex;
 			if (idx > 0)	// ++insertCount?
 			{
 				++insertCount;
-				advanceLine(fillResult.width, fillResult.height);
+				advanceLine(res.width, res.height);
 				linkNewSection(inserting);
 
 				// update loop status
-				if (idx >= inserting->getContent()->endIndex())
+				if (idx >= content->endIndex())
 					break;	// No more to insert in this pass
 				else 
 					inserting = inserting->split(idx);	// insert the rest
