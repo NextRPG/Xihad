@@ -8,13 +8,13 @@ local BattleManager = {
 }
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager2
+	self.manager = manager1
 
 	stateMachine = StateMachine.new()
 	stateMachine:addState("showCharacter")
 	stateMachine:addTransition("showCharacter", "showTile",
 		function ( object, etype )
-			return etype == "lPressed" and object 
+			return etype == "lClicked" and object 
 					and object:hasTag(c"Hero") 
 					and self.manager:checkAvailable(object)
 		end,
@@ -40,7 +40,7 @@ function BattleManager:init( manager1, manager2 )
 	stateMachine:addState("showTile")
 	stateMachine:addTransition("showTile", "showTile",
 		function ( object, etype )
-			return etype == "lPressed" and object and object:hasTag(c"Hero")
+			return etype == "lClicked" and object and object:hasTag(c"Hero")
 		end,
 		function ( object )
 			Chessboard:recoverArea(PathFinder)	
@@ -49,7 +49,7 @@ function BattleManager:init( manager1, manager2 )
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lPressed" and object and object:hasTag(c"Tile")
+			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
 			stateMachine:pendingAndAction(function (  )
@@ -84,7 +84,7 @@ function BattleManager:init( manager1, manager2 )
 		end)
 	stateMachine:addTransition("showTargetRange", "showCharacter",
 		function ( object, etype )
-			return etype == "lPressed" and object and object:hasTag(c"Tile")
+			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
 			SkillManager:onCastSkill(object)
@@ -92,21 +92,14 @@ function BattleManager:init( manager1, manager2 )
 
 	stateMachine:setInitial("showCharacter")
 	self.stateMachine = stateMachine
-
-	scene:pushController(self)
 end
 
 function BattleManager:onMouseEvent( e )
-	if e.type == "lPressed" then
-		print(getSelectedObject())
-	end
 	self.stateMachine:update(getSelectedObject(), e.type)
-	return true
 end
 
 function BattleManager:onKeyUp( e )
 	self.stateMachine:update(e.key)
-	return true
 end
 
 return BattleManager

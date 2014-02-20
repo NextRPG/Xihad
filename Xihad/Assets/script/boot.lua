@@ -39,4 +39,7 @@ BattleManager:init(HeroManager, AIManager)
 CameraManager:init()
 LightManager:init()
 
+-- init Controller
+scene:pushController(require("InputController"))
+
 cursor:setVisible(true)
