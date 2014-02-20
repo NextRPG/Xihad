@@ -1,3 +1,5 @@
+*.exp
+*.bsc
 *.user
 *.exe
 *.ilk
@@ -16,3 +18,4 @@
 /docs/Reference/html
 /Xihad/math3d.*
 *sublime*
+/Debug/*.lib
