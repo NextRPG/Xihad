@@ -33,6 +33,8 @@ namespace xihad { namespace dialogue
 
 	void CBaseDialogueBuilder::addText( ITextContent* text )
 	{
+		if (!text) return;
+
 		if (mParagraphs.empty() && !newParagraph())
 			throw std::exception("Paragraph creation failed!");
 
@@ -42,6 +44,8 @@ namespace xihad { namespace dialogue
 
 	void CBaseDialogueBuilder::addTickEvent(ITickEvent* event)
 	{
+		if (!event) return;
+
 		STickEvent te;
 		te.sectionIndex = mSectionCount;
 		te.event = event;
@@ -54,7 +58,7 @@ namespace xihad { namespace dialogue
 		CAlignedTextSection* aligned = onLinkTextSections();
 		
 		// 2. Transfer text sections into text elements
-		std::list<irr_ptr<ITextElement>> elements;
+		std::vector<irr_ptr<ITextElement>> elements;
 		onCreateTextElements(aligned, elements);
 
 		// 3. create dialogue from text elements
@@ -68,7 +72,7 @@ namespace xihad { namespace dialogue
 
 	void CBaseDialogueBuilder::onCreateTextElements(
 		CAlignedTextSection* aligned, 
-		std::list<irr_ptr<ITextElement>>& outElements)
+		std::vector<irr_ptr<ITextElement>>& outElements)
 	{
 		ngn::position2di offset;
 		while (aligned)
@@ -93,9 +97,9 @@ namespace xihad { namespace dialogue
 	}
 
 	IDialogue* CBaseDialogueBuilder::onCreateDialogue(
-		std::list<irr_ptr<ITextElement>>& elements)
+		std::vector<irr_ptr<ITextElement>>& elements)
 	{
-		return new CDialogue(elements, mTickEvents);
+		return new CDialogue(elements, mTickEvents, mFactory.get());
 	}
 
 }}

@@ -27,13 +27,13 @@
     <ClCompile Include="..\src\Dialogue\CDialogueAlignmenter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Dialogue\CAlignmentDialogueBuilder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Dialogue\CDialogue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Dialogue\CAlignedTextSection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dialogue\CAlignedDialogueBuilder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,9 +65,6 @@
     <ClInclude Include="..\src\Dialogue\CDialogueAlignmenter.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Dialogue\CAlignmentDialogueBuilder.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Dialogue\IDialogue.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -84,6 +81,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Dialogue\IDialogueContext.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dialogue\CAlignedDialogueBuilder.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

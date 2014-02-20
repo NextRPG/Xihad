@@ -1,19 +1,16 @@
 #pragma once
-#include <string>
-#include <irrlicht/IReferenceCounted.h>
-#include <Engine/SColor.h>
+#include "ITextContent.hpp"
 #include <Engine/position2d.h>
 
 namespace xihad { namespace dialogue 
 {
 	class ITextAppearance;
-	class ITextElement : public virtual irr::IReferenceCounted
+	class ITextElement : public ITextContent
 	{
 	public:	
 		virtual ~ITextElement() {}
 
-		virtual void setVisible(bool visible) = 0;
-		virtual void setContent(const std::wstring& content) = 0;
+		virtual void setVisible(unsigned bgnIndex, unsigned endIndex) = 0;
 		virtual void setOffset(ngn::position2di pos) = 0;
 	};
 }}

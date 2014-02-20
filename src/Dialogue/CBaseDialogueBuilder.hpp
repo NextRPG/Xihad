@@ -42,10 +42,10 @@ namespace xihad { namespace dialogue
 
 		virtual void onCreateTextElements(
 			CAlignedTextSection* aligned,
-			std::list<irr_ptr<ITextElement>>& outElements);
+			std::vector<irr_ptr<ITextElement>>& outElements);
 
 		virtual IDialogue* onCreateDialogue(
-			std::list<irr_ptr<ITextElement>>& elements);
+			std::vector<irr_ptr<ITextElement>>& elements);
 
 		virtual void reset();
 

@@ -8,6 +8,11 @@ namespace xihad { namespace dialogue
 	{
 		unsigned sectionIndex;
 		irr_ptr<ITickEvent> event;
+
+		bool inRange(unsigned bgn, unsigned end)
+		{
+			return sectionIndex>=bgn && sectionIndex<end;
+		}
 	};
 }}
 

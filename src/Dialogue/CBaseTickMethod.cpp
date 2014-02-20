@@ -4,9 +4,8 @@
 
 namespace xihad { namespace dialogue
 {
-
 	CBaseTickMethod::CBaseTickMethod( float standardCycle, float initSpeed ) :
-		mEventEnabled(true), mStandardCycle(standardCycle)
+		mStandardCycle(standardCycle)
 	{
 		assert(mStandardCycle > 0);
 		setTickSpeed(initSpeed);
@@ -36,20 +35,7 @@ namespace xihad { namespace dialogue
 		if (mTimer.satisfy(delta))
 		{
 			onTick();
-
-			if (mEventEnabled)
-				checkEvent();
 		}
-	}
-
-	void CBaseTickMethod::setEventEnabled( bool enable )
-	{
-		mEventEnabled = enable;
-	}
-
-	bool CBaseTickMethod::isEventEnabled() const
-	{
-		return mEventEnabled;
 	}
 
 	void CBaseTickMethod::checkEvent()

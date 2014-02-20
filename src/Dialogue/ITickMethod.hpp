@@ -11,9 +11,6 @@ namespace xihad { namespace dialogue
 		virtual void setTickSpeed(float speed) = 0;
 		virtual float getTickSpeed() const = 0;
 
-		virtual void setEventEnabled(bool enable) = 0;
-		virtual bool isEventEnabled() const = 0;
-
 		virtual void tick(float delta) = 0;
 	};
 

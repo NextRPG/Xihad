@@ -12,9 +12,6 @@ namespace xihad { namespace dialogue
 		virtual void setTickSpeed(float speed) override;
 		virtual float getTickSpeed() const override;
 
-		virtual void setEventEnabled(bool enable) override;
-		virtual bool isEventEnabled()  const override;
-
 		virtual void tick(float delta) override;
 
 	protected:
@@ -22,7 +19,6 @@ namespace xihad { namespace dialogue
 		virtual void checkEvent();
 
 	private:
-		bool mEventEnabled;
 		float mStandardCycle;
 		CTimerCondition mTimer;
 	};

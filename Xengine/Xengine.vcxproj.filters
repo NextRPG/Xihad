@@ -204,6 +204,9 @@
     <ClInclude Include="..\src\GameWorld\Engine\position2d.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\CppBase\CLineBreak.hpp">
+      <Filter>CppBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">

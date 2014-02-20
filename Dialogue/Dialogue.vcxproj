@@ -16,7 +16,7 @@
     <ClCompile Include="..\src\Dialogue\CBaseTickMethod.cpp" />
     <ClCompile Include="..\src\Dialogue\CDialogue.cpp" />
     <ClCompile Include="..\src\Dialogue\CDialogueAlignmenter.cpp" />
-    <ClCompile Include="..\src\Dialogue\CAlignmentDialogueBuilder.cpp" />
+    <ClCompile Include="..\src\Dialogue\CAlignedDialogueBuilder.cpp" />
     <ClCompile Include="..\src\Dialogue\CTimerCondition.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -24,7 +24,7 @@
     <ClInclude Include="..\src\Dialogue\CBaseDialogueBuilder.hpp" />
     <ClInclude Include="..\src\Dialogue\CBaseTickMethod.hpp" />
     <ClInclude Include="..\src\Dialogue\CDialogue.hpp" />
-    <ClInclude Include="..\src\Dialogue\CAlignmentDialogueBuilder.hpp" />
+    <ClInclude Include="..\src\Dialogue\CAlignedDialogueBuilder.hpp" />
     <ClInclude Include="..\src\Dialogue\CTickEventRedirection.hpp" />
     <ClInclude Include="..\src\Dialogue\CTimerCondition.hpp" />
     <ClInclude Include="..\src\Dialogue\CDialogueAlignmenter.hpp" />
@@ -43,7 +43,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>

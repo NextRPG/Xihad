@@ -1,8 +1,5 @@
 #include "CAlignedDialogueBuilder.hpp"
 #include "CDialogueAlignmenter.hpp"
-#include "ITextSectionSplitter.hpp"
-#include "IDialogueContext.hpp"
-#include "ITextAppearance.hpp"
 #include "ITextContent.hpp"
 #include "CTickEventRedirection.hpp"
 
@@ -25,9 +22,9 @@ namespace xihad { namespace dialogue
 		CTickEventRedirection<std::list<STickEvent>> eventRedirect(mTickEvents);
 		for (SParagraph* p : mParagraphs)
 		{
-			for (CTextSection& visiting : *p)
+			for (irr_ptr<ITextContent> visiting : *p)
 			{
-				int insertCount = mAlignmenter->insert(visiting);
+				int insertCount = mAlignmenter->insert(visiting.get());
 				eventRedirect.onInsertion(insertCount);
 			}
 

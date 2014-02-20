@@ -17,23 +17,30 @@ namespace xihad { namespace dialogue
 	public:	
 		virtual ~ITextContent() {}
 		
-		virtual std::wstring nextLetter(
-			unsigned bgnIndex, unsigned* endIndex = nullptr) const = 0;
-		
-		virtual std::wstring nextWord(
-			unsigned bgnIndex, unsigned* endIndex = nullptr) const = 0;
+		/// 获取指定位置所属的字符区间
+		/**
+		 * @param [in, out] bgnIndex
+		 * @param [out] endIndex
+		 */
+		virtual void getLetterRange(unsigned& bgnIndex, unsigned* endIndex = 0) const = 0;
+
+		/// 获取指定位置所属的单词区间
+		virtual void getWordRange(unsigned& bgnIndex, unsigned* endIndex = 0) const = 0;
 
 		/// Split text into two parts [0, index) and [index, end)
 		/**
-		 * @param index The end of left part (i.e, this)
+		 * @param index The letter contains the specified index will be the end of left part (i.e, this)
 		 * @return splitted text. If index is not valid, then return nullptr.
 		 */
 		virtual ITextContent* split(unsigned index) = 0;
 
+		/// Get end index of this text
 		virtual unsigned endIndex() const = 0;
 
+		/// Decide whether this text is empty
 		virtual bool empty() const = 0;
 
+		/// Compute the result of filling this text into area that limitted with the specified width
 		virtual SFillResult fillHorizontal(unsigned widthLimit, bool allowEmpty = true) const = 0;
 	};
 }}
