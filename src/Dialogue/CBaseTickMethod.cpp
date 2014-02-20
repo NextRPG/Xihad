@@ -38,7 +38,7 @@ namespace xihad { namespace dialogue
 			onTick();
 
 			if (mEventEnabled)
-				triggerEvent();
+				checkEvent();
 		}
 	}
 
@@ -52,7 +52,7 @@ namespace xihad { namespace dialogue
 		return mEventEnabled;
 	}
 
-	void CBaseTickMethod::triggerEvent()
+	void CBaseTickMethod::checkEvent()
 	{
 		// TODO
 	}

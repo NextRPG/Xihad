@@ -12,6 +12,7 @@ namespace xihad { namespace dialogue
 		virtual void setTickMethod(ITickMethod* method) = 0;
 		virtual ITickMethod* getTickMethod() const = 0;
 		virtual IDialogueContext* getContext() const = 0;
+		virtual void onUpdate(float deltaTime) = 0;
 	};
 }}
 

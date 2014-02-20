@@ -19,7 +19,7 @@ namespace xihad { namespace dialogue
 
 	protected:
 		virtual bool onTick() = 0;
-		virtual void triggerEvent();
+		virtual void checkEvent();
 
 	private:
 		bool mEventEnabled;

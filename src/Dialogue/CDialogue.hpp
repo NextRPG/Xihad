@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include <list>
 #include "IDialogue.hpp"
 #include "STickEvent.hpp"
+#include <Engine/irr_ptr.h>
 
 namespace xihad { namespace dialogue 
 {
@@ -24,22 +24,15 @@ namespace xihad { namespace dialogue
 
 		virtual ITickMethod* getTickMethod() const override
 		{
-			return mTickMethod;
+			return mTickMethod.get();
 		}
 
-		bool atEnd();
-
-		bool atBegin();
+		virtual void onUpdate(float deltaTime);
 
 	private:
 		TickEvents mEvents;
 		TextElements mTextElements;
-
-		// TODO 记录当前显示位置
-		TextElements::iterator mCurrentSection;
-		std::wstring::iterator mCurrentChar;
-
-		ITickMethod* mTickMethod;
+		irr_ptr<ITickMethod> mTickMethod;
 	};
 
 
