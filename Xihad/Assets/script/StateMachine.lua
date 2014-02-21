@@ -47,7 +47,8 @@ function StateMachine:pendingAndAction( func )
 		func()
 		self.ASYNC = false		
 	end)
-	coroutine.resume(co)
+	local result, info = coroutine.resume(co)
+	if result ~= true then print(info) end
 end
 
 return StateMachine

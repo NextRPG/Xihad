@@ -39,7 +39,7 @@ function CharacterManager:createCharacter( character, i, j )
 	local tile = {y = i, x = j}
 
 	local location = getPixelLocation(tile)
-	characterObject:concatTranslate(location.x, 0, location.z)
+	characterObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	local param = { 
 		mesh  = "Assets/model/ninja.b3d", 
@@ -92,6 +92,8 @@ end
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
 function CharacterManager:onSelectTile( object, finder )
+
+
 	finder = finder or PathFinder 	
 	local tile = object:findComponent(c"Tile")
 	

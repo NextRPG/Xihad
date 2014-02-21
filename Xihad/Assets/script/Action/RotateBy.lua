@@ -40,7 +40,7 @@ function RotateBy:onUpdate(  )
 	local deltaY = self.destination.y * (lastFrameTime / self.leftTime)
 	self.destination.y = self.destination.y - deltaY
 
-	self.object:concatRotate(0,deltaY,0)
+	self.object:concatRotate(math3d.vector(0,deltaY,0))
 
 	self.leftTime = self.leftTime - lastFrameTime
 	if (self.leftTime <= 0) then
