@@ -108,6 +108,8 @@ namespace xihad { namespace script
 			luaT_defRegsBgn(cursorRegs)
 				luaT_mnamedfunc_ovl(ICursorControl, void (ICursorControl::*)(float, float), setPosition),
 				luaT_lnamedfunc(getPosition),
+				luaT_mnamedfunc(ICursorControl, setVisible),
+				luaT_mnamedfunc(ICursorControl, isVisible),
 			luaT_defRegsEnd
 			MetatableFactory<ICursorControl>::create(L, cursorRegs);
 		}

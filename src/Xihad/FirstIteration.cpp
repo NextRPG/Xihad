@@ -16,7 +16,6 @@ using namespace ngn;
 int first_iter(int argc, const char** argv)
 {
  	IrrlichtDevice* device = createDefaultDevice();
-	device->setGammaRamp(1.f, 1.f, 1.f, 0, 0);
 	initSystem(device);
 
 	std::string path = "Assets/";

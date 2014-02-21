@@ -24,13 +24,17 @@ namespace xihad { namespace ngn
 
 		void dispatch(ParamArg pParam, IdArg pSourceId, double timeout = 0.0) override
 		{
-			pendingEvents.push_back(Event(pParam, pSourceId, timeout));
+			Event e(pParam, pSourceId);
+			e.timeout = timeout;
+			pendingEvents.push_back(e);
 		}
 		
 		void addListener(const MessageTag& pEventTag, Listener* pListener, SourceFilter* pFilter) override
 		{
-			if (pListener != nullptr)
-				listenerTree.insert(pEventTag, ListenerWrapper(pListener, pFilter));
+			if (pListener == nullptr)
+				return;
+
+			listenerTree.insert(pEventTag, ListenerWrapper(pListener, pFilter));
 		}
 
 		void clearListener(Listener* pListener) override
@@ -139,36 +143,42 @@ namespace xihad { namespace ngn
 
 			// 将新添加的消息事件添加进等待队列
 			float indemnity = pTimeline.getLastTimeChange(); // 延时补偿
+
+			int index = 0;
 			auto it = pendingEvents.begin();
 			while (it != pendingEvents.end())
 			{
 				it->timeout -= indemnity;
 				it->timeout += current;	// 本地时间转换为全局时间
+				it->arriveIndex = index;// 保证同样延迟的消息会先来先发
 				awaitMessageQueue.push(*it);
-				it = pendingEvents.erase(it);
 
-				// 下一个事件补偿更少的时间，来保证同样延迟的消息会先来先发
-				indemnity -= 1.12e-32F;
+				// 迭代器更新
+				it = pendingEvents.erase(it);
+				++index;
 			}
 		}
 
 	private:
 		struct Event
 		{
-			Event(ParamArg pParam, IdArg pSourceId, double pTimeout)
-				: param(pParam), sourceId(pSourceId), timeout(pTimeout)
+			Event(ParamArg pParam, IdArg pSourceId)
+				: param(pParam), sourceId(pSourceId), timeout(0), arriveIndex(0)
 			{
 			}
 
 			bool operator>(const Event& pOther) const
 			{
-				return timeout > pOther.timeout;
+				if (timeout != pOther.timeout)
+					return timeout > pOther.timeout;
+				else 
+					return arriveIndex > pOther.arriveIndex;
 			}
 
-		public:
 			typename Listener::Parameter param;
 			Identifier sourceId;
 			double timeout;
+			int arriveIndex;
 		};
 
 		typedef std::priority_queue<Event, std::vector<Event>, std::greater<Event>> MessageQueue;

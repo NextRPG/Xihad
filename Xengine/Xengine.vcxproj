@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\BitOperation.h" />
+    <ClInclude Include="..\src\CppBase\CLineBreak.hpp" />
     <ClInclude Include="..\src\CppBase\IteratorPair.h" />
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
@@ -110,6 +111,7 @@
     <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\position2d.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Properties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />
