@@ -21,15 +21,15 @@ namespace xihad { namespace ngn
 			GameObject::setParent(nullptr);
 		}
 
-		virtual void resetScale(float sx, float sy, float sz) override
+		virtual void resetScale(const vector3df& s) override
 		{
 		}
 
-		virtual void resetRotate(float rx, float ry, float rz) override
+		virtual void resetRotate(const vector3df& r) override
 		{
 		}
 
-		virtual void resetTranslate(float tx, float ty, float tz) override
+		virtual void resetTranslate(const vector3df& t) override
 		{
 		}
 
