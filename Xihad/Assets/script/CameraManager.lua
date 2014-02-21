@@ -12,7 +12,7 @@ local CameraManager = {
 function CameraManager:createCamera( name )
 	local camera = scene:createObject(c(name))
 	camera.ccom = camera:appendComponent(c"Camera")
-	camera.move = camera:appendComponent(c"CameraMoveBy")
+	camera.move = camera:appendComponent(c"ForeverMoveBy")
 	camera.rotate = camera:appendComponent(c"RotateBy")
 	camera.sequence = camera:appendComponent(c"Sequence")
 	return camera
@@ -32,14 +32,20 @@ end
 function CameraManager:onMouseEvent( e )
 	local camera = self.camera
 	local ccom = camera:findComponent(c"Camera")
-	local moveby = camera:findComponent(c"CameraMoveBy")
+	local moveby = camera:findComponent(c"ForeverMoveBy")
+
+	print(camera:getTranslate():xyz())
 
 	if e.type == "mouseDragged" and e.deltaX ~= nil then
 
-		moveby:runAction{ destination = {x = e.deltaX, y = - e.deltaY}, interval = e.interval}
+		moveby:runAction{x = e.deltaX, y = - e.deltaY} 
+
+	elseif e.type == "mouseDraggedEnd" then
+
+		moveby:stopAction()
 
 	end
-	print(e.wheelDelta)
+	-- print(e.wheelDelta)
 	ccom:setFOV((1+0.05*e.wheelDelta) * ccom:getFOV())
 end
 

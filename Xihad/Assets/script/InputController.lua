@@ -15,7 +15,7 @@ local BattleManager = require "BattleManager"
 local lastType = ""
 local lastX, lastY = 0, 0
 local lastTime = 0
-function judgeType( e )
+local function judgeType( e )
 	local type = e.type
 	if lastType == "mouseDragged" then
 		local x, y = cursor:getPosition()
@@ -28,7 +28,7 @@ function judgeType( e )
 			return "mouseDragged"
 		elseif type == "lUplift" then
 			lastType = ""
-			return ""
+			return "mouseDraggedEnd"
 		end
 	elseif lastType == "lPressed" then
 		lastX, lastY = cursor:getPosition()
@@ -38,7 +38,7 @@ function judgeType( e )
 		elseif type == "mouseMoved" then
 			return "mouseDragged"
 		end
-	elseif lastType == "lClicked" then
+	elseif lastType == "lClicked" or "mouseDraggedEnd" then
 		lastType = ""
 	end
 	return type
@@ -48,7 +48,7 @@ end
 
 function InputController:onMouseEvent( e )
 	e.type = judgeType( e )
-	if e.type == "wheelMoved" or e.type == "mouseDragged" then
+	if e.type == "wheelMoved" or e.type == "mouseDragged" or e.type == "mouseDraggedEnd" then
 		CameraManager:onMouseEvent( e )
 	else 
 	
