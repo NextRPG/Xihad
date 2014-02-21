@@ -14,6 +14,7 @@ package.path = package.path
 
 require "Consts"
 require "LuaUtils"
+require "math3d"
 
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"

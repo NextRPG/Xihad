@@ -15,7 +15,7 @@ local BattleManager = require "BattleManager"
 local lastType = ""
 local lastX, lastY = 0, 0
 function judgeType( e )
-	type = e.type
+	local type = e.type
 	if lastType == "mouseDragged" then
 		local x, y = cursor:getPosition()
 		e.deltaX = x - lastX
@@ -48,6 +48,8 @@ function InputController:onMouseEvent( e )
 	if e.type == "wheelMoved" or e.type == "mouseDragged" then
 		CameraManager:onMouseEvent( e )
 	else 
+	print(e.type)
+
 		BattleManager:onMouseEvent( e )
 	end
 	lastType = e.type
