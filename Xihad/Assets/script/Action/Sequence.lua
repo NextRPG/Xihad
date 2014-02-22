@@ -16,7 +16,7 @@ function Sequence:runActions( actions, callback )
 	for i,action in ipairs(actions) do
 		if actions[i + 1] ~= nil then
 			action.callback = function () 
-				self.object:findComponent(c(actions[i + 1].actionType)):runAction(actions[i + 1]) 
+				self.object:findComponent(c(actions[i + 1].actionType)):runAction(actions[i + 1], actions[i + 1].callback) 
 			end
 		else 
 			if callback ~= nil then
@@ -24,7 +24,7 @@ function Sequence:runActions( actions, callback )
 			end
 		end
 	end
-	self.object:findComponent(c(actions[1].actionType)):runAction(actions[1])
+	self.object:findComponent(c(actions[1].actionType)):runAction(actions[1], actions[1].callback)
 
 	-- print( " 4 " , coroutine.running())
 end

@@ -32,6 +32,7 @@ end
 -- @treturn Object characterObject
 function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
+	character.model = "reimu"
 	local characterObject = scene:createObject(c(character.name))
 
 	local test = characterObject:appendComponent(c"Character", character)
@@ -42,8 +43,8 @@ function CharacterManager:createCharacter( character, i, j )
 	characterObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	local param = { 
-		mesh  = "Assets/model/ninja.b3d", 
-		clips = "Assets/model/ninja.clip" 
+		mesh  = "Assets/model/".. character.model .. "/" .. character.model ..  ".b3d", 
+		clips = "Assets/model/".. character.model .. "/" .. character.model ..  ".clip" 
 	}
 	local anim = characterObject:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid") 

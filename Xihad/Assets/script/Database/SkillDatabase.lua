@@ -38,7 +38,7 @@ loadSkill{
 	damage = 40,
 	property = "P",
 	description = "将怒龙之力集中于拳头猛击对方",
-	animation = "overhead attack"
+	-- animation = "overhead attack"
 }
 
 loadSkill{
@@ -55,7 +55,7 @@ loadSkill{
 	damage = 50,
 	property = "P",
 	description = "攻击周围的敌人",
-	animation = "swipe and spin sword"
+	-- animation = "swipe and spin sword"
 }
 
 loadSkill{
@@ -67,7 +67,7 @@ loadSkill{
 	damage = 10,
 	property = "N",
 	description = "就是普通的攻击而已",
-	animation = "punch and swipe sword"
+	-- animation = "punch and swipe sword"
 }
 
 return SkillDatabase

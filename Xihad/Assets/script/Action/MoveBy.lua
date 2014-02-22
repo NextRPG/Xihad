@@ -26,7 +26,7 @@ local function playAnimation( object, name )
 	end
 end
 
-function MoveBy:runAction( action )
+function MoveBy:runAction( action, callback )
 	if self.enabled then return false end
 
 	print(action.destination.x, action.destination.y)
@@ -34,13 +34,9 @@ function MoveBy:runAction( action )
 	self.destination = self.source + 
 		math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
 			action.destination.y * Consts.TILE_HEIGHT)
-	self.callback = action.callback or function ( ) end
+	self.callback = callback or function ( ) end
 	self.interval = action.interval or 0.5
 	self.leftTime = self.interval
-	-- self.methods = action.methods or {}
-	-- self.methods[#self.methods + 1] = function ( ... )
-	-- 	self.object:resetTranslate(...)
-	-- end
 
 	playAnimation(self.object, "walk")
 

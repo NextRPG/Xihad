@@ -13,18 +13,16 @@ function RotateBy.new( o )
 	return o
 end
 
-function RotateBy:runAction( action )
+function RotateBy:runAction( action, callback )
 	if enabled then return end
 	
 	local destination = action.destination
-	local callback = action.callback 
+	local callback = callback or action.callback 
 	local interval = action.interval
 
 	self.destination = destination or { y = 0 }
-	local animate = self.object:findComponent(c"AnimatedMesh")	
-	self.callback = callback or function ( )
-		animate:playAnimation(c"idle 1")
-	end
+	print("callback", callback == nil)
+	self.callback = callback or function ( ) end
 
 	self.leftTime = interval or 1.0
 	self.enabled = true
@@ -36,6 +34,7 @@ end
 function RotateBy:onUpdate(  )
 	if not self.enabled then return end
 
+	local animate = self.object:findComponent(c"AnimatedMesh")	
 	local lastFrameTime = Time.change	
 	local deltaY = self.destination.y * (lastFrameTime / self.leftTime)
 	self.destination.y = self.destination.y - deltaY
@@ -45,6 +44,7 @@ function RotateBy:onUpdate(  )
 	self.leftTime = self.leftTime - lastFrameTime
 	if (self.leftTime <= 0) then
 		self.enabled = false
+		animate:playAnimation(c"idle 1")
 		self.callback()
 	end
 end

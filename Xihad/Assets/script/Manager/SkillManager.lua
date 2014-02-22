@@ -93,7 +93,7 @@ end
 -- 发出技能后展示动画，并作出相应逻辑判断
 -- selectSkill可以传入
 -- @tparam Object tileObject
-function SkillManager:onCastSkill( object, skill, characterObject )
+function SkillManager:onCastSkill( tileObject, skill, characterObject )
 
 	skill = skill or selectSkill
 	characterObject = characterObject or currentCharacter
@@ -101,11 +101,19 @@ function SkillManager:onCastSkill( object, skill, characterObject )
 	Chessboard:recoverArea(skillRange)
 	Chessboard:recoverArea(targetRange)
 	local character = characterObject:findComponent(c"Character")
-	local tile = object:findComponent(c"Tile")
+	local tile = tileObject:findComponent(c"Tile")
 	local anim = characterObject:findComponent(c"AnimatedMesh")
+	local rotateBy = characterObject:findComponent(c"RotateBy")
+	local rx, ry, rz = characterObject:getRotation():xyz()
+	local ty = getLogicAngle(tile)
+	print("the target is", ty)
 
-	runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
-	anim:playAnimation(c"idle 1")
+	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}})
+	
+	if skill.animation then
+		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
+		anim:playAnimation(c"idle 1")
+	end
 
 	if targetRange == nil or table.contains(targetRange, tile) then
 		skill:trigger(character, tile)
