@@ -97,6 +97,19 @@ function SkillManager:onCastSkill( object )
 	Chessboard:recoverArea(targetRange)
 	local character = currentCharacter:findComponent(c"Character")
 	local tile = object:findComponent(c"Tile")
+	local anim = currentCharacter:findComponent(c"AnimatedMesh")
+
+	runAsyncFunc(anim.playAnimation, anim, c(selectSkill.animation))
+	-- local current = coroutine.running()
+	-- anim:playAnimation(c(selectSkill.animation), function (  )
+	-- 	assert(coroutine.running() == current)
+	-- 	coroutine.resume(current, 1)
+	-- 	-- print("haha")
+	-- end)
+	-- print(coroutine.yield())
+	anim:playAnimation(c"idle 1")
+
+
 	if table.contains(targetRange, tile) then
 		selectSkill:trigger(character, tile)
 	end

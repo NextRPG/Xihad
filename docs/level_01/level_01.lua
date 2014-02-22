@@ -9,21 +9,8 @@ return {
   properties = {},
   tilesets = {
     {
-      name = "山崖",
-      firstgid = 1,
-      tilewidth = 32,
-      tileheight = 32,
-      spacing = 0,
-      margin = 0,
-      image = "cliff.png",
-      imagewidth = 32,
-      imageheight = 32,
-      properties = {},
-      tiles = {}
-    },
-    {
       name = "texture",
-      firstgid = 2,
+      firstgid = 1,
       tilewidth = 32,
       tileheight = 32,
       spacing = 0,
@@ -55,7 +42,7 @@ return {
     },
     {
       name = "character",
-      firstgid = 5,
+      firstgid = 4,
       tilewidth = 32,
       tileheight = 32,
       spacing = 0,
@@ -72,19 +59,6 @@ return {
           }
         }
       }
-    },
-    {
-      name = "物品",
-      firstgid = 7,
-      tilewidth = 32,
-      tileheight = 23,
-      spacing = 0,
-      margin = 0,
-      image = "treasure.png",
-      imagewidth = 32,
-      imageheight = 23,
-      properties = {},
-      tiles = {}
     }
   },
   layers = {
@@ -100,23 +74,23 @@ return {
       properties = {},
       encoding = "lua",
       data = {
-        1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4
+        2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2,
+        2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3
       }
     },
     {
@@ -127,62 +101,62 @@ return {
       properties = {},
       objects = {
         {
-          name = "",
+          name = "a",
           type = "",
           shape = "rectangle",
           x = 224,
           y = 320,
           width = 0,
           height = 0,
-          gid = 6,
+          gid = 5,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "b",
           type = "",
           shape = "rectangle",
           x = 321,
           y = 256,
           width = 0,
           height = 0,
-          gid = 6,
+          gid = 5,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "c",
           type = "",
           shape = "rectangle",
           x = 161,
           y = 257,
           width = 0,
           height = 0,
-          gid = 6,
+          gid = 5,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "d",
           type = "",
           shape = "rectangle",
           x = 289,
           y = 96,
           width = 0,
           height = 0,
-          gid = 6,
+          gid = 5,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "e",
           type = "",
           shape = "rectangle",
           x = 161,
           y = 96,
           width = 0,
           height = 0,
-          gid = 6,
+          gid = 5,
           visible = true,
           properties = {}
         }
@@ -196,68 +170,35 @@ return {
       properties = {},
       objects = {
         {
-          name = "",
+          name = "1",
           type = "",
           shape = "rectangle",
           x = 129,
           y = 481,
           width = 0,
           height = 0,
-          gid = 5,
+          gid = 4,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "2",
           type = "",
           shape = "rectangle",
           x = 193,
           y = 481,
           width = 0,
           height = 0,
-          gid = 5,
+          gid = 4,
           visible = true,
           properties = {}
         },
         {
-          name = "",
+          name = "3",
           type = "",
           shape = "rectangle",
           x = 257,
           y = 480,
-          width = 0,
-          height = 0,
-          gid = 5,
-          visible = true,
-          properties = {}
-        }
-      }
-    },
-    {
-      type = "objectgroup",
-      name = "elements",
-      visible = true,
-      opacity = 1,
-      properties = {},
-      objects = {
-        {
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 448,
-          y = 160,
-          width = 0,
-          height = 0,
-          gid = 7,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 978,
-          y = 363,
           width = 0,
           height = 0,
           gid = 4,

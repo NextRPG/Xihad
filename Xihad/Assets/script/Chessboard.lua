@@ -47,7 +47,7 @@ function Chessboard:createTile( tile )
 	resetColor(tileObject)
 
 	local location = getPixelLocation(tile)
-	tileObject:concatTranslate(location.x, 0, location.z)
+	tileObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	tileObject:addTag(c"Tile")
 
@@ -64,6 +64,8 @@ function Chessboard:init( map )
 		tile.terrain = TerrainDatabase[id]
 		self:createTile(tile)
 	end
+	Consts.ROWS = map.height
+	Consts.COLS = map.width
 end
 
 ---

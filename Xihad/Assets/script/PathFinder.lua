@@ -1,6 +1,6 @@
 --- 
--- 处理游戏中有关寻路的情景
--- @module name
+-- 处理游戏中使用广度寻路的情景
+-- @module PathFinder
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
@@ -8,6 +8,13 @@ local Chessboard = require "Chessboard"
 local queue = require "Queue"
 
 local PathFinder = {}
+
+function PathFinder.new( o )
+	assert(type(o) == "table", "prototype must be a table")
+	setmetatable(o, {__index = PathFinder})
+
+	return o
+end
 
 function hash( tile )
 	assert(tile.x)
@@ -36,15 +43,16 @@ end
 -- @int maxAP
 local directions = Consts.directions
 function PathFinder:getReachableTiles( start, maxAP, predicate )
+
 	assert(start) assert(maxAP)
 	assert(self.start == nil, "must clean before getReachableTiles")
 	start.leftAP = maxAP
 	self.start = start 
-	self[hash(start)] = start
 	local openQueue = queue.new()
 	openQueue:push(start)
+	local count = 0
 	while openQueue:empty() == false do
-		currentPoint = openQueue:pop()
+		local currentPoint = openQueue:pop()
 		self[hash(currentPoint)] = currentPoint
 		for k,v in pairs(directions) do
 
@@ -52,43 +60,21 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-
 			if inbound(point.x, point.y) and Chessboard:tileAt(point):findComponent(c"Tile"):canPass()
 				 and point.leftAP > 0 and self[hash(point)] == nil  then
-				 	if not predicate or predicate(point) then
 				 		openQueue:push(point)
-					end
 			end
+			count = count + 1
 		end
 	end
+			print(count)
+
 	assert(self.start)
 	for k,v in pairs(self) do
-		if type(v) == "table" then
+		if type(v) == "table" and k ~= "start" then
 			self[#self + 1] = v
 		end
 	end
-end
-
---- 
--- 获得到达所有敌人处的最短路径
--- @tab start
--- @tparam CharacterManager manager
-local fakeMaxAP = 10000
-function PathFinder:getEnemyPath( start, manager )
-	local fakeMaxAP = 10000
-	local predicate = function ( point )
-		return manager:getHeroByLocation(point)
-	end
-	self:getReachableTiles(start, fakeMaxAP, predicate)
-end
-
----
--- 获得到达所有敌人的路径后，找到一个最能走到范围内的目标点
-function PathFinder:getEnemyTile( finalTile, maxAP )
-	while fakeMaxAP - finalTile.prev.leftAP > maxAP do
-		finalTile = finalTile.prev
-	end
-	return finalTile.prev
 end
 
 ---
@@ -96,8 +82,8 @@ end
 -- @tab tile
 -- @treturn {string, ...} path 
 function PathFinder:constructPath( tile )
-	local path = {}
-	local tile = findTile(tile)
+	local path = {}	
+	local tile = self[hash(tile)]
 	assert(tile)
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction

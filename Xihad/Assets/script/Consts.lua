@@ -2,8 +2,6 @@
 
 Consts = {
 	-- map
-	ROWS = 10,
-	COLS = 10,
 	TILE_WIDTH = 10, 
 	TILE_HEIGHT = 10,
 	-- characterProperties

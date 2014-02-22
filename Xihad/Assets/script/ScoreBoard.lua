@@ -32,20 +32,33 @@ function ScoreBoard:appendKey( list )
 	end
 end
 
+local standard = {}
+local function getIndex( num )
+	local index = 1
+	for k,v in pairs(standard) do
+		if v > num then
+			index = index + 1
+		end
+	end
+	return index
+end
+
 ---
 -- 加上一个列表和它所对应的ratio
+-- 需要假设该链表中数值越大则选择优先级越高
 -- @tab list
 -- @float ratio
 function ScoreBoard:appendValue( list, ratio )
 	self.ratio[#self.ratio + 1] = ratio
 	local columnIndex = #self.ratio	
-	for i,v in ipairs(list) do
-		self.data[v.name][columnIndex] = i
+	standard = table.copy(list)
+	for k,v in pairs(list) do
+		self.data[k][columnIndex] = getIndex(v)
 	end
 end
 
 ---
--- 计算出结果并返回分值最高的一个单位
+-- 计算出结果并返回分值最小的一个单位
 function ScoreBoard:getResult(  )
 	local testValue = 0
 	for i,v in ipairs(self.ratio) do
@@ -58,14 +71,15 @@ function ScoreBoard:getResult(  )
 			list.result = list.result + ratio * list[i]
 		end
 	end
-	local maxName = ""
-	local maxScore = 0
+
+	local minName = ""
+	local minScore = 100000
 	for k,list in pairs(self.data) do
-		if list.result > maxScore then
-			maxName, maxScore = k, list.result
+		if list.result < minScore then
+			minName, minScore = k, list.result
 		end
 	end
-	return maxName
+	return minName
 end
 
 return ScoreBoard

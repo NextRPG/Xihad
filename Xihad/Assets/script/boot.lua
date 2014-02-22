@@ -14,6 +14,7 @@ package.path = package.path
 
 require "Consts"
 require "LuaUtils"
+require "math3d"
 
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
@@ -28,6 +29,7 @@ require "SkillDatabase"
 -- load save files
 local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsub("[^\\\/]$", "%1\\")
 local battle = dofile(CUR_DIR .. "\\Save\\maptest.battle")
+local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 
 -- init battle related manager
 Chessboard:init(battle.chessboard)
@@ -39,3 +41,8 @@ BattleManager:init(HeroManager, AIManager)
 CameraManager:init()
 LightManager:init()
 
+
+-- init Controller
+scene:pushController(require("InputController"))
+
+cursor:setVisible(true)

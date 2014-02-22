@@ -35,7 +35,7 @@ function Sequence:runMoveActions( actions, callback )
 	local newActions = {}
 
 	function rotateBeforeMove( index ) 
-		local rx, ry, rz = self.object:getRotation()
+		local rx, ry, rz = self.object:getRotation():xyz()
 		local ty = getLogicAngle(actions[index].destination)
 		local rotate = {destination = {y = calRotation( ry, ty )},
 		 interval = 0.25, actionType = "RotateBy"}

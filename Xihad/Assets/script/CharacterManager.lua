@@ -36,10 +36,10 @@ function CharacterManager:createCharacter( character, i, j )
 
 	local test = characterObject:appendComponent(c"Character", character)
 	assert(test)
-	local tile = {y = i - 1, x = j}
+	local tile = {y = i, x = j}
 
 	local location = getPixelLocation(tile)
-	characterObject:concatTranslate(location.x, 0, location.z)
+	characterObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	local param = { 
 		mesh  = "Assets/model/ninja.b3d", 
@@ -91,9 +91,14 @@ end
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
-function CharacterManager:onSelectTile( object )
+function CharacterManager:onSelectTile( object, finder )
+
+
+	finder = finder or PathFinder 	
 	local tile = object:findComponent(c"Tile")
-	local path = PathFinder:constructPathAndClean(tile)
+	
+	local path = finder:constructPathAndClean(tile)
+
 	local directions = Consts.directions
 	local sequence = self.currentCharacter:findComponent(c"Sequence")
 	-- TODO：优化路径
@@ -102,6 +107,7 @@ function CharacterManager:onSelectTile( object )
 		actions[#actions + 1] = {destination = directions[v]}
 	end
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
+	print("haha")
 	local character = self.currentCharacter:findComponent(c"Character")
 	character.states.TURNOVER = true
 end

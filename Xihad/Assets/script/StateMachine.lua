@@ -47,7 +47,7 @@ function StateMachine:pendingAndAction( func )
 		func()
 		self.ASYNC = false		
 	end)
-	coroutine.resume(co)
+	runCallback(coroutine.resume(co))
 end
 
 return StateMachine

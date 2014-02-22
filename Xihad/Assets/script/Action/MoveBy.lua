@@ -1,16 +1,20 @@
--- logic Move, not the pixel Move 
-MoveBy = {
+ --- 
+-- logic Move, not the pixel Move
+-- @module MoveBy
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+local MoveBy = {
 	destination = {x = 0, y = 0},
 	leftTime = 0,
 	enabled = false
 }
 
 package.path = package.path .. ";../?.lua"
-local m3d = require "math3d"
 
 function MoveBy.new( o )
-	o = o or {}
-
+	
+	o = o or {}	
 	setmetatable(o, {__index = MoveBy})
 	return o
 end
@@ -23,36 +27,42 @@ local function playAnimation( object, name )
 end
 
 function MoveBy:runAction( action )
-	if self.enabled then return end
+	if self.enabled then return false end
 
 	print(action.destination.x, action.destination.y)
-	self.source = m3d.vector(self.object:getTranslate())
+	self.source = self.object:getTranslate()
 	self.destination = self.source + 
-		m3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
+		math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
 			action.destination.y * Consts.TILE_HEIGHT)
 	self.callback = action.callback or function ( ) end
 	self.interval = action.interval or 0.7
 	self.leftTime = self.interval
+	-- self.methods = action.methods or {}
+	-- self.methods[#self.methods + 1] = function ( ... )
+	-- 	self.object:resetTranslate(...)
+	-- end
 
 	playAnimation(self.object, "walk")
 
 	self.enabled = true
+	return true
 end
 
 function MoveBy:onUpdate(  )
-	if not self.enabled then return end
+	if not self.enabled then return false end
 
 	self.leftTime = self.leftTime - Time.change
 	if (self.leftTime <= 0) then
-		self.object:resetTranslate(self.destination:xyz())
+		self.object:resetTranslate(self.destination)
 		self.enabled = false
 		playAnimation(self.object, "idle 1")
 		self.callback()
 	else
-		self.object:resetTranslate(m3d.lerp(
-			self.source, self.destination, self.leftTime / self.interval ):xyz() )
+		self.object:resetTranslate(math3d.lerp(
+			self.source, self.destination, self.leftTime / self.interval))
 	end
 
+	return true
 end
 
 return MoveBy

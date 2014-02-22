@@ -1,12 +1,3 @@
-function createEnumTable( t, index )
-	local enumTable = {}
-	local enumIndex = index or 0
-	for i,v in ipairs(t) do
-		enumTable[v] = enumIndex + i
-	end
-	return enumTable
-end
-
 -- coordinate
 
 local width = Consts.TILE_WIDTH
@@ -99,12 +90,18 @@ end
 
 -- function
 
+function runCallback( result, func, t )
+	if type(func) == "function" then
+		func(unpack(t))
+	end
+	if result ~= true then print(func) end
+end
+
 function runAsyncFunc( func, ... )
 	local current = coroutine.running()
 	local t = {...}
 	table.insert(t, function (  )
-		coroutine.resume(current)
+		runCallback(coroutine.resume(current))
 	end)
-	func(unpack(t))
-	coroutine.yield()
+	coroutine.yield(func, t)
 end
