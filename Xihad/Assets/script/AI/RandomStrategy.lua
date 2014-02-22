@@ -1,4 +1,3 @@
-local PathFinder = require "PathFinder"
 local GoalFinder = require "GoalFinder"
 local SkillManager = require "SkillManager"
 local ScoreBoard = require "ScoreBoard"

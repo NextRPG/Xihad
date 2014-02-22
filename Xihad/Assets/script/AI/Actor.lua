@@ -47,7 +47,8 @@ function Actor:initThread(  )
 			local point = strategy:judgeTile()
 			-- runAsync
 			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
-			PathFinder:cleanUp()			
+			
+
 			coroutine.resume(scheduler)
 
 			scheduler = coroutine.yield()

@@ -11,6 +11,11 @@ package.path = package.path
 .. ";Assets/Script/Utils/?.lua"
 .. ";Assets/Script/Save/?"
 .. ";Assets/Script/Database/?.lua"
+.. ";Assets/Script/AI/?.lua"
+.. ";Assets/Script/Component/?.lua"
+.. ";Assets/Script/IO/?.lua"
+.. ";Assets/Script/Manager/?.lua"
+
 
 require "Consts"
 require "LuaUtils"
