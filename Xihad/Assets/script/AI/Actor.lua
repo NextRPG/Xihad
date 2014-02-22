@@ -8,6 +8,7 @@
 local PathFinder = require "PathFinder"
 local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
+local SkillManager = require "SkillManager"
 
 ---
 -- @thread cothread
@@ -48,6 +49,11 @@ function Actor:initThread(  )
 			-- runAsync
 			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
 			
+			local selectSkill, target = strategy:judgeSkill() -- component
+			if selectSkill ~= 0 then
+				print(" the skill is ", selectSkill)
+				SkillManager:onCastSkill( target, selectSkill, object)
+			end
 
 			coroutine.resume(scheduler)
 

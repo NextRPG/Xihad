@@ -88,6 +88,7 @@ function math.round( i )
 end
 
 function table.contains( t, e )
+	print(debug.traceback())
 	for k,v in pairs(t) do
 		if v == e then return true end
 		if table.equal(v, e) then return true end
@@ -120,4 +121,24 @@ function runAsyncFunc( func, ... )
 	print(func, t)
 	
 	coroutine.yield(func, t)
+end
+
+function findMax( list )
+	local maxKey, maxValue = next(list)
+	for k,v in pairs(list) do
+		if maxValue < v then
+			maxKey, maxValue = k, v
+		end	
+	end
+	return maxKey, maxValue
+end
+
+function findMin( list )
+	local minKey, minValue = next(list)
+	for k,v in pairs(list) do
+		if minValue > v then
+			minKey, minValue = k, v
+		end
+	end
+	return minKey, minValue
 end

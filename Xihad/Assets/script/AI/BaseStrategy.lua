@@ -1,6 +1,7 @@
 local GoalFinder = require "GoalFinder"
 local SkillManager = require "SkillManager"
 local ScoreBoard = require "ScoreBoard"
+local Chessboard = require "Chessboard"
 
 local BaseStrategy = {
 
@@ -38,16 +39,36 @@ function BaseStrategy:judgeTile(  )
 end
 
 function BaseStrategy:judgeSkill(  )
-	-- local skills = self.object:findComponent(c"Character").skills
-	-- for i,id in ipairs(skills) do
-	-- 	local skill = SkillManager:getSkill(id):findComponent(c"Skill")
-	-- 	-- if skill:
+	local skills = self.object:findComponent(c"Character").skills
+	local center = self.object:findComponent(c"Character"):tile()
 
-	-- end	
-end
+	local names, damages, currentTimes, ranges = {},{},{},{}
+	for i,id in ipairs(skills) do
+		repeat
+			local skill = SkillManager:getSkill(id):findComponent(c"Skill")
+			if not skill:hasEnemy( center ) then break end
+			names[#names + 1] = skill.id
+			damages[#damages + 1] = skill.damage
+			currentTimes[#currentTimes + 1] = skill.currentTimes
+			ranges[#ranges + 1] = #skill.range
+		until true
+	end	
 
-function BaseStrategy:judgeTarget(  )
-	
+	if #names == 0 then
+		return 0
+	end
+
+	local board = ScoreBoard.new{}
+
+	board:appendKey( names )
+	board:appendValue( damages, 0.3 )
+	board:appendValue( currentTimes, 0.3 )
+	board:appendValue( ranges, 0.4 )
+
+	local selectSkill = SkillManager:getSkill(board:getResult()):findComponent(c("Skill"))
+	local target = selectSkill:getBestTarget(center)
+
+	return selectSkill, Chessboard:tileAt(target)
 end
 
 return BaseStrategy
