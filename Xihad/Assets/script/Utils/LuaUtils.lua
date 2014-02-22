@@ -35,6 +35,7 @@ function calRotation( currentRotation, targetRotation )
 	else
 		return targetRotation - currentRotation
 	end
+	-- return targetRotation - currentRotation
 end
 
 -- MouseEvent
@@ -95,6 +96,7 @@ function table.contains( t, e )
 end
 
 function math.p_add( p1, p2 )
+	
 	return {x = p1.x + p2.x, y = p1.y + p2.y}
 end
 

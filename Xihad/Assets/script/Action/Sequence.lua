@@ -34,11 +34,12 @@ function Sequence:runMoveActions( actions, callback )
 	-- local rotate = self.obejct:appendComponent(c"Action.RotateBy")
 	local newActions = {}
 
+	local rx, ry, rz = self.object:getRotation():xyz()
 	function rotateBeforeMove( index ) 
-		local rx, ry, rz = self.object:getRotation():xyz()
 		local ty = getLogicAngle(actions[index].destination)
 		local rotate = {destination = {y = calRotation( ry, ty )},
 		 interval = 0.25, actionType = "RotateBy"}
+		 ry = ty
 		newActions[#newActions + 1] = rotate 
 		-- start.callback = function ( ) move:runAction(actions[index]) end
 	end
