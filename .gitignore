@@ -15,4 +15,5 @@
 /ipch/
 /docs/Reference/html
 /Xihad/math3d.*
+/Debug/*.lib
 *sublime*
