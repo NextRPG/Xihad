@@ -207,6 +207,9 @@
     <ClInclude Include="..\src\CppBase\CLineBreak.hpp">
       <Filter>CppBase</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\CppBase\CStringSplitter.hpp">
+      <Filter>CppBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">

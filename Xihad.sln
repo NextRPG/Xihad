@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dialogue", "Dialogue\Dialog
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcxproj", "{D612E66F-9058-4E94-8D43-D851A6FFFDF0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaT", "LuaT\LuaT.vcxproj", "{C358F438-442B-4119-BF1C-5E3C28817D1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -77,6 +79,10 @@ Global
 		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Debug|Win32.Build.0 = Debug|Win32
 		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Release|Win32.ActiveCfg = Release|Win32
 		{D612E66F-9058-4E94-8D43-D851A6FFFDF0}.Release|Win32.Build.0 = Release|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Debug|Win32.Build.0 = Debug|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Release|Win32.ActiveCfg = Release|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

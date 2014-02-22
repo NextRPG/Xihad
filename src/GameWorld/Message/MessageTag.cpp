@@ -1,14 +1,15 @@
 #include "MessageTag.h"
 #include <algorithm>
 #include <iostream>
-#include "CppBase\StringUtil.h"
+#include "CppBase\CStringSplitter.hpp"
 
 namespace xihad { namespace ngn 
 {
 	MessageTag::MessageTag( const std::string& pParseSource, char pSeparator )
 		: mOrginTag(pParseSource), mSeparator(pSeparator)
 	{
-		StringUtil::split(mTags, pParseSource, pSeparator, '%');
+		CStringSplitter<char> splitter(pSeparator, '%');
+		splitter.split(mTags, pParseSource);
 	}
 
 	MessageTag::const_itr MessageTag::begin() const
