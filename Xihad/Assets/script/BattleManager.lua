@@ -1,6 +1,13 @@
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
 local StateMachine = require "StateMachine"
+--- 
+-- 控制战斗流程
+-- @module BattleManager
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+
 local PathFinder = require "PathFinder"
 
 local BattleManager = {
@@ -10,7 +17,21 @@ local BattleManager = {
 function BattleManager:init( manager1, manager2 )
 	self.manager = manager1
 
-	stateMachine = StateMachine.new()
+	local stateMachine = StateMachine.new()
+
+	self:addShowCharacter()
+	self:addShowTile()
+	self:addShowSkill()
+	self:addShowTargetRange()
+
+	stateMachine:setInitial("showCharacter")
+	self.stateMachine = stateMachine
+end
+
+function BattleManager:addShowCharacter(  )
+
+	local stateMachine = self.stateMachine
+
 	stateMachine:addState("showCharacter")
 	stateMachine:addTransition("showCharacter", "showTile",
 		function ( object, etype )
@@ -34,9 +55,12 @@ function BattleManager:init( manager1, manager2 )
 				self.manager = manager1
 				self.manager:roundStart()
 			end)
+	end)
+end
 
-		end)
+function BattleManager:addShowTile(  )
 
+	local stateMachine = self.stateMachine
 	stateMachine:addState("showTile")
 	stateMachine:addTransition("showTile", "showTile",
 		function ( object, etype )
@@ -58,6 +82,10 @@ function BattleManager:init( manager1, manager2 )
 				SkillManager:onShowSkills(self.manager.currentCharacter)
 			end)
 		end)
+end
+
+function BattleManager:addShowSkill(  )
+	local stateMachine = self.stateMachine
 
 	stateMachine:addState("showSkill")
 	stateMachine:addTransition("showSkill", "showCharacter",
@@ -73,8 +101,11 @@ function BattleManager:init( manager1, manager2 )
 		function ( key )
 			SkillManager:onSelectSkill(key)
 		end)
+end
 
-	stateMachine:addState("showTargetRange")
+function BattleManager:addShowTargetRange(  )
+	local stateMachine = self.stateMachine
+		stateMachine:addState("showTargetRange")
 	stateMachine:addTransition("showTargetRange", "showTargetRange",
 		function( object, etype )
 			return etype == "mouseMoved" and object and object:hasTag(c"Tile")
@@ -91,9 +122,6 @@ function BattleManager:init( manager1, manager2 )
 				SkillManager:onCastSkill(object)
 			end)
 		end)
-
-	stateMachine:setInitial("showCharacter")
-	self.stateMachine = stateMachine
 end
 
 function BattleManager:onMouseEvent( e )
