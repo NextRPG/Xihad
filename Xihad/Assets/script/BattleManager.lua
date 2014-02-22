@@ -18,6 +18,8 @@ function BattleManager:init( manager1, manager2 )
 	self.manager = manager1
 
 	local stateMachine = StateMachine.new()
+	self.stateMachine = stateMachine
+	
 
 	self:addShowCharacter()
 	self:addShowTile()
@@ -25,7 +27,6 @@ function BattleManager:init( manager1, manager2 )
 	self:addShowTargetRange()
 
 	stateMachine:setInitial("showCharacter")
-	self.stateMachine = stateMachine
 end
 
 function BattleManager:addShowCharacter(  )
