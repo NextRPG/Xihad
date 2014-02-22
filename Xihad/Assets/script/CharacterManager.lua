@@ -107,6 +107,7 @@ function CharacterManager:onSelectTile( object, finder )
 		actions[#actions + 1] = {destination = directions[v]}
 	end
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
+	print("haha")
 	local character = self.currentCharacter:findComponent(c"Character")
 	character.states.TURNOVER = true
 end

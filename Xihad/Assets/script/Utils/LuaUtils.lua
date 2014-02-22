@@ -103,8 +103,11 @@ function runAsyncFunc( func, ... )
 	local current = coroutine.running()
 	local t = {...}
 	table.insert(t, function (  )
-		coroutine.resume(current)
+		local result, func, t = coroutine.resume(current)
+		print(result, func, t)
+		if type(func) == "function" then
+			func(unpack(t))
+		end
 	end)
-	func(unpack(t))
-	coroutine.yield()
+	coroutine.yield(func, t)
 end

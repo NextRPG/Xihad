@@ -87,7 +87,9 @@ function BattleManager:init( manager1, manager2 )
 			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
-			SkillManager:onCastSkill(object)
+			stateMachine:pendingAndAction(function (  )
+				SkillManager:onCastSkill(object)
+			end)
 		end)
 
 	stateMachine:setInitial("showCharacter")
