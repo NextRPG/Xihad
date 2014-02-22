@@ -2,25 +2,18 @@ local GoalFinder = require "GoalFinder"
 local SkillManager = require "SkillManager"
 local ScoreBoard = require "ScoreBoard"
 
-local RandomStrategy = {
+local BaseStrategy = {
 
 }
 
-function RandomStrategy.new( o )
+function BaseStrategy.new( o )
 	assert(type(o) == "table", "prototype RandomStratedy must be a table")
-	setmetatable(o, {__index = RandomStrategy})
+	setmetatable(o, {__index = BaseStrategy})
 
 	return o
 end
 
-function RandomStrategy:judgeTile(  )
-	local character = self.object:findComponent(c"Character")
-	for i, p in ipairs(PathFinder) do
-		if not table.equal(p , character:tile()) then
-			return p
-		end
-	end
-
+function BaseStrategy:judgeTile(  )
 	local actor = self.object:findComponent(c"Character")
 	local names, distances, HPs = {}, {}, {}
 
@@ -40,10 +33,11 @@ function RandomStrategy:judgeTile(  )
 	local name = board:getResult()
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
 	local tile = GoalFinder:getTargetTile( actor:tile(), enemy:tile(), actor:getProperty("maxAP"))
+	
 	return tile
 end
 
-function RandomStrategy:judgeSkill(  )
+function BaseStrategy:judgeSkill(  )
 	-- local skills = self.object:findComponent(c"Character").skills
 	-- for i,id in ipairs(skills) do
 	-- 	local skill = SkillManager:getSkill(id):findComponent(c"Skill")
@@ -52,8 +46,8 @@ function RandomStrategy:judgeSkill(  )
 	-- end	
 end
 
-function RandomStrategy:judgeTarget(  )
+function BaseStrategy:judgeTarget(  )
 	
 end
 
-return RandomStrategy
+return BaseStrategy

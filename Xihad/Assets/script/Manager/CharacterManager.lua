@@ -88,6 +88,22 @@ function CharacterManager:onSelectCharacter( object )
 	Chessboard:markArea(PathFinder)
 end
 
+local function optimizePath( actions )
+	local newActions = {}
+	newActions[1] = actions[1]
+	for i,action in ipairs(actions) do
+		if actions[i + 1] ~= nil then
+			if table.equal(action, actions[i + 1]) then
+				newActions[#newActions].destination = math.p_add(newActions[#newActions].destination, actions[i + 1].destination)
+				newActions[#newActions].interval = newActions[#newActions].interval + actions[i + 1].interval
+			else
+				newActions[#newActions + 1] = actions[i + 1]
+			end
+		end
+	end
+	return newActions
+end
+
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
@@ -104,10 +120,10 @@ function CharacterManager:onSelectTile( object, finder )
 	-- TODO：优化路径
 	local actions = {}
 	for i,v in ipairs(path) do
-		actions[#actions + 1] = {destination = directions[v]}
+		actions[#actions + 1] = {destination = directions[v], interval = 0.5}
 	end
+	actions = optimizePath(actions)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
-	print("haha")
 	local character = self.currentCharacter:findComponent(c"Character")
 	character.states.TURNOVER = true
 end

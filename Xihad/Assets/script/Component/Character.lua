@@ -110,8 +110,6 @@ end
 -- @string name
 -- @return int
 function Character:getProperty( name )
-	print(debug.traceback())
-	print(type)
 	if type(self.properties[name]) == "table" then
 		return self.properties[name]:calculate()
 	else

@@ -35,7 +35,7 @@ function MoveBy:runAction( action )
 		math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
 			action.destination.y * Consts.TILE_HEIGHT)
 	self.callback = action.callback or function ( ) end
-	self.interval = action.interval or 0.7
+	self.interval = action.interval or 0.5
 	self.leftTime = self.interval
 	-- self.methods = action.methods or {}
 	-- self.methods[#self.methods + 1] = function ( ... )

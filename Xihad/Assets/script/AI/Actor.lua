@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local PathFinder = require "PathFinder"
-local RandomStrategy = require "RandomStrategy"
+local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
 
 ---
@@ -21,7 +21,7 @@ function Actor.new( o, object )
 	setmetatable(o, {__index = Actor})
 	assert(o.manager)
 
-	o.strategy = RandomStrategy.new{object = object}
+	o.strategy = BaseStrategy.new{object = object}
 	o:initThread(  )
 	return o
 end
@@ -30,7 +30,7 @@ end
 -- cothread从上次中断的地方返回继续执行
 -- @... 传入任意长参数...
 function Actor:run( ... )
-	coroutine.resume( self.cothread, ... )
+	runCallback(coroutine.resume( self.cothread, ... ))
 end
 
 function Actor:initThread(  )
