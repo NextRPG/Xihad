@@ -35,6 +35,7 @@ function calRotation( currentRotation, targetRotation )
 	else
 		return targetRotation - currentRotation
 	end
+	-- return targetRotation - currentRotation
 end
 
 -- MouseEvent
@@ -61,7 +62,13 @@ end
 
 function table.equal( t1, t2 )
 	for k,v in pairs(t1) do
-		if v ~= t2[k] then return false end
+		if type(v) == "table" and type(t2[k]) =="table" then
+			if table.equal(v, t2[k]) == false then
+				return false
+			end
+		elseif v ~= t2[k] then 
+			return false 
+		end
 	end
 	return true
 end
@@ -81,6 +88,7 @@ function math.round( i )
 end
 
 function table.contains( t, e )
+	print(debug.traceback())
 	for k,v in pairs(t) do
 		if v == e then return true end
 		if table.equal(v, e) then return true end
@@ -88,20 +96,49 @@ function table.contains( t, e )
 	return false
 end
 
+function math.p_add( p1, p2 )
+	
+	return {x = p1.x + p2.x, y = p1.y + p2.y}
+end
+
 -- function
 
 function runCallback( result, func, t )
-	if type(func) == "function" then
+	print(func, t)
+	if type(func) == "function" then		
 		func(unpack(t))
 	end
 	if result ~= true then print(func) end
 end
 
 function runAsyncFunc( func, ... )
+
 	local current = coroutine.running()
 	local t = {...}
 	table.insert(t, function (  )
 		runCallback(coroutine.resume(current))
 	end)
+	print(func, t)
+	
 	coroutine.yield(func, t)
+end
+
+function findMax( list )
+	local maxKey, maxValue = next(list)
+	for k,v in pairs(list) do
+		if maxValue < v then
+			maxKey, maxValue = k, v
+		end	
+	end
+	return maxKey, maxValue
+end
+
+function findMin( list )
+	local minKey, minValue = next(list)
+	for k,v in pairs(list) do
+		if minValue > v then
+			minKey, minValue = k, v
+		end
+	end
+	return minKey, minValue
 end

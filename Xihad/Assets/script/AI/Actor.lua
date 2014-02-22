@@ -6,8 +6,9 @@
 -- @copyright NextRPG
 
 local PathFinder = require "PathFinder"
-local RandomStrategy = require "RandomStrategy"
+local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
+local SkillManager = require "SkillManager"
 
 ---
 -- @thread cothread
@@ -21,7 +22,7 @@ function Actor.new( o, object )
 	setmetatable(o, {__index = Actor})
 	assert(o.manager)
 
-	o.strategy = RandomStrategy.new{object = object}
+	o.strategy = BaseStrategy.new{object = object}
 	o:initThread(  )
 	return o
 end
@@ -30,7 +31,7 @@ end
 -- cothread从上次中断的地方返回继续执行
 -- @... 传入任意长参数...
 function Actor:run( ... )
-	coroutine.resume( self.cothread, ... )
+	runCallback(coroutine.resume( self.cothread, ... ))
 end
 
 function Actor:initThread(  )
@@ -47,7 +48,13 @@ function Actor:initThread(  )
 			local point = strategy:judgeTile()
 			-- runAsync
 			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
-			PathFinder:cleanUp()			
+			
+			local selectSkill, target = strategy:judgeSkill() -- component
+			if selectSkill ~= 0 then
+				print(" the skill is ", selectSkill)
+				SkillManager:onCastSkill( target, selectSkill, object)
+			end
+
 			coroutine.resume(scheduler)
 
 			scheduler = coroutine.yield()

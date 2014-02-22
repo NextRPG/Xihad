@@ -124,6 +124,22 @@ function Skill:hasEnemy( center )
 	return false
 end
 
+function Skill:getBestTarget( center )
+	local target2Num = {}
+	local attackArea = self:getAttackArea(center)
+	for i,target in ipairs(attackArea) do
+		local range = self:getRange(target)
+		target2Num[target] = 0
+		for i,tile in ipairs(range) do
+			if HeroManager:getCharacterByLocation(tile) then
+				target2Num[target] = target2Num[target] + 1
+			end
+		end
+	end
+	local bestTarget = findMax(target2Num)
+	return bestTarget
+end
+
 ---
 -- 技能在某点被触发
 -- @tparam Character hero

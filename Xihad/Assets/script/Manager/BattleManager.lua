@@ -15,20 +15,21 @@ local BattleManager = {
 }
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager1
+	self.manager = manager2
 
 	local stateMachine = StateMachine.new()
+	self.stateMachine = stateMachine
+	
 
-	self:addShowCharacter()
+	self:addShowCharacter( manager1, manager2 )
 	self:addShowTile()
 	self:addShowSkill()
 	self:addShowTargetRange()
 
 	stateMachine:setInitial("showCharacter")
-	self.stateMachine = stateMachine
 end
 
-function BattleManager:addShowCharacter(  )
+function BattleManager:addShowCharacter( manager1, manager2 )
 
 	local stateMachine = self.stateMachine
 

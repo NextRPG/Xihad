@@ -90,28 +90,25 @@ function SkillManager:onSelectTarget( object )
 end
 
 ---
--- 发出技能后展示动画，并作出相应逻辑判断：TODO
+-- 发出技能后展示动画，并作出相应逻辑判断
+-- selectSkill可以传入
 -- @tparam Object tileObject
-function SkillManager:onCastSkill( object )
+function SkillManager:onCastSkill( object, skill, characterObject )
+
+	skill = skill or selectSkill
+	characterObject = characterObject or currentCharacter
+
 	Chessboard:recoverArea(skillRange)
 	Chessboard:recoverArea(targetRange)
-	local character = currentCharacter:findComponent(c"Character")
+	local character = characterObject:findComponent(c"Character")
 	local tile = object:findComponent(c"Tile")
-	local anim = currentCharacter:findComponent(c"AnimatedMesh")
+	local anim = characterObject:findComponent(c"AnimatedMesh")
 
-	runAsyncFunc(anim.playAnimation, anim, c(selectSkill.animation))
-	-- local current = coroutine.running()
-	-- anim:playAnimation(c(selectSkill.animation), function (  )
-	-- 	assert(coroutine.running() == current)
-	-- 	coroutine.resume(current, 1)
-	-- 	-- print("haha")
-	-- end)
-	-- print(coroutine.yield())
+	runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
 	anim:playAnimation(c"idle 1")
 
-
-	if table.contains(targetRange, tile) then
-		selectSkill:trigger(character, tile)
+	if targetRange == nil or table.contains(targetRange, tile) then
+		skill:trigger(character, tile)
 	end
 end
 

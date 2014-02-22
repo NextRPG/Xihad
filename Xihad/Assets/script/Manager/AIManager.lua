@@ -1,6 +1,4 @@
 local CharacterManager = require "CharacterManager"
-local RandomStrategy = require "RandomStrategy"
-
 
 local AIManager = CharacterManager.new{team = "AI"}
 
