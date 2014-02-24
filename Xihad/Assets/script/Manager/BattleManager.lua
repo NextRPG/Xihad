@@ -41,6 +41,7 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 					and self.manager:checkAvailable(object)
 		end,
 		function ( object )
+
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showCharacter", "showCharacter",
