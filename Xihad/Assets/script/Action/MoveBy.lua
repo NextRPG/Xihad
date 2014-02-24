@@ -19,7 +19,7 @@ function MoveBy.new( o )
 	return o
 end
 
-local function playAnimation( object, name )
+function playAnimation( object, name )
 	local animate = object:findComponent(c"AnimatedMesh")
 	if animate ~= nil then
 		animate:playAnimation(c(name))
@@ -29,16 +29,23 @@ end
 function MoveBy:runAction( action, callback )
 	if self.enabled then return false end
 
-	print(action.destination.x, action.destination.y)
 	self.source = self.object:getTranslate()
-	self.destination = self.source + 
+	action.destination = self.source + 
 		math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
 			action.destination.y * Consts.TILE_HEIGHT)
+	self:runActionByPixel(action, callback)
+
+	return true
+end
+
+function MoveBy:runActionByPixel( action, callback )
+	if self.enabled then return false end
+
+	self.source = self.object:getTranslate()
+	self.destination = action.destination
 	self.callback = callback or function ( ) end
 	self.interval = action.interval or 0.5
 	self.leftTime = self.interval
-
-	playAnimation(self.object, "walk")
 
 	self.enabled = true
 	return true
