@@ -48,15 +48,13 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 			return self.manager:checkRoundOver() or self.manager == manager2
 		end, 
 		function (  )
-			stateMachine:pendingAndAction(function (  )
 				self.manager = manager2
 				self.manager:roundStart() 
 				print("doing something")
 				self.manager:runActors()
 				self.manager = manager1
 				self.manager:roundStart()
-			end)
-	end)
+		end)
 end
 
 function BattleManager:addShowTile(  )
@@ -77,11 +75,9 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
-			stateMachine:pendingAndAction(function (  )
 				Chessboard:recoverArea(PathFinder)
 				self.manager:onSelectTile(object)
 				SkillManager:onShowSkills(self.manager.currentCharacter)
-			end)
 		end)
 end
 

@@ -35,19 +35,19 @@ end
 function StateMachine:update( ... )
 	for condition, action in pairs(self[self.currentState]) do
 		if condition( ... ) and not self.ASYNC then
-			action( ... )
+			self:pendingAndAction(action, ...)
 			break;
 		end
 	end
 end
 
-function StateMachine:pendingAndAction( func )
+function StateMachine:pendingAndAction( func, ... )
 	self.ASYNC = true
-	co = coroutine.create(function (  )
-		func()
+	co = coroutine.create(function ( ... )
+		func(...)
 		self.ASYNC = false		
 	end)
-	runCallback(coroutine.resume(co))
+	runCallback(coroutine.resume(co, ...))
 end
 
 return StateMachine

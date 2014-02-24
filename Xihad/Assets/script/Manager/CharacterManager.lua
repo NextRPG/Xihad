@@ -87,6 +87,8 @@ end
 function CharacterManager:onSelectCharacter( object )
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
+	local CameraManager = require "CameraManager"
+	CameraManager:move2Tile(character:tile())
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	Chessboard:markArea(PathFinder)
 end

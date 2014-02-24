@@ -1,7 +1,12 @@
+require "math3d"
 -- coordinate
 
 local width = Consts.TILE_WIDTH
 local height = Consts.TILE_HEIGHT
+
+function point2vector( point )
+	return math3d.vector(point.x * width, 0, point.y * height)
+end
 
 function getLogicLocation( location )
 	return {x = math.floor(location.x / width) , y = math.floor(location.z / height)}

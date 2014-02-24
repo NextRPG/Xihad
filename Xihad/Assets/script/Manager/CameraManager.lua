@@ -73,7 +73,16 @@ function CameraManager:adjustHeight( wheelDelta )
 		move:runAction{destination = ccom:getTarget() + self.shift * 2}
 		self.state = "high"
 	end
+end
 
+function CameraManager:move2Tile( point )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local action = {}
+	action.destination2 = point2vector(point)
+	action.destination = action.destination2 + self.shift
+	self.state = "low"	
+	runAsyncFunc(move.runAction, move, action)
 end
 
 return CameraManager
