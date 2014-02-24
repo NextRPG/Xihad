@@ -6,7 +6,8 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	shift = math3d.vector(-50, 50, -50)
+	shift = math3d.vector(-50, 50, -50),
+	state = "high"
 }
 
 function CameraManager:createCamera( name )
@@ -18,16 +19,13 @@ function CameraManager:createCamera( name )
 end
 
 function CameraManager:init(  )
-	
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
 	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
-	camera:concatTranslate(math3d.vector(0, 50, -5))
+	camera:concatTranslate(ccom:getTarget() + self.shift * 2)
 	ccom:setUpVector(math3d.vector(0, 1, 0))
 	self.camera = camera
 	ccom:setFOV(0.85)
-	-- scene:pushController(self)
-
 end
 
 function CameraManager:onMouseEvent( e )
@@ -39,15 +37,14 @@ function CameraManager:onMouseEvent( e )
 
 	if e.type == "mouseDragged" and e.deltaX ~= nil then
 
-		forever:runAction{x = e.deltaX, y = - e.deltaY} 
+		forever:runAction{x = - e.deltaX, y = e.deltaY} 
 
 	elseif e.type == "mouseDraggedEnd" then
 
 		forever:stopAction()
 
 	end
-	-- ccom:setFOV((1+0.05*e.wheelDelta) * ccom:getFOV())
-	-- print(ccom:getFOV())
+	self:adjustHeight(e.wheelDelta)
 end
 
 local backAction = {}
@@ -60,9 +57,23 @@ function CameraManager:onKeyUp( e )
 		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
 		move:moveToCharacter(scene:findObject(c"1"))
 	elseif e.key == "DOWN" then
-
 		move:runAction(backAction)
 	end
+end
+
+function CameraManager:adjustHeight( wheelDelta )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local ccom = camera:findComponent(c"Camera")
+
+	if self.state ~= "low" and wheelDelta > 0 then
+		move:runAction{destination = ccom:getTarget() + self.shift}
+		self.state = "low"
+	elseif self.state ~= "high" and wheelDelta < 0 then
+		move:runAction{destination = ccom:getTarget() + self.shift * 2}
+		self.state = "high"
+	end
+
 end
 
 return CameraManager

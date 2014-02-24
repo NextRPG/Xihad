@@ -32,12 +32,7 @@ function CameraMoveBy:runAction( action, callback )
 
 	local ccom = self.object:findComponent(c"Camera")
 	self.source2 = ccom:getTarget()
-	print("to do", action.destination2:xyz())
-
-	self.destination2 = action.destination2
-	print("real", self.destination2:xyz())
-
-
+	self.destination2 = action.destination2 or self.source2
 	self:runActionByPixel(action, callback)	
 	return true
 end
