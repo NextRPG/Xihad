@@ -88,7 +88,6 @@ function math.round( i )
 end
 
 function table.contains( t, e )
-	print(debug.traceback())
 	for k,v in pairs(t) do
 		if v == e then return true end
 		if table.equal(v, e) then return true end

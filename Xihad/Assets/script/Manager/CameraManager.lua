@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	
+	shift = math3d.vector(-50, 50, -50)
 }
 
 function CameraManager:createCamera( name )
@@ -21,10 +21,11 @@ function CameraManager:init(  )
 	
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
-	camera:concatTranslate(math3d.vector(30, 50, 25))
+	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
+	camera:concatTranslate(math3d.vector(0, 50, -5))
 	ccom:setUpVector(math3d.vector(0, 1, 0))
-	ccom:setTarget(math3d.vector(50, 0, 45))
 	self.camera = camera
+	ccom:setFOV(0.85)
 	-- scene:pushController(self)
 
 end
@@ -46,6 +47,7 @@ function CameraManager:onMouseEvent( e )
 
 	end
 	-- ccom:setFOV((1+0.05*e.wheelDelta) * ccom:getFOV())
+	-- print(ccom:getFOV())
 end
 
 local backAction = {}
@@ -58,7 +60,6 @@ function CameraManager:onKeyUp( e )
 		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
 		move:moveToCharacter(scene:findObject(c"1"))
 	elseif e.key == "DOWN" then
-	print("before", backAction.destination2:xyz())
 
 		move:runAction(backAction)
 	end

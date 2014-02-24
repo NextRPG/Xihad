@@ -61,6 +61,8 @@ function CharacterManager:createCharacter( character, i, j )
 		SkillManager:createSkill(v)
 	end
 
+	characterObject:concatTranslate(math3d.vector(0, 3, 0))
+
 	return characterObject	
 end
 

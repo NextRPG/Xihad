@@ -35,6 +35,8 @@ function MoveBy:runAction( action, callback )
 			action.destination.y * Consts.TILE_HEIGHT)
 	self:runActionByPixel(action, callback)
 
+	playAnimation( self.object, "walk" )
+
 	return true
 end
 
