@@ -31,7 +31,7 @@ function CameraMoveBy:runAction( action, callback )
 	if self.enabled then return false end
 
 	local ccom = self.object:findComponent(c"Camera")
-	self.source2 = ccom:getTarget() + math3d.vector(0, 0, 0)
+	self.source2 = ccom:getTarget()
 	print("to do", action.destination2:xyz())
 
 	self.destination2 = action.destination2

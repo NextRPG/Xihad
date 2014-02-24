@@ -21,7 +21,7 @@ function CameraManager:init(  )
 	
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
-	camera:concatTranslate(math3d.vector(20, 75, 15))
+	camera:concatTranslate(math3d.vector(30, 50, 25))
 	ccom:setUpVector(math3d.vector(0, 1, 0))
 	ccom:setTarget(math3d.vector(50, 0, 45))
 	self.camera = camera
@@ -55,7 +55,7 @@ function CameraManager:onKeyUp( e )
 	local ccom = camera:findComponent(c"Camera")
 
 	if e.key == "UP" then
-		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget() + math3d.vector(0, 0, 0) }
+		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
 		move:moveToCharacter(scene:findObject(c"1"))
 	elseif e.key == "DOWN" then
 	print("before", backAction.destination2:xyz())
