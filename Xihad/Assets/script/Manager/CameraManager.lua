@@ -90,11 +90,11 @@ end
 function CameraManager:move2Tile( point )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
-	local action = {interval = 1.0}
+	local action = {}
 	action.destination2 = point2vector(point)
 	action.destination = action.destination2 + self.shift
-	self.state = "low"	
-	runAsyncFunc(move.runAction, move, action)
+	self.state = "low"
+	runAsyncFunc(move.runActionByDelta, move, action)
 end
 
 return CameraManager

@@ -24,8 +24,14 @@ function CameraMoveBy:moveToCharacter( characterObject )
 	action.destination = action.destination2 + math3d.vector(0, 0, 10)
 	
 	self:runAction(action, callback)
+end
 
-	return true
+function CameraMoveBy:runActionByDelta( action, callback )
+	if self.enabled then return false end
+	self.delta = action.destination - self.object:getTranslate()
+	action.interval = self.delta:length() * 0.01
+	print("interval is", self.interval)
+	self:runAction(action, callback)
 end
 
 function CameraMoveBy:runAction( action, callback )
@@ -34,8 +40,8 @@ function CameraMoveBy:runAction( action, callback )
 	local ccom = self.object:findComponent(c"Camera")
 	self.source2 = ccom:getTarget()
 	self.destination2 = action.destination2 or self.source2
-	self:runActionByPixel(action, callback)	
-	return true
+	self:runActionByInterval(action, callback)	
+
 end
 
 function CameraMoveBy:onUpdate(  )
@@ -44,8 +50,8 @@ function CameraMoveBy:onUpdate(  )
 
 	local ccom = self.object:findComponent(c"Camera")
 
-	print("realTrans", self.object:getTranslate():xyz())
-	print("realTarget", ccom:getTarget():xyz())
+	-- print("realTrans", self.object:getTranslate():xyz())
+	-- print("realTarget", ccom:getTarget():xyz())
 	self.leftTime = self.leftTime - Time.change
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)

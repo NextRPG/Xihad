@@ -33,14 +33,14 @@ function MoveBy:runAction( action, callback )
 	action.destination = self.source + 
 		math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, 
 			action.destination.y * Consts.TILE_HEIGHT)
-	self:runActionByPixel(action, callback)
+	self:runActionByInterval(action, callback)
 
 	playAnimation( self.object, "walk" )
 
 	return true
 end
 
-function MoveBy:runActionByPixel( action, callback )
+function MoveBy:runActionByInterval( action, callback )
 	if self.enabled then return false end
 
 	self.source = self.object:getTranslate()
@@ -48,6 +48,19 @@ function MoveBy:runActionByPixel( action, callback )
 	self.callback = callback or function ( ) end
 	self.interval = action.interval or 0.5
 	self.leftTime = self.interval
+
+	self.enabled = true
+	return true
+end
+
+function MoveBy:runActionByDelta( action, callback )
+	if self.enabled then return false end
+
+	self.source = self.object:getTranslate()
+	self.destination = action.destination
+	self.callback = callback or function ( ) end
+	self.delta = self.destination - self.source
+	self.leftDelta = self.delta
 
 	self.enabled = true
 	return true
