@@ -9,6 +9,7 @@ local PathFinder = require "PathFinder"
 local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
+local CameraManager = require "CameraManager"
 
 ---
 -- @thread cothread
@@ -23,43 +24,39 @@ function Actor.new( o, object )
 	assert(o.manager)
 
 	o.strategy = BaseStrategy.new{object = object}
-	o:initThread(  )
 	return o
 end
 
 ---
 -- cothread从上次中断的地方返回继续执行
 -- @... 传入任意长参数...
-function Actor:run( ... )
-	runCallback(coroutine.resume( self.cothread, ... ))
-end
+function Actor:run( scheduler )
+	cothread = coroutine.create(function ( scheduler )
+		local object    = self.object
+		local strategy  = self.strategy
+		local manager   = self.manager			
+		local character = object:findComponent(c"Character")
+		local tile      = character:tile()
 
-function Actor:initThread(  )
-	self.cothread = coroutine.create(function ( scheduler )
-		while true do
-			local object    = self.object
-			local strategy  = self.strategy
-			local manager   = self.manager			
-			local character = object:findComponent(c"Character")
-			local tile      = character:tile()
+		manager.currentCharacter = object
 
-			manager.currentCharacter = object
+		CameraManager:move2Tile(tile)
 
-			local point = strategy:judgeTile()
-			-- runAsync
-			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
-			
-			local selectSkill, target = strategy:judgeSkill() -- component
-			if selectSkill ~= 0 then
-				print(" the skill is ", selectSkill)
-				SkillManager:onCastSkill( target, selectSkill, object)
-			end
-
-			coroutine.resume(scheduler)
-
-			scheduler = coroutine.yield()
+		local point = strategy:judgeTile()
+		-- runAsync
+		manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
+		
+		local selectSkill, target = strategy:judgeSkill() -- component
+		if selectSkill ~= 0 then
+			print(" the skill is ", selectSkill)
+			SkillManager:onCastSkill( target, selectSkill, object)
 		end
+
+		runCallback(coroutine.resume(scheduler)) 
+
+		scheduler = coroutine.yield()
 	end)
+	runCallback(coroutine.resume( cothread, scheduler ))
 end
 
 

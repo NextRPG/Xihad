@@ -6,47 +6,88 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	
+	shift = math3d.vector(0, 48, -16),
 }
 
 function CameraManager:createCamera( name )
 	local camera = scene:createObject(c(name))
-	camera.ccom = camera:appendComponent(c"Camera")
-	camera.move = camera:appendComponent(c"ForeverMoveBy")
-	camera.rotate = camera:appendComponent(c"RotateBy")
-	camera.sequence = camera:appendComponent(c"Sequence")
+	camera:appendComponent(c"Camera")
+	camera:appendComponent(c"ForeverMoveBy")
+	camera:appendComponent(c"CameraMoveBy")
+	camera:appendComponent(c"CameraFollow")
 	return camera
 end
 
 function CameraManager:init(  )
-	
 	local camera = self:createCamera("mainCamera")
-	camera:concatTranslate(math3d.vector(40, 75, 35))
-	camera.ccom:setUpVector(math3d.vector(0, 0, 1))
-	camera.ccom:setTarget(math3d.vector(50, 0, 45))
+	local ccom = camera:findComponent(c"Camera")
+	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
+	camera:concatTranslate(ccom:getTarget() + self.shift)
+	self.state = "low"
+	ccom:setUpVector(math3d.vector(0, 1, 0))
 	self.camera = camera
-	-- scene:pushController(self)
-
+	-- ccom:setFOV(0.85)
 end
 
 function CameraManager:onMouseEvent( e )
 	local camera = self.camera
 	local ccom = camera:findComponent(c"Camera")
-	local moveby = camera:findComponent(c"ForeverMoveBy")
+	local forever = camera:findComponent(c"ForeverMoveBy")
 
-	print(camera:getTranslate():xyz())
 
 	if e.type == "mouseDragged" and e.deltaX ~= nil then
 
-		moveby:runAction{x = e.deltaX, y = - e.deltaY} 
+		forever:runAction{x = - e.deltaX, y = e.deltaY} 
 
 	elseif e.type == "mouseDraggedEnd" then
 
-		moveby:stopAction()
+		forever:stopAction()
 
 	end
-	-- print(e.wheelDelta)
-	ccom:setFOV((1+0.05*e.wheelDelta) * ccom:getFOV())
+	-- self:adjustHeight(e.wheelDelta)
+	self.shift = self.shift * (1 + e.wheelDelta / 10)
+	print(self.shift:xyz())
+
+
+	-- camera:resetTranslate(ccom:getTarget() +  self.shift)
+end
+
+local backAction = {}
+function CameraManager:onKeyUp( e )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local ccom = camera:findComponent(c"Camera")
+
+	if e.key == "UP" then
+		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+		move:moveToCharacter(scene:findObject(c"1"))
+	elseif e.key == "DOWN" then
+		move:runAction(backAction)
+	end
+end
+
+function CameraManager:adjustHeight( wheelDelta )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local ccom = camera:findComponent(c"Camera")
+
+	if self.state ~= "low" and wheelDelta > 0 then
+		move:runAction{destination = ccom:getTarget() + self.shift}
+		self.state = "low"
+	elseif self.state ~= "high" and wheelDelta < 0 then
+		move:runAction{destination = ccom:getTarget() + self.shift * 2}
+		self.state = "high"
+	end
+end
+
+function CameraManager:move2Tile( point )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local action = {interval = 0.3}
+	action.destination2 = point2vector(point)
+	action.destination = action.destination2 + self.shift
+	self.state = "low"	
+	runAsyncFunc(move.runAction, move, action)
 end
 
 return CameraManager

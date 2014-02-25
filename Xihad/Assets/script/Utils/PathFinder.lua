@@ -114,4 +114,12 @@ function PathFinder:cleanUp(  )
 	end
 end
 
+function PathFinder:hasTile( tileObject )
+	local tile = tileObject:findComponent(c"Tile")
+	if self[hash(tile)] ~= nil then
+		return true
+	end
+	return false
+end
+
 return PathFinder

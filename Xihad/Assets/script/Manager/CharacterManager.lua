@@ -7,7 +7,8 @@
 
 local PathFinder = require "PathFinder"
 local Chessboard = require "Chessboard"
-	local SkillManager = require("SkillManager")
+local CameraManager = require "CameraManager"
+local SkillManager = require("SkillManager")
 
 ---
 -- 记录当前team信息的容器
@@ -32,6 +33,7 @@ end
 -- @treturn Object characterObject
 function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
+	character.model = "reimu"
 	local characterObject = scene:createObject(c(character.name))
 
 	local test = characterObject:appendComponent(c"Character", character)
@@ -42,8 +44,8 @@ function CharacterManager:createCharacter( character, i, j )
 	characterObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	local param = { 
-		mesh  = "Assets/model/ninja.b3d", 
-		clips = "Assets/model/ninja.clip" 
+		mesh  = "Assets/model/".. character.model .. "/" .. character.model ..  ".b3d", 
+		clips = "Assets/model/".. character.model .. "/" .. character.model ..  ".clip" 
 	}
 	local anim = characterObject:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid") 
@@ -59,6 +61,9 @@ function CharacterManager:createCharacter( character, i, j )
 	for i,v in ipairs(character.skills) do
 		SkillManager:createSkill(v)
 	end
+
+	characterObject:concatTranslate(math3d.vector(0, 3, 0))
+	characterObject:resetScale(math3d.vector(0.8, 0.8, 0.8))
 
 	return characterObject	
 end
@@ -84,6 +89,7 @@ end
 function CharacterManager:onSelectCharacter( object )
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
+	CameraManager:move2Tile(character:tile())
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	Chessboard:markArea(PathFinder)
 end
@@ -120,10 +126,14 @@ function CharacterManager:onSelectTile( object, finder )
 	-- TODO：优化路径
 	local actions = {}
 	for i,v in ipairs(path) do
-		actions[#actions + 1] = {destination = directions[v], interval = 0.5}
+		actions[#actions + 1] = {destination = directions[v], interval = 0.2}
 	end
 	actions = optimizePath(actions)
+
+	local follow = CameraManager.camera:findComponent(c"CameraFollow")
+	follow:start(self.currentCharacter)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
+	follow:stop()
 	local character = self.currentCharacter:findComponent(c"Character")
 	character.states.TURNOVER = true
 end

@@ -41,6 +41,7 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 					and self.manager:checkAvailable(object)
 		end,
 		function ( object )
+
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showCharacter", "showCharacter",
@@ -48,15 +49,13 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 			return self.manager:checkRoundOver() or self.manager == manager2
 		end, 
 		function (  )
-			stateMachine:pendingAndAction(function (  )
-				self.manager = manager2
-				self.manager:roundStart() 
-				print("doing something")
-				self.manager:runActors()
-				self.manager = manager1
-				self.manager:roundStart()
-			end)
-	end)
+			self.manager = manager2
+			self.manager:roundStart() 
+			print("doing something")
+			self.manager:runActors()
+			self.manager = manager1
+			self.manager:roundStart()
+		end)
 end
 
 function BattleManager:addShowTile(  )
@@ -65,7 +64,7 @@ function BattleManager:addShowTile(  )
 	stateMachine:addState("showTile")
 	stateMachine:addTransition("showTile", "showTile",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Hero")
+			return etype == "lClicked" and object and object:hasTag(c"Hero") and self.manager:checkAvailable(object)
 		end,
 		function ( object )
 			Chessboard:recoverArea(PathFinder)	
@@ -74,14 +73,12 @@ function BattleManager:addShowTile(  )
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Tile")
+			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object)
 		end,
 		function ( object )
-			stateMachine:pendingAndAction(function (  )
 				Chessboard:recoverArea(PathFinder)
 				self.manager:onSelectTile(object)
 				SkillManager:onShowSkills(self.manager.currentCharacter)
-			end)
 		end)
 end
 
@@ -97,7 +94,7 @@ function BattleManager:addShowSkill(  )
 		end)
 	stateMachine:addTransition("showSkill", "showTargetRange",
 		function ( key )
-			return type(key) == "string" and tonumber(key) ~= nil
+			return type(key) == "string" and tonumber(key) <=3 
 		end,
 		function ( key )
 			SkillManager:onSelectSkill(key)

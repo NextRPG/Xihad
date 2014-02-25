@@ -60,6 +60,7 @@ function InputController:onMouseEvent( e )
 end
 
 function InputController:onKeyUp( e )
+	CameraManager:onKeyUp(e)
 	BattleManager:onKeyUp(e)
 	return true
 end

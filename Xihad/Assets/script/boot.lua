@@ -15,6 +15,7 @@ package.path = package.path
 .. ";Assets/Script/Component/?.lua"
 .. ";Assets/Script/IO/?.lua"
 .. ";Assets/Script/Manager/?.lua"
+.. ";Assets/Script/Lib/?.lua"
 
 
 require "Consts"

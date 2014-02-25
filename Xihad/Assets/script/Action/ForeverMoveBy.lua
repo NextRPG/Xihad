@@ -38,7 +38,9 @@ end
 -- end
 
 function ForeverMoveBy:runAction( speed )
-	self.speed = speed
+	if not (speed.x * self.speed.x > 0 and speed.y * self.speed.y > 0) then
+		self.speed = speed
+	end
 	self.enabled = true
 end
 

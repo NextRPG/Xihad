@@ -1,7 +1,14 @@
+--- 
+-- 对AI进行控制和切换的Manager
+-- @module AIManager
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+
 local CharacterManager = require "CharacterManager"
 
-local AIManager = CharacterManager.new{team = "AI"}
 
+local AIManager = CharacterManager.new{team = "AI"}
 
 function AIManager:init( AIs )
 	-- init heroes on map
