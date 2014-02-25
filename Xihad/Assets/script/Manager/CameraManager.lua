@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	shift = math3d.vector(0, 48, -16),
+	shift = math3d.vector(0, 48, -16) * 1.5,
 }
 
 function CameraManager:createCamera( name )
@@ -26,7 +26,7 @@ function CameraManager:init(  )
 	self.state = "low"
 	ccom:setUpVector(math3d.vector(0, 0, 1))
 	self.camera = camera
-	-- ccom:setFOV(0.85)
+	ccom:setFOV(0.85)
 end
 
 function CameraManager:onMouseEvent( e )
@@ -45,7 +45,7 @@ function CameraManager:onMouseEvent( e )
 
 	end
 	-- self:adjustHeight(e.wheelDelta)
-	-- self.shift = self.shift * (1 + e.wheelDelta / 10)
+	self.shift = self.shift * (1 + e.wheelDelta / 10)
 	-- print(self.shift:xyz())
 
 
