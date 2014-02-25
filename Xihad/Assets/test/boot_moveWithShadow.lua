@@ -5,19 +5,19 @@ local floor = scene:createObject(c"floor")
 local fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
 fcomp:setColor(255, 0, 0)
-floor:concatTranslate(0, -2.5, 0)
+floor:concatTranslate(math3d.vector(0, -2.5, 0))
 
 floor = scene:createObject(c"floor2")
 fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
 fcomp:setColor(0, 255, 0)
-floor:concatTranslate(15, -2.5, 0)
+floor:concatTranslate(math3d.vector(15, -2.5, 0))
 
 floor = scene:createObject(c"floor3")
 fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
 fcomp:setColor(0, 0, 255)
-floor:concatTranslate(-15, -2.5, 0)
+floor:concatTranslate(math3d.vector(-15, -2.5, 0))
 
 local param = { 
 	-- mesh = "Assets/model/man2_x/2.b3d"
@@ -36,31 +36,40 @@ for i = 10, 1, -1 do
 	-- anim:setAnimationSpeed(0)
 	-- anim:addShadow(nil, "zfail")
 	if i%2==0 then 
-		ninja:concatTranslate(-i/2*3, 0, i/2*3)
+		ninja:concatTranslate(math3d.vector(-i/2*3, 0, i/2*3))
 	else
-		ninja:concatTranslate(i/2*3, 0, i/2*3)
+		ninja:concatTranslate(math3d.vector(i/2*3, 0, i/2*3))
 	end
 
-	ninja:concatRotate(0, 180, 0)
+	ninja:concatRotate(math3d.vector(0, 180, 0))
 end
 
 -- anim:addDebugState("skeleton", "aabb")
 -- ninja:concatUniScale(0.3);
-ninja:resetTranslate(1, 0, 1)
+ninja:resetTranslate(math3d.vector(1, 0, 1))
 
 local moveParam = { speed = 20 }
 local move = ninja:appendComponent(c"ControlledMove", moveParam)
 move:acquire()
 
 local camera = scene:createObject(c"camera")
-camera:appendComponent(c"Camera")
+local ccam = camera:appendComponent(c"Camera")
 -- euler = math3d.vector(0, -20, 0):horizontalAngle()
 -- camera:concatRotate(euler:xyz())
-camera:concatTranslate(0, 8, -25)
+camera:concatTranslate(math3d.vector(0, 30, -25))
+
+ccam:setTarget(math3d.vector(0, 0, -5))
+ccam:setUpVector(math3d.vector(0, 0, 1))
+camera:appendUpdater({ onUpdate = function()
+	local dx = 0.1
+	camera:resetTranslate(camera:getTranslate() + math3d.vector(0,0,dx))
+	ccam:setTarget(ccam:getTarget() + math3d.vector(0,0,dx))
+end })
+
 
 local sun = scene:createObject(c"sun")
 lightComp = sun:appendComponent(c"Light")
 lightComp:castShadow(true)
 lightComp:setType "point"
-sun:concatRotate(90, 0, 0)
-sun:concatTranslate(20, 30, -5)
+sun:concatRotate(math3d.vector(90, 0, 0))
+sun:concatTranslate(math3d.vector(20, 30, -5))
