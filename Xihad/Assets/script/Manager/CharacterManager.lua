@@ -63,7 +63,7 @@ function CharacterManager:createCharacter( character, i, j )
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
-	characterObject:resetScale(math3d.vector(0.8, 0.8, 0.8))
+	-- characterObject:resetScale(math3d.vector(0.8, 0.8, 0.8))
 
 	return characterObject	
 end
@@ -143,7 +143,8 @@ end
 ---
 -- 回合开始时，进行初始化工作
 function CharacterManager:roundStart(  )
-	-- handle message that round on Character has started 
+	-- handle message that round on Character has started
+	CameraManager:move2Tile(self.currentCharacter:findComponent(c"Character"):tile())
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
 		character.states.TURNOVER = false
