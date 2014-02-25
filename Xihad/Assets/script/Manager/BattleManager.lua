@@ -49,12 +49,12 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 			return self.manager:checkRoundOver() or self.manager == manager2
 		end, 
 		function (  )
-				self.manager = manager2
-				self.manager:roundStart() 
-				print("doing something")
-				self.manager:runActors()
-				self.manager = manager1
-				self.manager:roundStart()
+			self.manager = manager2
+			self.manager:roundStart() 
+			print("doing something")
+			self.manager:runActors()
+			self.manager = manager1
+			self.manager:roundStart()
 		end)
 end
 
