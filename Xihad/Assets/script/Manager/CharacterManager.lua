@@ -7,7 +7,8 @@
 
 local PathFinder = require "PathFinder"
 local Chessboard = require "Chessboard"
-	local SkillManager = require("SkillManager")
+local CameraManager = require "CameraManager"
+local SkillManager = require("SkillManager")
 
 ---
 -- 记录当前team信息的容器
@@ -88,7 +89,6 @@ end
 function CharacterManager:onSelectCharacter( object )
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
-	local CameraManager = require "CameraManager"
 	CameraManager:move2Tile(character:tile())
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	Chessboard:markArea(PathFinder)
@@ -129,7 +129,11 @@ function CharacterManager:onSelectTile( object, finder )
 		actions[#actions + 1] = {destination = directions[v], interval = 0.2}
 	end
 	actions = optimizePath(actions)
+
+	local follow = CameraManager.camera:findComponent(c"CameraFollow")
+	follow:start(self.currentCharacter)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
+	follow:stop()
 	local character = self.currentCharacter:findComponent(c"Character")
 	character.states.TURNOVER = true
 end

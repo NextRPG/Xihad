@@ -9,6 +9,7 @@ local PathFinder = require "PathFinder"
 local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
+local CameraManager = require "CameraManager"
 
 ---
 -- @thread cothread
@@ -44,6 +45,8 @@ function Actor:initThread(  )
 			local tile      = character:tile()
 
 			manager.currentCharacter = object
+
+			CameraManager:move2Tile(tile)
 
 			local point = strategy:judgeTile()
 			-- runAsync

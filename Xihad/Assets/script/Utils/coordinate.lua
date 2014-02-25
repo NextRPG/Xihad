@@ -5,6 +5,11 @@ function point2vector( point )
 	return math3d.vector(point.x * width, 0, point.y * height)
 end
 
+function vector2point( vector )
+	local _x, y, _z = vector:xyz()
+	return getLogicLocation{x = _x, z = _z}
+end
+
 function getLogicLocation( location )
 	return {x = math.floor(location.x / width) , y = math.floor(location.z / height)}
 end

@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	shift = math3d.vector(0, 64, -16),
+	shift = math3d.vector(0, 48, -16),
 }
 
 function CameraManager:createCamera( name )
@@ -14,6 +14,7 @@ function CameraManager:createCamera( name )
 	camera:appendComponent(c"Camera")
 	camera:appendComponent(c"ForeverMoveBy")
 	camera:appendComponent(c"CameraMoveBy")
+	camera:appendComponent(c"CameraFollow")
 	return camera
 end
 
@@ -82,7 +83,7 @@ end
 function CameraManager:move2Tile( point )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
-	local action = {interval = 0.4}
+	local action = {interval = 0.3}
 	action.destination2 = point2vector(point)
 	action.destination = action.destination2 + self.shift
 	self.state = "low"	
