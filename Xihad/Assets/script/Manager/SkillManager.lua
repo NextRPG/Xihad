@@ -105,10 +105,10 @@ function SkillManager:onCastSkill( tileObject, skill, characterObject )
 	local anim = characterObject:findComponent(c"AnimatedMesh")
 	local rotateBy = characterObject:findComponent(c"RotateBy")
 	local rx, ry, rz = characterObject:getRotation():xyz()
-	local ty = getLogicAngle(tile)
+	local ty = getLogicAngle(math.p_sub(tile, character:tile()))
 	print("the target is", ty)
 
-	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}})
+	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	
 	if skill.animation then
 		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))

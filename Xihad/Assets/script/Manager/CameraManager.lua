@@ -6,8 +6,7 @@
 -- @copyright NextRPG
 
 local CameraManager = {
-	shift = math3d.vector(-50, 50, -50),
-	state = "high"
+	shift = math3d.vector(0, 64, -16),
 }
 
 function CameraManager:createCamera( name )
@@ -22,10 +21,11 @@ function CameraManager:init(  )
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
 	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
-	camera:concatTranslate(ccom:getTarget() + self.shift * 2)
+	camera:concatTranslate(ccom:getTarget() + self.shift)
+	self.state = "low"
 	ccom:setUpVector(math3d.vector(0, 1, 0))
 	self.camera = camera
-	ccom:setFOV(0.85)
+	-- ccom:setFOV(0.85)
 end
 
 function CameraManager:onMouseEvent( e )
@@ -33,7 +33,6 @@ function CameraManager:onMouseEvent( e )
 	local ccom = camera:findComponent(c"Camera")
 	local forever = camera:findComponent(c"ForeverMoveBy")
 
-	print(camera:getTranslate():xyz())
 
 	if e.type == "mouseDragged" and e.deltaX ~= nil then
 
@@ -44,7 +43,12 @@ function CameraManager:onMouseEvent( e )
 		forever:stopAction()
 
 	end
-	self:adjustHeight(e.wheelDelta)
+	-- self:adjustHeight(e.wheelDelta)
+	self.shift = self.shift * (1 + e.wheelDelta / 10)
+	print(self.shift:xyz())
+
+
+	-- camera:resetTranslate(ccom:getTarget() +  self.shift)
 end
 
 local backAction = {}
@@ -78,7 +82,7 @@ end
 function CameraManager:move2Tile( point )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
-	local action = {}
+	local action = {interval = 0.4}
 	action.destination2 = point2vector(point)
 	action.destination = action.destination2 + self.shift
 	self.state = "low"	

@@ -62,6 +62,7 @@ function CharacterManager:createCharacter( character, i, j )
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
+	characterObject:resetScale(math3d.vector(0.8, 0.8, 0.8))
 
 	return characterObject	
 end
@@ -125,7 +126,7 @@ function CharacterManager:onSelectTile( object, finder )
 	-- TODO：优化路径
 	local actions = {}
 	for i,v in ipairs(path) do
-		actions[#actions + 1] = {destination = directions[v], interval = 0.5}
+		actions[#actions + 1] = {destination = directions[v], interval = 0.2}
 	end
 	actions = optimizePath(actions)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)

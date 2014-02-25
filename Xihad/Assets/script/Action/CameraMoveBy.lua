@@ -5,6 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 
+local ease = require "EaseFunction"
 local MoveBy = require "MoveBy"
 local CameraMoveBy = MoveBy.new{}
 
@@ -50,10 +51,12 @@ function CameraMoveBy:onUpdate(  )
 		playAnimation(self.object, "idle 1")
 		self.callback()
 	else
-		self.object:resetTranslate(math3d.lerp(
-			self.source, self.destination, self.leftTime / self.interval))
-		ccom:setTarget(math3d.lerp(
-			self.source2, self.destination2, self.leftTime / self.interval))
+		local newTrans = math3d.lerp(
+			self.source, self.destination, ease.linear(self.leftTime / self.interval))
+		local newTrans = newTrans - self.object:getTranslate()
+
+		self.object:resetTranslate(self.object:getTranslate() + newTrans)
+		ccom:setTarget(ccom:getTarget() + newTrans)
 
 	end
 

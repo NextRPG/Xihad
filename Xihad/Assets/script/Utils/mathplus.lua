@@ -4,6 +4,9 @@ function math.round( i )
 end
 
 function math.p_add( p1, p2 )
-	
 	return {x = p1.x + p2.x, y = p1.y + p2.y}
+end
+
+function math.p_sub( p1, p2 )
+	return {x = p1.x - p2.x, y = p1.y - p2.y}
 end

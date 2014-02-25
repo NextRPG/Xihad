@@ -64,7 +64,7 @@ function BattleManager:addShowTile(  )
 	stateMachine:addState("showTile")
 	stateMachine:addTransition("showTile", "showTile",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Hero")
+			return etype == "lClicked" and object and object:hasTag(c"Hero") and self.manager:checkAvailable(object)
 		end,
 		function ( object )
 			Chessboard:recoverArea(PathFinder)	
@@ -73,7 +73,7 @@ function BattleManager:addShowTile(  )
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Tile")
+			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object)
 		end,
 		function ( object )
 				Chessboard:recoverArea(PathFinder)
