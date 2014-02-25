@@ -43,29 +43,28 @@ function CameraMoveBy:onUpdate(  )
 
 
 	local ccom = self.object:findComponent(c"Camera")
+
+	print("realTrans", self.object:getTranslate():xyz())
+	print("realTarget", ccom:getTarget():xyz())
 	self.leftTime = self.leftTime - Time.change
-	if (self.leftTime <= 0) then
-		self.object:resetTranslate(self.destination)
-		ccom:setTarget(self.destination2)
-				print("realTrans", self.object:getTranslate():xyz())
-		print("realTarget", ccom:getTarget():xyz())
-		self.enabled = false
-		playAnimation(self.object, "idle 1")
-		self.callback()
-	else
-		local newTrans = math3d.lerp(
-			self.source, self.destination, ease.quad(self.leftTime / self.interval))
-		local newTarget = newTrans - self.source + self.source2
+	-- if (self.leftTime <= 0) then
+	-- 	self.object:resetTranslate(self.destination)
+	-- 	ccom:setTarget(self.destination2)
+	-- 	self.enabled = false
+	-- 	playAnimation(self.object, "idle 1")
+	-- 	self.callback()
+	-- else
+		-- local newTrans = math3d.lerp(
+		-- 	self.source, self.destination, ease.linear(self.leftTime / self.interval))
+		-- local newTarget = newTrans - self.source + self.source2
 
-		print("realTrans", self.object:getTranslate():xyz())
-		print("realTarget", ccom:getTarget():xyz())
+		-- ccom:setTarget(newTarget)
 
-		ccom:setTarget(newTarget)
-
-		self.object:resetTranslate(newTrans)
+		-- self.object:resetTranslate(newTrans)
 		-- self.object:concatTranslate(newTrans - self.object:getTranslate())
-
-	end
+		ccom:setTarget(ccom:getTarget() + math3d.vector(0.5, 0, 0))
+		self.object:concatTranslate(math3d.vector(0.5, 0, 0))
+	-- end
 
 	return true
 end

@@ -15,7 +15,7 @@ local BattleManager = {
 }
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager2
+	self.manager = manager1
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
@@ -94,7 +94,7 @@ function BattleManager:addShowSkill(  )
 		end)
 	stateMachine:addTransition("showSkill", "showTargetRange",
 		function ( key )
-			return type(key) == "string" and tonumber(key) <=3 
+			return type(key) == "string" and tonumber(key) ~= nil and tonumber(key) <= 3 
 		end,
 		function ( key )
 			SkillManager:onSelectSkill(key)
