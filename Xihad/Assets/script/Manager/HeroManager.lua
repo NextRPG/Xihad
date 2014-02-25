@@ -1,6 +1,10 @@
 local CharacterManager = require "CharacterManager"
+local CameraManager = require "CameraManager"
 
-local HeroManager = CharacterManager.new{team = "Hero"}
+local HeroManager = CharacterManager.new{
+	team = "Hero", 
+	roundStart_aux = CharacterManager.roundStart
+}
 
 function HeroManager:init(heros)
 	-- init heroes on map
@@ -20,6 +24,11 @@ function HeroManager:init(heros)
 		character.name = hero.name
 		self.currentCharacter = self:createCharacter(character, hero.y, hero.x)
 	end
+end
+
+function HeroManager:roundStart(  )
+	CameraManager:move2Tile(self.currentCharacter:findComponent(c"Character"):tile())
+	self:roundStart_aux(  )
 end
 
 return HeroManager

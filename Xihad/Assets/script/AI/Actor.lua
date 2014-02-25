@@ -44,8 +44,10 @@ function Actor:run( scheduler )
 
 		local point = strategy:judgeTile()
 		-- runAsync
-		manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
-		
+		if not table.equal(point, character:tile()) then 
+			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
+		end
+
 		local selectSkill, target = strategy:judgeSkill() -- component
 		if selectSkill ~= 0 then
 			print(" the skill is ", selectSkill)
