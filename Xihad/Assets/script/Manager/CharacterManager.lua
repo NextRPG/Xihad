@@ -63,7 +63,7 @@ function CharacterManager:createCharacter( character, i, j )
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
-	-- characterObject:resetScale(math3d.vector(0.8, 0.8, 0.8))
+	characterObject:resetScale(math3d.vector(12, 12, 12))
 
 	return characterObject	
 end

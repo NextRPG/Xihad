@@ -24,7 +24,7 @@ function CameraManager:init(  )
 	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
 	camera:concatTranslate(ccom:getTarget() + self.shift)
 	self.state = "low"
-	ccom:setUpVector(math3d.vector(0, 1, 0))
+	ccom:setUpVector(math3d.vector(0, 0, 1))
 	self.camera = camera
 	-- ccom:setFOV(0.85)
 end
@@ -45,8 +45,8 @@ function CameraManager:onMouseEvent( e )
 
 	end
 	-- self:adjustHeight(e.wheelDelta)
-	self.shift = self.shift * (1 + e.wheelDelta / 10)
-	print(self.shift:xyz())
+	-- self.shift = self.shift * (1 + e.wheelDelta / 10)
+	-- print(self.shift:xyz())
 
 
 	-- camera:resetTranslate(ccom:getTarget() +  self.shift)
@@ -63,7 +63,14 @@ function CameraManager:onKeyUp( e )
 		move:moveToCharacter(scene:findObject(c"1"))
 	elseif e.key == "DOWN" then
 		move:runAction(backAction)
+	elseif e.key == "Z" then
+		ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
+	elseif e.key == "X" then
+		ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
+	elseif e.key == "C" then
+		ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
 	end
+	print(ccom:getUpVector():xyz())
 end
 
 function CameraManager:adjustHeight( wheelDelta )
@@ -83,7 +90,7 @@ end
 function CameraManager:move2Tile( point )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
-	local action = {interval = 0.3}
+	local action = {interval = 1.0}
 	action.destination2 = point2vector(point)
 	action.destination = action.destination2 + self.shift
 	self.state = "low"	
