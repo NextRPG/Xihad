@@ -58,12 +58,12 @@ local ccam = camera:appendComponent(c"Camera")
 -- camera:concatRotate(euler:xyz())
 camera:concatTranslate(math3d.vector(0, 30, -25))
 
-ccam:setTarget(math3d.vector(0, 0, -5))
-ccam:setUpVector(math3d.vector(0, 0, 1))
+ccam:setTarget(math3d.vector(0, 0, -15))
+ccam:setUpVector(math3d.vector(0, 1, 0))
 camera:appendUpdater({ onUpdate = function()
 	local dx = 0.1
-	camera:resetTranslate(camera:getTranslate() + math3d.vector(0,0,dx))
-	ccam:setTarget(ccam:getTarget() + math3d.vector(0,0,dx))
+	camera:resetTranslate(camera:getTranslate() + math3d.vector(dx, 0,0))
+	ccam:setTarget(ccam:getTarget() + math3d.vector(dx,0,0))
 end })
 
 
