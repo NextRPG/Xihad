@@ -16,16 +16,21 @@ function CameraMoveBy.new( o )
 	return o
 end
 
-function CameraMoveBy:moveToCharacter( characterObject )
-	if self.enabled then return false end
+-- function CameraMoveBy:moveToCharacter( characterObject )
+-- 	if self.enabled then return false end
 
-	local action = {}
-	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 0)
-	action.destination = action.destination2 + math3d.vector(0, 0, 10)
+-- 	local action = {}
+-- 	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 10)
+-- 	action.destination = action.destination2 + math3d.vector(10, 10, 0)
 	
-	self:runAction(action, callback)
+-- 	self:runAction(action, callback)
+-- end
 
-	return true
+function CameraMoveBy:runActionByDelta( action, callback )
+	if self.enabled then return false end
+	self.delta = action.destination - self.object:getTranslate()
+	action.interval = self.delta:length() * 0.0005
+	self:runAction(action, callback)
 end
 
 function CameraMoveBy:runAction( action, callback )
@@ -34,8 +39,12 @@ function CameraMoveBy:runAction( action, callback )
 	local ccom = self.object:findComponent(c"Camera")
 	self.source2 = ccom:getTarget()
 	self.destination2 = action.destination2 or self.source2
-	self:runActionByPixel(action, callback)	
-	return true
+	self.sourceRotate = self.source2 - self.object:getTranslate()
+	self.quaternion = math3d.quaternion(
+		self.sourceRotate,
+		self.destination2 - action.destination)
+	self:runActionByInterval(action, callback)
+
 end
 
 function CameraMoveBy:onUpdate(  )
@@ -44,26 +53,25 @@ function CameraMoveBy:onUpdate(  )
 
 	local ccom = self.object:findComponent(c"Camera")
 
-	print("realTrans", self.object:getTranslate():xyz())
-	print("realTarget", ccom:getTarget():xyz())
+	-- print("Time.change", Time.change)
+	-- print("realTrans", self.object:getTranslate():xyz())
+	-- print("realTarget", ccom:getTarget():xyz())
+	-- print("destination2", self.destination2:xyz())
 	self.leftTime = self.leftTime - Time.change
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)
 		ccom:setTarget(self.destination2)
 		self.enabled = false
-		playAnimation(self.object, "idle 1")
+		-- playAnimation(self.object, "idle 1")
 		self.callback()
 	else
 		local newTrans = math3d.lerp(
 			self.source, self.destination, ease.linear(self.leftTime / self.interval))
-		local newTarget = newTrans - self.source + self.source2
+		local newTarget = math3d.lerp(math3d.quaternion(), self.quaternion,
+		 1 - ease.linear(self.leftTime / self.interval)) * self.sourceRotate + newTrans
 
 		ccom:setTarget(newTarget)
-
 		self.object:resetTranslate(newTrans)
-		self.object:concatTranslate(newTrans - self.object:getTranslate())
-		-- ccom:setTarget(ccom:getTarget() + math3d.vector(0.5, 0, 0))
-		-- self.object:concatTranslate(math3d.vector(0.5, 0, 0))
 	end
 
 	return true

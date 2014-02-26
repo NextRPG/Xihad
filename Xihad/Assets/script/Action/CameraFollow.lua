@@ -19,7 +19,6 @@ end
 function CameraFollow:start( object )
 
 	self.follow = object
-	print("self.follow", self.follow:getID())
 	self.enabled = true
 
 end

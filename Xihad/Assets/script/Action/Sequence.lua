@@ -18,20 +18,16 @@ function Sequence:runActions( actions, callback )
 			action.callback = function () 
 				self.object:findComponent(c(actions[i + 1].actionType)):runAction(actions[i + 1], actions[i + 1].callback) 
 			end
-		else 
-			if callback ~= nil then
-				action.callback = callback
-			end
+		elseif callback ~= nil then
+			action.callback = callback
 		end
 	end
-		self.object:findComponent(c(actions[1].actionType)):runAction(actions[1], actions[1].callback)
-	-- print( " 4 " , coroutine.running())
+
+	self.object:findComponent(c(actions[1].actionType)):runAction(actions[1], actions[1].callback)
 end
 
 function Sequence:runMoveActions( actions, callback )
-	if actions[1] == nil then
-		actions[1] = {destination = point(0, 0), actionType = "MoveBy"}
-	end
+
 	local newActions = {}
 
 	local rx, ry, rz = self.object:getRotation():xyz()
@@ -49,8 +45,6 @@ function Sequence:runMoveActions( actions, callback )
 		action.actionType = "MoveBy"
 		newActions[#newActions + 1] = action
 	end
-
-	-- print(newActions[1].actionType)
 
 	self:runActions(newActions, callback)
 

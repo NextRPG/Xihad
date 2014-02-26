@@ -8,6 +8,7 @@
 
 local Chessboard = require "Chessboard"
 local SkillDatabase = require "SkillDatabase"
+local CameraManager = require "CameraManager"
 
 ---
 -- 
@@ -107,13 +108,16 @@ function SkillManager:onCastSkill( tileObject, skill, characterObject )
 	local rx, ry, rz = characterObject:getRotation():xyz()
 	local ty = getLogicAngle(math.p_sub(tile, character:tile()))
 	print("the target is", ty)
+	print(tile.x, tile.y)
 
 	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	
+	CameraManager:move2Battle(characterObject)
 	if skill.animation then
 		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
 		anim:playAnimation(c"idle 1")
 	end
+	CameraManager:back2Normal()
 
 	if targetRange == nil or table.contains(targetRange, tile) then
 		skill:trigger(character, tile)

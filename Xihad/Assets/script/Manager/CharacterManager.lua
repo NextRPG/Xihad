@@ -33,7 +33,7 @@ end
 -- @treturn Object characterObject
 function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
-	character.model = "reimu"
+	character.model = "ninja"
 	local characterObject = scene:createObject(c(character.name))
 
 	local test = characterObject:appendComponent(c"Character", character)
@@ -63,7 +63,8 @@ function CharacterManager:createCharacter( character, i, j )
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
-	characterObject:resetScale(math3d.vector(12, 12, 12))
+	characterObject:resetScale(math3d.vector(1.5, 1.5, 1.5))
+	-- characterObject:resetScale(math3d.vector(8, 8, 8))
 
 	return characterObject	
 end
@@ -89,7 +90,7 @@ end
 function CharacterManager:onSelectCharacter( object )
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
-	CameraManager:move2Tile(character:tile())
+	CameraManager:move2Character(object)
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	Chessboard:markArea(PathFinder)
 end
@@ -144,7 +145,6 @@ end
 -- 回合开始时，进行初始化工作
 function CharacterManager:roundStart(  )
 	-- handle message that round on Character has started
-	CameraManager:move2Tile(self.currentCharacter:findComponent(c"Character"):tile())
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
 		character.states.TURNOVER = false
