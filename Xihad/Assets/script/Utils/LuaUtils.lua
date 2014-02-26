@@ -43,3 +43,6 @@ function findMin( list )
 	return minKey, minValue
 end
 
+function hex2Color( str )
+	return tonumber("0x" .. str:sub(1, 2)), tonumber("0x" .. str:sub(3, 4)), tonumber("0x" .. str:sub(5, 6))
+end

@@ -21,14 +21,19 @@ local function resetColor( tileObject )
 	local fcomp = tileObject:findComponent(c"Mesh")
 	if tile.terrain.id == 1 then
 		-- light green
-		fcomp:setColor(152, 241, 156)
+		fcomp:setColor(hex2Color("b2d235"))
 	elseif tile.terrain.id == 2 then
 		-- BLUE
-		fcomp:setColor(7, 65, 255)
+		-- fcomp:setColor(hex2Color("102b6a"))
+		fcomp:setColor(hex2Color("102b6a"))
 	elseif tile.terrain.id == 3 then
 		-- deep green 
-		fcomp:setColor(11, 110, 11)
+		fcomp:setColor(hex2Color("225a1f"))
 	end
+end
+
+local function tname( tile )
+	return tile.x .. " " .. tile.y
 end
 
 -- public
@@ -39,7 +44,7 @@ end
 -- @treturn Object tileObject
 function Chessboard:createTile( tile )
 	local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
-	local tileObject = scene:createObject(c(tile.x .. " " .. tile.y))
+	local tileObject = scene:createObject(c(tname(tile)))
 	fcomp = tileObject:appendComponent(c"Mesh")
 	fcomp:setMesh(cubeMesh)
 	fcomp:createSelector(c"stupid") 
@@ -50,6 +55,10 @@ function Chessboard:createTile( tile )
 	tileObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	tileObject:addTag(c"Tile")
+
+	local highlightObject = scene:createObject(c("highlight" .. tname(tile)))
+	highlightObject:appendComponent(c"Highlight")
+	highlightObject:resetTranslate(tileObject:getTranslate())
 
 	return tileObject
 end
@@ -73,7 +82,11 @@ end
 -- @tab location
 -- @treturn Object tileObject
 function Chessboard:tileAt( location )
-	return scene:findObject(c(location.x .. " " .. location.y))
+	return scene:findObject(c(tname(location)))
+end
+
+function Chessboard:highlightAt( location )
+	return scene:findObject(c("highlight" .. tname(location)))
 end
 
 --- 
