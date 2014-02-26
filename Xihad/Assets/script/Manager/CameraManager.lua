@@ -21,11 +21,11 @@ end
 function CameraManager:init(  )
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
-	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
-	camera:concatTranslate(ccom:getTarget() + self.shift)
+	-- ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
+	-- camera:concatTranslate(ccom:getTarget() + self.shift)
 	self.state = "low"
-	ccom:setUpVector(math3d.vector(0, 0, 1))
-	-- ccom:setUpVector(math3d.vector(0, 1, 1))
+	-- ccom:setUpVector(math3d.vector(0, 0, 1))
+	ccom:setUpVector(math3d.vector(0, 1, 0))
 
 	self.camera = camera
 	ccom:setFOV(0.85)

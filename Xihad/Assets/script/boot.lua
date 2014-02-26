@@ -37,15 +37,16 @@ local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsu
 local battle = dofile(CUR_DIR .. "\\Save\\maptest.battle")
 local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 
+-- init Camera related manager
+CameraManager:init()
+LightManager:init()
+
 -- init battle related manager
 Chessboard:init(battle.chessboard)
 HeroManager:init(battle.heros)
 AIManager:init(battle.AIs)
 BattleManager:init(HeroManager, AIManager)
 
--- init Camera related manager
-CameraManager:init()
-LightManager:init()
 
 
 -- init Controller
