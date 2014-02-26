@@ -53,7 +53,7 @@ function CameraMoveBy:onUpdate(  )
 
 	local ccom = self.object:findComponent(c"Camera")
 
-	print("Time.change", Time.change)
+	-- print("Time.change", Time.change)
 	-- print("realTrans", self.object:getTranslate():xyz())
 	-- print("realTarget", ccom:getTarget():xyz())
 	-- print("destination2", self.destination2:xyz())
@@ -65,10 +65,6 @@ function CameraMoveBy:onUpdate(  )
 		-- playAnimation(self.object, "idle 1")
 		self.callback()
 	else
-		-- local newTrans = math3d.lerp(
-		-- 	self.source, self.destination, ease.linear(self.leftTime / self.interval))
-		-- local newTarget = newTrans - self.source + self.source2
-
 		local newTrans = math3d.lerp(
 			self.source, self.destination, ease.linear(self.leftTime / self.interval))
 		local newTarget = math3d.lerp(math3d.quaternion(), self.quaternion,
