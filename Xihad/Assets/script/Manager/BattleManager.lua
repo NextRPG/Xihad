@@ -21,13 +21,42 @@ function BattleManager:init( manager1, manager2 )
 	self.stateMachine = stateMachine
 	
 
+	self:addShowNothing(manager1, manager2)
 	self:addShowCharacter( manager1, manager2 )
 	self:addShowTile()
 	self:addShowSkill()
 	self:addShowTargetRange()
 	global:appendUpdateHandler(self)
 
-	stateMachine:setInitial("showCharacter")
+	stateMachine:setInitial("showNothing")
+end
+
+function BattleManager:addShowNothing( manager1, manager2 )
+	local stateMachine = self.stateMachine
+
+	stateMachine:addState("showNothing")
+
+	stateMachine:addTransition("showNothing", "showCharacter",
+	function (  )
+		return self.manager == manager1
+	end, 
+	function (  )
+		self.manager = manager1
+		self.manager:roundStart()
+	end)
+
+	stateMachine:addTransition("showNothing", "showCharacter",
+	function (  )
+		return self.manager == manager2
+	end, 
+	function (  )
+		self.manager = manager2
+		self.manager:roundStart() 
+		self.manager:runActors()
+		self.manager = manager1
+		self.manager:roundStart()
+	end)
+
 end
 
 function BattleManager:addShowCharacter( manager1, manager2 )
@@ -47,18 +76,15 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 		end)
 	stateMachine:addTransition("showCharacter", "showCharacter",
 		function (  )
-			return self.manager:checkRoundOver() or self.manager == manager2
+			return self.manager:checkRoundOver()
 		end, 
 		function (  )
 			self.manager = manager2
 			self.manager:roundStart() 
-			print("doing something")
 			self.manager:runActors()
 			self.manager = manager1
 			self.manager:roundStart()
 		end)
-	-- stateMachine:addTransition("showCharacter", "showCharacter",
-	-- 	)
 end
 
 function BattleManager:addShowTile(  )

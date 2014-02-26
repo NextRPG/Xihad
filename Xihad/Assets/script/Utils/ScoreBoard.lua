@@ -53,6 +53,7 @@ function ScoreBoard:appendValue( list, ratio )
 	local columnIndex = #self.ratio	
 	standard = table.copy(list)
 	for k,v in pairs(list) do
+		print("type is", type(self.data[k]))
 		self.data[k][columnIndex] = getIndex(v)
 	end
 end

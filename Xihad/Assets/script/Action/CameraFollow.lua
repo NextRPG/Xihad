@@ -26,11 +26,11 @@ end
 function CameraFollow:stop(  )
 	
 	self.follow = nil
-	self.enabled = fals
+	self.enabled = false
 
 end
 
-function CameraFollow:onUpdate( ... )
+function CameraFollow:onUpdate(  )
 	if not self.enabled then return false end
 
 	local camera = self.object

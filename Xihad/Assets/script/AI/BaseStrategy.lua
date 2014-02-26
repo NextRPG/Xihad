@@ -46,11 +46,11 @@ function BaseStrategy:judgeSkill(  )
 	for i,id in ipairs(skills) do
 		repeat
 			local skill = SkillManager:getSkill(id):findComponent(c"Skill")
-			if not skill:hasEnemy( center ) then break end
+			if not skill:hasEnemy( center ) then break end			
 			names[#names + 1] = skill.id
-			damages[#damages + 1] = skill.damage
-			currentTimes[#currentTimes + 1] = skill.currentTimes
-			ranges[#ranges + 1] = #skill.range
+			damages[skill.id] = skill.damage
+			currentTimes[skill.id] = skill.currentTimes
+			ranges[skill.id] = #skill.range
 		until true
 	end	
 

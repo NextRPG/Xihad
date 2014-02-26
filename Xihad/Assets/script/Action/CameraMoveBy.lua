@@ -16,15 +16,15 @@ function CameraMoveBy.new( o )
 	return o
 end
 
--- function CameraMoveBy:moveToCharacter( characterObject )
--- 	if self.enabled then return false end
+function CameraMoveBy:moveToCharacter( characterObject, callback )
+	if self.enabled then return false end
 
--- 	local action = {}
--- 	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 10)
--- 	action.destination = action.destination2 + math3d.vector(10, 10, 0)
+	local action = {}
+	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 10, 0)
+	action.destination = action.destination2 + math3d.vector(0, 0, 10)
 	
--- 	self:runAction(action, callback)
--- end
+	self:runAction(action, callback)
+end
 
 function CameraMoveBy:runActionByDelta( action, callback )
 	if self.enabled then return false end
