@@ -29,7 +29,7 @@ end
 function CameraMoveBy:runActionByDelta( action, callback )
 	if self.enabled then return false end
 	self.delta = action.destination - self.object:getTranslate()
-	action.interval = self.delta:length() * 0.0005
+	action.interval = self.delta:length() * 0.01
 	self:runAction(action, callback)
 end
 
