@@ -8,10 +8,11 @@
 local stack = require "Stack"
 
 local Highlight = {
-	 BLUE = "2a5caa",
+	 BLUE = "102b6a",
 	 RED = "aa2116",
 	 PURPLE = "411445",
 	 WHITE = "fffffb",
+	 ALPHA = "ALPHA"
 }
 
 function Highlight.new( o )
@@ -23,15 +24,25 @@ function Highlight.new( o )
 	return o
 end
 
+function Highlight:change2Alpha(  )
+	if self.object:findComponent(c"Mesh") then
+		self.object:removeComponent(c"Mesh")
+	end
+end
+
 function Highlight:changeColor(  )
 	local stack = self.stack
 	if not stack:empty() then
-		if not self.object:findComponent(c"Mesh") then
-			self.object:appendComponent(c"Mesh")
+		if stack:top() == "ALPHA" then
+			self:change2Alpha()
+			return
+		elseif not self.object:findComponent(c"Mesh") then
+			local colorMesh = geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
+			self.object:appendComponent(c"Mesh"):setMesh(colorMesh)
 		end
-		self.object:findComponent(c"Mesh"):setColor(stack:top())
-	elseif self.object:findComponent(c"Mesh") then
-		self.object:removeComponent(c"Mesh")
+		self.object:findComponent(c"Mesh"):setColor(hex2Color(stack:top()))
+	else
+		self:change2Alpha()
 	end
 end
 
@@ -43,8 +54,13 @@ end
 function Highlight:popColor( colorstr )
 	if not self.stack:empty() then
 		self.stack:pop()
-		self.changeColor(  )
+		self:changeColor(  )
 	end
+end
+
+function Highlight:clear(  )
+	self.stack:clear()
+	self:change2Alpha()
 end
 
 return Highlight

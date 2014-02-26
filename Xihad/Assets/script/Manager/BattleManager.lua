@@ -96,8 +96,7 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Hero") and self.manager:checkAvailable(object)
 		end,
 		function ( object )
-			Chessboard:recoverArea(PathFinder)	
-			PathFinder:cleanUp()
+			Chessboard:recoverArea(PathFinder)
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
@@ -105,9 +104,9 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object)
 		end,
 		function ( object )
-				Chessboard:recoverArea(PathFinder)
-				self.manager:onSelectTile(object)
-				SkillManager:onShowSkills(self.manager.currentCharacter)
+			Chessboard:recoverArea(PathFinder)
+			self.manager:onSelectTile(object)
+			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)
 end
 
@@ -145,9 +144,7 @@ function BattleManager:addShowTargetRange(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
-			stateMachine:pendingAndAction(function (  )
-				SkillManager:onCastSkill(object)
-			end)
+			SkillManager:onCastSkill(object)
 		end)
 end
 

@@ -45,12 +45,13 @@ local directions = Consts.directions
 function PathFinder:getReachableTiles( start, maxAP, predicate )
 
 	assert(start) assert(maxAP)
-	assert(self.start == nil, "must clean before getReachableTiles")
+	self:cleanUp()
+
 	start.leftAP = maxAP
 	self.start = start 
 	local openQueue = queue.new()
 	openQueue:push(start)
-	local count = 0
+	-- local count = 0
 	while openQueue:empty() == false do
 		local currentPoint = openQueue:pop()
 		self[hash(currentPoint)] = currentPoint
@@ -64,14 +65,14 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 				 and point.leftAP > 0 and self[hash(point)] == nil  then
 				 		openQueue:push(point)
 			end
-			count = count + 1
+			-- count = count + 1
 		end
 	end
-			print(count)
+			-- print(count)
 
 	assert(self.start)
 	for k,v in pairs(self) do
-		if type(v) == "table" and k ~= "start" then
+		if type(v) == "table" and k ~= "start" and not Chessboard:hasCharacter(v) then
 			self[#self + 1] = v
 		end
 	end
@@ -116,7 +117,7 @@ end
 
 function PathFinder:hasTile( tileObject )
 	local tile = tileObject:findComponent(c"Tile")
-	if self[hash(tile)] ~= nil then
+	if self[hash(tile)] ~= nil and not Chessboard:hasCharacter(tile) then
 		return true
 	end
 	return false

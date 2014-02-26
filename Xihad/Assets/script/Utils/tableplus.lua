@@ -12,7 +12,7 @@ function table.equal( t1, t2 )
 			if table.equal(v, t2[k]) == false then
 				return false
 			end
-		elseif v ~= t2[k] then 
+		elseif v ~= t2[k] and v ~= nil and t2[k] ~= nil then 
 			return false 
 		end
 	end

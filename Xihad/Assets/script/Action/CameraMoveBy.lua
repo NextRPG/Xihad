@@ -61,9 +61,11 @@ function CameraMoveBy:onUpdate(  )
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)
 		ccom:setTarget(self.destination2)
-		self.enabled = false
 		-- playAnimation(self.object, "idle 1")
+		print("2 the end")
+		self.enabled = false
 		self.callback()
+
 	else
 		local newTrans = math3d.lerp(
 			self.source, self.destination, ease.linear(self.leftTime / self.interval))

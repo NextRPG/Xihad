@@ -77,7 +77,7 @@ function CharacterManager:getCharacterByLocation( location )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
 		local tile = character:tile()
-		if table.equal(location, tile) then
+		if table.equal(tile, location) then
 		 	return characterObject
 		end
 	end

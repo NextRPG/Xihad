@@ -78,10 +78,10 @@ function Skill.new( o )
 end
 
 ---
--- 获得可以攻击的范围(1)
+-- 获得技能攻击点的范围(1)
 -- @tparam tab center
 -- @treturn tab attackArea
-function Skill:getAttackArea( center )
+function Skill:getTargetRange( center )
 	local attackArea = {}
 	for i=center.x - self.maxDistance, center.x + self.maxDistance do
 		for j=center.y - self.maxDistance, center.y + self.maxDistance do
@@ -97,22 +97,25 @@ function Skill:getAttackArea( center )
 end
 
 ---
--- 获得技能攻击点的范围(2)
+-- 获得可以攻击的范围(2)
 -- @tparam tab center
 -- @treturn tab range
-function Skill:getRange( center )
+function Skill:getAttackArea( center )
 	local range = {}
 	for i,v in ipairs(self.range) do
-		range[#range + 1] = {x = v.x + center.x, y = v.y + center.y}
+		local point = math.p_add(v, center)
+		if Chessboard:tileAt(point):findComponent(c"Tile"):canPass() then
+			range[#range + 1] = point
+		end
 	end
 	return range
 end
 
 function Skill:hasEnemy( center )
 	local checked = {}
-	local attackArea = self:getAttackArea(center)
+	local attackArea = self:getTargetRange(center)
 	for i,target in ipairs(attackArea) do
-		local range = self:getRange(target)
+		local range = self:getAttackArea(target)
 		for i,tile in ipairs(range) do
 			if checked[tile.x .. " " .. tile.y] == nil 
 				and HeroManager:getCharacterByLocation(tile) then
@@ -126,9 +129,9 @@ end
 
 function Skill:getBestTarget( center )
 	local target2Num = {}
-	local attackArea = self:getAttackArea(center)
+	local attackArea = self:getTargetRange(center)
 	for i,target in ipairs(attackArea) do
-		local range = self:getRange(target)
+		local range = self:getAttackArea(target)
 		target2Num[target] = 0
 		for i,tile in ipairs(range) do
 			if HeroManager:getCharacterByLocation(tile) then
@@ -149,7 +152,7 @@ function Skill:trigger( hero, targetTile )
 	-- hero:bindEffect()
 
 	local tile = targetTile
-	local range = self:getRange(tile)
+	local range = self:getAttackArea(tile)
 
 	for i,v in ipairs(range) do
 		local object = 	HeroManager:getCharacterByLocation(v) 

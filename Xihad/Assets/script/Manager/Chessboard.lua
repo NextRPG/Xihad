@@ -25,7 +25,7 @@ local function resetColor( tileObject )
 	elseif tile.terrain.id == 2 then
 		-- BLUE
 		-- fcomp:setColor(hex2Color("102b6a"))
-		fcomp:setColor(hex2Color("102b6a"))
+		fcomp:setColor(hex2Color("121a2a"))
 	elseif tile.terrain.id == 3 then
 		-- deep green 
 		fcomp:setColor(hex2Color("225a1f"))
@@ -58,7 +58,8 @@ function Chessboard:createTile( tile )
 
 	local highlightObject = scene:createObject(c("highlight" .. tname(tile)))
 	highlightObject:appendComponent(c"Highlight")
-	highlightObject:resetTranslate(tileObject:getTranslate())
+	highlightObject:resetTranslate(tileObject:getTranslate() + math3d.vector(0, 2.5, 0))
+	highlightObject:addTag(c"Highlight")
 
 	return tileObject
 end
@@ -86,7 +87,7 @@ function Chessboard:tileAt( location )
 end
 
 function Chessboard:highlightAt( location )
-	return scene:findObject(c("highlight" .. tname(location)))
+	return scene:findObject(c("highlight" .. tname(location))):findComponent(c"Highlight")
 end
 
 --- 
@@ -100,15 +101,24 @@ function Chessboard:hasCharacter( location )
 end
 
 ---
--- 恢复一些地图块为原来的颜色
+-- 弹出地图当前的颜色（彻底忘记）
+-- @tparam {Point,...} points
+-- @return nil
+function Chessboard:popArea( points )
+	if points == nil then return end
+	for i,point in ipairs(points) do
+		self:highlightAt(point):popColor()
+	end
+end
+
+---
+-- 恢复一些地图块为透明色
 -- @tparam {Point,...} points
 -- @return nil
 function Chessboard:recoverArea( points )
 	if points == nil then return end
-	for k,point in pairs(points) do
-		if type(point) == "table" then
-			resetColor(self:tileAt(point)) 
-		end
+	for i,point in ipairs(points) do
+		self:highlightAt(point):pushColor("ALPHA")
 	end
 end
 
@@ -119,12 +129,15 @@ end
 -- @return nil
 function Chessboard:markArea(points, color)
 	if points == nil then return end
-	color = color or {255, 0, 0}
-	for k,point in pairs(points) do
-		if type(point) == "table" then
-			local mesh = self:tileAt(point):findComponent(c"Mesh")
-			mesh:setColor(color[1], color[2], color[3])
-		end
+	color = color or "BLUE"
+	for i,point in ipairs(points) do
+		self:highlightAt(point):pushColor(color)
+	end
+end
+
+function Chessboard:clearAll(  )
+	for highlightObject in scene:objectsWithTag("Highlight") do
+		highlightObject:findComponent(c"Highlight"):clear()
 	end
 end
 

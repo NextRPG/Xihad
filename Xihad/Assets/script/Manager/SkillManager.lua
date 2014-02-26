@@ -68,8 +68,8 @@ function SkillManager:onSelectSkill( key )
 	for k,v in pairs(selectSkill) do
 		print(k,v)
 	end
-	targetRange = selectSkill:getAttackArea(character:tile())
-	Chessboard:markArea(targetRange)
+	targetRange = selectSkill:getTargetRange(character:tile())
+	Chessboard:markArea(targetRange, "RED")
 end
 
 ---
@@ -81,10 +81,10 @@ function SkillManager:onSelectTarget( object )
 	if lastObject == nil or lastObject:getID() ~= object:getID() then
 		local tile = object:findComponent(c"Tile")
 		if table.contains(targetRange, tile) then
-			Chessboard:recoverArea(skillRange)
-			Chessboard:markArea(targetRange)
-			skillRange = selectSkill:getRange(tile)
-			Chessboard:markArea(skillRange, {139, 0, 139}) -- 紫色
+
+			Chessboard:popArea(skillRange)
+			skillRange = selectSkill:getAttackArea(tile)
+			Chessboard:markArea(skillRange, "PURPLE") -- 紫色
 		end
 		lastObject = object
 	end
@@ -99,8 +99,8 @@ function SkillManager:onCastSkill( tileObject, skill, characterObject )
 	skill = skill or selectSkill
 	characterObject = characterObject or currentCharacter
 
-	Chessboard:recoverArea(skillRange)
-	Chessboard:recoverArea(targetRange)
+	Chessboard:clearAll()
+	skillRange = nil
 	local character = characterObject:findComponent(c"Character")
 	local tile = tileObject:findComponent(c"Tile")
 	local anim = characterObject:findComponent(c"AnimatedMesh")
@@ -117,11 +117,11 @@ function SkillManager:onCastSkill( tileObject, skill, characterObject )
 		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
 		anim:playAnimation(c"idle 1")
 	end
-	CameraManager:back2Normal()
-
 	if targetRange == nil or table.contains(targetRange, tile) then
 		skill:trigger(character, tile)
 	end
+	
+	CameraManager:back2Normal()
 end
 
 return SkillManager
