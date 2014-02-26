@@ -94,7 +94,7 @@ namespace xihad { namespace ngn
 	{
 		mImpl.reset(new impl(world));
 		mImpl->updateInterval = frameInterval;
-		mImpl->breakPointGuess = toClock_t(frameInterval * 3);
+		mImpl->breakPointGuess = toClock_t(frameInterval * 100);
 		mImpl->status = INITIALIZED;
 	}
 
@@ -134,6 +134,7 @@ namespace xihad { namespace ngn
 			return false;
 
 		LoopStatus& status = mImpl->status;
+		// const clock_t& threshold = mImpl->breakPointGuess;
 		const clock_t& threshold = mImpl->breakPointGuess;
 		auto& world = mImpl->gameWorld;
 
@@ -229,8 +230,8 @@ namespace xihad { namespace ngn
 
 		if (mImpl->showFPS)
 		{
-			std::wstring fps = L"XihadÒıÇæ[FPS: (A)";
-			fps += std::to_wstring(stats.getAverageFPS());
+			std::wstring fps = L"XihadÒıÇæ[FPS: (T)";
+			fps += std::to_wstring(stepTime);
 			fps += L", (R)";
 			fps += std::to_wstring(stats.getRecentFPS());
 			fps += L"]";

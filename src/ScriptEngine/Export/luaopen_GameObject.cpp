@@ -92,6 +92,8 @@ namespace xihad { namespace script
 			{ "appendComponent", objectAppendComponent },
 			{ "searchComponent", objectFindComponent },
 			{ "findComponent",	 objectFindComponent },
+			luaT_mnamedfunc(GameObject, setParent),
+			luaT_mnamedfunc(GameObject, getParent),
 			luaT_mnamedfunc(GameObject, removeComponent),
 			luaT_mnamedfunc(GameObject, getScene),
 			luaT_mnamedfunc(GameObject, addTag),

@@ -9,6 +9,7 @@ namespace xihad { namespace render3d
 		RenderComponent(name, host, node)
 	{
 		node->getLightData().SpecularColor = irr::video::SColorf();
+		node->getLightData().Radius = 1000.f;
 	}
 
 	void LightComponent::setLightData( const irr::video::SLight& light )

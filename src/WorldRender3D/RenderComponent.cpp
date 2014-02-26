@@ -118,12 +118,7 @@ namespace xihad { namespace render3d
 		return getNode()->isDebugDataVisible();
 	}
 
-	void RenderComponent::onStart()
-	{
-		mNode->setParent(mNode->getSceneManager()->getRootSceneNode());
-	}
-
-	void RenderComponent::onUpdate( const ngn::Timeline& )
+	void RenderComponent::syncWithObject()
 	{
 		static string BASE_NAME = "Render";
 
@@ -141,7 +136,7 @@ namespace xihad { namespace render3d
 
 			RenderComponent* rc;
 			trulyVisible = !(rc = polymorphic_downcast<RenderComponent*> (comp)) ||
-							(rc->isTrulyVisible());
+				(rc->isTrulyVisible());
 		}
 
 		BitOperation::set(mVisibility, 2, trulyVisible);
@@ -153,6 +148,16 @@ namespace xihad { namespace render3d
 		mNode->setPosition(worldTransform.getTranslation());
 		mNode->setRotation(worldTransform.getRotationDegrees());
 		mNode->setScale(worldTransform.getScale());
+	}
+
+	void RenderComponent::onStart()
+	{
+		mNode->setParent(mNode->getSceneManager()->getRootSceneNode());
+	}
+
+	void RenderComponent::onUpdate( const ngn::Timeline& )
+	{
+		
 	}
 
 	void RenderComponent::onStop()

@@ -38,6 +38,8 @@ namespace xihad { namespace render3d
 		CeguiHandle* ceguiSystem;
 		float seconds;
 		bool firstUpdate;
+		
+		std::list<RenderComponent*> renderComponents;
 	};
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
@@ -65,7 +67,7 @@ namespace xihad { namespace render3d
 		GameObject& obj, const Properties& param )
 	{
 		irr_ptr<ISceneManager> smgr = mImpl->smgr;
-		Component* ret = nullptr;
+		RenderComponent* ret = nullptr;
 
 		if (compName == "Mesh")
 		{
@@ -203,6 +205,20 @@ namespace xihad { namespace render3d
 		mImpl->seconds = 0;
 	}
 
+	static void syncSceneNode(ISceneNode* node)
+	{
+		auto iter = node->getChildren().begin();
+		while (iter != node->getChildren().end())
+		{
+			RenderComponent* component = RenderComponent::getComponentFromNode(*iter);
+			if (component)
+				component->syncWithObject();
+
+			syncSceneNode(*iter);
+			++iter;
+		}
+	}
+
 	void IrrlichtComponentSystem::onUpdate( const Timeline& tl )
 	{
 		// mImpl->seconds += tl.getLastTimeChange();
@@ -212,6 +228,7 @@ namespace xihad { namespace render3d
 		// 第一次更新时，场景还未更新，所以所以游戏对象都处于原点，会造成人工痕迹
 		mImpl->ceguiSystem->update(tl);
 
+
 		mImpl->driver->beginScene(true, true, SColor(255,100,101,140));
 		if (mImpl->firstUpdate)
 		{
@@ -219,6 +236,7 @@ namespace xihad { namespace render3d
 		}
 		else
 		{
+			syncSceneNode(dynamic_cast<ISceneNode*>(mImpl->smgr.get()));
 			mImpl->smgr->drawAll();
 			mImpl->ceguiSystem->renderFrame();
 		}
