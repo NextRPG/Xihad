@@ -135,7 +135,7 @@ namespace xihad { namespace ngn
 
 		LoopStatus& status = mImpl->status;
 		// const clock_t& threshold = mImpl->breakPointGuess;
-		clock_t threshold = mImpl->updateInterval*1000;
+		const clock_t& threshold = mImpl->breakPointGuess;
 		auto& world = mImpl->gameWorld;
 
 		world->start();
