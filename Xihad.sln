@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xengine", "Xengine\Xengine.vcxproj", "{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{4013602C-9169-4B51-B3A6-13DA20ABB5CB}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70} = {6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameRender3D", "GameRender3D\GameRender3D.vcxproj", "{EB3A3BF4-5E75-461E-A037-68D11E1651A4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScriptEngine", "ScriptEngine\ScriptEngine.vcxproj", "{2A0C6990-6D8E-4508-A6D1-8093F2797328}"
@@ -44,10 +39,6 @@ Global
 		{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}.Debug|Win32.Build.0 = Debug|Win32
 		{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}.Release|Win32.ActiveCfg = Release|Win32
 		{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}.Release|Win32.Build.0 = Release|Win32
-		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Debug|Win32.Build.0 = Debug|Win32
-		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.ActiveCfg = Release|Win32
-		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.Build.0 = Release|Win32
 		{EB3A3BF4-5E75-461E-A037-68D11E1651A4}.Debug|Win32.ActiveCfg = Debug|Win32
 		{EB3A3BF4-5E75-461E-A037-68D11E1651A4}.Debug|Win32.Build.0 = Debug|Win32
 		{EB3A3BF4-5E75-461E-A037-68D11E1651A4}.Release|Win32.ActiveCfg = Release|Win32

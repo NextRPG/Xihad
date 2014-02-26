@@ -657,6 +657,11 @@ currently only supports zip archives, though. */
 #ifdef NO__IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
 #undef __IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
 #endif
+//! Define __IRR_COMPILE_WITH_CXX_11 if you want to open WAD archives
+#define __IRR_COMPILE_WITH_CXX_11
+#ifdef NO__IRR_COMPILE_WITH_CXX_11
+#undef __IRR_COMPILE_WITH_CXX_11
+#endif
 
 //! Set FPU settings
 /** Irrlicht should use approximate float and integer fpu techniques

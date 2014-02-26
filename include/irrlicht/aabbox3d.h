@@ -5,6 +5,7 @@
 #ifndef __IRR_AABBOX_3D_H_INCLUDED__
 #define __IRR_AABBOX_3D_H_INCLUDED__
 
+#include <limits>
 #include "irrMath.h"
 #include "plane3d.h"
 #include "line3d.h"
@@ -179,6 +180,31 @@ class aabbox3d
 				{ t=MinEdge.Y; MinEdge.Y = MaxEdge.Y; MaxEdge.Y=t; }
 			if (MinEdge.Z > MaxEdge.Z)
 				{ t=MinEdge.Z; MinEdge.Z = MaxEdge.Z; MaxEdge.Z=t; }
+		}
+
+		//! Before adding any internal point, the bbox will be negative
+		bool negative() const
+		{
+			return MinEdge.X>MaxEdge.X || MinEdge.Y>MaxEdge.Y || MinEdge.Z>MaxEdge.Z;
+		}
+
+#undef max
+#undef min
+		void removeAllPoints()
+		{
+			MinEdge = core::vector3d<T>(std::numeric_limits<T>::max());
+			MaxEdge = core::vector3d<T>(std::numeric_limits<T>::min());
+		}
+
+		bool resetOnNegative() 
+		{
+			if (negative())
+			{
+				reset(0, 0, 0);
+				return true;
+			}
+
+			return false;
 		}
 
 		//! Calculates a new interpolated bounding box.

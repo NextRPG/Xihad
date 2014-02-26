@@ -4,7 +4,7 @@ int cegui_test(int argc, const char** argv);
 
 int main(int argc, const char** argv)
 {
-	//return first_iter(argc, argv);
-	return first_iter(argc, argv);
+	return irr_test(argc, argv);
+	// return first_iter(argc, argv);
 }
 

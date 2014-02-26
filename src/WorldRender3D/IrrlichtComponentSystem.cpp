@@ -20,7 +20,6 @@
 #include "ParticleSystemComponent.h"
 #include "CEGuiHandle.h"
 
-
 using namespace xihad::ngn;
 using namespace irr;
 using namespace scene;
@@ -236,7 +235,7 @@ namespace xihad { namespace render3d
 		}
 		else
 		{
-			syncSceneNode(dynamic_cast<ISceneNode*>(mImpl->smgr.get()));
+			syncSceneNode(mImpl->smgr->getRootSceneNode());
 			mImpl->smgr->drawAll();
 			mImpl->ceguiSystem->renderFrame();
 		}
