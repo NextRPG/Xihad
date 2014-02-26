@@ -25,7 +25,6 @@ function BattleManager:init( manager1, manager2 )
 	self:addShowTile()
 	self:addShowSkill()
 	self:addShowTargetRange()
-	self.manager:roundStart()
 
 	stateMachine:setInitial("showCharacter")
 end
