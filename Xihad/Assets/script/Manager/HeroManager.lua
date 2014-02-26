@@ -27,7 +27,7 @@ function HeroManager:init(heros)
 end
 
 function HeroManager:roundStart(  )
-	CameraManager:move2Tile(self.currentCharacter:findComponent(c"Character"):tile())
+	CameraManager:move2Character(self.currentCharacter)
 	self:roundStart_aux(  )
 end
 

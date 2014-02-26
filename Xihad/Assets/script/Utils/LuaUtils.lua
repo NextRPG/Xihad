@@ -6,7 +6,6 @@ require "coordinate"
 -- function
 
 function runCallback( result, func, t )
-	print(func, t)
 	if type(func) == "function" then		
 		func(unpack(t))
 	end
@@ -20,7 +19,6 @@ function runAsyncFunc( func, ... )
 	table.insert(t, function (  )
 		runCallback(coroutine.resume(current))
 	end)
-	print(func, t)
 	
 	coroutine.yield(func, t)
 end

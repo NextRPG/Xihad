@@ -25,6 +25,8 @@ function CameraManager:init(  )
 	camera:concatTranslate(ccom:getTarget() + self.shift)
 	self.state = "low"
 	ccom:setUpVector(math3d.vector(0, 0, 1))
+	-- ccom:setUpVector(math3d.vector(0, 1, 1))
+
 	self.camera = camera
 	ccom:setFOV(0.85)
 end
@@ -44,33 +46,27 @@ function CameraManager:onMouseEvent( e )
 		forever:stopAction()
 
 	end
-	-- self:adjustHeight(e.wheelDelta)
-	self.shift = self.shift * (1 + e.wheelDelta / 10)
-	-- print(self.shift:xyz())
-
-
-	-- camera:resetTranslate(ccom:getTarget() +  self.shift)
+	self:adjustHeight(e.wheelDelta)
 end
 
-local backAction = {}
 function CameraManager:onKeyUp( e )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	local ccom = camera:findComponent(c"Camera")
 
-	if e.key == "UP" then
-		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
-		move:moveToCharacter(scene:findObject(c"1"))
-	elseif e.key == "DOWN" then
-		move:runAction(backAction)
-	elseif e.key == "Z" then
-		ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
-	elseif e.key == "X" then
-		ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
-	elseif e.key == "C" then
-		ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
-	end
-	print(ccom:getUpVector():xyz())
+	-- if e.key == "UP" then
+	-- 	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+	-- 	move:moveToCharacter(scene:findObject(c"1"))
+	-- elseif e.key == "DOWN" then
+	-- 	move:runAction(backAction)
+	-- elseif e.key == "Z" then
+	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
+	-- elseif e.key == "X" then
+	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
+	-- elseif e.key == "C" then
+	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
+	-- end
+	-- print(ccom:getUpVector():xyz())
 end
 
 function CameraManager:adjustHeight( wheelDelta )
@@ -87,14 +83,36 @@ function CameraManager:adjustHeight( wheelDelta )
 	end
 end
 
-function CameraManager:move2Tile( point )
+function CameraManager:move2vector( vector )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	local action = {}
-	action.destination2 = point2vector(point)
+	action.destination2 = vector
 	action.destination = action.destination2 + self.shift
 	self.state = "low"
 	runAsyncFunc(move.runActionByDelta, move, action)
+end
+
+function CameraManager:move2Character( characterObject )
+	self:move2vector( characterObject:getTranslate() )
+end
+
+local backAction = {}
+function CameraManager:move2Battle( characterObject )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	local ccom = camera:findComponent(c"Camera")
+	local action = {}
+	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 10)
+	action.destination = action.destination2 + math3d.vector(20, 20, 0)
+	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+	runAsyncFunc(move.runAction, move, action)
+end
+
+function CameraManager:back2Normal( characterObject )
+	local camera = self.camera
+	local move = camera:findComponent(c"CameraMoveBy")
+	runAsyncFunc(move.runAction, move, backAction)
 end
 
 return CameraManager

@@ -40,7 +40,7 @@ function Actor:run( scheduler )
 
 		manager.currentCharacter = object
 
-		CameraManager:move2Tile(tile)
+		CameraManager:move2Character(object)
 
 		local point = strategy:judgeTile()
 		-- runAsync
@@ -50,7 +50,6 @@ function Actor:run( scheduler )
 
 		local selectSkill, target = strategy:judgeSkill() -- component
 		if selectSkill ~= 0 then
-			print(" the skill is ", selectSkill)
 			SkillManager:onCastSkill( target, selectSkill, object)
 		end
 
