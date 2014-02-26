@@ -25,6 +25,7 @@ function BattleManager:init( manager1, manager2 )
 	self:addShowTile()
 	self:addShowSkill()
 	self:addShowTargetRange()
+	global:appendUpdateHandler(self)
 
 	stateMachine:setInitial("showCharacter")
 end
@@ -56,6 +57,8 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 			self.manager = manager1
 			self.manager:roundStart()
 		end)
+	-- stateMachine:addTransition("showCharacter", "showCharacter",
+	-- 	)
 end
 
 function BattleManager:addShowTile(  )
@@ -120,6 +123,10 @@ function BattleManager:addShowTargetRange(  )
 				SkillManager:onCastSkill(object)
 			end)
 		end)
+end
+
+function BattleManager:onUpdate(  )
+	self.stateMachine:update()
 end
 
 function BattleManager:onMouseEvent( e )

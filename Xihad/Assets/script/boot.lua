@@ -17,6 +17,7 @@ package.path = package.path
 .. ";Assets/Script/Manager/?.lua"
 .. ";Assets/Script/Lib/?.lua"
 
+global = scene:createObject(c("global"))
 
 require "Consts"
 require "LuaUtils"
@@ -48,6 +49,7 @@ BattleManager:init(HeroManager, AIManager)
 -- init Camera related manager
 CameraManager:init()
 LightManager:init()
+
 
 
 -- init Controller

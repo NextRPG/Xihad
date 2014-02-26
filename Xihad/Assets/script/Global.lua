@@ -1,36 +1,36 @@
-Global = {
--- cosnts
-}
+-- Global = {
+-- -- cosnts
+-- }
 
-package.loaded["Global"] = Global
+-- package.loaded["Global"] = Global
 
-local Chessboard = require "Chessboard"
-local HeroManager = require "HeroManager"
-local AIManager = require "AIManager"
-require "ElementManager"
-local CameraManager = require "CameraManager"
-local BattleManager = require "BattleManager"
+-- local Chessboard = require "Chessboard"
+-- local HeroManager = require "HeroManager"
+-- local AIManager = require "AIManager"
+-- require "ElementManager"
+-- local CameraManager = require "CameraManager"
+-- local BattleManager = require "BattleManager"
 
--- load resources
-require "SkillDatabase"
-require "TerrainDatabase"
-require "Consts"
+-- -- load resources
+-- require "SkillDatabase"
+-- require "TerrainDatabase"
+-- require "Consts"
 
 
 
-function Global.initSystem( ... )
-	Chessboard:init()
-	HeroManager:init()
-	AIManager:init()
-	BattleManager:init(HeroManager, AIManager)
+-- function Global.initSystem( ... )
+-- 	Chessboard:init()
+-- 	HeroManager:init()
+-- 	AIManager:init()
+-- 	BattleManager:init(HeroManager, AIManager)
 
-	-- AIManager:init()
+-- 	-- AIManager:init()
 
-	-- elementManager = ElementManager:new()
-	-- elementManager:init()
+-- 	-- elementManager = ElementManager:new()
+-- 	-- elementManager:init()
 
-	-- chessboard = Chessboard:new()
-	-- chessboard:init()
+-- 	-- chessboard = Chessboard:new()
+-- 	-- chessboard:init()
 
-	CameraManager:init()
-end
+-- 	CameraManager:init()
+-- end
