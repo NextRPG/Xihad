@@ -85,7 +85,7 @@ function SkillManager:onSelectSkill( key )
 	for k,v in pairs(selectSkill) do
 		print(k,v)
 	end
-	targetRange = selectSkill:getTargetRange(character:tile())
+	targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
 	Chessboard:pushArea(targetRange, "RED")
 end
 
