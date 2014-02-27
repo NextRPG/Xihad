@@ -8,7 +8,7 @@ namespace irr { namespace scene
 	class IMesh;
 
 	// Initializer
-	class IBasicParticleInitializer;
+	class IParticleBasicInitializer;
 	class IParticleAnimatedMeshInitializer;
 	class IParticleBoxInitializer;
 	class IParticleCylinderInitializer;
@@ -22,21 +22,21 @@ namespace irr { namespace scene
 	class IParticleAffector;
 	class IParticleAttractionAffector;
 	class IParticleFadeOutAffector;
-	class IParticleGravityAffector;
+	class IParticleForceAffector;
 	class IParticleRotationAffector;
 
 	// Emitter
 	class IParticleEmitter;
 
 	// Renderer
-	class IParticleRenderer;
 	class IQuadParticleRenderer;
+	class IPointParticleRenderer;
 
 	class IParticleSystemFactory : public virtual IReferenceCounted
 	{
 	public:
 		// Initializer
-		virtual IBasicParticleInitializer* createBasicParticleInitializer() = 0;
+		virtual IParticleBasicInitializer* createBasicParticleInitializer() = 0;
 		virtual IParticleAnimatedMeshInitializer* createAnimatedMeshInitializer() = 0;
 		virtual IParticleBoxInitializer* createBoxInitializer() = 0;
 		virtual IParticleCylinderInitializer* createCylinderInitializer() = 0;
@@ -49,15 +49,16 @@ namespace irr { namespace scene
 		// Affector
 		virtual IParticleAttractionAffector* createAttractionAffector() = 0;
 		virtual IParticleFadeOutAffector* createFadeOutAffector() = 0;
-		virtual IParticleGravityAffector* createGravityAffector() = 0;
+		virtual IParticleForceAffector* createGravityAffector() = 0;
 		virtual IParticleRotationAffector* createRotationAffector() = 0;
 		virtual IParticleAffector* createScaleAffector(
 			const core::dimension2df& scaleTo) = 0;
 
 		// Renderer
 		virtual IQuadParticleRenderer* createQuadRenderer() = 0;
-		virtual IParticleRenderer* createBillboardRenderer() = 0;
-		virtual IParticleRenderer* createDirectionalRenderer() = 0;
+		virtual IQuadParticleRenderer* createBillboardRenderer() = 0;
+		virtual IQuadParticleRenderer* createDirectionalRenderer() = 0;
+		virtual IPointParticleRenderer* createPointParticleRenderer() = 0;
 
 		// Emitter
 		virtual IParticleEmitter* createEmitter() = 0;

@@ -33,7 +33,7 @@ namespace irr { namespace scene
 
 		virtual void onParticleSwapped(u32 index) = 0;
 
-		virtual core::aabbox3df& getBoundingBox() const = 0;
+		virtual core::aabbox3df& getBoundingBox() = 0;
 
 		virtual video::SMaterial& getMaterial() = 0;
 

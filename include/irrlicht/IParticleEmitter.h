@@ -26,7 +26,7 @@ public:
 	\param outArray Pointer which will point to the array with the new
 	particles to add into the system.
 	\return Amount of new particles in the array. Can be 0. */
-	virtual s32 emitt(u32 now, u32 timeSinceLastCall, SParticle*& outArray) = 0;
+	virtual s32 emitt(f32 now, f32 timeSinceLastCall, SParticle*& outArray) = 0;
 
 	virtual void setParticleInitializer(IParticleInitializer*) = 0;
 

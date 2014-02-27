@@ -28,9 +28,6 @@ public:
 
 	//! Get the speed in degrees per second in all 3 dimensions
 	virtual const core::vector3df& getSpeed() const = 0;
-
-	//! Get emitter type
-	virtual E_PARTICLE_AFFECTOR_TYPE getType() const { return EPAT_ROTATE; }
 };
 
 } // end namespace scene

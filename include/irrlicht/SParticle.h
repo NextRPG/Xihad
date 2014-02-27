@@ -25,10 +25,10 @@ namespace scene
 		core::CRandomizer randomizer;
 
 		//! Elapsed time of the particle since born
-		u32 localTime;
+		f32 localTime;
 
 		//! Length of life time of the particle
-		u32 lifeTime;
+		f32 lifeTime;
 
 		//! Position of the particle
 		core::vector3df pos;

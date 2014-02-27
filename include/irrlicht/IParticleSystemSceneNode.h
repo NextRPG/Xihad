@@ -63,14 +63,12 @@ public:
 	//! Remove all currently visible particles
 	virtual void clearParticles() = 0;
 
+	virtual u32 getParticleCount() = 0;
+
 	//! Do manually update the particles.
  	//! This should only be called when you want to render the node outside the scenegraph,
  	//! as the node will care about this otherwise automatically.
-	virtual void doParticleSystem(u32 time) = 0;
-
-	//! Gets the particle emitter, which creates the particles.
-	/** \return The particle emitter. Can be 0 if none is set. */
-	virtual IParticleEmitter* getEmitter() =0;
+	virtual void doParticleSystem(f32 time) = 0;
 
 	//! Sets the particle emitter, which creates the particles.
 	/** A particle emitter can be created using one of the createEmitter
@@ -79,7 +77,9 @@ public:
 	\param emitter: Sets the particle emitter. You can set this to 0 for
 	removing the current emitter and stopping the particle system emitting
 	new particles. */
-	virtual void setEmitter(IParticleEmitter* emitter) = 0;
+	virtual void addEmitter(IParticleEmitter*, f32 timeToBeginEmitt = 0.f, f32 timeToStopEmitt = 16000000.f) = 0;
+
+	virtual void clearEmitters() = 0;
 
 	virtual void setRenderer(IParticleRenderer*) = 0;
 
@@ -99,12 +99,10 @@ public:
 	\param affector: New affector. */
 	virtual void addAffector(IParticleAffector* affector, float lifeBgn = 0.f, float lifeEnd = 1.f) = 0;
 
-	//! Get a list of all particle affectors.
-	/** \return The list of particle affectors attached to this node. */
-	virtual const core::list<SRangedParticleAffector>& getAffectors() const = 0;
+	virtual bool removeAffector(IParticleAffector* affector) = 0;
 
 	//! Removes all particle affectors in the particle system.
-	virtual void removeAllAffectors() = 0;
+	virtual void clearAffectors() = 0;
 };
 
 } // end namespace scene
