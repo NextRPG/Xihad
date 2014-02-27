@@ -21,8 +21,8 @@
 -- print(findMin(list))
 -- print(findMax(list))
 
-function hex2Color( str )
-	return tonumber("0x" .. str:sub(1, 2)), tonumber("0x" .. str:sub(3, 4)), tonumber("0x" .. str:sub(5, 6))
-end
+-- function hex2Color( str )
+-- 	return tonumber("0x" .. str:sub(1, 2)), tonumber("0x" .. str:sub(3, 4)), tonumber("0x" .. str:sub(5, 6))
+-- end
 
-print(hex2Color("102b6a"))
+print(tonumber("10 2"))

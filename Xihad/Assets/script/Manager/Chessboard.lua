@@ -96,8 +96,7 @@ end
 -- @return bool
 function Chessboard:hasCharacter( location )
 	local AIManager, HeroManager = require "AIManager", require "HeroManager"
-	return AIManager:getCharacterByLocation(location) 
-		or HeroManager:getCharacterByLocation(location)
+	return AIManager:getCharacterByLocation(location) or HeroManager:getCharacterByLocation(location)
 end
 
 ---

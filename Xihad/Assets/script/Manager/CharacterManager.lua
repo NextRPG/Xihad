@@ -73,11 +73,10 @@ end
 -- 通过位置得到CharacterObject
 -- @tab location
 -- @treturn Object characterObject or nil
-function CharacterManager:getCharacterByLocation( location )
+function CharacterManager:getCharacterByLocation( point )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
-		local tile = character:tile()
-		if table.equal(tile, location) then
+		if math.p_same(character:tile(), point) then
 		 	return characterObject
 		end
 	end
@@ -90,8 +89,8 @@ end
 function CharacterManager:onSelectCharacter( object )
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
-	CameraManager:move2Character(object)
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
+	CameraManager:move2Character(object)
 	Chessboard:markArea(PathFinder)
 end
 

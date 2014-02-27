@@ -62,7 +62,7 @@ function CameraMoveBy:onUpdate(  )
 		self.object:resetTranslate(self.destination)
 		ccom:setTarget(self.destination2)
 		-- playAnimation(self.object, "idle 1")
-		print("2 the end")
+		-- print("2 the end")
 		self.enabled = false
 		self.callback()
 

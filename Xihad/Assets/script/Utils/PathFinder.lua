@@ -18,7 +18,7 @@ end
 
 function hash( tile )
 	assert(tile.x)
-	return tile.x .. " " .. tile.y
+	return tile.x .. ", " .. tile.y
 end
 
 function inbound( x, y )
@@ -55,6 +55,9 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 	while openQueue:empty() == false do
 		local currentPoint = openQueue:pop()
 		self[hash(currentPoint)] = currentPoint
+		if not Chessboard:hasCharacter(currentPoint) then
+			self[#self + 1] = currentPoint
+		end
 		for k,v in pairs(directions) do
 
 			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
@@ -68,14 +71,16 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 			-- count = count + 1
 		end
 	end
-			-- print(count)
-
-	assert(self.start)
-	for k,v in pairs(self) do
-		if type(v) == "table" and k ~= "start" and not Chessboard:hasCharacter(v) then
-			self[#self + 1] = v
-		end
-	end
+	-- print(Chessboard:hasCharacter{x = 9, y = 2} == nil)
+	-- for k,v in pairs(self) do
+	-- 	if type(v) == "table" and k ~= "start" 
+	-- 		-- and tonumber(k) == nil 
+	-- 		and not Chessboard:hasCharacter(v) 
+	-- 		then
+	-- 			print("got tile", v.x, v.y)
+	-- 			self[#self + 1] = v
+	-- 	end
+	-- end
 end
 
 ---
