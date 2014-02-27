@@ -64,7 +64,7 @@ end
 -- 找到当前Character所在的TileObject
 -- @treturn Object tileObject
 function Character:tile()
-	return Chessboard:tileAt(vector2point(self.object:getTranslation())):findComponent(c"Tile")
+	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
 end
 
 -- EffectTarget

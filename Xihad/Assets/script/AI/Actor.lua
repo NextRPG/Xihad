@@ -50,7 +50,7 @@ function Actor:run( scheduler )
 
 		local selectSkill, target = strategy:judgeSkill() -- component
 		if selectSkill ~= 0 then
-			SkillManager:onCastSkill( target, selectSkill, object)
+			SkillManager:onCastSkill( target, selectSkill, character)
 		end
 
 		runCallback(coroutine.resume(scheduler)) 

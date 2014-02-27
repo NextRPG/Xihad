@@ -77,7 +77,7 @@ function CharacterManager:getCharacterByLocation( point )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
 		if math.p_same(character:tile(), point) then
-		 	return characterObject
+		 	return characterObject:findComponent(c"Character")
 		end
 	end
 	return nil
@@ -91,7 +91,8 @@ function CharacterManager:onSelectCharacter( object )
 	local character = object:findComponent(c"Character")
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	CameraManager:move2Character(object)
-	Chessboard:markArea(PathFinder)
+	Chessboard:pushArea(PathFinder, "BLUE")
+	Chessboard:pushArea()
 end
 
 local function optimizePath( actions )
@@ -113,12 +114,10 @@ end
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
-function CharacterManager:onSelectTile( object, finder )
+function CharacterManager:onSelectTile( tile, finder )
 
 
 	finder = finder or PathFinder 	
-	local tile = object:findComponent(c"Tile")
-	
 	local path = finder:constructPathAndClean(tile)
 
 	local directions = Consts.directions

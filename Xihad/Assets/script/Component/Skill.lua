@@ -88,7 +88,7 @@ function Skill:getTargetRange( center )
 			if  math.abs(i - center.x) + math.abs(j - center.y) <= self.maxDistance and 
 				math.abs(i - center.x) + math.abs(j - center.y) >= self.minDistance and
 			    i >= 0 and i < Consts.COLS and j >= 0 and j < Consts.ROWS 
-			    and Chessboard:tileAt{x = i, y = j}:findComponent(c"Tile"):canPass() then
+			    and Chessboard:tileAt{x = i, y = j}:canPass() then
 			    attackArea[#attackArea + 1] = {x = i, y = j}
 			end
 		end
@@ -104,7 +104,7 @@ function Skill:getAttackArea( center )
 	local range = {}
 	for i,v in ipairs(self.range) do
 		local point = math.p_add(v, center)
-		if Chessboard:tileAt(point):findComponent(c"Tile"):canPass() then
+		if Chessboard:tileAt(point):canPass() then
 			range[#range + 1] = point
 		end
 	end
@@ -127,19 +127,33 @@ function Skill:hasEnemy( center )
 	return false
 end
 
-function Skill:getBestTarget( center )
+function Skill:getTargets2Num( center, manager )
 	local target2Num = {}
 	local attackArea = self:getTargetRange(center)
 	for i,target in ipairs(attackArea) do
 		local range = self:getAttackArea(target)
 		target2Num[target] = 0
 		for i,tile in ipairs(range) do
-			if HeroManager:getCharacterByLocation(tile) then
+			if manager:getCharacterByLocation(tile) then
 				target2Num[target] = target2Num[target] + 1
 			end
 		end
 	end
-	local bestTarget = findMax(target2Num)
+	return target2Num
+end
+
+function Skill:getAvailableTargets( center, manager )
+	local targets, target2Num = {}, self:getTargets2Num(center, manager)
+	for target,num in pairs(target2Num) do
+		if num > 0 then
+			targets[#targets + 1] = target
+		end
+	end
+	return targets
+end
+
+function Skill:getBestTarget( center )
+	local bestTarget = findMax(self:getTargets2Num(center, HeroManager))
 	return bestTarget
 end
 
@@ -155,12 +169,8 @@ function Skill:trigger( hero, targetTile )
 	local range = self:getAttackArea(tile)
 
 	for i,v in ipairs(range) do
-		local object = 	HeroManager:getCharacterByLocation(v) 
+		local character = 	HeroManager:getCharacterByLocation(v) 
 						or AIManager:getCharacterByLocation(v)
-		local character
-		if object then
-			character = object:findComponent(c"Character")
-		end
 		if checkSkill(hero, self, character) then
 			print(character.properties.currentHP)
 			if self.effect2Target then character:bindEffect(self.effect2Target) end

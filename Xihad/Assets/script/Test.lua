@@ -25,4 +25,4 @@
 -- 	return tonumber("0x" .. str:sub(1, 2)), tonumber("0x" .. str:sub(3, 4)), tonumber("0x" .. str:sub(5, 6))
 -- end
 
-print(tonumber("10 2"))
+print((1 == 2) and "haha" or "hehe")

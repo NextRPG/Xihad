@@ -38,7 +38,14 @@ end
 -- @int id
 -- @treturn Object skillObject or nil
 function SkillManager:getSkill( id )
-	return scene:findObject(sname(id))
+	return scene:findObject(sname(id)):findComponent(c"Skill")
+end
+
+function SkillManager:getAllAvailableTargets( characterObject )
+	-- local skills = characterObject:findComponent(c"Character")
+	-- for i,id in ipairs(character.skills) do
+		
+	-- end
 end
 
 ---
@@ -69,7 +76,7 @@ function SkillManager:onSelectSkill( key )
 		print(k,v)
 	end
 	targetRange = selectSkill:getTargetRange(character:tile())
-	Chessboard:markArea(targetRange, "RED")
+	Chessboard:pushArea(targetRange, "RED")
 end
 
 ---
@@ -84,7 +91,7 @@ function SkillManager:onSelectTarget( object )
 
 			Chessboard:popArea(skillRange)
 			skillRange = selectSkill:getAttackArea(tile)
-			Chessboard:markArea(skillRange, "PURPLE") -- 紫色
+			Chessboard:pushArea(skillRange, "PURPLE") -- 紫色
 		end
 		lastObject = object
 	end
@@ -94,15 +101,14 @@ end
 -- 发出技能后展示动画，并作出相应逻辑判断
 -- selectSkill可以传入
 -- @tparam Object tileObject
-function SkillManager:onCastSkill( tileObject, skill, characterObject )
+function SkillManager:onCastSkill( tile, skill, character )
 
 	skill = skill or selectSkill
-	characterObject = characterObject or currentCharacter
+	local characterObject = (character == nil) and currentCharacter or character.object
 
 	Chessboard:clearAll()
 	skillRange = nil
 	local character = characterObject:findComponent(c"Character")
-	local tile = tileObject:findComponent(c"Tile")
 	local anim = characterObject:findComponent(c"AnimatedMesh")
 	local rotateBy = characterObject:findComponent(c"RotateBy")
 	local rx, ry, rz = characterObject:getRotation():xyz()

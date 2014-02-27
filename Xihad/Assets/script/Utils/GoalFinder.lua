@@ -9,20 +9,6 @@ local PathFinder = require "PathFinder"
 
 local GoalFinder = PathFinder.new{}
 
-function hash( tile )
-	assert(tile.x)
-	return tile.x .. " " .. tile.y
-end
-
-function inbound( x, y )
-	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
-end
-
--- 这种遍历查找重复的方法没有哈希表的方法快，但是也有好处(其实也没什么好处)
-function findTile( location )
-	return self[hash(location)]
-end
-
 local function findMin( list, scores )
 	local point, minScore = {}, 100000
 	for k,v in pairs(list) do
@@ -59,11 +45,11 @@ function GoalFinder:Astar( start, goal )
 		for k,v in pairs(directions) do
 
 			repeat 
-			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
+			local tile = Chessboard:tileAt(currentPoint)
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if self[hash(point)] ~= nil or not inbound(point.x, point.y) or not Chessboard:tileAt(point):findComponent(c"Tile"):canPass() then
+			if self[hash(point)] ~= nil or not inbound(point.x, point.y) or not Chessboard:tileAt(point):canPass() then
 				break
 			end
 

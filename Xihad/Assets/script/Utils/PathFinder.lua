@@ -44,7 +44,7 @@ end
 local directions = Consts.directions
 function PathFinder:getReachableTiles( start, maxAP, predicate )
 
-	assert(start) assert(maxAP)
+	assert(start.x) assert(maxAP)
 	self:cleanUp()
 
 	start.leftAP = maxAP
@@ -60,27 +60,17 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 		end
 		for k,v in pairs(directions) do
 
-			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
+			local tile = Chessboard:tileAt(currentPoint)
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if inbound(point.x, point.y) and Chessboard:tileAt(point):findComponent(c"Tile"):canPass()
+			if inbound(point.x, point.y) and Chessboard:tileAt(point):canPass()
 				 and point.leftAP > 0 and self[hash(point)] == nil  then
 				 		openQueue:push(point)
 			end
 			-- count = count + 1
 		end
 	end
-	-- print(Chessboard:hasCharacter{x = 9, y = 2} == nil)
-	-- for k,v in pairs(self) do
-	-- 	if type(v) == "table" and k ~= "start" 
-	-- 		-- and tonumber(k) == nil 
-	-- 		and not Chessboard:hasCharacter(v) 
-	-- 		then
-	-- 			print("got tile", v.x, v.y)
-	-- 			self[#self + 1] = v
-	-- 	end
-	-- end
 end
 
 ---

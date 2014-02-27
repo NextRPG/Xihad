@@ -83,7 +83,7 @@ end
 -- @tab location
 -- @treturn Object tileObject
 function Chessboard:tileAt( location )
-	return scene:findObject(c(tname(location)))
+	return scene:findObject(c(tname(location))):findComponent(c"Tile")
 end
 
 function Chessboard:highlightAt( location )
@@ -110,25 +110,26 @@ function Chessboard:popArea( points )
 	end
 end
 
----
--- 恢复一些地图块为透明色
--- @tparam {Point,...} points
--- @return nil
-function Chessboard:recoverArea( points )
-	if points == nil then return end
-	for i,point in ipairs(points) do
-		self:highlightAt(point):pushColor("ALPHA")
-	end
-end
+-- ---
+-- -- 恢复一些地图块为透明色
+-- -- @tparam {Point,...} points
+-- -- @return nil
+-- function Chessboard:recoverArea( points )
+-- 	if points == nil then return end
+-- 	for i,point in ipairs(points) do
+-- 		self:highlightAt(point):pushColor("ALPHA")
+-- 	end
+-- end
 
 ---
 -- 标记一些地图块为某种颜色
 -- @tparam {Point,...} points
 -- @tparam {r,g,b} color
 -- @return nil
-function Chessboard:markArea(points, color)
+function Chessboard:pushArea(points, color)
 	if points == nil then return end
-	color = color or "BLUE"
+	-- color = color or "BLUE"
+	assert(color ~= nil, "color can not be nil")
 	for i,point in ipairs(points) do
 		self:highlightAt(point):pushColor(color)
 	end

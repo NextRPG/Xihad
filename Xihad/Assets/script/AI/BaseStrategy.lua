@@ -28,8 +28,8 @@ function BaseStrategy:judgeTile(  )
 	local board = ScoreBoard.new{}
 
 	board:appendKey( names )
-	board:appendValue( distances, 0.1 )
-	board:appendValue( HPs, 0.9 )
+	board:appendValue( distances, 0.5 )
+	board:appendValue( HPs, 0.5 )
 
 	local name = board:getResult()
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
@@ -45,7 +45,7 @@ function BaseStrategy:judgeSkill(  )
 	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
 		repeat
-			local skill = SkillManager:getSkill(id):findComponent(c"Skill")
+			local skill = SkillManager:getSkill(id)
 			if not skill:hasEnemy( center ) then break end			
 			names[#names + 1] = skill.id
 			damages[skill.id] = skill.damage
@@ -65,7 +65,7 @@ function BaseStrategy:judgeSkill(  )
 	board:appendValue( currentTimes, 0.3 )
 	board:appendValue( ranges, 0.4 )
 
-	local selectSkill = SkillManager:getSkill(board:getResult()):findComponent(c("Skill"))
+	local selectSkill = SkillManager:getSkill(board:getResult())
 	local target = selectSkill:getBestTarget(center)
 
 	return selectSkill, Chessboard:tileAt(target)
