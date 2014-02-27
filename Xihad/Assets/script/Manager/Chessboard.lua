@@ -104,8 +104,11 @@ end
 -- @tparam {Point,...} points
 -- @return nil
 function Chessboard:popArea( points )
+
 	if points == nil then return end
+
 	for i,point in ipairs(points) do
+
 		self:highlightAt(point):popColor()
 	end
 end

@@ -39,6 +39,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 
 	assert(start.x) assert(maxAP)
 	self:cleanUp()
+	self.data = {}
 
 	start.leftAP = maxAP
 	self.start = start 
@@ -47,7 +48,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 	-- local count = 0
 	while openQueue:empty() == false do
 		local currentPoint = openQueue:pop()
-		self[hash(currentPoint)] = currentPoint
+		self.data[hash(currentPoint)] = currentPoint
 		if not Chessboard:hasCharacter(currentPoint) then
 			self[#self + 1] = currentPoint
 			currentPoint.canStay = true
@@ -59,7 +60,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
 			if inbound(point) and Chessboard:tileAt(point):canPass()
-				 and point.leftAP > 0 and self[hash(point)] == nil  then
+				 and point.leftAP > 0 and self.data[hash(point)] == nil  then
 				 		openQueue:push(point)
 			end
 			-- count = count + 1
@@ -73,8 +74,7 @@ end
 -- @treturn {string, ...} path 
 function PathFinder:constructPath( tile )
 	local path = {}	
-	local tile = self[hash(tile)]
-	assert(tile)
+	local tile = self.data[hash(tile)]
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction
 		tile = tile.prev
@@ -82,17 +82,6 @@ function PathFinder:constructPath( tile )
 	table.reverse(path)
 	return path
 end
-
----
--- 构建路径后在将缓存清理
--- @tab tile
--- @treturn {string, ...} path 
-function PathFinder:constructPathAndClean( tile )
-	local tmp = self:constructPath( tile )
-	self:cleanUp()
-	return tmp
-end
-
 ---
 -- 清理缓存
 function PathFinder:cleanUp(  )
@@ -105,7 +94,7 @@ function PathFinder:cleanUp(  )
 end
 
 function PathFinder:hasTile( tile )
-	if self[hash(tile)] ~= nil and self[hash(tile)].canStay == true then
+	if self.data[hash(tile)] ~= nil and self.data[hash(tile)].canStay == true then
 		return true
 	end
 	return false

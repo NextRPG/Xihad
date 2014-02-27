@@ -106,8 +106,6 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object:findComponent(c"Tile"))
 		end,
 		function ( object )
-			Chessboard:pushArea(PathFinder, "ALPHA")
-			Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
 			self.manager:onSelectTile(object:findComponent(c"Tile"))
 			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)
@@ -122,6 +120,8 @@ function BattleManager:addShowSkill(  )
 			return key == "K"
 		end,
 		function ( key )
+			local character = self.manager.currentCharacter:findComponent(c"Character")
+			character.states.TURNOVER = true
 		end)
 	stateMachine:addTransition("showSkill", "showTargetRange",
 		function ( key )
@@ -129,6 +129,13 @@ function BattleManager:addShowSkill(  )
 		end,
 		function ( key )
 			SkillManager:onSelectSkill(key)
+		end)
+	stateMachine:addTransition("showSkill", "showCharacter",
+		function ( object, etype )
+			return etype == "rUplift"
+		end,
+		function (  )
+			self.manager:back2ShowCharacter()
 		end)
 end
 
@@ -148,6 +155,13 @@ function BattleManager:addShowTargetRange(  )
 		end,
 		function ( object )
 			SkillManager:onCastSkill(object:findComponent(c"Tile"))
+		end)
+	stateMachine:addTransition("showTargetRange", "showSkill", 
+		function ( object, etype )
+			return etype == "rUplift"
+		end, 
+		function (  )
+			SkillManager:back2ShowSkill()
 		end)
 end
 

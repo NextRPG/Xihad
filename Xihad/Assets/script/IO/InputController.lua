@@ -51,8 +51,6 @@ function InputController:onMouseEvent( e )
 	if e.type == "wheelMoved" or e.type == "mouseDragged" or e.type == "mouseDraggedEnd" then
 		CameraManager:onMouseEvent( e )
 	else 
-	
-
 		BattleManager:onMouseEvent( e )
 	end
 	lastType = e.type

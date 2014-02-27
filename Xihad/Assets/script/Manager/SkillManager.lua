@@ -67,8 +67,10 @@ function SkillManager:onShowSkills( object )
 	local character = currentCharacter:findComponent(c"Character")
 	-- 显示技能
 	print("开始选择技能")
-	for i,v in ipairs(character.skills) do
-		print(i,v)
+	for i,id in ipairs(character.skills) do
+		if SkillManager:getSkill(id):hasEnemy(character:tile(), character:getEnemyManager()) then
+			print(i,id)
+		end
 	end
 	print("K", "待机")
 	print("选择你想使用的技能")
@@ -82,9 +84,6 @@ local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
 	selectSkill = scene:findObject(sname(key)):findComponent(c"Skill")
-	for k,v in pairs(selectSkill) do
-		print(k,v)
-	end
 	targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
 	Chessboard:pushArea(targetRange, "RED")
 end
@@ -99,12 +98,21 @@ function SkillManager:onSelectTarget( object )
 		local tile = object:findComponent(c"Tile")
 		if table.contains(targetRange, tile) then
 
-			Chessboard:popArea(skillRange)
 			skillRange = selectSkill:getAttackArea(tile)
 			Chessboard:pushArea(skillRange, "PURPLE") -- 紫色
+		elseif skillRange ~= nil then
+			Chessboard:popArea(skillRange)
+			skillRange = nil	
 		end
 		lastObject = object
 	end
+end
+
+function SkillManager:back2ShowSkill(  )
+	Chessboard:popArea(skillRange)
+	Chessboard:popArea(targetRange)
+	skillRange, targetRange = nil
+	self:onShowSkills(currentCharacter)
 end
 
 ---
@@ -138,6 +146,8 @@ function SkillManager:onCastSkill( tile, skill, character )
 	end
 	
 	CameraManager:back2Normal()
+	character.states.TURNOVER = true
+	print("haha")
 end
 
 return SkillManager

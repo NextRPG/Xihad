@@ -117,11 +117,15 @@ end
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
+local lastTranslate = math3d.vector(0, 0, 0)
 function CharacterManager:onSelectTile( tile, finder )
 
+	Chessboard:pushArea(PathFinder, "ALPHA")
+	Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
 
+	lastTranslate = self.currentCharacter:getTranslate()
 	finder = finder or PathFinder 	
-	local path = finder:constructPathAndClean(tile)
+	local path = finder:constructPath(tile)
 
 	local directions = Consts.directions
 	local sequence = self.currentCharacter:findComponent(c"Sequence")
@@ -136,8 +140,12 @@ function CharacterManager:onSelectTile( tile, finder )
 	follow:start(self.currentCharacter)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
 	follow:stop()
-	local character = self.currentCharacter:findComponent(c"Character")
-	character.states.TURNOVER = true
+end
+
+function CharacterManager:back2ShowCharacter(  )
+	self.currentCharacter:resetTranslate(lastTranslate)
+	Chessboard:popArea(PathFinder)
+	CameraManager:move2Character(self.currentCharacter)
 end
 
 

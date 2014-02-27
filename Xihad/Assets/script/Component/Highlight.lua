@@ -51,7 +51,7 @@ function Highlight:pushColor( colorstr )
 	self:changeColor()
 end
 
-function Highlight:popColor( colorstr )
+function Highlight:popColor(  )
 	if not self.stack:empty() then
 		self.stack:pop()
 		self:changeColor(  )

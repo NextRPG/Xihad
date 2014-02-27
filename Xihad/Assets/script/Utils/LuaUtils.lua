@@ -49,7 +49,7 @@ end
 
 function hash( tile )
 	assert(tile.x)
-	return tile.x .. ", " .. tile.y
+	return tile.x .. " " .. tile.y
 end
 
 function inbound( point )

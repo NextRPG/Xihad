@@ -6,6 +6,7 @@
 -- @copyright NextRPG
 local Chessboard = require "Chessboard"
 local PathFinder = require "PathFinder"
+local AIManager = require "AIManager"
 
 local GoalFinder = PathFinder.new{}
 
@@ -24,9 +25,13 @@ local directions = Consts.directions
 function GoalFinder:Astar( start, goal )
 
 	assert(start) assert(goal)
-	self:cleanUp()
-	start.leftAP = fakeMaxAP -- fake
+	-- print(type(self.data[hash{x = 6, y = 2}]))
+	-- self:cleanUp()
+	self.data = {}
+	-- print(type(self.data[hash{x = 6, y = 2}]))
 	self.start = start 
+
+	start.leftAP = fakeMaxAP -- fake
 	local openSet, g_score, h_score, f_score  = {}, {}, {}, {}
 	openSet[hash(start)] = start
 
@@ -37,7 +42,7 @@ function GoalFinder:Astar( start, goal )
 	while next(openSet) ~= nil do
 		local currentPoint = findMin(openSet, f_score)
 		openSet[hash(currentPoint)] = nil
-		self[hash(currentPoint)] = currentPoint
+		self.data[hash(currentPoint)] = currentPoint
 		if hash(currentPoint) == hash(goal) then
 			return true
 		end
@@ -49,7 +54,9 @@ function GoalFinder:Astar( start, goal )
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if self[hash(point)] ~= nil or not inbound(point) or not Chessboard:tileAt(point):canPass() then
+
+			if self.data[hash(point)] ~= nil or not inbound(point)
+			 or not Chessboard:tileAt(point):canPass() or AIManager:getCharacterByLocation(point) then
 				break
 			end
 
@@ -57,6 +64,7 @@ function GoalFinder:Astar( start, goal )
 			local tentative_g_score = g_score[hash(currentPoint)] + 1
 
 			if openSet[hash(point)] == nil or tentative_g_score < g_score[hash(point)] then
+				
 				openSet[hash(point)] = point
 				g_score[hash(point)] = tentative_g_score
 				h_score[hash(point)] = math.abs(goal.y - point.y) + math.abs(goal.x - point.x)
@@ -72,16 +80,26 @@ end
 
 function GoalFinder:getCostAP( start, goal )
 	self:Astar(start, goal)
-	return self[hash(goal)].leftAP
+	return self.data[hash(goal)].leftAP
 end
 
 function GoalFinder:getTargetTile( start, goal, maxAP )
 	self:Astar(start, goal)
-	local tile = self[hash(goal)]
+	local tile = self.data[hash(goal)]
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
 		tile = tile.prev
 	end
 	return tile.prev
+end
+
+function GoalFinder:cleanUp(  )
+	-- 一个教训，迭代器返回的是值而不是引用
+	for k,v in pairs(self) do
+		if (type(v) == "table") then
+			self[k] = nil
+			print(k, type(self[k]))
+		end
+	end
 end
 
 return GoalFinder
