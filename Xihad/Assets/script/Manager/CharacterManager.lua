@@ -34,6 +34,7 @@ end
 function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
 	character.model = "ninja"
+	character.team = self.team
 	local characterObject = scene:createObject(c(character.name))
 
 	local test = characterObject:appendComponent(c"Character", character)
@@ -92,7 +93,9 @@ function CharacterManager:onSelectCharacter( object )
 	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
 	CameraManager:move2Character(object)
 	Chessboard:pushArea(PathFinder, "BLUE")
-	Chessboard:pushArea()
+	Chessboard:pushArea(
+		SkillManager:getAllAvailableTargets(
+			self.currentCharacter:findComponent(c"Character")), "RED")
 end
 
 local function optimizePath( actions )

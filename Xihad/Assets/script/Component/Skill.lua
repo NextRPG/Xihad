@@ -8,6 +8,8 @@
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
 local AIManager = require "AIManager"
+local PathFinder = require "PathFinder"
+
 
 ---
 -- 
@@ -87,7 +89,7 @@ function Skill:getTargetRange( center )
 		for j=center.y - self.maxDistance, center.y + self.maxDistance do
 			if  math.abs(i - center.x) + math.abs(j - center.y) <= self.maxDistance and 
 				math.abs(i - center.x) + math.abs(j - center.y) >= self.minDistance and
-			    i >= 0 and i < Consts.COLS and j >= 0 and j < Consts.ROWS 
+			    inbound{x = i, y = j}
 			    and Chessboard:tileAt{x = i, y = j}:canPass() then
 			    attackArea[#attackArea + 1] = {x = i, y = j}
 			end
@@ -104,24 +106,24 @@ function Skill:getAttackArea( center )
 	local range = {}
 	for i,v in ipairs(self.range) do
 		local point = math.p_add(v, center)
-		if Chessboard:tileAt(point):canPass() then
+		if inbound(point) and Chessboard:tileAt(point):canPass() then
 			range[#range + 1] = point
 		end
 	end
 	return range
 end
 
-function Skill:hasEnemy( center )
+function Skill:hasEnemy( center, manager )
 	local checked = {}
-	local attackArea = self:getTargetRange(center)
-	for i,target in ipairs(attackArea) do
-		local range = self:getAttackArea(target)
-		for i,tile in ipairs(range) do
-			if checked[tile.x .. " " .. tile.y] == nil 
-				and HeroManager:getCharacterByLocation(tile) then
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		local attackArea = self:getAttackArea(target)
+		for i,tile in ipairs(attackArea) do
+			if checked[hash(tile)] == nil 
+				and manager:getCharacterByLocation(tile) then
 				return true
 			end
-			checked[tile.x .. " " .. tile.y] = true
+			checked[hash(tile)] = true
 		end
 	end	
 	return false
@@ -129,11 +131,11 @@ end
 
 function Skill:getTargets2Num( center, manager )
 	local target2Num = {}
-	local attackArea = self:getTargetRange(center)
-	for i,target in ipairs(attackArea) do
-		local range = self:getAttackArea(target)
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		local attackArea = self:getAttackArea(target)
 		target2Num[target] = 0
-		for i,tile in ipairs(range) do
+		for i,tile in ipairs(attackArea) do
 			if manager:getCharacterByLocation(tile) then
 				target2Num[target] = target2Num[target] + 1
 			end
@@ -143,13 +145,35 @@ function Skill:getTargets2Num( center, manager )
 end
 
 function Skill:getAvailableTargets( center, manager )
-	local targets, target2Num = {}, self:getTargets2Num(center, manager)
-	for target,num in pairs(target2Num) do
-		if num > 0 then
-			targets[#targets + 1] = target
-		end
+
+	local targets = {}
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		repeat
+			if PathFinder:hasTile(target) then break end
+			local attackArea = self:getAttackArea(target)
+			for i,tile in ipairs(attackArea) do
+				if manager:getCharacterByLocation(tile) then
+					targets[#targets + 1] = target
+					break
+				end
+			end
+		until true
 	end
 	return targets
+end
+
+function Skill:getPossibleTargets( manager )
+	local possibleTargets = {}
+	for i,point in ipairs(PathFinder) do
+		local targets = self:getAvailableTargets(point, manager)
+		for i,target in ipairs(targets) do
+			if not table.contains(possibleTargets, target) then
+				possibleTargets[#possibleTargets + 1] = target
+			end
+		end
+	end
+	return possibleTargets
 end
 
 function Skill:getBestTarget( center )

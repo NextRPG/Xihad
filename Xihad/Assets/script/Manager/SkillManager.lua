@@ -41,11 +41,21 @@ function SkillManager:getSkill( id )
 	return scene:findObject(sname(id)):findComponent(c"Skill")
 end
 
-function SkillManager:getAllAvailableTargets( characterObject )
-	-- local skills = characterObject:findComponent(c"Character")
-	-- for i,id in ipairs(character.skills) do
-		
-	-- end
+function SkillManager:getAllAvailableTargets( character )
+	local skills = character.skills
+	local allTargets = {}
+	self.allTargets = {}
+	for i,id in ipairs(character.skills) do
+		local targets = self:getSkill(id):getPossibleTargets(character:getEnemyManager())
+		print(#targets)
+		for i,target in ipairs(targets) do
+			if not table.contains(allTargets, target) then
+				allTargets[#allTargets + 1] = target
+			end
+		end
+	end
+	self.allTargets = allTargets
+	return allTargets
 end
 
 ---

@@ -21,7 +21,7 @@ function CameraMoveBy:moveToCharacter( characterObject, callback )
 
 	local action = {}
 	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 10, 0)
-	action.destination = action.destination2 + math3d.vector(0, 0, 10)
+	action.destination = action.destination2 + math3d.vector(0, 0, 30)
 	
 	self:runAction(action, callback)
 end

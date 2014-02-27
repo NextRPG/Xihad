@@ -1,6 +1,7 @@
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
 local StateMachine = require "StateMachine"
+local SkillManager = require "SkillManager"
 --- 
 -- 控制战斗流程
 -- @module BattleManager
@@ -15,7 +16,7 @@ local BattleManager = {
 }
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager1
+	self.manager = manager2
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
@@ -97,14 +98,16 @@ function BattleManager:addShowTile(  )
 		end,
 		function ( object )
 			Chessboard:popArea(PathFinder)
+			Chessboard:popArea(SkillManager.allTargets)
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object)
+			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object:findComponent(c"Tile"))
 		end,
 		function ( object )
 			Chessboard:pushArea(PathFinder, "ALPHA")
+			Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
 			self.manager:onSelectTile(object:findComponent(c"Tile"))
 			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)

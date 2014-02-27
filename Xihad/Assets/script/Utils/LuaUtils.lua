@@ -46,3 +46,13 @@ end
 function hex2Color( str )
 	return tonumber("0x" .. str:sub(1, 2)), tonumber("0x" .. str:sub(3, 4)), tonumber("0x" .. str:sub(5, 6))
 end
+
+function hash( tile )
+	assert(tile.x)
+	return tile.x .. ", " .. tile.y
+end
+
+function inbound( point )
+	local x, y = point.x, point.y
+	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
+end

@@ -16,14 +16,7 @@ function PathFinder.new( o )
 	return o
 end
 
-function hash( tile )
-	assert(tile.x)
-	return tile.x .. ", " .. tile.y
-end
 
-function inbound( x, y )
-	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
-end
 
 -- 这种遍历查找重复的方法没有哈希表的方法快，但是也有好处(其实也没什么好处)
 function findTile( location )
@@ -57,6 +50,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 		self[hash(currentPoint)] = currentPoint
 		if not Chessboard:hasCharacter(currentPoint) then
 			self[#self + 1] = currentPoint
+			currentPoint.canStay = true
 		end
 		for k,v in pairs(directions) do
 
@@ -64,7 +58,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if inbound(point.x, point.y) and Chessboard:tileAt(point):canPass()
+			if inbound(point) and Chessboard:tileAt(point):canPass()
 				 and point.leftAP > 0 and self[hash(point)] == nil  then
 				 		openQueue:push(point)
 			end
@@ -110,9 +104,8 @@ function PathFinder:cleanUp(  )
 	end
 end
 
-function PathFinder:hasTile( tileObject )
-	local tile = tileObject:findComponent(c"Tile")
-	if self[hash(tile)] ~= nil and not Chessboard:hasCharacter(tile) then
+function PathFinder:hasTile( tile )
+	if self[hash(tile)] ~= nil and self[hash(tile)].canStay == true then
 		return true
 	end
 	return false

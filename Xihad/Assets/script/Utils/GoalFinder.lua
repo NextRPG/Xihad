@@ -49,7 +49,7 @@ function GoalFinder:Astar( start, goal )
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if self[hash(point)] ~= nil or not inbound(point.x, point.y) or not Chessboard:tileAt(point):canPass() then
+			if self[hash(point)] ~= nil or not inbound(point) or not Chessboard:tileAt(point):canPass() then
 				break
 			end
 

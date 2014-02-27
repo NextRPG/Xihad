@@ -67,6 +67,14 @@ function Character:tile()
 	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
 end
 
+function Character:getManager(  )
+	return self.team == "Hero" and require("HeroManager") or require("AIManager")
+end
+
+function Character:getEnemyManager(  )
+	return self.team == "Hero" and require("AIManager") or require("HeroManager")  
+end
+
 -- EffectTarget
 -- unused
 function Character:bindEffect( effect )

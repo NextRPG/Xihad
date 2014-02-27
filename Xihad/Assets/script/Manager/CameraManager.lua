@@ -59,21 +59,21 @@ function CameraManager:onKeyUp( e )
 
 
 	local HeroManager = require "HeroManager"
-	-- if e.key == "UP" then
-	-- 	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
-	-- 	move:moveToCharacter(HeroManager.currentCharacter, function (  )
-	-- 		rotate:start(math3d.vector(0, 1, 0))
-	-- 	end)
-	-- elseif e.key == "DOWN" then
-		-- rotate:stop()
-		-- move:runAction(backAction)
+	if e.key == "UP" then
+		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+		move:moveToCharacter(HeroManager.currentCharacter, function (  )
+			rotate:start(math3d.vector(0, 1, 0))
+		end)
+	elseif e.key == "DOWN" then
+		rotate:stop()
+		move:runAction(backAction)
 	-- elseif e.key == "Z" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
 	-- elseif e.key == "X" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
 	-- elseif e.key == "C" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
-	-- end
+	end
 	-- print(ccom:getUpVector():xyz())
 end
 

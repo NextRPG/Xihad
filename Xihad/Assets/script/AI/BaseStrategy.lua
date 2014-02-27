@@ -39,14 +39,15 @@ function BaseStrategy:judgeTile(  )
 end
 
 function BaseStrategy:judgeSkill(  )
-	local skills = self.object:findComponent(c"Character").skills
-	local center = self.object:findComponent(c"Character"):tile()
+	local character = self.object:findComponent(c"Character")
+	local skills = character.skills
+	local center = character:tile()
 
 	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
 		repeat
 			local skill = SkillManager:getSkill(id)
-			if not skill:hasEnemy( center ) then break end			
+			if not skill:hasEnemy( center, character:getEnemyManager()) then break end			
 			names[#names + 1] = skill.id
 			damages[skill.id] = skill.damage
 			currentTimes[skill.id] = skill.currentTimes
