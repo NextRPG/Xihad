@@ -84,7 +84,8 @@ local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
 	selectSkill = scene:findObject(sname(key)):findComponent(c"Skill")
-	targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
+	-- targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
+	targetRange = selectSkill:getTargetRange(character:tile())
 	Chessboard:pushArea(targetRange, "RED")
 end
 
@@ -96,12 +97,11 @@ local skillRange = nil
 function SkillManager:onSelectTarget( object )
 	if lastObject == nil or lastObject:getID() ~= object:getID() then
 		local tile = object:findComponent(c"Tile")
+		Chessboard:popArea(skillRange)
 		if table.contains(targetRange, tile) then
-
 			skillRange = selectSkill:getAttackArea(tile)
 			Chessboard:pushArea(skillRange, "PURPLE") -- 紫色
 		elseif skillRange ~= nil then
-			Chessboard:popArea(skillRange)
 			skillRange = nil	
 		end
 		lastObject = object

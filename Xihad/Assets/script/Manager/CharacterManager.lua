@@ -145,6 +145,7 @@ end
 function CharacterManager:back2ShowCharacter(  )
 	self.currentCharacter:resetTranslate(lastTranslate)
 	Chessboard:popArea(PathFinder)
+	Chessboard:popArea(SkillManager.allTargets)
 	CameraManager:move2Character(self.currentCharacter)
 end
 

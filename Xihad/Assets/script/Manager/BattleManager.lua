@@ -109,6 +109,13 @@ function BattleManager:addShowTile(  )
 			self.manager:onSelectTile(object:findComponent(c"Tile"))
 			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)
+	stateMachine:addTransition("showTile", "showCharacter", 
+		function ( object, etype )
+			return etype == "rUplift"
+		end,
+		function (  )
+			Chessboard:clearAll()
+		end)
 end
 
 function BattleManager:addShowSkill(  )
@@ -130,7 +137,7 @@ function BattleManager:addShowSkill(  )
 		function ( key )
 			SkillManager:onSelectSkill(key)
 		end)
-	stateMachine:addTransition("showSkill", "showCharacter",
+	stateMachine:addTransition("showSkill", "showTile",
 		function ( object, etype )
 			return etype == "rUplift"
 		end,
