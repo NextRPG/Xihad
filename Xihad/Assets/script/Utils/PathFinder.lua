@@ -35,8 +35,8 @@ end
 -- @tab start
 -- @int maxAP
 local directions = Consts.directions
-function PathFinder:getReachableTiles( start, maxAP, predicate )
-	local AIManager = require "AIManager"
+function PathFinder:getReachableTiles( character )
+	local start, maxAP, manager = character:tile(), character:getProperty("maxAP"), character:getEnemyManager()
 
 	assert(start.x) assert(maxAP)
 	self:cleanUp()
@@ -61,7 +61,7 @@ function PathFinder:getReachableTiles( start, maxAP, predicate )
 
 			if inbound(point) and Chessboard:tileAt(point):canPass()
 				 and point.leftAP > 0 and self.data[hash(point)] == nil 
-				 and not AIManager:getCharacterByLocation(point)  then
+				 and not manager:getCharacterByLocation(point)  then
 				 		openQueue:push(point)
 			end
 		end

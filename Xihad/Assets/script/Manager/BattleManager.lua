@@ -16,7 +16,7 @@ local BattleManager = {
 }
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager2
+	self.manager = manager1
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
@@ -25,6 +25,7 @@ function BattleManager:init( manager1, manager2 )
 	self:addShowNothing(manager1, manager2)
 	self:addShowCharacter( manager1, manager2 )
 	self:addShowTile()
+	self:addShowAITile()
 	self:addShowSkill()
 	self:addShowTargetRange()
 	global:appendUpdateHandler(self)
@@ -72,7 +73,15 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 					and self.manager:checkAvailable(object)
 		end,
 		function ( object )
-			Chessboard:clearAll()
+			self.manager:onSelectCharacter(object)
+		end)
+	stateMachine:addTransition("showCharacter", "showAITile",
+		function ( object, etype )
+			return etype == "lClicked" and object 
+					and object:hasTag(c"AI") 
+					and self.manager:checkAvailable(object)
+		end,
+		function ( object )
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showCharacter", "showCharacter",
@@ -97,8 +106,6 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Hero") and self.manager:checkAvailable(object)
 		end,
 		function ( object )
-			Chessboard:popArea(PathFinder)
-			Chessboard:popArea(SkillManager.allTargets)
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
@@ -116,6 +123,33 @@ function BattleManager:addShowTile(  )
 		function (  )
 			Chessboard:clearAll()
 		end)
+	stateMachine:addTransition("showTile", "showAITile", 
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"AI")
+		end, 
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+end
+
+function BattleManager:addShowAITile(  )
+	local stateMachine = self.stateMachine
+	stateMachine:addState("showAITile")
+	stateMachine:addTransition("showAITile", "showAITile",
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"AI")
+		end,
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+	stateMachine:addTransition("showAITile", "showTile",
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"Hero")
+		end,
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+
 end
 
 function BattleManager:addShowSkill(  )

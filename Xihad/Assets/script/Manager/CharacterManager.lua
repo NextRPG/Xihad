@@ -88,9 +88,10 @@ end
 -- 选中角色后的行为
 -- @tparam Object characterObject
 function CharacterManager:onSelectCharacter( object )
+	Chessboard:clearAll()
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
-	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
+	PathFinder:getReachableTiles(character)
 	CameraManager:move2Character(object)
 	Chessboard:pushArea(PathFinder, "BLUE")
 	Chessboard:pushArea(
