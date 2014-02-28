@@ -7,6 +7,7 @@
 local Chessboard = require "Chessboard"
 local PathFinder = require "PathFinder"
 local AIManager = require "AIManager"
+local HeroManager = require "HeroManager"
 
 local GoalFinder = PathFinder.new{}
 
@@ -22,7 +23,7 @@ end
 
 local fakeMaxAP = 100000
 local directions = Consts.directions
-function GoalFinder:Astar( start, goal )
+function GoalFinder:Astar( start, goal, predicate )
 
 	assert(start) assert(goal)
 	-- print(type(self.data[hash{x = 6, y = 2}]))
@@ -56,10 +57,11 @@ function GoalFinder:Astar( start, goal )
 
 
 			if self.data[hash(point)] ~= nil or not inbound(point)
-			 or not Chessboard:tileAt(point):canPass() or AIManager:getCharacterByLocation(point) then
+			 or not Chessboard:tileAt(point):canPass() 
+			 or (HeroManager:getCharacterByLocation(point) and not math.p_same(point, goal))
+			 or (predicate and predicate(point) == true) then
 				break
 			end
-
 
 			local tentative_g_score = g_score[hash(currentPoint)] + 1
 
@@ -71,16 +73,17 @@ function GoalFinder:Astar( start, goal )
 			 	f_score[hash(point)] = h_score[hash(point)] + g_score[hash(point)]
 			end
 			until true
-
 		end
-
 	end
-	error("not a connected graph")
+	return false
 end
 
 function GoalFinder:getCostAP( start, goal )
-	self:Astar(start, goal)
-	return self.data[hash(goal)].leftAP
+	if self:Astar(start, goal) then
+		return self.data[hash(goal)].leftAP
+	else
+		return "MAX"
+	end
 end
 
 function GoalFinder:getTargetTile( start, goal, maxAP )
@@ -88,6 +91,22 @@ function GoalFinder:getTargetTile( start, goal, maxAP )
 	local tile = self.data[hash(goal)]
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
 		tile = tile.prev
+	end
+	-- print("got a AI", AIManager:getCharacterByLocation(tile.prev) ~= nil)
+	if AIManager:getCharacterByLocation(tile.prev) then
+		print("haha")
+		if self:Astar(start, goal, function ( point ) return AIManager:getCharacterByLocation(point) end) then
+			tile = self.data[hash(goal)]
+			while fakeMaxAP - tile.prev.leftAP > maxAP do
+				tile = tile.prev
+			end
+		-- else
+		-- 	self:Astar(start, goal)
+		-- 	tile = self.data[hash(start)]
+		-- 	while fakeMaxAP - tile.prev.leftAP > maxAP do
+		-- 		tile = tile.prev
+		-- 	end
+		end
 	end
 	return tile.prev
 end

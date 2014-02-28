@@ -126,6 +126,7 @@ function CharacterManager:onSelectTile( tile, finder )
 	lastTranslate = self.currentCharacter:getTranslate()
 	finder = finder or PathFinder 	
 	local path = finder:constructPath(tile)
+	if #path == 0 then return end
 
 	local directions = Consts.directions
 	local sequence = self.currentCharacter:findComponent(c"Sequence")

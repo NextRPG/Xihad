@@ -19,10 +19,14 @@ function BaseStrategy:judgeTile(  )
 	local names, distances, HPs = {}, {}, {}
 
 	for object in scene:objectsWithTag("Hero") do
-		names[#names + 1] = object:getID()
-		local enemy = object:findComponent(c"Character")
-		distances[object:getID()] = GoalFinder:getCostAP(actor:tile() ,enemy:tile())
-		HPs[object:getID()] = - enemy:getProperty("currentHP")
+		repeat
+			local enemy = object:findComponent(c"Character")
+			local costAP = GoalFinder:getCostAP(actor:tile() ,enemy:tile())
+			if costAP == "MAX" then break end
+			names[#names + 1] = object:getID()
+			distances[object:getID()] = costAP
+			HPs[object:getID()] = - enemy:getProperty("currentHP")
+		until true
 	end	
 
 	local board = ScoreBoard.new{}
