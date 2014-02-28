@@ -59,9 +59,12 @@ function GoalFinder:Astar( start, goal, predicate )
 			if self.data[hash(point)] ~= nil or not inbound(point)
 			 or not Chessboard:tileAt(point):canPass() 
 			 or (HeroManager:getCharacterByLocation(point) and not math.p_same(point, goal))
-			 or (predicate and predicate(point) == true) then
+			 or (predicate and predicate(point)) 
+			 then
+
 				break
 			end
+			
 
 			local tentative_g_score = g_score[hash(currentPoint)] + 1
 
@@ -94,18 +97,21 @@ function GoalFinder:getTargetTile( start, goal, maxAP )
 	end
 	-- print("got a AI", AIManager:getCharacterByLocation(tile.prev) ~= nil)
 	if AIManager:getCharacterByLocation(tile.prev) then
-		print("haha")
 		if self:Astar(start, goal, function ( point ) return AIManager:getCharacterByLocation(point) end) then
 			tile = self.data[hash(goal)]
 			while fakeMaxAP - tile.prev.leftAP > maxAP do
 				tile = tile.prev
 			end
-		-- else
-		-- 	self:Astar(start, goal)
-		-- 	tile = self.data[hash(start)]
-		-- 	while fakeMaxAP - tile.prev.leftAP > maxAP do
-		-- 		tile = tile.prev
-		-- 	end
+		else
+			self:Astar(start, goal)
+			tile = self.data[hash(goal)]
+			while fakeMaxAP - tile.prev.leftAP > maxAP do
+				tile = tile.prev
+			end
+			print("tile.prev", tile.prev.x, tile.prev.y)
+			while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
+				tile = tile.prev
+			end
 		end
 	end
 	return tile.prev

@@ -147,7 +147,6 @@ function SkillManager:onCastSkill( tile, skill, character )
 	
 	CameraManager:back2Normal()
 	character.states.TURNOVER = true
-	print("haha")
 end
 
 return SkillManager
