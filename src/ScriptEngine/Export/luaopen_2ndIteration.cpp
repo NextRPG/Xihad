@@ -22,9 +22,6 @@ using namespace xihad::render3d;
 
 luaT_defMetaData(ICursorControl, false);
 luaT_defMetaData(ISceneCollisionManager, false);
-luaT_defMetaData(vector3df,	false);
-luaT_defMetaData(line3df,	false);
-luaT_defMetaData(aabbox3df,	false);
 
 namespace xihad { namespace script
 {

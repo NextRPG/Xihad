@@ -85,7 +85,7 @@ int irr_test(int argc, const char** argv)
 	pnode->addAffector(faff, 0.7f, 1.0f);
 	faff->drop();
 
-	IParticleAffector* saff = pfactory->createScaleAffector(core::dimension2df(0.1f,2.f));
+	IParticleAffector* saff = pfactory->createScaleAffector();
 	pnode->addAffector(saff);
 	saff->drop();
 

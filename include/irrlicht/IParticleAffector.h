@@ -24,10 +24,10 @@ public:
 	//! Affects an array of particles.
 	/** \param timediff Elapsed milliseconds since last affect
 	\param particle To affect particle. */
-	void affect(f32 timediff, f32 d, SParticle& particle) 
+	void affect(f32 timediff, f32 d, f32 dd, SParticle& particle) 
 	{
 		if (Enabled)
-			doAffect(timediff, d, particle);
+			doAffect(timediff, d, dd, particle);
 	}
 
 	//! Sets whether or not the affector is currently enabled.
@@ -37,7 +37,7 @@ public:
 	virtual bool getEnabled() const { return Enabled; }
 
 protected:
-	virtual void doAffect(f32 timediff, f32 d, SParticle& particle) = 0;
+	virtual void doAffect(f32 timediff, f32 d, f32 dd, SParticle& particle) = 0;
 
 private:
 	bool Enabled;

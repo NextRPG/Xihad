@@ -5,8 +5,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(line3df,	false);
-
 namespace xihad { namespace script 
 {
 #ifdef LUAOPEN_LINE_INTERSECTS_SPHERE

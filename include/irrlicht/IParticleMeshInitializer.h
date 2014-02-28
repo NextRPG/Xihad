@@ -20,21 +20,16 @@ public:
 	//! Set Mesh to emit particles from
 	virtual void setMesh( IMesh* mesh ) = 0;
 
-	//! Set whether to use vertex normal for direction, or direction specified
-	virtual void setUseNormalDirection( bool useNormalDirection = true ) = 0;
+	virtual void setMinNormalDirectionSize( f32 minSize ) = 0;
 
-	//! Set the amount that the normal is divided by for getting a particles direction
-	virtual void setNormalDirectionModifier( f32 normalDirectionModifier ) = 0;
+	virtual void setMaxNormalDirectionSize( f32 maxSize ) = 0;
 
 	//! Get Mesh we're emitting particles from
 	virtual const IMesh* getMesh() const = 0;
 
-	//! Get whether to use vertex normal for direction, or direction specified
-	virtual bool isUsingNormalDirection() const = 0;
+	virtual f32 getMinNormalDirectionSize() const = 0;
 
-	//! Get the amount that the normal is divided by for getting a particles direction
-	virtual f32 getNormalDirectionModifier() const = 0;
-
+	virtual f32 getMaxNormalDirectionSize() const = 0;
 };
 
 } // end namespace scene

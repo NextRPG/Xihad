@@ -49,10 +49,9 @@ namespace irr { namespace scene
 		// Affector
 		virtual IParticleAttractionAffector* createAttractionAffector() = 0;
 		virtual IParticleFadeOutAffector* createFadeOutAffector() = 0;
-		virtual IParticleForceAffector* createGravityAffector() = 0;
+		virtual IParticleForceAffector* createForceAffector() = 0;
 		virtual IParticleRotationAffector* createRotationAffector() = 0;
-		virtual IParticleAffector* createScaleAffector(
-			const core::dimension2df& scaleTo) = 0;
+		virtual IParticleAffector* createScaleAffector() = 0;
 
 		// Renderer
 		virtual IQuadParticleRenderer* createQuadRenderer() = 0;

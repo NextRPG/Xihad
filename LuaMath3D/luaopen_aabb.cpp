@@ -6,8 +6,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(aabbox3df, false);
-
 namespace xihad { namespace script 
 {
 	luaT_static int boxAddPoint(lua_State* L)
