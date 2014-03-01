@@ -56,3 +56,20 @@ function inbound( point )
 	local x, y = point.x, point.y
 	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
 end
+
+local function search(t, k, plist )
+	for i=1, plist.n do
+		local v = plist[i][k]
+		if type(v) == "table" then t[k] = table.copy(v) return t[k]
+		elseif v then return v
+		end
+	end
+end 
+
+function inherit( self, ... )
+	setmetatable(self, {__index = function ( t, k )
+		return search(t, k, arg)
+	end})
+	self.__index = self
+	return self
+end

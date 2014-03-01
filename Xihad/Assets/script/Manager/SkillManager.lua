@@ -47,7 +47,6 @@ function SkillManager:getAllAvailableTargets( character )
 	self.allTargets = {}
 	for i,id in ipairs(character.skills) do
 		local targets = self:getSkill(id):getPossibleTargets(character:getEnemyManager())
-		print(#targets)
 		for i,target in ipairs(targets) do
 			if not table.contains(allTargets, target) then
 				allTargets[#allTargets + 1] = target
@@ -131,8 +130,6 @@ function SkillManager:onCastSkill( tile, skill, character )
 	local rotateBy = characterObject:findComponent(c"RotateBy")
 	local rx, ry, rz = characterObject:getRotation():xyz()
 	local ty = getLogicAngle(math.p_sub(tile, character:tile()))
-	print("the target is", ty)
-	print(tile.x, tile.y)
 
 	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	

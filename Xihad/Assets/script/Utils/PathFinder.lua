@@ -5,7 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 local Chessboard = require "Chessboard"
-local queue = require "Queue"
+local Queue = require "Queue"
 
 local PathFinder = {}
 
@@ -44,7 +44,7 @@ function PathFinder:getReachableTiles( character )
 
 	start.leftAP = maxAP
 	self.start = start 
-	local openQueue = queue.new()
+	local openQueue = Queue.new()
 	openQueue:push(start)
 	while openQueue:empty() == false do
 		local currentPoint = openQueue:pop()

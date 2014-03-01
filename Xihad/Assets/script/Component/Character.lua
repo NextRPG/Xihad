@@ -22,6 +22,8 @@ local Chessboard = require "Chessboard"
 -- @tparam tab effects 人物所中的效果的集合
 -- @tparam tab equipments 人物所穿的装备的集合
 -- @tparam tab skills 人物所拥有的技能的集合
+local Publisher = require "Publisher"
+
 local Character = {
 	career = 0,
 	level = 0,
@@ -37,7 +39,8 @@ local Character = {
 -- @treturn Character o
 function Character.new( o )
 	assert(type(o) == "table", "prototype must be a table")
-	setmetatable(o, {__index = Character})
+	-- setmetatable(o, {__index = Character})
+	inherit(o, Publisher, Character)
 
 	o.skills = o.skills or {}
 	o.effects = o.effects or {}
