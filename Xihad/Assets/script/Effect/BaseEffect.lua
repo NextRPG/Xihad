@@ -3,9 +3,9 @@ BaseEffect = {
 	enableUpdate = false
 }
 
-function BaseEffect:new( o )
+function BaseEffect.new( o )
 	o = o or {}
-	setmetatable(o, {__index = self})
+	setmetatable(o, {__index = BaseEffect})
 
 	return o
 end

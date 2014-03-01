@@ -197,7 +197,8 @@ function Skill:trigger( hero, targetTile )
 						or AIManager:getCharacterByLocation(v)
 		if checkSkill(hero, self, character) then
 			print(character.properties.currentHP)
-			if self.effect2Target then character:bindEffect(self.effect2Target) end
+			if self.effect2Target then self.effect2Target:bindEffect(character) end
+			-- if self.effect2Target then character:bindEffect(self.effect2Target) end
 			if self.damage then character:handleDamage(self, hero, self.property) end
 			print(character.properties.currentHP)
 		end

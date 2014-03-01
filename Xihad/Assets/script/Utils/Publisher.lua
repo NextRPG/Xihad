@@ -31,8 +31,25 @@ function Publisher:detachSubscriber( key, subscriber, callback )
 	self.subscribers[key][callback] = nil
 end
 
+local function changeState_aux( subject, key, value )
+-- local ref = a
+-- for slice in str:gmatch("[^.].") do
+-- 	ref = ref[tonumber(slice)]
+-- end
+-- local realKey = str:match("[^.]", -1)
+
+
+end
+
 function Publisher:changeState( key, value )
-	self[key] = value
+	-- changeState_aux(self, key, value)
+	local ref = self
+	for slice in key:gmatch("([^\.]+)[\.]") do
+		ref = ref[slice]
+		print(ref)
+	end
+	local arr = string.split(key, ".")
+	ref[arr[#arr]] = value
 	if self.subscribers[key] == nil then return end
 	for callback,subscriber in pairs(self.subscribers[key]) do
 		callback(subscriber, value)

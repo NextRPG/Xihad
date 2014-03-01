@@ -1,6 +1,7 @@
 require "math3d"
 require "mathplus"
 require "tableplus"
+require "stringplus"
 require "coordinate"
 
 -- function

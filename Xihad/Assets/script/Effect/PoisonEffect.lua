@@ -1,5 +1,5 @@
 require "BaseEffect"
-PoisonEffect = BaseEffect:new()
+PoisonEffect = BaseEffect.new()
 
 function PoisonEffect:new( o )
 	o = o or {}
@@ -10,7 +10,8 @@ function PoisonEffect:new( o )
 end
 
 function PoisonEffect:bind( target )
-	
+	assert(target, "target can't be nil")
+	target.effects:add(self)
 end
 
 function PoisonEffect:roundUpdate( target )

@@ -9,6 +9,8 @@
 
 local Equation = require "Equation"
 local Chessboard = require "Chessboard"
+local Publisher = require "Publisher"
+local Set = require "Set"
 
 ---
 -- @string team 
@@ -22,7 +24,6 @@ local Chessboard = require "Chessboard"
 -- @tparam tab effects 人物所中的效果的集合
 -- @tparam tab equipments 人物所穿的装备的集合
 -- @tparam tab skills 人物所拥有的技能的集合
-local Publisher = require "Publisher"
 
 local Character = {
 	career = 0,
@@ -31,7 +32,7 @@ local Character = {
 	exp = 0,
 	name = "",
 	skills = {},
-	effects = {},
+	effects = Set.new{},
 	equipments = {}, -- Consts.parts
 	properties = {},
 	states = {TURNOVER = false},
@@ -45,8 +46,6 @@ local Character = {
 function Character.new( o )
 	assert(type(o) == "table", "prototype must be a table")
 	inherit(o, Publisher, Character)
-
-
 
 	for k,property in pairs(Consts.properties) do
 		-- test 
@@ -75,25 +74,25 @@ end
 
 -- EffectTarget
 -- unused
-function Character:bindEffect( effect )
-	assert(effect, "effect can't be nil")
-	self.effects[effect] = #self.effects
-end
+-- function Character:bindEffect( effect )
+-- 	assert(effect, "effect can't be nil")
+-- 	self.effects[effect] = #self.effects
+-- end
 
-function Character:unbindEffect( effect )
-	assert(effect, "effect can't be nil")
-	self.effects[effect] = nil	
-end
+-- function Character:unbindEffect( effect )
+-- 	assert(effect, "effect can't be nil")
+-- 	self.effects[effect] = nil	
+-- end
 
-function Character:updateEffects(  )
-	for k,v in pairs(self.effects) do
-		k:roundUpdate(self)
-	end
-end
+-- function Character:updateEffects(  )
+-- 	for k,v in pairs(self.effects) do
+-- 		k:roundUpdate(self)
+-- 	end
+-- end
 
-function Character:resetEffects(  )
-	self.effects = {}
-end
+-- function Character:resetEffects(  )
+-- 	self.effects = {}
+-- end
 
 -- EquipTarget
 -- unused
@@ -131,7 +130,7 @@ function Character:handleDamage_aux( param )
 	local damage = math.floor(
 	(skillPower * attack*3)/(defense + attack)*(1.1 - math.random() * 0.2))
 	print("cause" .. damage .. "damage")
-	self.properties.currentHP = self:getProperty("currentHP") - damage
+	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
 	if (self:getProperty("currentHP") < 0) then
 		self.properties.currentHP = 0
 		-- dispatch character dead message
