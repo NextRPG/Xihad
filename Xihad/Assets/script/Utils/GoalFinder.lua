@@ -23,7 +23,7 @@ end
 
 local fakeMaxAP = 100000
 local directions = Consts.directions
-function GoalFinder:Astar( start, goal, predicate )
+function GoalFinder:Astar( start, goal, maxAP, predicate )
 
 	assert(start) assert(goal)
 	-- print(type(self.data[hash{x = 6, y = 2}]))
@@ -59,9 +59,8 @@ function GoalFinder:Astar( start, goal, predicate )
 			if self.data[hash(point)] ~= nil or not inbound(point)
 			 or not Chessboard:tileAt(point):canPass() 
 			 or (HeroManager:getCharacterByLocation(point) and not math.p_same(point, goal))
-			 or (predicate and predicate(point)) 
+			 or (predicate and predicate(currentPoint, point)) 
 			 then
-
 				break
 			end
 			
@@ -81,39 +80,36 @@ function GoalFinder:Astar( start, goal, predicate )
 	return false
 end
 
-function GoalFinder:getCostAP( start, goal )
-	if self:Astar(start, goal) then
+function GoalFinder:getCostAP( start, goal, maxAP )
+	if self:Astar(start, goal, maxAP) then
 		return self.data[hash(goal)].leftAP
 	else
 		return "MAX"
 	end
 end
 
-function GoalFinder:getTargetTile( start, goal, maxAP )
-	self:Astar(start, goal)
+function GoalFinder:findPrevious( start, goal, maxAP)
 	local tile = self.data[hash(goal)]
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
+		print(tile.prev.leftAP)
 		tile = tile.prev
 	end
-	-- print("got a AI", AIManager:getCharacterByLocation(tile.prev) ~= nil)
-	if AIManager:getCharacterByLocation(tile.prev) then
-		if self:Astar(start, goal, function ( point ) return AIManager:getCharacterByLocation(point) end) then
-			tile = self.data[hash(goal)]
-			while fakeMaxAP - tile.prev.leftAP > maxAP do
-				tile = tile.prev
-			end
-		else
-			self:Astar(start, goal)
-			tile = self.data[hash(goal)]
-			while fakeMaxAP - tile.prev.leftAP > maxAP do
-				tile = tile.prev
-			end
-			while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
-				tile = tile.prev
-			end
-		end
+	while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
+		tile = tile.prev
 	end
 	return tile.prev
+end
+
+function GoalFinder:getTargetTile( start, goal, maxAP )
+	if	self:Astar(start, goal, maxAP, 
+		function ( currentPoint, point ) 
+			return AIManager:getCharacterByLocation( currentPoint ) and math.p_same(point, goal)
+		end) then
+		return self:findPrevious(start, goal, maxAP)
+	else
+		self:Astar(start, goal, maxAP)
+		return self:findPrevious(start, goal, maxAP)
+	end
 end
 
 function GoalFinder:cleanUp(  )

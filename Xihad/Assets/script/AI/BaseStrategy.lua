@@ -21,7 +21,7 @@ function BaseStrategy:judgeTile(  )
 	for object in scene:objectsWithTag("Hero") do
 		repeat
 			local enemy = object:findComponent(c"Character")
-			local costAP = GoalFinder:getCostAP(actor:tile() ,enemy:tile())
+			local costAP = GoalFinder:getCostAP(actor:tile() ,enemy:tile(), actor:getProperty("maxAP"))
 			if costAP == "MAX" then break end
 			names[#names + 1] = object:getID()
 			distances[object:getID()] = costAP
