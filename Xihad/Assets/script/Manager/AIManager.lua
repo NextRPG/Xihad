@@ -22,7 +22,16 @@ function AIManager:init( AIs )
 				getExp = 0,
 				
 				name = "Tom" .. i,
-				skills = { 1, 3 }
+				skills = { 1, 3 },
+
+				properties = {
+					physicalAttack = 5,
+					physicalDefense = 5,
+					magicAttack = 5,
+					magicDefense = 10,  
+					maxAP = 5,			
+					maxHP = 200
+				}
 
 			}
 		character.name = AI.name

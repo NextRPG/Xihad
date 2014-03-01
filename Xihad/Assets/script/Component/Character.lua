@@ -29,7 +29,12 @@ local Character = {
 	level = 0,
 	currentExp = 0,
 	exp = 0,
-	name = ""
+	name = "",
+	skills = {},
+	effects = {},
+	equipments = {}, -- Consts.parts
+	properties = {},
+	states = {TURNOVER = false},
 }
 
 
@@ -39,26 +44,16 @@ local Character = {
 -- @treturn Character o
 function Character.new( o )
 	assert(type(o) == "table", "prototype must be a table")
-	-- setmetatable(o, {__index = Character})
 	inherit(o, Publisher, Character)
 
-	o.skills = o.skills or {}
-	o.effects = o.effects or {}
 
-	o.equipments = o.equipments or {}
-	for k,part in pairs(Consts.parts) do
-		o.equipments[part] = nil
-	end
 
-	o.properties = o.properties or {}
 	for k,property in pairs(Consts.properties) do
 		-- test 
-		o.properties[property] = o.properties[property] or Equation.new{offset = 5}
+		o.properties[property] = Equation.new{offset = o.properties[property]}
 	end
-
 	o.properties.currentHP = o.properties.maxHP:calculate()
 	o.properties.currentAP = o.properties.maxAP:calculate()
-	o.states = {DEAD = false, ROUNDOVER = false, TURNOVER = false}
 
 	return o
 end

@@ -108,7 +108,6 @@ function GoalFinder:getTargetTile( start, goal, maxAP )
 			while fakeMaxAP - tile.prev.leftAP > maxAP do
 				tile = tile.prev
 			end
-			print("tile.prev", tile.prev.x, tile.prev.y)
 			while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
 				tile = tile.prev
 			end
