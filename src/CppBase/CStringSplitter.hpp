@@ -51,7 +51,7 @@ namespace xihad
 
 			for (unsigned bgn = 0, end = 0; end <= len; ++end)
 			{
-				charT ch = end!=len ? source[end] : mmSeparatorarator;
+				charT ch = end!=len ? source[end] : mSeparator;
 
 				if (metEsc)
 				{
@@ -60,7 +60,7 @@ namespace xihad
 				}
 				else 
 				{
-					if (ch == mmSeparatorarator)
+					if (ch == mSeparator)
 					{
 						concatPiece(piece, source, &bgn, end);	// copy until mSeparatorarator
 
@@ -128,7 +128,7 @@ namespace xihad
 		}
 
 	private:
-		bool checkEqulity() const
+		void checkEqulity() const
 		{
 			if (mSeparator == mEscape)
 				throw std::exception("<sep> shouldn't be equal to <esc>");

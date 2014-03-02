@@ -11,7 +11,8 @@
 #include <irrlicht/IParticleFadeOutAffector.h>
 #include <irrlicht/IParticleAffector.h>
 #include <irrlicht/IParticleDirectionInitializer.h>
-#include <irrlicht/IQuadParticleRenderer.h>
+#include <irrlicht/IParticleQuadRenderer.h>
+#include <irrlicht/IParticlePointRenderer.h>
 #include <irrlicht/IParticleSphereInitializer.h>
 #include <irrlicht/IParticleAttractionAffector.h>
 #include "CreateDevice.h"
@@ -41,7 +42,7 @@ int irr_test(int argc, const char** argv)
 	// pnode->setRenderer(brenderer);
 	// brenderer->drop();
 
-	IPointParticleRenderer* prenderer = pfactory->createPointParticleRenderer();
+	IParticlePointRenderer* prenderer = pfactory->createPointRenderer();
 	prenderer->setPointSize(3);
 	pnode->setRenderer(prenderer);
 	prenderer->drop();
@@ -54,7 +55,7 @@ int irr_test(int argc, const char** argv)
 	cinit->pushBack(sphinit);
 	sphinit->drop();
 
-	IParticleBasicInitializer* basicInit = pfactory->createBasicParticleInitializer();
+	IParticleBasicInitializer* basicInit = pfactory->createBasicInitializer();
 	basicInit->setMaxLifeTime(30);
 	basicInit->setMinLifeTime(20);
 	basicInit->setMaxStartColor(video::SColor(255, 200, 64, 64));
