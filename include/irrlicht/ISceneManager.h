@@ -94,6 +94,7 @@ namespace scene
 		ESNRP_SHADOW =64
 	};
 
+	class IParticleSystemFactory;
 	class IAnimatedMesh;
 	class IAnimatedMeshSceneNode;
 	class IBillboardSceneNode;
@@ -150,6 +151,7 @@ namespace scene
 	class ISceneManager : public virtual IReferenceCounted
 	{
 	public:
+		virtual IParticleSystemFactory* getParticleSystemFactory() const = 0;
 
 		//! Get pointer to an animateable mesh. Loads the file if not loaded already.
 		/**
@@ -713,7 +715,7 @@ namespace scene
 		\return Pointer to the created scene node.
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
 		virtual IParticleSystemSceneNode* addParticleSystemSceneNode(
-			bool withDefaultEmitter=true, ISceneNode* parent=0, s32 id=-1,
+			s32 maxParticles = 0xffff, ISceneNode* parent=0, s32 id=-1,
 			const core::vector3df& position = core::vector3df(0,0,0),
 			const core::vector3df& rotation = core::vector3df(0,0,0),
 			const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f)) = 0;

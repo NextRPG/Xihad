@@ -6,8 +6,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(quaternion,false);
-
 namespace xihad { namespace script
 {
 	static void setQuaternion(lua_State* L, int _1, quaternion* q)

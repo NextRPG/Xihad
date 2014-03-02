@@ -80,6 +80,12 @@ namespace luaT
 	}
 
 	template <>
+	inline void push_<unsigned>(lua_State* L, unsigned pValue)
+	{
+		lua_pushnumber(L, pValue);
+	}
+
+	template <>
 	inline void push_<LString>(lua_State* L, LString& pStr)
 	{
 		if (pStr.size == 0)

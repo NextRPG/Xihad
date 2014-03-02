@@ -12,6 +12,15 @@ namespace irr
 namespace scene
 {
 
+enum E_FADEOUT_COLOR_MASK
+{
+	EFCM_RED_ENABLE		= 0x1,
+	EFCM_GREEN_ENABLE	= 0x2,
+	EFCM_BLUE_ENABLE	= 0x4,
+	EFCM_ALPHA_ENABLE	= 0x8,
+	EFCM_ALL_ENABLE		= 0xf,
+};
+
 //! A particle affector which fades out the particles.
 class IParticleFadeOutAffector : public IParticleAffector
 {
@@ -20,17 +29,15 @@ public:
 	//! Sets the targetColor, i.e. the color the particles will interpolate to over time.
 	virtual void setTargetColor( const video::SColor& targetColor ) = 0;
 
-	//! Sets the time in milliseconds it takes for each particle to fade out (minimal 1 ms)
-	virtual void setFadeOutTime( u32 fadeOutTime ) = 0;
-
 	//! Gets the targetColor, i.e. the color the particles will interpolate to over time.
 	virtual const video::SColor& getTargetColor() const = 0;
 
-	//! Gets the time in milliseconds it takes for each particle to fade out.
-	virtual u32 getFadeOutTime() const = 0;
+	virtual void setColorMask(E_FADEOUT_COLOR_MASK) = 0;
 
-	//! Get emitter type
-	virtual E_PARTICLE_AFFECTOR_TYPE getType() const { return EPAT_FADE_OUT; }
+	virtual E_FADEOUT_COLOR_MASK getColorMask() const = 0;
+
+	virtual bool isChannelEnabled(E_FADEOUT_COLOR_MASK) const = 0;
+
 };
 
 } // end namespace scene

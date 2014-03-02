@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/vector3d.h"
 
 namespace xihad { namespace ngn
 {
@@ -33,84 +34,58 @@ namespace xihad { namespace ngn
 		 */
 		Transform();
 
-#if 0
-		/// 在当前变换上级联缩放
-		void concatScale(float px, float py, float pz)
-		{
-			resetScale(
-				mScale[X_AXIS] * px,
-				mScale[Y_AXIS] * py,
-				mScale[Z_AXIS] * pz);
-		}
-
-		/// 在当前变换上级联缩放
-		void concatUniScale(float s)
-		{
-			this->concatScale(s, s, s);
-		}
-
-		/// 在当前变换上级联旋转，角度制
-		void concatRotate(float px, float py, float pz)
-		{
-			resetRotate(
-				mRotation[X_AXIS] + px, 
-				mRotation[Y_AXIS] + py, 
-				mRotation[Z_AXIS] + pz);
-		}
-
-		/// 在当前变换上级联平移
-		void concatTranslate(float px, float py, float pz)
-		{
-			resetTranslate(
-				mTranslate[X_AXIS] + px, 
-				mTranslate[Y_AXIS] + py, 
-				mTranslate[Z_AXIS] + pz);
-		}
-#endif
-
 		/// 重置缩放
-		void resetScale(float sx = 1, float sy = 1, float sz = 1);
+		void resetScale(const vector3df& scale = vector3df(1,1,1))
+		{
+			mScale = scale;
+		}
 
 		/// 取得当前缩放
 		/**
 		 * @see AxisIndex
 		 * @return array of floating number (size = 3)
 		 */
-		const float* getScale() const
+		const vector3df& getScale() const
 		{
 			return mScale;
 		}
 		
 		/// 重置旋转，角度制
-		void resetRotate(float rx = 0, float ry = 0, float rz = 0);
+		void resetRotate(const vector3df& rotate = vector3df())
+		{
+			mRotation = rotate;
+		}
 
 		/// 取得当前旋转，角度制
 		/**
 		 * @see AxisIndex
 		 * @return array of floating number (size = 3)
 		 */
-		const float* getRotation() const
+		const vector3df& getRotation() const
 		{
 			return mRotation;
 		}
 		
 		/// 重置平移
-		void resetTranslate(float tx = 0, float ty = 0, float tz = 0);
+		void resetTranslate(const vector3df& trans = vector3df())
+		{
+			mTranslate = trans;
+		}
 
 		/// 取得当前平移
 		/**
 		 * @see AxisIndex
 		 * @return array of floating number (size = 3)
 		 */
-		const float* getTranslation() const
+		const vector3df& getTranslation() const
 		{
 			return mTranslate;
 		}
 
 	private:
-		float mScale[3];
-		float mRotation[3];
-		float mTranslate[3];
+		vector3df mScale;
+		vector3df mRotation;
+		vector3df mTranslate;
 	};
 }}
 

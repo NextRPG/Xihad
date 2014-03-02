@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="15" height="17" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="texture" tilewidth="32" tileheight="32">
+  <image source="texture.png" width="96" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="terrain" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="terrain" value="2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="terrain" value="3"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="4" name="character" tilewidth="32" tileheight="32">
+  <image source="character.png" width="32" height="70"/>
+  <tile id="0">
+   <properties>
+    <property name="maxHP" value="100"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="map" width="15" height="17">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYMKCGZEwNnlkdejqicHk6EHXi89d+NxLKmaGYnL1MZPhPmYy7WUeBnoJhQ0l8U6ttDEQYYWuj1K9AA+1AZU=
+  </data>
+ </layer>
+ <objectgroup name="AIs" width="15" height="17">
+  <object name="a" gid="5" x="224" y="320"/>
+  <object name="b" gid="5" x="321" y="256"/>
+  <object name="c" gid="5" x="161" y="257"/>
+  <object name="d" gid="5" x="289" y="96"/>
+  <object name="e" gid="5" x="161" y="96"/>
+ </objectgroup>
+ <objectgroup name="heros" width="15" height="17">
+  <object name="1" gid="4" x="129" y="481"/>
+  <object name="2" gid="4" x="193" y="481"/>
+  <object name="3" gid="4" x="257" y="480"/>
+ </objectgroup>
+</map>

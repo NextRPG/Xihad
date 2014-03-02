@@ -222,27 +222,27 @@ namespace xihad { namespace ngn
 		}
 	}
 
-	void GameObject::resetScale( float sx, float sy, float sz )
+	void GameObject::resetScale( const vector3df& scale )
 	{
-		const float* mScale = mTransform.getScale();
-		if (mScale[0] != sx && mScale[1] != sy && mScale[2] != sz)
+		const vector3df& mScale = mTransform.getScale();
+		if (mScale != scale)
 		{
-			mTransform.resetScale(sx, sy, sz);
+			mTransform.resetScale(scale);
 			updateChildrenWorldMatrix();
 			mImpl->transfromDirtyBits |= SCALE_DIRTY;
 		}
 	}
 
-	void GameObject::resetRotate( float rx, float ry, float rz )
+	void GameObject::resetRotate( const vector3df& rotate )
 	{
-		mTransform.resetRotate(rx, ry, rz);
+		mTransform.resetRotate(rotate);
 		updateChildrenWorldMatrix();
 		mImpl->transfromDirtyBits |= ROTATE_DIRTY;		
 	}
 
-	void GameObject::resetTranslate( float tx, float ty, float tz )
+	void GameObject::resetTranslate( const vector3df& trans )
 	{
-		mTransform.resetTranslate(tx, ty, tz);
+		mTransform.resetTranslate(trans);
 		updateChildrenWorldMatrix();
 		mImpl->transfromDirtyBits |= TRANSLATE_DIRTY;
 	}
@@ -374,17 +374,17 @@ namespace xihad { namespace ngn
 
 	vector3df GameObject::getScale() const
 	{
-		return vector3_helper::fromArray(mTransform.getScale());
+		return mTransform.getScale();
 	}
 
 	vector3df GameObject::getRotation() const
 	{
-		return vector3_helper::fromArray(mTransform.getRotation());
+		return mTransform.getRotation();
 	}
 
 	vector3df GameObject::getTranslate() const
 	{
-		return vector3_helper::fromArray(mTransform.getTranslation());
+		return mTransform.getTranslation();
 	}
 
 }}

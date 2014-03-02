@@ -5,8 +5,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(plane3df,	false);
-
 namespace xihad { namespace script
 {
 	static int setPlane(lua_State* L)

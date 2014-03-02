@@ -240,6 +240,12 @@ namespace luaT
 	}
 
 	template <>
+	inline unsigned checkarg_<unsigned>(lua_State* L, int idx)
+	{
+		return (unsigned) luaL_checknumber(L, idx);
+	}
+
+	template <>
 	inline int checkarg_<int>(lua_State* L, int idx)
 	{
 		return luaL_checkint(L, idx);

@@ -3,7 +3,11 @@
 
 irr::IrrlichtDevice* createDefaultDevice()
 {
-	return irr::createDevice(irr::video::EDT_OPENGL, 
-		irr::core::dimension2d<size_t>(1024, 600), 16,
-		false, true, false, 0);
+	irr::SIrrlichtCreationParameters param;
+	param.WindowSize = irr::core::dimension2du(1024, 600);
+	param.DriverType = irr::video::EDT_DIRECT3D9;
+
+	param.Vsync = true;
+	param.AntiAlias = 4;
+	return irr::createDeviceEx(param);
 }

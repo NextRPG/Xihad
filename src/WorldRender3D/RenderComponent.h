@@ -89,6 +89,13 @@ namespace xihad { namespace render3d
 
 		bool isCulled() const;
 
+		irr::scene::ISceneNode* getNode()
+		{
+			return mNode.get();
+		}
+
+		virtual void syncWithObject();
+
 	protected:
 		virtual ~RenderComponent();
 
@@ -97,11 +104,6 @@ namespace xihad { namespace render3d
 		virtual void onUpdate( const ngn::Timeline& );
 
 		virtual void onStop();
-
-		irr::scene::ISceneNode* getNode()
-		{
-			return mNode.get();
-		}
 
 		irr::scene::ISceneNode const * getNode() const
 		{

@@ -17,5 +17,6 @@
 /ipch/
 /docs/Reference/html
 /Xihad/math3d.*
-*sublime*
 /Debug/*.lib
+*sublime*
+/Debug/irrlicht-*.dll

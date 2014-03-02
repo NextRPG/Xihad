@@ -23,7 +23,8 @@ function ControlledMove:setTarget( ndir )
 end
 
 function ControlledMove:onUpdate()
-	local x, y, z = self.object:getRotation()
+	local rot = self.object:getRotation()
+	local x,y,z = rot:xyz()
 	y = y % 360
 	y = y>180 and y - 360 or (y <= -180 and y + 360 or y)
 	
@@ -40,7 +41,7 @@ function ControlledMove:onUpdate()
 			dy = y-self.ydir > max and -max or self.ydir-y
 		end
 
-		self.object:concatRotate(0, dy, 0)
+		self.object:concatRotate(math3d.vector(0, dy, 0))
 	end
 
 	if not self.dontMove then

@@ -169,30 +169,27 @@ namespace xihad { namespace ngn
 		virtual child_iterator lastChild() const;
 
 		/// 在当前变换上级联缩放
-		void concatScale(float px, float py, float pz)
+		void concatScale(const vector3df& concat)
 		{
-			vector3df scales = getScale();
-			resetScale(px*scales.X, py*scales.Y, pz*scales.Z);
+			resetScale(getScale()+concat);
 		}
 
 		/// 在当前变换上级联缩放
 		void concatUniScale(float s)
 		{
-			concatScale(s, s, s);
+			concatScale(getScale()+s);
 		}
 
 		/// 在当前变换上级联旋转，角度制
-		void concatRotate(float px, float py, float pz)
+		void concatRotate(const vector3df& concat)
 		{
-			vector3df rotates = getRotation();
-			resetRotate(px+rotates.X, py+rotates.Y, pz+rotates.Z);
+			resetRotate(getRotation()+concat);
 		}
 
 		/// 在当前变换上级联平移
-		void concatTranslate(float px, float py, float pz)
+		void concatTranslate(const vector3df& concat)
 		{
-			vector3df translates = getTranslate();
-			resetTranslate(px+translates.X, py+translates.Y, pz+translates.Z);
+			resetTranslate(getTranslate()+concat);
 		}
 
 		/**
@@ -213,17 +210,17 @@ namespace xihad { namespace ngn
 		/**
 		 * @see Transform::resetScale()
 		 */
-		virtual void resetScale(float sx = 1, float sy = 1, float sz = 1);
+		virtual void resetScale(const vector3df& scale = vector3df(1,1,1));
 
 		/**
 		 * @see Transform::resetRotate()
 		 */
-		virtual void resetRotate(float rx = 0, float ry = 0, float rz = 0);
+		virtual void resetRotate(const vector3df& rotate = vector3df());
 
 		/**
 		 * @see Transform::resetTranslate()
 		 */
-		virtual void resetTranslate(float tx = 0, float ty = 0, float tz = 0);
+		virtual void resetTranslate(const vector3df& trans = vector3df());
 
 		/// 取得局部坐标系中的变换矩阵
 		virtual const Matrix& getLocalTransformMatrix() const;

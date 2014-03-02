@@ -8,8 +8,8 @@ namespace xihad { namespace render3d
 		ngn::GameObject& host, irr::scene::ILightSceneNode* node ) :
 		RenderComponent(name, host, node)
 	{
-		node->getLightData().DiffuseColor = irr::video::SColorf(.5f, .5f, .5f);
-		node->getLightData().SpecularColor = irr::video::SColorf(.5f, .5f, .5f);
+		node->getLightData().SpecularColor = irr::video::SColorf();
+		node->getLightData().Radius = 1000.f;
 	}
 
 	void LightComponent::setLightData( const irr::video::SLight& light )
