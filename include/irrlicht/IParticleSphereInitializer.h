@@ -5,7 +5,7 @@
 #ifndef __I_PARTICLE_SPHERE_EMITTER_H_INCLUDED__
 #define __I_PARTICLE_SPHERE_EMITTER_H_INCLUDED__
 
-#include "IParticleInitializer.h"
+#include "IParticleGeometricInitializer.h"
 #include "vector3d.h"
 
 namespace irr
@@ -14,7 +14,7 @@ namespace scene
 {
 
 //! A particle emitter which emits from a spherical space.
-class IParticleSphereInitializer : public IParticleInitializer
+class IParticleSphereInitializer : public IParticleGeometricInitializer
 {
 public:
 	//! Set the center of the sphere for particle emissions

@@ -37,7 +37,7 @@ namespace scene
 		core::vector3df vector;
 
 		//! Current color of the particle
-		video::SColor color;
+		video::SColorf color;
 
 		//! Scale of the particle.
 		/** The current scale of the particle. */

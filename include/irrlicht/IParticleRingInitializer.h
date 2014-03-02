@@ -5,7 +5,7 @@
 #ifndef __I_PARTICLE_RING_EMITTER_H_INCLUDED__
 #define __I_PARTICLE_RING_EMITTER_H_INCLUDED__
 
-#include "IParticleInitializer.h"
+#include "IParticleGeometricInitializer.h"
 #include "vector3d.h"
 
 namespace irr
@@ -14,7 +14,7 @@ namespace scene
 {
 
 //! A particle emitter which emits particles along a ring shaped area.
-class IParticleRingInitializer : public IParticleInitializer
+class IParticleRingInitializer : public IParticleGeometricInitializer
 {
 public:
 

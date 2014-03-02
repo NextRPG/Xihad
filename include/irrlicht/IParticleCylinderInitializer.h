@@ -5,7 +5,7 @@
 #ifndef __I_PARTICLE_CYLINDER_EMITTER_H_INCLUDED__
 #define __I_PARTICLE_CYLINDER_EMITTER_H_INCLUDED__
 
-#include "IParticleInitializer.h"
+#include "IParticleGeometricInitializer.h"
 #include "vector3d.h"
 
 namespace irr
@@ -14,7 +14,7 @@ namespace scene
 {
 
 //! A particle emitter which emits from a cylindrically shaped space.
-class IParticleCylinderInitializer : public IParticleInitializer
+class IParticleCylinderInitializer : public IParticleGeometricInitializer
 {
 public:
 	//! Set the center of the radius for the cylinder, at one end of the cylinder
@@ -29,9 +29,6 @@ public:
 	//! Set the length of the cylinder
 	virtual void setLength( f32 length ) = 0;
 
-	//! Set whether or not to draw points inside the cylinder
-	virtual void setOutlineOnly( bool outlineOnly = true ) = 0;
-
 	//! Get the center of the cylinder
 	virtual const core::vector3df& getCenter() const = 0;
 
@@ -43,9 +40,6 @@ public:
 
 	//! Get the center of the cylinder
 	virtual f32 getLength() const = 0;
-
-	//! Get whether or not to draw points inside the cylinder
-	virtual bool getOutlineOnly() const = 0;
 };
 
 } // end namespace scene

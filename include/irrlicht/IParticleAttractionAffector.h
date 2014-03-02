@@ -22,10 +22,14 @@ public:
 
 	virtual void setMass(f32 mass) = 0;
 
+	virtual void setRadius(f32 radius) = 0;
+
 	//! Get the point that particles are attracted to
 	virtual const core::vector3df& getPoint() const = 0;
 
 	virtual f32 getMass() const = 0;
+
+	virtual f32 getRadius() const = 0;
 };
 
 } // end namespace scene

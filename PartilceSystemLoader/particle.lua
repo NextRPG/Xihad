@@ -11,53 +11,76 @@ local function createIniter(f)
 	
 	
 	local bi = f:initer("Basic")
-	bi:setColor(0xffffff00, 0xffff0000)
-	bi:setLifeTime(2, 3)
-	bi:setWidth(2, 4)	-- Useless to point renderer
-	bi:setHeight(3, 3)	-- Useless to point renderer
+	bi:setColor(0xff104000, 0xff800090)
+	bi:setLifeTime(2, 2)
+	bi:setWidth(0.4, 0.6)
+	bi:setHeight(0.4, 0.6)
 	
-	local di = f:initer("Direction")
-	di:setDirection(math3d.vector(0,-5,0))
-	di:setMaxAngleDegree(120)
+	local xi = f:initer("Sphere")
+	-- xi:setCenter(math3d.vector(0, -3, 0))
+	xi:setNormalDirectionSize(-25)
+	xi:setRadius(20)
+	xi:setOutlineOnly(true)
 	
-	local xi = f:initer("Box")
-	local box = math3d.aabb(math3d.vector(-1,-1,-1))
-	box:addPoint(math3d.vector(1,1,1))
-	xi:setBox(box)
-	
-	return f:initer({ di, bi, xi })
+	return f:initer({ bi, xi })
 end
 
 return function(pnode, f)
 ----------------------------------------------
 -- + emitter
 	local e = f:emitter()
-	e:setPPS(2000, 3000)	-- Equals to setMinPPS(600), setMaxPPS(1000)
+	e:setPPS(1000)	-- Equals to setMinPPS(600), setMaxPPS(1000)
 	e:setIniter(createIniter(f))
-	pnode:addEmitter(e, 0, 1)
+	pnode:addEmitter(e, 0, 0.5)
 	
 	-- You must grab emitter if you want to add emitter again!
 	-- Because every set/add function will decrease the parameter object's reference count.
 	-- addEmitter/setIniter/setRenderer/addAffector
-	e:grab()
-	pnode:addEmitter(e, 4)
+	-- e:grab()
+	-- pnode:addEmitter(e, 4) 
 	
 ----------------------------------------------
 -- 1 renderer
-	local r = f:renderer("Point")
-	r:setPointSize(4)
-	pnode:setRenderer(r)
+	-- local r = f:renderer("Point")
+	-- r:setPointSize(3)
+	-- pnode:setRenderer(r)
 	
+	local r = f:renderer("Billboard")
+	pnode:setRenderer(r)
+	-- r:addTexRegion(0,0,0.5,0.5)
+	-- r:addTexRegion(0.5,0,1,0.5)
+	-- r:addTexRegion(0,0.5,0.5,1)
+	-- r:addTexRegion(0.5,0.5,1,1)
 	
 ---------------------------------------------- 
 -- * affector
+	-- local a = f:affector("FadeOut")
+	-- a:setTargetColor(0x22222200)
+	-- pnode:addAffector(a, 0.5, 0.7)
+
 	local a = f:affector("FadeOut")
-	a:setTargetColor(0x00000000)
-	a:setColorMask("agb")
-	pnode:addAffector(a, 0.3, 1)
+	a:setTargetColor(0xffff0000)
+	a:setColorMask("rgb")
+	pnode:addAffector(a, 0.5, 0.8)
 	
-	local a = f:affector("Force")
-	a:setGravity(math3d.vector(0, 1, 0))
-	a:setForce(math3d.vector(5, 0, 0))
-	pnode:addAffector(a)
+	local a = f:affector("Attraction")
+	a:setMass(600)
+	a:setRadius(0.5)
+	pnode:addAffector(a, 0, 0.5)
+
+	local a = f:affector("Rotation")
+	a:setSpeed(math3d.vector(0,0,9))
+	pnode:addAffector(a, 0, 0.5)
+	
+	local a = f:affector("Attraction")
+	a:setMass(-50000)
+	pnode:addAffector(a, 0.7)
+	
+	-- local a = f:affector("Force")
+	-- a:setGravity(math3d.vector(0, 0, 200))
+	-- pnode:addAffector(a, 0.7)
+	
+	local a = f:affector("Rotation")
+	a:setSpeed(math3d.vector(0, 0, 2000))
+	pnode:addAffector(a, 0.7)
 end

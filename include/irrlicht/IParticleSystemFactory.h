@@ -29,14 +29,14 @@ namespace irr { namespace scene
 	class IParticleEmitter;
 
 	// Renderer
-	class IQuadParticleRenderer;
-	class IPointParticleRenderer;
+	class IParticleQuadRenderer;
+	class IParticlePointRenderer;
 
 	class IParticleSystemFactory : public virtual IReferenceCounted
 	{
 	public:
 		// Initializer
-		virtual IParticleBasicInitializer* createBasicParticleInitializer() = 0;
+		virtual IParticleBasicInitializer* createBasicInitializer() = 0;
 		virtual IParticleAnimatedMeshInitializer* createAnimatedMeshInitializer() = 0;
 		virtual IParticleBoxInitializer* createBoxInitializer() = 0;
 		virtual IParticleCylinderInitializer* createCylinderInitializer() = 0;
@@ -54,10 +54,10 @@ namespace irr { namespace scene
 		virtual IParticleAffector* createScaleAffector() = 0;
 
 		// Renderer
-		virtual IQuadParticleRenderer* createQuadRenderer() = 0;
-		virtual IQuadParticleRenderer* createBillboardRenderer() = 0;
-		virtual IQuadParticleRenderer* createDirectionalRenderer() = 0;
-		virtual IPointParticleRenderer* createPointParticleRenderer() = 0;
+		virtual IParticleQuadRenderer* createQuadRenderer() = 0;
+		virtual IParticleQuadRenderer* createBillboardRenderer() = 0;
+		virtual IParticleQuadRenderer* createDirectionRenderer() = 0;
+		virtual IParticlePointRenderer* createPointRenderer() = 0;
 
 		// Emitter
 		virtual IParticleEmitter* createEmitter() = 0;

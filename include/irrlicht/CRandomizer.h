@@ -16,6 +16,11 @@ namespace irr { namespace core
 			Seed = seed;
 		}
 
+		s32 getSeed() const
+		{
+			return Seed;
+		}
+
 		s32 rand(s32 seed2)
 		{
 			seed2 |= Seed;
