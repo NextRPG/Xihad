@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\PartilceSystemLoader\TestParticleSystemLoader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -31,6 +28,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PartilceSystemLoader\ParticleEditor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -69,6 +69,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PartilceSystemLoader\TplStackPusherFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PartilceSystemLoader\DefaultStackPusherFactory.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

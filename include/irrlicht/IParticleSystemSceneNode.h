@@ -60,6 +60,10 @@ public:
 	Default is true. */
 	virtual void setParticlesAreGlobal(bool global=true) = 0;
 
+	virtual void setMaxParticleCount(s32) = 0;
+
+	virtual s32 getMaxParticleCount() const = 0;
+
 	//! Remove all currently visible particles
 	virtual void clearParticles() = 0;
 

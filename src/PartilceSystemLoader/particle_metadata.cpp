@@ -3,9 +3,12 @@
 #include "IParticleSystemScriptFactory.h"
 #include <luaT/luaT.h>
 
-using namespace irr::scene;
+using namespace irr;
+using namespace scene;
+using namespace video;
 using namespace xihad::particle;
 
+luaT_defMetaData(SMaterial, false);
 luaT_defMetaData(IParticleInitializer, true);
 luaT_defMetaData(IParticleBasicInitializer, false);
 luaT_defMetaData(IParticleDirectionInitializer, false);

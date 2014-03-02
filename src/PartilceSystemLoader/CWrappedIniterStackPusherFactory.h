@@ -15,7 +15,6 @@ namespace xihad { namespace particle
 	public:
 		CWrappedIniterStackPusherFactory(DelegateFactory* f) : mFactory(f) {}
 
-
 	protected:
 		virtual CWrappedMeshInitializer* createProduct() override
 		{

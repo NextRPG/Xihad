@@ -1,9 +1,8 @@
 /**
  * TODO 
- * 1. SMaterial: BlendFactor, MaterialType, Texture, Lighting, ZWriteEnable
- * 2. 测试 AnimatedMesh
- * 3. 设置 AnimatedMesh 和 Mesh 的参数
- * 4. 重构代码
+ * 1. 测试 AnimatedMesh
+ * 2. 设置 AnimatedMesh 和 Mesh 的参数
+ * 3. Affector 绝对生命期
  */
 #include "luaopen_ParticleSystem.h"
 #include "IrrlichtParticleSystems.h"
@@ -12,9 +11,12 @@
 #include "IParticleSystemScriptFactory.h"
 #include "IStackPusher.h"
 #include <luaT/luaT.h>
+#include <irrlicht/ISceneManager.h>
+#include <CppBase/StringUtil.h>
 
 using namespace irr;
 using namespace scene;
+using namespace video;
 using namespace luaT;
 
 #define setRangeFunc(field)	{ "set"###field, rangeSetter<field> }
@@ -33,7 +35,6 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle System Scene Node
 	////////////////////////////////////////////////////////////////////// 
-
 	static int addEmitter(lua_State* L)
 	{
 		luaT_variable(L, 1, IParticleSystemSceneNode*, pnode);
@@ -69,13 +70,45 @@ namespace xihad { namespace particle
 		return 0;
 	}
 
+	luaT_static void setRenderer(IParticleSystemSceneNode* pnode, IParticleRenderer* render)
+	{
+		pnode->setRenderer(render);
+		render->drop();
+	}}
+
+	luaT_static void setRendererTexture(IParticleSystemSceneNode* pnode, 
+		IParticleRenderer* render, int layer, const char* texPath)
+	{
+		ITexture* tex = pnode->getSceneManager()->getVideoDriver()->getTexture(texPath);
+		render->getMaterial().setTexture(layer, tex);
+	}}
+
+	static int newChild(lua_State* L)
+	{
+		int argc = lua_gettop(L);
+		luaT_variable(L, 1, IParticleSystemSceneNode*, pnode);
+		core::vector3df position = argc>=2 ? 
+			luaT::checkarg<core::vector3df>(L, 2) : core::vector3df();
+		core::vector3df rotation = argc>=3 ?
+			luaT::checkarg<core::vector3df>(L, 3) : core::vector3df();
+
+		ISceneManager* smgr = pnode->getSceneManager();
+		push<IParticleSystemSceneNode*>(L, 
+			smgr->addParticleSystemSceneNode(65535, pnode, -1, position, rotation));
+
+		return 1;
+	}
+
 	void luaopen_ParticleSystemNode( lua_State* L )
 	{
 		luaT_defRegsBgn(pnode)
 			luaT_mnamedfunc(IParticleSystemSceneNode, setParticlesAreGlobal),
+			luaT_mnamedfunc(IParticleSystemSceneNode, setMaxParticleCount),
 			luaT_lnamedfunc(addEmitter),
 			luaT_lnamedfunc(addAffector),
-			luaT_mnamedfunc(IParticleSystemSceneNode, setRenderer),
+			luaT_cnamedfunc(setRenderer),
+			luaT_cnamedfunc(setRendererTexture),
+			luaT_lnamedfunc(newChild),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleSystemSceneNode>::create(L, pnode);
 	}
@@ -154,6 +187,51 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle Renderer
 	////////////////////////////////////////////////////////////////////// 
+	luaT_static void setMaterialType(SMaterial& mat, const char* type)
+	{
+		int idx = StringUtil::select(type, sBuiltInMaterialTypeNames);
+		if (idx != -1)
+			mat.MaterialType = (E_MATERIAL_TYPE) idx;
+		else 
+			std::cerr << "Unrecognized material type: "  << type << std::endl;
+	}}
+
+	luaT_static void setLighting(SMaterial& mat, bool b)
+	{
+		mat.Lighting = b;
+	}}
+
+	luaT_static void setZWriteEnable(SMaterial& mat, bool b)
+	{
+		mat.ZWriteEnable = b;
+	}}
+
+	luaT_static void setBlend(SMaterial& mat, const char* fsrc, const char* fdst, const char* bops)
+	{
+		static const char* sBlendFactors[] = {
+			"0", "1", "dst_color", "1 - dst_color", "src_color", "1 - src_color",
+			"src_alpha", "1 - src_alpha", "dst_alpha", "1 - dst_alpha", 0
+		};
+		static const char* sBlendOperation[] = {
+			"none", "add", "substract", "rev_substract", "min", "max", 0
+		};
+		
+		int src = StringUtil::select(fsrc, sBlendFactors);
+		int dst = StringUtil::select(fdst, sBlendFactors);
+		if (src != -1 && dst != -1)
+			mat.MaterialTypeParam = pack_textureBlendFunc((E_BLEND_FACTOR) src, (E_BLEND_FACTOR) dst);
+		else if (src == -1)
+			std::cerr << "Unrecognized src blend factor: " << fsrc << std::endl;
+		else 
+			std::cerr << "Unrecognized dst blend factor: " << fdst << std::endl;
+
+		int ops = StringUtil::select(bops, sBlendOperation);
+		if (ops != -1)
+			mat.BlendOperation = (E_BLEND_OPERATION) ops;
+		else 
+			std::cerr << "Unrecognized blend operation: " << bops << std::endl;
+	}}
+
 	luaT_static void addTexRegion(IParticleQuadRenderer* quad, f32 x, f32 y, f32 x2, f32 y2)
 	{
 		quad->addTextureRegion(core::rectf(x,y,x2,y2));
@@ -161,8 +239,16 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleRenderer( lua_State* L )
 	{
-		// TODO Get Material
+		luaT_defRegsBgn(smat)
+			luaT_cnamedfunc(setMaterialType),
+			luaT_cnamedfunc(setBlend),
+			luaT_cnamedfunc(setLighting),
+			luaT_cnamedfunc(setZWriteEnable),
+		luaT_defRegsEnd
+		MetatableFactory<SMaterial>::create(L, smat);
+
 		luaT_defRegsBgn(renderer)
+			luaT_mnamedfunc(IParticleRenderer, getMaterial),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleRenderer>::create(L, renderer);
 
@@ -176,7 +262,6 @@ namespace xihad { namespace particle
 			luaT_mnamedfunc(IParticleQuadRenderer, setOrintation),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleQuadRenderer, IParticleRenderer>::create(L, quad_render);
-
 	}
 
 

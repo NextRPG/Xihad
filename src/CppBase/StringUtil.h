@@ -16,7 +16,7 @@ namespace xihad
 		 * @param options 指定搜索的字符串数组
 		 * @return 找到的字符串索引，或者 -1
 		 */
-		static int select(const char* target, const char* options[]);
+		static int select(const char* target, const char* const options[]);
 
 		/// Split source string into substring and push back to result set
 		/**

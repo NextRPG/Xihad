@@ -12,6 +12,7 @@
 using namespace irr::scene;
 namespace xihad { namespace particle
 {
+
 	int CParticleSystemScriptFactory::compositeIniter( lua_State* L )
 	{
 		if (!Factory) return 0;
@@ -24,7 +25,11 @@ namespace xihad { namespace particle
 			lua_rawgeti(L, -1, idx);
 			init = luaT::checkarg<IParticleInitializer*>(L, -1);
 
-			if (init) ciniter->pushBack(init);
+			if (init) 
+			{
+				ciniter->pushBack(init);
+				init->drop();
+			}
 			lua_pop(L, 1);
 		}
 
