@@ -1,31 +1,19 @@
-Item = {
-	type = ""
+--- 
+-- 表示背包中的一个物品
+-- @module Item
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+
+local Item = {
+
 }
 
-function Item:new( o )
-	o = o or {}
+function Item.new( o )
+	assert(type(o) == "table", "prototype must be a table")
+	setmetatable(o, {__index = Item})
 
-	setmetatable(o, self)
-	self.__index = self
 	return o
 end
 
-function Item:permitCasting( charater, skill )
-	return true
-end
-
-function Item:canPass( charater )
-	return true
-end
-
-function Item:canStay( charater )
-	return true
-end
-
-function Item:getActionPointIncr( charater )
-	return true
-end
-
-function Item:getActionPointCost(  )
-	return 0
-end
+return Item

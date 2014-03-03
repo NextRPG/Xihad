@@ -1,5 +1,4 @@
 local SkillDatabase = {}
-package.loaded["SkillDatabase"] = SkillDatabase
 
 function loadSkill( skill )
 	skill.range = createRange(skill.rangeTable)

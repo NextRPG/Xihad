@@ -87,3 +87,25 @@ function scene:createUniqueObjectWithComponent( component, param )
 	local object = scene:createUniqueObject(c(component))
 	object:appendComponent(c(component), param)
 end
+
+function serialize( o )
+	print(o)
+	if type(o) == "number" then
+		io.write(o)
+	elseif type(o) == "string" then
+		io.write(string.format("%q", o))
+	elseif type(o) == "table" then
+		io.write(" {\n")
+		for k,v in pairs(o) do
+			-- io.write(" ", k, " = ")
+			io.write(" [")
+			serialize(k)
+			io.write("] = ")
+			serialize(v)
+			io.write(",\n")
+		end
+		io.write("}")
+	else
+		error("cannot serialize a " .. type(o))
+	end
+end
