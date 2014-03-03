@@ -21,7 +21,6 @@ function RotateBy:runAction( action, callback )
 	local interval = action.interval
 
 	self.destination = destination or { y = 0 }
-	print("callback", callback == nil)
 	self.callback = callback or function ( ) end
 
 	self.leftTime = interval or 1.0

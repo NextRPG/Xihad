@@ -1,7 +1,11 @@
 function table.copy( t )
 	local t_copy = {}
 	for k,v in pairs(t) do
-		t_copy[k] = v
+		if type(v) ~= "table" then
+			t_copy[k] = v
+		else
+			t_copy[k] = table.copy(v)
+		end
 	end
 	return t_copy
 end
@@ -12,7 +16,7 @@ function table.equal( t1, t2 )
 			if table.equal(v, t2[k]) == false then
 				return false
 			end
-		elseif v ~= t2[k] then 
+		elseif v ~= t2[k] and v ~= nil and t2[k] ~= nil then 
 			return false 
 		end
 	end
@@ -33,4 +37,15 @@ function table.contains( t, e )
 		if table.equal(v, e) then return true end
 	end
 	return false
+end
+
+function table.merge( t1, t2 )
+	local t3 = {}
+	for k,v in pairs(t1) do
+		t3[k] = v
+	end
+	for k,v in pairs(t2) do
+		t3[k] = v
+	end
+	return t3
 end

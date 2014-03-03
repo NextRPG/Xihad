@@ -1,31 +1,19 @@
-TreasureBox = {
-	type = ""
+--- 
+-- 表示地图上一个财宝箱，里面有物品
+-- @module TreasureBox
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+
+local TreasureBox = {
+
 }
 
-function TreasureBox:new( o )
-	o = o or {}
+function TreasureBox.new( o )
+	assert(type(o) == "table", "prototype must be a table")
+	setmetatable(o, {__index = TreasureBox})
 
-	setmetatable(o, self)
-	self.__index = self
 	return o
 end
 
-function TreasureBox:permitCasting( charater, skill )
-	return true
-end
-
-function TreasureBox:canPass( charater )
-	return true
-end
-
-function TreasureBox:canStay( charater )
-	return true
-end
-
-function TreasureBox:getActionPointIncr( charater )
-	return true
-end
-
-function TreasureBox:getActionPointCost(  )
-	return 0
-end
+return TreasureBox

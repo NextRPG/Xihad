@@ -38,7 +38,23 @@ end
 -- @int id
 -- @treturn Object skillObject or nil
 function SkillManager:getSkill( id )
-	return scene:findObject(sname(id))
+	return scene:findObject(sname(id)):findComponent(c"Skill")
+end
+
+function SkillManager:getAllAvailableTargets( character )
+	local skills = character.skills
+	local allTargets = {}
+	self.allTargets = {}
+	for i,id in ipairs(character.skills) do
+		local targets = self:getSkill(id):getPossibleTargets(character:getEnemyManager())
+		for i,target in ipairs(targets) do
+			if not table.contains(allTargets, target) then
+				allTargets[#allTargets + 1] = target
+			end
+		end
+	end
+	self.allTargets = allTargets
+	return allTargets
 end
 
 ---
@@ -49,12 +65,14 @@ function SkillManager:onShowSkills( object )
 	currentCharacter = object
 	local character = currentCharacter:findComponent(c"Character")
 	-- 显示技能
-	print("开始选择技能")
-	for i,v in ipairs(character.skills) do
-		print(i,v)
+	-- print("开始选择技能")
+	for i,id in ipairs(character.skills) do
+		if SkillManager:getSkill(id):hasEnemy(character:tile(), character:getEnemyManager()) then
+			print(i,id)
+		end
 	end
-	print("K", "待机")
-	print("选择你想使用的技能")
+	-- print("K", "待机")
+	-- print("选择你想使用的技能")
 end
 
 ---
@@ -65,11 +83,9 @@ local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
 	selectSkill = scene:findObject(sname(key)):findComponent(c"Skill")
-	for k,v in pairs(selectSkill) do
-		print(k,v)
-	end
-	targetRange = selectSkill:getAttackArea(character:tile())
-	Chessboard:markArea(targetRange)
+	-- targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
+	targetRange = selectSkill:getTargetRange(character:tile())
+	Chessboard:pushArea(targetRange, "RED")
 end
 
 ---
@@ -80,35 +96,40 @@ local skillRange = nil
 function SkillManager:onSelectTarget( object )
 	if lastObject == nil or lastObject:getID() ~= object:getID() then
 		local tile = object:findComponent(c"Tile")
+		Chessboard:popArea(skillRange)
 		if table.contains(targetRange, tile) then
-			Chessboard:recoverArea(skillRange)
-			Chessboard:markArea(targetRange)
-			skillRange = selectSkill:getRange(tile)
-			Chessboard:markArea(skillRange, {139, 0, 139}) -- 紫色
+			skillRange = selectSkill:getAttackArea(tile)
+			Chessboard:pushArea(skillRange, "PURPLE") -- 紫色
+		elseif skillRange ~= nil then
+			skillRange = nil	
 		end
 		lastObject = object
 	end
+end
+
+function SkillManager:back2ShowSkill(  )
+	Chessboard:popArea(skillRange)
+	Chessboard:popArea(targetRange)
+	skillRange, targetRange = nil
+	self:onShowSkills(currentCharacter)
 end
 
 ---
 -- 发出技能后展示动画，并作出相应逻辑判断
 -- selectSkill可以传入
 -- @tparam Object tileObject
-function SkillManager:onCastSkill( tileObject, skill, characterObject )
+function SkillManager:onCastSkill( tile, skill, character )
 
 	skill = skill or selectSkill
-	characterObject = characterObject or currentCharacter
+	local characterObject = (character == nil) and currentCharacter or character.object
 
-	Chessboard:recoverArea(skillRange)
-	Chessboard:recoverArea(targetRange)
+	Chessboard:clearAll()
+	skillRange = nil
 	local character = characterObject:findComponent(c"Character")
-	local tile = tileObject:findComponent(c"Tile")
 	local anim = characterObject:findComponent(c"AnimatedMesh")
 	local rotateBy = characterObject:findComponent(c"RotateBy")
 	local rx, ry, rz = characterObject:getRotation():xyz()
 	local ty = getLogicAngle(math.p_sub(tile, character:tile()))
-	print("the target is", ty)
-	print(tile.x, tile.y)
 
 	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	
@@ -117,11 +138,12 @@ function SkillManager:onCastSkill( tileObject, skill, characterObject )
 		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
 		anim:playAnimation(c"idle 1")
 	end
-	CameraManager:back2Normal()
-
 	if targetRange == nil or table.contains(targetRange, tile) then
 		skill:trigger(character, tile)
 	end
+	
+	CameraManager:back2Normal()
+	character.states.TURNOVER = true
 end
 
 return SkillManager

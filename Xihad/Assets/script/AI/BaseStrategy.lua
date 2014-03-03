@@ -19,17 +19,21 @@ function BaseStrategy:judgeTile(  )
 	local names, distances, HPs = {}, {}, {}
 
 	for object in scene:objectsWithTag("Hero") do
-		names[#names + 1] = object:getID()
-		local enemy = object:findComponent(c"Character")
-		distances[object:getID()] = GoalFinder:getCostAP(actor:tile() ,enemy:tile())
-		HPs[object:getID()] = - enemy:getProperty("currentHP")
+		repeat
+			local enemy = object:findComponent(c"Character")
+			local costAP = GoalFinder:getCostAP(actor:tile() ,enemy:tile(), actor:getProperty("maxAP"))
+			if costAP == "MAX" then break end
+			names[#names + 1] = object:getID()
+			distances[object:getID()] = costAP
+			HPs[object:getID()] = - enemy:getProperty("currentHP")
+		until true
 	end	
 
 	local board = ScoreBoard.new{}
 
 	board:appendKey( names )
-	board:appendValue( distances, 0.1 )
-	board:appendValue( HPs, 0.9 )
+	board:appendValue( distances, 0.5 )
+	board:appendValue( HPs, 0.5 )
 
 	local name = board:getResult()
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
@@ -39,18 +43,19 @@ function BaseStrategy:judgeTile(  )
 end
 
 function BaseStrategy:judgeSkill(  )
-	local skills = self.object:findComponent(c"Character").skills
-	local center = self.object:findComponent(c"Character"):tile()
+	local character = self.object:findComponent(c"Character")
+	local skills = character.skills
+	local center = character:tile()
 
 	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
 		repeat
-			local skill = SkillManager:getSkill(id):findComponent(c"Skill")
-			if not skill:hasEnemy( center ) then break end
+			local skill = SkillManager:getSkill(id)
+			if not skill:hasEnemy( center, character:getEnemyManager()) then break end			
 			names[#names + 1] = skill.id
-			damages[#damages + 1] = skill.damage
-			currentTimes[#currentTimes + 1] = skill.currentTimes
-			ranges[#ranges + 1] = #skill.range
+			damages[skill.id] = skill.damage
+			currentTimes[skill.id] = skill.currentTimes
+			ranges[skill.id] = #skill.range
 		until true
 	end	
 
@@ -65,7 +70,7 @@ function BaseStrategy:judgeSkill(  )
 	board:appendValue( currentTimes, 0.3 )
 	board:appendValue( ranges, 0.4 )
 
-	local selectSkill = SkillManager:getSkill(board:getResult()):findComponent(c("Skill"))
+	local selectSkill = SkillManager:getSkill(board:getResult())
 	local target = selectSkill:getBestTarget(center)
 
 	return selectSkill, Chessboard:tileAt(target)

@@ -1,29 +1,30 @@
-require "BaseEffect"
-PoisonEffect = BaseEffect:new()
+--- 
+-- 作为Effect的控制逻辑Component
+-- @module PoisonEffect
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
+local BaseEffect = require "BaseEffect"
 
-function PoisonEffect:new( o )
-	o = o or {}
-	setmetatable(o, {__index = self})
+local PoisonEffect = {
+	damage = 0,
+}
 
-	o.damage = o.damage or 0
+function PoisonEffect.new( o, object )
+	inherit(o, PoisonEffect, BaseEffect)
+	o:init(object)
 	return o
 end
 
-function PoisonEffect:bind( target )
-	
-end
 
-function PoisonEffect:roundUpdate( target )
-	if self:checkUpdate(target) then
-		target:handleDamage(self.damage)
+function PoisonEffect:roundUpdate( currentTeam )
+	if self:checkUpdate( currentTeam ) then
+		print("doing PoisonEffect at " .. self.rounds)
+		self.target:handleDamage(self, self.source, "M")
 	end
-	-- dispatch poison message
 end
 
-function PoisonEffect:unbind( target )
-	-- body
-end
-
+return PoisonEffect
 
 
 

@@ -5,7 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 local Chessboard = require "Chessboard"
-local queue = require "Queue"
+local Queue = require "Queue"
 
 local PathFinder = {}
 
@@ -16,14 +16,7 @@ function PathFinder.new( o )
 	return o
 end
 
-function hash( tile )
-	assert(tile.x)
-	return tile.x .. " " .. tile.y
-end
 
-function inbound( x, y )
-	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
-end
 
 -- 这种遍历查找重复的方法没有哈希表的方法快，但是也有好处(其实也没什么好处)
 function findTile( location )
@@ -42,39 +35,39 @@ end
 -- @tab start
 -- @int maxAP
 local directions = Consts.directions
-function PathFinder:getReachableTiles( start, maxAP, predicate )
+function PathFinder:getReachableTiles( character )
+	local start, maxAP, manager = character:tile(), character:getProperty("maxAP"), character:getEnemyManager()
 
-	assert(start) assert(maxAP)
-	assert(self.start == nil, "must clean before getReachableTiles")
+	assert(start.x) assert(maxAP)
+	self:cleanUp()
+	self.data = {}
+
 	start.leftAP = maxAP
 	self.start = start 
-	local openQueue = queue.new()
+	local openQueue = Queue.new()
 	openQueue:push(start)
-	local count = 0
 	while openQueue:empty() == false do
 		local currentPoint = openQueue:pop()
-		self[hash(currentPoint)] = currentPoint
+		self.data[hash(currentPoint)] = currentPoint
+		if not Chessboard:hasCharacter(currentPoint) then
+			self[#self + 1] = currentPoint
+			currentPoint.canStay = true
+		end
 		for k,v in pairs(directions) do
 
-			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
+			local tile = Chessboard:tileAt(currentPoint)
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if inbound(point.x, point.y) and Chessboard:tileAt(point):findComponent(c"Tile"):canPass()
-				 and point.leftAP > 0 and self[hash(point)] == nil  then
+			if inbound(point) and Chessboard:tileAt(point):canPass()
+				 and point.leftAP > 0 and self.data[hash(point)] == nil 
+				 and not manager:getCharacterByLocation(point)  then
 				 		openQueue:push(point)
 			end
-			count = count + 1
 		end
 	end
-			print(count)
-
-	assert(self.start)
-	for k,v in pairs(self) do
-		if type(v) == "table" and k ~= "start" then
-			self[#self + 1] = v
-		end
-	end
+	self[#self + 1] = self.start
+	self.start.canStay = true
 end
 
 ---
@@ -83,8 +76,7 @@ end
 -- @treturn {string, ...} path 
 function PathFinder:constructPath( tile )
 	local path = {}	
-	local tile = self[hash(tile)]
-	assert(tile)
+	local tile = self.data[hash(tile)]
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction
 		tile = tile.prev
@@ -92,17 +84,6 @@ function PathFinder:constructPath( tile )
 	table.reverse(path)
 	return path
 end
-
----
--- 构建路径后在将缓存清理
--- @tab tile
--- @treturn {string, ...} path 
-function PathFinder:constructPathAndClean( tile )
-	local tmp = self:constructPath( tile )
-	self:cleanUp()
-	return tmp
-end
-
 ---
 -- 清理缓存
 function PathFinder:cleanUp(  )
@@ -114,9 +95,8 @@ function PathFinder:cleanUp(  )
 	end
 end
 
-function PathFinder:hasTile( tileObject )
-	local tile = tileObject:findComponent(c"Tile")
-	if self[hash(tile)] ~= nil then
+function PathFinder:hasTile( tile )
+	if self.data[hash(tile)] ~= nil and self.data[hash(tile)].canStay == true then
 		return true
 	end
 	return false

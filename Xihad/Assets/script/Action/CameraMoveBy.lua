@@ -16,15 +16,15 @@ function CameraMoveBy.new( o )
 	return o
 end
 
--- function CameraMoveBy:moveToCharacter( characterObject )
--- 	if self.enabled then return false end
+function CameraMoveBy:moveToCharacter( characterObject, callback )
+	if self.enabled then return false end
 
--- 	local action = {}
--- 	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 10)
--- 	action.destination = action.destination2 + math3d.vector(10, 10, 0)
+	local action = {}
+	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 10, 0)
+	action.destination = action.destination2 + math3d.vector(0, 0, 30)
 	
--- 	self:runAction(action, callback)
--- end
+	self:runAction(action, callback)
+end
 
 function CameraMoveBy:runActionByDelta( action, callback )
 	if self.enabled then return false end
@@ -61,9 +61,11 @@ function CameraMoveBy:onUpdate(  )
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)
 		ccom:setTarget(self.destination2)
-		self.enabled = false
 		-- playAnimation(self.object, "idle 1")
+		-- print("2 the end")
+		self.enabled = false
 		self.callback()
+
 	else
 		local newTrans = math3d.lerp(
 			self.source, self.destination, ease.linear(self.leftTime / self.interval))

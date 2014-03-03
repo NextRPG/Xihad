@@ -19,9 +19,6 @@ function StateMachine:addState( state )
 end
 
 function StateMachine:addTransition( state, nextState, condition, action )
-	if (self[state] == nil) then
-		print(state)
-	end
 	assert(type(state) == "string" and type(nextState) == "string" 
 		and type(action) == "function"
 		and type(condition) == "function" and self[state] ~= nil)
@@ -45,7 +42,7 @@ function StateMachine:pendingAndAction( func, ... )
 	self.ASYNC = true
 	co = coroutine.create(function ( ... )
 		func(...)
-		self.ASYNC = false		
+		self.ASYNC = false	
 	end)
 	runCallback(coroutine.resume(co, ...))
 end

@@ -15,28 +15,6 @@ function ForeverMoveBy.new( o )
 	return o
 end
 
--- function ForeverMoveBy:runAction( action )
--- 	if self.enabled then return false end
-
--- 	local k = 1
-
--- 	local ccom = self.object:findComponent(c"Camera")
--- 	self.source2 = ccom:getTarget()
--- 	self.destination2 = self.source2 + 
--- 	math3d.vector(action.destination.x * k, 0, 
--- 		action.destination.y * k)
--- 		self.source = self.object:getTranslate()
-
--- 	self.destination = self.source + 
--- 		math3d.vector(action.destination.x * k, 0, 
--- 			action.destination.y * k)
--- 	self.callback = action.callback or function ( ) end
--- 	self.interval = action.interval or 0.1
--- 	self.leftTime = self.interval
-
--- 	self.enabled = true
--- end
-
 function ForeverMoveBy:runAction( speed )
 	if not (speed.x * self.speed.x > 0 and speed.y * self.speed.y > 0) then
 		self.speed = speed

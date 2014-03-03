@@ -34,6 +34,7 @@ end
 function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
 	character.model = "ninja"
+	character.team = self.team
 	local characterObject = scene:createObject(c(character.name))
 
 	local test = characterObject:appendComponent(c"Character", character)
@@ -73,12 +74,11 @@ end
 -- 通过位置得到CharacterObject
 -- @tab location
 -- @treturn Object characterObject or nil
-function CharacterManager:getCharacterByLocation( location )
+function CharacterManager:getCharacterByLocation( point )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
-		local tile = character:tile()
-		if table.equal(location, tile) then
-		 	return characterObject
+		if math.p_same(character:tile(), point) then
+		 	return characterObject:findComponent(c"Character")
 		end
 	end
 	return nil
@@ -88,11 +88,15 @@ end
 -- 选中角色后的行为
 -- @tparam Object characterObject
 function CharacterManager:onSelectCharacter( object )
+	Chessboard:clearAll()
 	self.currentCharacter = object
 	local character = object:findComponent(c"Character")
+	PathFinder:getReachableTiles(character)
 	CameraManager:move2Character(object)
-	PathFinder:getReachableTiles(character:tile(),character:getProperty("maxAP"))
-	Chessboard:markArea(PathFinder)
+	Chessboard:pushArea(PathFinder, "BLUE")
+	Chessboard:pushArea(
+		SkillManager:getAllAvailableTargets(
+			self.currentCharacter:findComponent(c"Character")), "RED")
 end
 
 local function optimizePath( actions )
@@ -114,13 +118,16 @@ end
 ---
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
-function CharacterManager:onSelectTile( object, finder )
+local lastTranslate = math3d.vector(0, 0, 0)
+function CharacterManager:onSelectTile( tile, finder )
 
+	Chessboard:pushArea(PathFinder, "ALPHA")
+	Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
 
+	lastTranslate = self.currentCharacter:getTranslate()
 	finder = finder or PathFinder 	
-	local tile = object:findComponent(c"Tile")
-	
-	local path = finder:constructPathAndClean(tile)
+	local path = finder:constructPath(tile)
+	if #path == 0 then return end
 
 	local directions = Consts.directions
 	local sequence = self.currentCharacter:findComponent(c"Sequence")
@@ -135,8 +142,13 @@ function CharacterManager:onSelectTile( object, finder )
 	follow:start(self.currentCharacter)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
 	follow:stop()
-	local character = self.currentCharacter:findComponent(c"Character")
-	character.states.TURNOVER = true
+end
+
+function CharacterManager:back2ShowCharacter(  )
+	self.currentCharacter:resetTranslate(lastTranslate)
+	Chessboard:popArea(PathFinder)
+	Chessboard:popArea(SkillManager.allTargets)
+	CameraManager:move2Character(self.currentCharacter)
 end
 
 

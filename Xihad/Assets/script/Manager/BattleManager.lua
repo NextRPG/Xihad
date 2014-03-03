@@ -1,6 +1,10 @@
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
 local StateMachine = require "StateMachine"
+local SkillManager = require "SkillManager"
+local PathFinder = require "PathFinder"
+local Publisher = require "Publisher"
+
 --- 
 -- 控制战斗流程
 -- @module BattleManager
@@ -8,26 +12,62 @@ local StateMachine = require "StateMachine"
 -- @license MIT
 -- @copyright NextRPG
 
-local PathFinder = require "PathFinder"
+local BattleManager = {}
 
-local BattleManager = {
-	currentState = "showCharacter"
-}
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager1
+	self.manager = manager2
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
 	
 
+	self:addShowNothing(manager1, manager2)
 	self:addShowCharacter( manager1, manager2 )
 	self:addShowTile()
+	self:addShowAITile()
 	self:addShowSkill()
 	self:addShowTargetRange()
 	global:appendUpdateHandler(self)
+	inherit(self, Publisher)
 
-	stateMachine:setInitial("showCharacter")
+	stateMachine:setInitial("showNothing")
+end
+
+function BattleManager:AI2Hero( manager1, manager2 )
+	self.manager = manager2
+	print("round AI start")
+	self:changeState("round", self.manager.team)
+	self.manager:roundStart()
+	self.manager:runActors()
+	self.manager = manager1
+	print("round Hero start")
+	self:changeState("round", self.manager.team)
+	self.manager:roundStart()
+end
+
+function BattleManager:addShowNothing( manager1, manager2 )
+	local stateMachine = self.stateMachine
+
+	stateMachine:addState("showNothing")
+
+	stateMachine:addTransition("showNothing", "showCharacter",
+	function (  )
+		return self.manager == manager1
+	end, 
+	function (  )
+		self.manager = manager1
+		self.manager:roundStart()
+	end)
+
+	stateMachine:addTransition("showNothing", "showCharacter",
+	function (  )
+		return self.manager == manager2
+	end, 
+	function (  )
+		self:AI2Hero(manager1, manager2)
+	end)
+
 end
 
 function BattleManager:addShowCharacter( manager1, manager2 )
@@ -42,23 +82,24 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 					and self.manager:checkAvailable(object)
 		end,
 		function ( object )
-
+			self.manager:onSelectCharacter(object)
+		end)
+	stateMachine:addTransition("showCharacter", "showAITile",
+		function ( object, etype )
+			return etype == "lClicked" and object 
+					and object:hasTag(c"AI") 
+					and self.manager:checkAvailable(object)
+		end,
+		function ( object )
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showCharacter", "showCharacter",
 		function (  )
-			return self.manager:checkRoundOver() or self.manager == manager2
+			return self.manager:checkRoundOver()
 		end, 
 		function (  )
-			self.manager = manager2
-			self.manager:roundStart() 
-			print("doing something")
-			self.manager:runActors()
-			self.manager = manager1
-			self.manager:roundStart()
+			self:AI2Hero(manager1, manager2)
 		end)
-	-- stateMachine:addTransition("showCharacter", "showCharacter",
-	-- 	)
 end
 
 function BattleManager:addShowTile(  )
@@ -70,19 +111,50 @@ function BattleManager:addShowTile(  )
 			return etype == "lClicked" and object and object:hasTag(c"Hero") and self.manager:checkAvailable(object)
 		end,
 		function ( object )
-			Chessboard:recoverArea(PathFinder)	
-			PathFinder:cleanUp()
 			self.manager:onSelectCharacter(object)
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object)
+			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object:findComponent(c"Tile"))
 		end,
 		function ( object )
-				Chessboard:recoverArea(PathFinder)
-				self.manager:onSelectTile(object)
-				SkillManager:onShowSkills(self.manager.currentCharacter)
+			self.manager:onSelectTile(object:findComponent(c"Tile"))
+			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)
+	stateMachine:addTransition("showTile", "showCharacter", 
+		function ( object, etype )
+			return etype == "rUplift"
+		end,
+		function (  )
+			Chessboard:clearAll()
+		end)
+	stateMachine:addTransition("showTile", "showAITile", 
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"AI")
+		end, 
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+end
+
+function BattleManager:addShowAITile(  )
+	local stateMachine = self.stateMachine
+	stateMachine:addState("showAITile")
+	stateMachine:addTransition("showAITile", "showAITile",
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"AI")
+		end,
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+	stateMachine:addTransition("showAITile", "showTile",
+		function ( object, etype )
+			return etype == "lClicked" and object and object:hasTag(c"Hero")
+		end,
+		function ( object )
+			self.manager:onSelectCharacter(object)
+		end)
+
 end
 
 function BattleManager:addShowSkill(  )
@@ -94,6 +166,8 @@ function BattleManager:addShowSkill(  )
 			return key == "K"
 		end,
 		function ( key )
+			local character = self.manager.currentCharacter:findComponent(c"Character")
+			character.states.TURNOVER = true
 		end)
 	stateMachine:addTransition("showSkill", "showTargetRange",
 		function ( key )
@@ -101,6 +175,13 @@ function BattleManager:addShowSkill(  )
 		end,
 		function ( key )
 			SkillManager:onSelectSkill(key)
+		end)
+	stateMachine:addTransition("showSkill", "showTile",
+		function ( object, etype )
+			return etype == "rUplift"
+		end,
+		function (  )
+			self.manager:back2ShowCharacter()
 		end)
 end
 
@@ -119,9 +200,14 @@ function BattleManager:addShowTargetRange(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
-			stateMachine:pendingAndAction(function (  )
-				SkillManager:onCastSkill(object)
-			end)
+			SkillManager:onCastSkill(object:findComponent(c"Tile"))
+		end)
+	stateMachine:addTransition("showTargetRange", "showSkill", 
+		function ( object, etype )
+			return etype == "rUplift"
+		end, 
+		function (  )
+			SkillManager:back2ShowSkill()
 		end)
 end
 

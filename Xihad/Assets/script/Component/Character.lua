@@ -9,6 +9,8 @@
 
 local Equation = require "Equation"
 local Chessboard = require "Chessboard"
+local Publisher = require "Publisher"
+local Set = require "Set"
 
 ---
 -- @string team 
@@ -22,12 +24,18 @@ local Chessboard = require "Chessboard"
 -- @tparam tab effects 人物所中的效果的集合
 -- @tparam tab equipments 人物所穿的装备的集合
 -- @tparam tab skills 人物所拥有的技能的集合
+
 local Character = {
 	career = 0,
 	level = 0,
 	currentExp = 0,
 	exp = 0,
-	name = ""
+	name = "",
+	skills = {},
+	effects = Set.new{},
+	equipments = {}, -- Consts.parts
+	properties = {},
+	states = {TURNOVER = false},
 }
 
 
@@ -37,25 +45,14 @@ local Character = {
 -- @treturn Character o
 function Character.new( o )
 	assert(type(o) == "table", "prototype must be a table")
-	setmetatable(o, {__index = Character})
+	inherit(o, Publisher, Character)
 
-	o.skills = o.skills or {}
-	o.effects = o.effects or {}
-
-	o.equipments = o.equipments or {}
-	for k,part in pairs(Consts.parts) do
-		o.equipments[part] = nil
-	end
-
-	o.properties = o.properties or {}
 	for k,property in pairs(Consts.properties) do
 		-- test 
-		o.properties[property] = o.properties[property] or Equation.new{offset = 5}
+		o.properties[property] = Equation.new{offset = o.properties[property]}
 	end
-
 	o.properties.currentHP = o.properties.maxHP:calculate()
 	o.properties.currentAP = o.properties.maxAP:calculate()
-	o.states = {DEAD = false, ROUNDOVER = false, TURNOVER = false}
 
 	return o
 end
@@ -64,30 +61,38 @@ end
 -- 找到当前Character所在的TileObject
 -- @treturn Object tileObject
 function Character:tile()
-	return Chessboard:tileAt(vector2point(self.object:getTranslation())):findComponent(c"Tile")
+	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
+end
+
+function Character:getManager(  )
+	return self.team == "Hero" and require("HeroManager") or require("AIManager")
+end
+
+function Character:getEnemyManager(  )
+	return self.team == "Hero" and require("AIManager") or require("HeroManager")  
 end
 
 -- EffectTarget
 -- unused
-function Character:bindEffect( effect )
-	assert(effect, "effect can't be nil")
-	self.effects[effect] = #self.effects
-end
+-- function Character:bindEffect( effect )
+-- 	assert(effect, "effect can't be nil")
+-- 	self.effects[effect] = #self.effects
+-- end
 
-function Character:unbindEffect( effect )
-	assert(effect, "effect can't be nil")
-	self.effects[effect] = nil	
-end
+-- function Character:unbindEffect( effect )
+-- 	assert(effect, "effect can't be nil")
+-- 	self.effects[effect] = nil	
+-- end
 
-function Character:updateEffects(  )
-	for k,v in pairs(self.effects) do
-		k:roundUpdate(self)
-	end
-end
+-- function Character:updateEffects(  )
+-- 	for k,v in pairs(self.effects) do
+-- 		k:roundUpdate(self)
+-- 	end
+-- end
 
-function Character:resetEffects(  )
-	self.effects = {}
-end
+-- function Character:resetEffects(  )
+-- 	self.effects = {}
+-- end
 
 -- EquipTarget
 -- unused
@@ -125,7 +130,7 @@ function Character:handleDamage_aux( param )
 	local damage = math.floor(
 	(skillPower * attack*3)/(defense + attack)*(1.1 - math.random() * 0.2))
 	print("cause" .. damage .. "damage")
-	self.properties.currentHP = self:getProperty("currentHP") - damage
+	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
 	if (self:getProperty("currentHP") < 0) then
 		self.properties.currentHP = 0
 		-- dispatch character dead message
@@ -158,7 +163,7 @@ end
 
 ---
 -- 处理各种属性的攻击，进行伤害值计算
--- @tparam Skill skill
+-- @tparam Skill skill 不一定是skill，可以是带有damage的能造成伤害的table
 -- @tparam Character attacker 
 -- @string property 
 function Character:handleDamage( skill, attacker, property )

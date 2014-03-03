@@ -33,7 +33,7 @@ function Tile:permitCasting( charater, skill )
 end
 
 function Tile:canPass( )
-	return self.terrain.canPass 
+	return self.terrain.canPass
 end
 
 function Tile:canStay( charater )

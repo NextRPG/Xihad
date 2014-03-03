@@ -21,14 +21,19 @@ local function resetColor( tileObject )
 	local fcomp = tileObject:findComponent(c"Mesh")
 	if tile.terrain.id == 1 then
 		-- light green
-		fcomp:setColor(152, 241, 156)
+		fcomp:setColor(hex2Color("b2d235"))
 	elseif tile.terrain.id == 2 then
 		-- BLUE
-		fcomp:setColor(7, 65, 255)
+		-- fcomp:setColor(hex2Color("102b6a"))
+		fcomp:setColor(hex2Color("121a2a"))
 	elseif tile.terrain.id == 3 then
 		-- deep green 
-		fcomp:setColor(11, 110, 11)
+		fcomp:setColor(hex2Color("225a1f"))
 	end
+end
+
+local function tname( tile )
+	return tile.x .. " " .. tile.y
 end
 
 -- public
@@ -39,7 +44,7 @@ end
 -- @treturn Object tileObject
 function Chessboard:createTile( tile )
 	local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
-	local tileObject = scene:createObject(c(tile.x .. " " .. tile.y))
+	local tileObject = scene:createObject(c(tname(tile)))
 	fcomp = tileObject:appendComponent(c"Mesh")
 	fcomp:setMesh(cubeMesh)
 	fcomp:createSelector(c"stupid") 
@@ -50,6 +55,11 @@ function Chessboard:createTile( tile )
 	tileObject:concatTranslate(math3d.vector(location.x, 0, location.z))
 
 	tileObject:addTag(c"Tile")
+
+	local highlightObject = scene:createObject(c("highlight" .. tname(tile)))
+	highlightObject:appendComponent(c"Highlight")
+	highlightObject:resetTranslate(tileObject:getTranslate() + math3d.vector(0, 2.5, 0))
+	highlightObject:addTag(c"Highlight")
 
 	return tileObject
 end
@@ -73,7 +83,11 @@ end
 -- @tab location
 -- @treturn Object tileObject
 function Chessboard:tileAt( location )
-	return scene:findObject(c(location.x .. " " .. location.y))
+	return scene:findObject(c(tname(location))):findComponent(c"Tile")
+end
+
+function Chessboard:highlightAt( location )
+	return scene:findObject(c("highlight" .. tname(location))):findComponent(c"Highlight")
 end
 
 --- 
@@ -82,20 +96,20 @@ end
 -- @return bool
 function Chessboard:hasCharacter( location )
 	local AIManager, HeroManager = require "AIManager", require "HeroManager"
-	return AIManager:getCharacterByLocation(location) 
-		or HeroManager:getCharacterByLocation(location)
+	return AIManager:getCharacterByLocation(location) or HeroManager:getCharacterByLocation(location)
 end
 
 ---
--- 恢复一些地图块为原来的颜色
+-- 弹出地图当前的颜色（彻底忘记）
 -- @tparam {Point,...} points
 -- @return nil
-function Chessboard:recoverArea( points )
+function Chessboard:popArea( points )
+
 	if points == nil then return end
-	for k,point in pairs(points) do
-		if type(point) == "table" then
-			resetColor(self:tileAt(point)) 
-		end
+
+	for i,point in ipairs(points) do
+
+		self:highlightAt(point):popColor()
 	end
 end
 
@@ -104,14 +118,17 @@ end
 -- @tparam {Point,...} points
 -- @tparam {r,g,b} color
 -- @return nil
-function Chessboard:markArea(points, color)
+function Chessboard:pushArea(points, color)
 	if points == nil then return end
-	color = color or {255, 0, 0}
-	for k,point in pairs(points) do
-		if type(point) == "table" then
-			local mesh = self:tileAt(point):findComponent(c"Mesh")
-			mesh:setColor(color[1], color[2], color[3])
-		end
+	assert(color ~= nil, "color can not be nil")
+	for i,point in ipairs(points) do
+		self:highlightAt(point):pushColor(color)
+	end
+end
+
+function Chessboard:clearAll(  )
+	for highlightObject in scene:objectsWithTag("Highlight") do
+		highlightObject:findComponent(c"Highlight"):clear()
 	end
 end
 

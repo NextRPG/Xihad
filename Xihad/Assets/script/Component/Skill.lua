@@ -8,6 +8,9 @@
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
 local AIManager = require "AIManager"
+local PathFinder = require "PathFinder"
+local BaseEffect = require "BaseEffect"
+
 
 ---
 -- 
@@ -33,6 +36,124 @@ local Skill = {
 	minDistance = 1,
 	maxDistance = 1
 }
+
+-- public
+
+---
+--
+function Skill.new( o )
+	assert(type(o) == "table", "prototype must be a table")
+	setmetatable(o, {__index = Skill})
+
+	-- o.effect2Self = o.effect2Self or nil
+	-- o.effect2Target = o.effect2Target or 
+	o.range = o.range or {{x = 0, y = 0}}
+
+	o.currentTimes = o.maxTimes
+	return o
+end
+
+---
+-- 获得技能攻击点的范围(1)
+-- @tparam tab center
+-- @treturn tab attackArea
+function Skill:getTargetRange( center )
+	local attackArea = {}
+	for i=center.x - self.maxDistance, center.x + self.maxDistance do
+		for j=center.y - self.maxDistance, center.y + self.maxDistance do
+			if  math.abs(i - center.x) + math.abs(j - center.y) <= self.maxDistance and 
+				math.abs(i - center.x) + math.abs(j - center.y) >= self.minDistance and
+			    inbound{x = i, y = j}
+			    and Chessboard:tileAt{x = i, y = j}:canPass() then
+			    attackArea[#attackArea + 1] = {x = i, y = j}
+			end
+		end
+	end
+	return attackArea
+end
+
+---
+-- 获得可以攻击的范围(2)
+-- @tparam tab center
+-- @treturn tab range
+function Skill:getAttackArea( center )
+	local range = {}
+	for i,v in ipairs(self.range) do
+		local point = math.p_add(v, center)
+		if inbound(point) and Chessboard:tileAt(point):canPass() then
+			range[#range + 1] = point
+		end
+	end
+	return range
+end
+
+function Skill:hasEnemy( center, manager )
+	local checked = {}
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		local attackArea = self:getAttackArea(target)
+		for i,tile in ipairs(attackArea) do
+			if checked[hash(tile)] == nil 
+				and manager:getCharacterByLocation(tile) then
+				return true
+			end
+			checked[hash(tile)] = true
+		end
+	end	
+	return false
+end
+
+function Skill:getTargets2Num( center, manager )
+	local target2Num = {}
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		local attackArea = self:getAttackArea(target)
+		target2Num[target] = 0
+		for i,tile in ipairs(attackArea) do
+			if manager:getCharacterByLocation(tile) then
+				target2Num[target] = target2Num[target] + 1
+			end
+		end
+	end
+	return target2Num
+end
+
+function Skill:getAvailableTargets( center, manager )
+
+	local targets = {}
+	local targetRange = self:getTargetRange(center)
+	for i,target in ipairs(targetRange) do
+		repeat
+			if PathFinder:hasTile(target) then break end
+			local attackArea = self:getAttackArea(target)
+			for i,tile in ipairs(attackArea) do
+				if manager:getCharacterByLocation(tile) then
+					targets[#targets + 1] = target
+					break
+				end
+			end
+		until true
+	end
+	return targets
+end
+
+function Skill:getPossibleTargets( manager )
+	local possibleTargets = {}
+	for i,point in ipairs(PathFinder) do
+		local targets = self:getAvailableTargets(point, manager)
+		for i,target in ipairs(targets) do
+			if not table.contains(possibleTargets, target) then
+				possibleTargets[#possibleTargets + 1] = target
+			end
+		end
+	end
+	return possibleTargets
+end
+
+function Skill:getBestTarget( center )
+	local bestTarget = findMax(self:getTargets2Num(center, HeroManager))
+	return bestTarget
+end
 
 -- private
 
@@ -60,86 +181,6 @@ local function checkSkill( hero, skill, character )
 end
 
 
-
--- public
-
----
---
-function Skill.new( o )
-	assert(type(o) == "table", "prototype must be a table")
-	setmetatable(o, {__index = Skill})
-
-	o.effect2Self = o.effect2Self or nil
-	o.effect2Target = o.effect2Target or nil
-	o.range = o.range or {{x = 0, y = 0}}
-
-	o.currentTimes = o.maxTimes
-	return o
-end
-
----
--- 获得可以攻击的范围(1)
--- @tparam tab center
--- @treturn tab attackArea
-function Skill:getAttackArea( center )
-	local attackArea = {}
-	for i=center.x - self.maxDistance, center.x + self.maxDistance do
-		for j=center.y - self.maxDistance, center.y + self.maxDistance do
-			if  math.abs(i - center.x) + math.abs(j - center.y) <= self.maxDistance and 
-				math.abs(i - center.x) + math.abs(j - center.y) >= self.minDistance and
-			    i >= 0 and i < Consts.COLS and j >= 0 and j < Consts.ROWS 
-			    and Chessboard:tileAt{x = i, y = j}:findComponent(c"Tile"):canPass() then
-			    attackArea[#attackArea + 1] = {x = i, y = j}
-			end
-		end
-	end
-	return attackArea
-end
-
----
--- 获得技能攻击点的范围(2)
--- @tparam tab center
--- @treturn tab range
-function Skill:getRange( center )
-	local range = {}
-	for i,v in ipairs(self.range) do
-		range[#range + 1] = {x = v.x + center.x, y = v.y + center.y}
-	end
-	return range
-end
-
-function Skill:hasEnemy( center )
-	local checked = {}
-	local attackArea = self:getAttackArea(center)
-	for i,target in ipairs(attackArea) do
-		local range = self:getRange(target)
-		for i,tile in ipairs(range) do
-			if checked[tile.x .. " " .. tile.y] == nil 
-				and HeroManager:getCharacterByLocation(tile) then
-				return true
-			end
-			checked[tile.x .. " " .. tile.y] = true
-		end
-	end	
-	return false
-end
-
-function Skill:getBestTarget( center )
-	local target2Num = {}
-	local attackArea = self:getAttackArea(center)
-	for i,target in ipairs(attackArea) do
-		local range = self:getRange(target)
-		target2Num[target] = 0
-		for i,tile in ipairs(range) do
-			if HeroManager:getCharacterByLocation(tile) then
-				target2Num[target] = target2Num[target] + 1
-			end
-		end
-	end
-	local bestTarget = findMax(target2Num)
-	return bestTarget
-end
-
 ---
 -- 技能在某点被触发
 -- @tparam Character hero
@@ -149,19 +190,28 @@ function Skill:trigger( hero, targetTile )
 	-- hero:bindEffect()
 
 	local tile = targetTile
-	local range = self:getRange(tile)
+	local range = self:getAttackArea(tile)
 
 	for i,v in ipairs(range) do
-		local object = 	HeroManager:getCharacterByLocation(v) 
+		local character = 	HeroManager:getCharacterByLocation(v) 
 						or AIManager:getCharacterByLocation(v)
-		local character
-		if object then
-			character = object:findComponent(c"Character")
-		end
 		if checkSkill(hero, self, character) then
 			print(character.properties.currentHP)
-			if self.effect2Target then character:bindEffect(self.effect2Target) end
-			if self.damage then character:handleDamage(self, hero, self.property) end
+			if self.effect2Target 
+			and BaseEffect.checkAvailable(self.effect2Target, character) 
+			then
+
+				local objName = BaseEffect.makeName(self.effect2Target, character)
+				scene:createObjectWithComponent(
+					objName, self.effect2Target.name,
+					table.merge( self.effect2Target, {
+						target = character,
+						source = hero}))
+			end
+
+			if self.damage then 
+				character:handleDamage(self, hero, self.property) 
+			end
 			print(character.properties.currentHP)
 		end
 	end

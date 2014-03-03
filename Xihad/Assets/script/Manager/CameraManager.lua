@@ -15,14 +15,15 @@ function CameraManager:createCamera( name )
 	camera:appendComponent(c"ForeverMoveBy")
 	camera:appendComponent(c"CameraMoveBy")
 	camera:appendComponent(c"CameraFollow")
+	camera:appendComponent(c"CameraRotate")
 	return camera
 end
 
 function CameraManager:init(  )
 	local camera = self:createCamera("mainCamera")
 	local ccom = camera:findComponent(c"Camera")
-	ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
-	camera:concatTranslate(ccom:getTarget() + self.shift)
+	-- ccom:setTarget(math3d.vector(Consts.COLS * Consts.TILE_WIDTH / 2, 0, Consts.ROWS * Consts.TILE_HEIGHT / 2))
+	-- camera:concatTranslate(ccom:getTarget() + self.shift)
 	self.state = "low"
 	-- ccom:setUpVector(math3d.vector(0, 0, 1))
 	ccom:setUpVector(math3d.vector(0, 1, 0))
@@ -49,23 +50,30 @@ function CameraManager:onMouseEvent( e )
 	self:adjustHeight(e.wheelDelta)
 end
 
+local backAction = {}
 function CameraManager:onKeyUp( e )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	local ccom = camera:findComponent(c"Camera")
+	local rotate = camera:findComponent(c"CameraRotate")
 
-	-- if e.key == "UP" then
-	-- 	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
-	-- 	move:moveToCharacter(scene:findObject(c"1"))
-	-- elseif e.key == "DOWN" then
-	-- 	move:runAction(backAction)
+
+	local HeroManager = require "HeroManager"
+	if e.key == "UP" then
+		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+		move:moveToCharacter(HeroManager.currentCharacter, function (  )
+			rotate:start(math3d.vector(0, 1, 0))
+		end)
+	elseif e.key == "DOWN" then
+		rotate:stop()
+		move:runAction(backAction)
 	-- elseif e.key == "Z" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
 	-- elseif e.key == "X" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
 	-- elseif e.key == "C" then
 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
-	-- end
+	end
 	-- print(ccom:getUpVector():xyz())
 end
 
@@ -97,7 +105,6 @@ function CameraManager:move2Character( characterObject )
 	self:move2vector( characterObject:getTranslate() )
 end
 
-local backAction = {}
 function CameraManager:move2Battle( characterObject )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
@@ -109,7 +116,7 @@ function CameraManager:move2Battle( characterObject )
 	runAsyncFunc(move.runAction, move, action)
 end
 
-function CameraManager:back2Normal( characterObject )
+function CameraManager:back2Normal(  )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	runAsyncFunc(move.runAction, move, backAction)

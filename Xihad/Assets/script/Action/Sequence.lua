@@ -2,9 +2,6 @@ Sequence = {
 	
 }
 
-package.path = package.path .. ";../?.lua"
-require "LuaUtils"
-
 function Sequence.new( o )
 	o = o or {}
 	setmetatable(o, {__index = Sequence})

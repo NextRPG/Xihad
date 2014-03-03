@@ -1,33 +1,40 @@
-require "Effect.BaseEffect"
+local BaseEffect = require "BaseEffect"
 
-BuffEffect = BaseEffect:new()
+local BuffEffect = {
 
-package.path = package.path .. ";../?.lua"
-require "Consts"
+}
 
-function BuffEffect:new( o )
-	o = o or {}
-	setmetatable(o, {__index = self})
-
-	o.buffs = o.buffs or {}
+function BuffEffect.new( o, object )
+	inherit(o, BuffEffect, BaseEffect)
+	o:init( object )
 
 	return o
 end
 
-function BuffEffect:bind( target )
-	for k,equation in pairs(target.properties) do
-		equation:addPower(self.buffs[k].power)
-		equation:addFixed(self.buffs[k].fixed)
+function BuffEffect:onStart(  )
+	for k,equation in pairs(self.target.properties) do
+		if self[k .. "Power"] ~= nil then
+			equation:addPower(self[k .. "Power"])
+		end
+		if self[k .. "Fixed"] ~= nil then
+			equation:addFixed(self[k .. "Fixed"])
+		end
 	end
 end
 
-function BuffEffect:roundUpdate( target )
-	self:checkUpdate( target )
+function BuffEffect:roundUpdate( currentTeam )
+	self:checkUpdate( currentTeam ) 
 end
 
-function BuffEffect:unbind( target )
-	for k,equation in pairs(target.properties) do
-		equation:addPower(self.buffs[k].power)
-		equation:addFixed(self.buffs[k].fixed)
+function BuffEffect:onStop(  )
+	for k,equation in pairs(self.target.properties) do
+		if self[k .. "Power"] ~= nil then
+			equation:reducePower(self[k .. "Power"])
+		end
+		if self[k .. "Fixed"] ~= nil then
+			equation:reduceFixed(self[k .. "Fixed"])
+		end
 	end
 end
+
+return BuffEffect

@@ -6,22 +6,10 @@
 -- @copyright NextRPG
 local Chessboard = require "Chessboard"
 local PathFinder = require "PathFinder"
+local AIManager = require "AIManager"
+local HeroManager = require "HeroManager"
 
 local GoalFinder = PathFinder.new{}
-
-function hash( tile )
-	assert(tile.x)
-	return tile.x .. " " .. tile.y
-end
-
-function inbound( x, y )
-	return x >= 0  and x < Consts.COLS and y >= 0 and y < Consts.ROWS 
-end
-
--- 这种遍历查找重复的方法没有哈希表的方法快，但是也有好处(其实也没什么好处)
-function findTile( location )
-	return self[hash(location)]
-end
 
 local function findMin( list, scores )
 	local point, minScore = {}, 100000
@@ -35,12 +23,16 @@ end
 
 local fakeMaxAP = 100000
 local directions = Consts.directions
-function GoalFinder:Astar( start, goal )
+function GoalFinder:Astar( start, goal, maxAP, predicate )
 
 	assert(start) assert(goal)
-	self:cleanUp()
-	start.leftAP = fakeMaxAP -- fake
+	-- print(type(self.data[hash{x = 6, y = 2}]))
+	-- self:cleanUp()
+	self.data = {}
+	-- print(type(self.data[hash{x = 6, y = 2}]))
 	self.start = start 
+
+	start.leftAP = fakeMaxAP -- fake
 	local openSet, g_score, h_score, f_score  = {}, {}, {}, {}
 	openSet[hash(start)] = start
 
@@ -51,7 +43,7 @@ function GoalFinder:Astar( start, goal )
 	while next(openSet) ~= nil do
 		local currentPoint = findMin(openSet, f_score)
 		openSet[hash(currentPoint)] = nil
-		self[hash(currentPoint)] = currentPoint
+		self.data[hash(currentPoint)] = currentPoint
 		if hash(currentPoint) == hash(goal) then
 			return true
 		end
@@ -59,43 +51,74 @@ function GoalFinder:Astar( start, goal )
 		for k,v in pairs(directions) do
 
 			repeat 
-			local tile = Chessboard:tileAt(currentPoint):findComponent(c"Tile")
+			local tile = Chessboard:tileAt(currentPoint)
 			local APcost = tile:getAPCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
-			if self[hash(point)] ~= nil or not inbound(point.x, point.y) or not Chessboard:tileAt(point):findComponent(c"Tile"):canPass() then
+
+			if self.data[hash(point)] ~= nil or not inbound(point)
+			 or not Chessboard:tileAt(point):canPass() 
+			 or (HeroManager:getCharacterByLocation(point) and not math.p_same(point, goal))
+			 or (predicate and predicate(currentPoint, point)) 
+			 then
 				break
 			end
-
+			
 
 			local tentative_g_score = g_score[hash(currentPoint)] + 1
 
 			if openSet[hash(point)] == nil or tentative_g_score < g_score[hash(point)] then
+				
 				openSet[hash(point)] = point
 				g_score[hash(point)] = tentative_g_score
 				h_score[hash(point)] = math.abs(goal.y - point.y) + math.abs(goal.x - point.x)
 			 	f_score[hash(point)] = h_score[hash(point)] + g_score[hash(point)]
 			end
 			until true
-
 		end
-
 	end
-	error("not a connected graph")
+	return false
 end
 
-function GoalFinder:getCostAP( start, goal )
-	self:Astar(start, goal)
-	return self[hash(goal)].leftAP
+function GoalFinder:getCostAP( start, goal, maxAP )
+	if self:Astar(start, goal, maxAP) then
+		return self.data[hash(goal)].leftAP
+	else
+		return "MAX"
+	end
 end
 
-function GoalFinder:getTargetTile( start, goal, maxAP )
-	self:Astar(start, goal)
-	local tile = self[hash(goal)]
+function GoalFinder:findPrevious( start, goal, maxAP)
+	local tile = self.data[hash(goal)]
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
 		tile = tile.prev
 	end
+	while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
+		tile = tile.prev
+	end
 	return tile.prev
+end
+
+function GoalFinder:getTargetTile( start, goal, maxAP )
+	if	self:Astar(start, goal, maxAP, 
+		function ( currentPoint, point ) 
+			return AIManager:getCharacterByLocation( currentPoint ) and math.p_same(point, goal)
+		end) then
+		return self:findPrevious(start, goal, maxAP)
+	else
+		self:Astar(start, goal, maxAP)
+		return self:findPrevious(start, goal, maxAP)
+	end
+end
+
+function GoalFinder:cleanUp(  )
+	-- 一个教训，迭代器返回的是值而不是引用
+	for k,v in pairs(self) do
+		if (type(v) == "table") then
+			self[k] = nil
+			print(k, type(self[k]))
+		end
+	end
 end
 
 return GoalFinder
