@@ -28,10 +28,12 @@ function BaseEffect.checkAvailable( newEffect, target )
 		oldEffect = oldEffect:findComponent(c(newEffect.name))
 		for k,v in pairs(newEffect) do
 			if type(v) == "number" then
-				print(k)
-				oldEffect[k] = math.max(oldEffect[k], newEffect[k])
+				if oldEffect.onStop then oldEffect:onStop() end
+				oldEffect[k] = oldEffect[k] and math.max(oldEffect[k], newEffect[k]) or newEffect[k]
+				if oldEffect.onStart then oldEffect:onStart() end
 			end
 		end
+		oldEffect.changed = true
 		return false
 	else
 		return true

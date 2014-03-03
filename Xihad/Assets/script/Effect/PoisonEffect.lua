@@ -18,7 +18,6 @@ end
 
 
 function PoisonEffect:roundUpdate( currentTeam )
-	print("haha")
 	if self:checkUpdate( currentTeam ) then
 		print("doing PoisonEffect at " .. self.rounds)
 		self.target:handleDamage(self, self.source, "M")
