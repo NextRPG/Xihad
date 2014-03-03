@@ -40,8 +40,8 @@ loadSkill{
 	description = "将怒龙之力集中于拳头猛击对方",
 	animation = "overhead attack",
 	effect2Target = {
-		name = "WeakenEffect",
-		physicalAttackPower = 0.1
+		name = "SleepEffect",
+		rounds = 2
 	}
 }
 

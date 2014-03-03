@@ -40,10 +40,6 @@ function BaseEffect.checkAvailable( newEffect, target )
 	end
 end
 
-function BaseEffect.checkEffect( hero, effect, character )
-	
-end
-
 function BaseEffect.makeName( effect, target )
 	return effect.name .. target.name
 end

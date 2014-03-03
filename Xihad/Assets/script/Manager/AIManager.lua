@@ -43,8 +43,12 @@ end
 function AIManager:runActors(  )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local actor = characterObject:findComponent(c"Actor")
-		actor:run(coroutine.running())
-		coroutine.yield()
+		local character = characterObject:findComponent(c"Character")
+		if not character.states.TURNOVER then
+			actor:run(coroutine.running())
+			coroutine.yield()
+			character.states.TURNOVER = true
+		end
 	end
 end
 
