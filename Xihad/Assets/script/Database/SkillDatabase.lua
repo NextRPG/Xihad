@@ -40,9 +40,8 @@ loadSkill{
 	description = "将怒龙之力集中于拳头猛击对方",
 	animation = "overhead attack",
 	effect2Target = {
-		name = "BuffEffect",
-		physicalAttackPower = 0.1,
-		rounds = 4
+		name = "WeakenEffect",
+		physicalAttackPower = 0.1
 	}
 }
 
@@ -50,8 +49,8 @@ loadSkill{
 	id = 2,
 	name  = "霹雳狂龙",
 	maxtimes = 10,
-	minDistance = 0,
-	maxDistance = 0,
+	minDistance = 2,
+	maxDistance = 3,
 	rangeTable = {
 			{0, 1, 0},
 			{1, 2, 1},
@@ -73,11 +72,6 @@ loadSkill{
 	property = "N",
 	description = "就是普通的攻击而已",
 	animation = "punch and swipe sword",
-	effect2Target = {
-		name = "BuffEffect",
-		physicalAttackFixed = 0.2,
-		rounds = 4
-	}
 }
 
 return SkillDatabase

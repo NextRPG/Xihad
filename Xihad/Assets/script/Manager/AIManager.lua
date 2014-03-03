@@ -22,7 +22,7 @@ function AIManager:init( AIs )
 				getExp = 0,
 				
 				name = "Tom" .. i,
-				skills = { 1, 3 },
+				skills = { 1, 2, 3 },
 
 				properties = {
 					physicalAttack = 5,

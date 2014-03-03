@@ -1,3 +1,9 @@
+--- 
+-- 造成对我方的增益效果
+-- @module BuffEffect
+-- @author wangxuanyi
+-- @license MIT
+-- @copyright NextRPG
 local BaseEffect = require "BaseEffect"
 
 local BuffEffect = {
