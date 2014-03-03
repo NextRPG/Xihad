@@ -1,7 +1,9 @@
+#include <luaT/luaT.h>
 #include "IrrlichtParticleSystems.h"
 #include "CWrappedMeshInitializer.h"
+#include "CWrappedAnimatedMeshInitializer.h"
 #include "IParticleSystemScriptFactory.h"
-#include <luaT/luaT.h>
+#include "IParticleSystemLoaderEnv.h"
 
 using namespace irr;
 using namespace scene;
@@ -15,6 +17,7 @@ luaT_defMetaData(IParticleDirectionInitializer, false);
 
 luaT_defMetaData(IParticleGeometricInitializer, true);
 luaT_defMetaData(CWrappedMeshInitializer, false);
+luaT_defMetaData(CWrappedAnimatedMeshInitializer, false);
 luaT_defMetaData(IParticleBoxInitializer, false);
 luaT_defMetaData(IParticleCylinderInitializer, false);
 luaT_defMetaData(IParticleRingInitializer, false);
@@ -35,3 +38,6 @@ luaT_defMetaData(IParticlePointRenderer, false);
 
 luaT_defMetaData(IParticleSystemSceneNode, false);
 luaT_defMetaData(IParticleSystemScriptFactory, false);
+luaT_defMetaData(IParticleSystemLoaderEnv, false);
+luaT_defMetaData(IMesh, false);
+luaT_defMetaData(ISceneNode, true);

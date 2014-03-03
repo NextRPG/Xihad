@@ -16,7 +16,13 @@ local function createIniter(f)
 	return f:initer({ bi, xi })
 end
 
-return function(pnode, f)
+return function(pnode, f, env)
+----------------------------------------------
+-- locate pnode
+	local tar = env:getNode("@target")
+	env:setPosition(pnode, env:getPosition(tar) + env:getAABB(tar):center())
+	pnode:setParticlesAreGlobal(false)
+
 ----------------------------------------------
 -- + emitter
 	local e = f:emitter()

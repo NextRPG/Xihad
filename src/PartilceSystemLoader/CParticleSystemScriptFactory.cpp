@@ -1,5 +1,4 @@
 #include "CParticleSystemScriptFactory.h"
-#include "CWrappedIniterStackPusherFactory.h"
 #include "CppBase/StdMap.h"
 #include "IStackPusherFactory.h"
 #include "IrrDelegateStackPusherFactory.h"
@@ -8,6 +7,9 @@
 #include <irrlicht/IParticleMeshInitializer.h>
 #include <irrlicht/IParticleAnimatedMeshInitializer.h>
 #include <LuaT/type_checker.h>
+#include "CWrappedMeshInitializer.h"
+#include "CWrappedAnimatedMeshInitializer.h"
+#include "CWrappedIniterStackPusherFactory.h"
 
 using namespace irr::scene;
 namespace xihad { namespace particle
@@ -77,13 +79,13 @@ namespace xihad { namespace particle
 #define NEW_DELEGATE(TYPE_NAME, f) \
 	NEW_DERIVE_DELEGATE(TYPE_NAME, TYPE_NAME, f)
 
-#define WRAPPED_DELEGATE(TYPE_NAME)	\
+#define WRAPPED_DELEGATE(WRAP_T, TYPE_NAME)	\
 	CWrappedIniterStackPusherFactory<	\
-		IParticle##TYPE_NAME,		\
+		WRAP_T, IParticle##TYPE_NAME,		\
 		&IParticleSystemFactory::create##TYPE_NAME>
 
-#define NEW_WRAPPED_DELEGATE(TYPE_NAME, f)	\
-	irrptr<WRAPPED_DELEGATE(TYPE_NAME)>(new WRAPPED_DELEGATE(TYPE_NAME)(f), false)
+#define NEW_WRAPPED_DELEGATE(WRAP_T, TYPE_NAME, f)	\
+	irrptr<WRAPPED_DELEGATE(WRAP_T, TYPE_NAME)>(new WRAPPED_DELEGATE(WRAP_T, TYPE_NAME)(f), false)
 
 	IParticleSystemScriptFactory* CParticleSystemScriptFactory::createDefault(
 		IParticleSystemFactory* f)
@@ -97,8 +99,8 @@ namespace xihad { namespace particle
 		pssf->Initers["Sphere"]		 = NEW_DELEGATE(SphereInitializer, f);
 		pssf->Initers["Cylinder"]	 = NEW_DELEGATE(CylinderInitializer, f);
 		pssf->Initers["Ring"]		 = NEW_DELEGATE(RingInitializer, f);
-		pssf->Initers["Mesh"]		 = NEW_WRAPPED_DELEGATE(MeshInitializer, f);
-		pssf->Initers["AnimatedMesh"]= NEW_WRAPPED_DELEGATE(AnimatedMeshInitializer, f);
+		pssf->Initers["Mesh"]		 = NEW_WRAPPED_DELEGATE(CWrappedMeshInitializer, MeshInitializer, f);
+		pssf->Initers["AnimatedMesh"]= NEW_WRAPPED_DELEGATE(CWrappedAnimatedMeshInitializer, AnimatedMeshInitializer, f);
 
 		pssf->Affectors["Attraction"]= NEW_DELEGATE(AttractionAffector, f);
 		pssf->Affectors["FadeOut"]	 = NEW_DELEGATE(FadeOutAffector, f);

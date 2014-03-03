@@ -32,6 +32,7 @@
 #include <iostream>
 #include "luaopen_ParticleSystem.h"
 #include "CParticleSystemScriptFactory.h"
+#include "CParticleEditorEnv.h"
 
 using namespace std;
 using namespace irr;
@@ -79,11 +80,12 @@ namespace xihad { namespace particle
 				return;
 			}
 
-			pnode = smgr->addParticleSystemSceneNode(65535, parent);
+			pnode = smgr->addParticleSystemSceneNode(65535);
 			luaT::push<decltype(pnode.get())>(L, pnode.get());
 			luaT::push<decltype(factory)>(L, factory);
+			luaT::push<decltype(env.get())>(L, env.get());
 
-			if (lua_pcall(L, 2, 0, 0) != 0)
+			if (lua_pcall(L, 3, 0, 0) != 0)
 			{
 				cerr << lua_tostring(L, -1) << endl;
 				removeNode();
@@ -93,11 +95,22 @@ namespace xihad { namespace particle
 		irrptr<scene::IParticleSystemSceneNode> pnode;
 		const char* scriptPath;
 		scene::ISceneManager* smgr;
-		ISceneNode* parent;
+		irrptr<IParticleSystemLoaderEnv> env;
 		IParticleSystemScriptFactory* factory;
 		lua_State* L;
 	};
 }}
+
+static ISceneNode* addNinja(ISceneManager* smgr, core::vector3df pos)
+{
+	IAnimatedMeshSceneNode* ninja = smgr->addAnimatedMeshSceneNode(smgr->getMesh("../Xihad/Assets/model/ninja.b3d"));
+	ninja->setFrameLoop(182, 204);
+	ninja->setMaterialFlag(video::EMF_LIGHTING, false);
+	ninja->setAnimationSpeed(12);
+	ninja->setPosition(pos);
+
+	return ninja;
+}
 
 int main(int argc, char** argv)
 {
@@ -112,16 +125,15 @@ int main(int argc, char** argv)
 	luaopen_AllParticleSystem(receiver->L);
 
 	receiver->smgr->addSkyDomeSceneNode(device->getVideoDriver()->getTexture("../Xihad/Assets/gfx/skydome.jpg"));
-	IAnimatedMeshSceneNode* ninja= 
-		receiver->smgr->addAnimatedMeshSceneNode(receiver->smgr->getMesh("../Xihad/Assets/model/ninja.b3d"));
-	ninja->setFrameLoop(182, 204);
-	ninja->setMaterialFlag(video::EMF_LIGHTING, false);
-	ninja->setAnimationSpeed(12);
-	ninja->setRotation(core::vector3df(0, 180, 0));
-	receiver->parent = ninja;
+	ISceneNode* source = addNinja(receiver->smgr, core::vector3df(-10, 0, 0));
+	source->setRotation(core::vector3df(0, 90, 0));
+	ISceneNode* target = addNinja(receiver->smgr, core::vector3df(10, 0, 0));
+	target->setRotation(core::vector3df(0, -90, 0));
+
+	receiver->env = irrptr<IParticleSystemLoaderEnv>(new CParticleEditorEnv(source, target), false);
 
 	receiver->createNewParticleSystem();
-	receiver->smgr->addCameraSceneNode(0, core::vector3df(0,5,-20));
+	receiver->smgr->addCameraSceneNode(0, core::vector3df(-12,12,-12), core::vector3df(5,0, 0));
 	device->setEventReceiver(receiver);
 	while (device->run())
 	{

@@ -101,7 +101,8 @@ public:
 	Please note that an affector is not necessary for the particle system to
 	work.
 	\param affector: New affector. */
-	virtual void addAffector(IParticleAffector* affector, float lifeBgn = 0.f, float lifeEnd = 1.f) = 0;
+	virtual void addAffector(IParticleAffector* affector, 
+		f32 ratioBegin = 0.f, f32 ratioEnd = 1.f, f32 globalBgn = 0.f, f32 globalEnd = 16000000.f) = 0;
 
 	virtual bool removeAffector(IParticleAffector* affector) = 0;
 

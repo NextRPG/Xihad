@@ -1,14 +1,13 @@
 #pragma once
 #include "TplStackPusherFactory.h"
-#include "CWrappedMeshInitializer.h"
 #include "IParticleSystemScriptFactory.h"
 #include <irrlicht/smartptr.h>
 
 namespace xihad { namespace particle
 {
-	template <typename T, T* (irr::scene::IParticleSystemFactory::* method)()>
+	template <typename WrapT, typename T, T* (irr::scene::IParticleSystemFactory::* method)()>
 	class CWrappedIniterStackPusherFactory : 
-		public TplStackPusherFactory<CWrappedMeshInitializer>
+		public TplStackPusherFactory<WrapT>
 	{
 		typedef irr::scene::IParticleSystemFactory DelegateFactory;
 
@@ -16,10 +15,10 @@ namespace xihad { namespace particle
 		CWrappedIniterStackPusherFactory(DelegateFactory* f) : mFactory(f) {}
 
 	protected:
-		virtual CWrappedMeshInitializer* createProduct() override
+		virtual WrapT* createProduct() override
 		{
 			T* product = (mFactory.get()->*method)();
-			CWrappedMeshInitializer* initer = new CWrappedMeshInitializer(product);
+			WrapT* initer = new WrapT(product);
 			product->drop();
 			return initer;
 		}

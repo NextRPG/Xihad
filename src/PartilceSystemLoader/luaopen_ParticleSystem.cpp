@@ -1,8 +1,6 @@
 /**
  * TODO 
- * 1. 测试 AnimatedMesh
- * 2. 设置 AnimatedMesh 和 Mesh 的参数
- * 3. Affector 绝对生命期
+ * 1. Affector 绝对生命期
  */
 #include "luaopen_ParticleSystem.h"
 #include "IrrlichtParticleSystems.h"
@@ -13,6 +11,8 @@
 #include <luaT/luaT.h>
 #include <irrlicht/ISceneManager.h>
 #include <CppBase/StringUtil.h>
+#include "IParticleSystemLoaderEnv.h"
+#include "CWrappedAnimatedMeshInitializer.h"
 
 using namespace irr;
 using namespace scene;
@@ -59,13 +59,21 @@ namespace xihad { namespace particle
 		if (!a)
 			luaL_typerror(L, 2, "Got null affector!");
 
-		if (lua_gettop(L) < 3)
-			pnode->addAffector(a);
-		else if (lua_gettop(L) < 4)
-			pnode->addAffector(a, (f32)lua_tonumber(L, 3));
-		else
-			pnode->addAffector(a, (f32)lua_tonumber(L, 3), (f32)lua_tonumber(L, 4));
+		f32 ratioBegin = 0.f, ratioEnd = 1.f, globalBgn = 0.f, globalEnd = 16000000.f;
+		if (lua_gettop(L) >= 3)
+			ratioBegin = (f32)lua_tonumber(L, 3);
 
+		if (lua_gettop(L) >= 4)
+			ratioEnd = (f32)lua_tonumber(L, 4);
+
+		if (lua_gettop(L) >= 5)
+			globalBgn = (f32)lua_tonumber(L, 5);
+
+		if (lua_gettop(L) >= 6)
+			globalEnd = (f32)lua_tonumber(L, 6);
+
+
+		pnode->addAffector(a, ratioBegin, ratioEnd, globalBgn, globalEnd);
 		a->drop();
 		return 0;
 	}
@@ -101,6 +109,8 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleSystemNode( lua_State* L )
 	{
+		MetatableFactory<ISceneNode>::create(L, 0);
+
 		luaT_defRegsBgn(pnode)
 			luaT_mnamedfunc(IParticleSystemSceneNode, setParticlesAreGlobal),
 			luaT_mnamedfunc(IParticleSystemSceneNode, setMaxParticleCount),
@@ -110,7 +120,16 @@ namespace xihad { namespace particle
 			luaT_cnamedfunc(setRendererTexture),
 			luaT_lnamedfunc(newChild),
 		luaT_defRegsEnd
-		MetatableFactory<IParticleSystemSceneNode>::create(L, pnode);
+		MetatableFactory<IParticleSystemSceneNode, ISceneNode>::create(L, pnode);
+
+		luaT_defRegsBgn(env)
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, setPosition),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, getPosition),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, getAABB),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, getMesh),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, getNode),
+		luaT_defRegsEnd
+		MetatableFactory<IParticleSystemLoaderEnv>::create(L, env);
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -308,9 +327,7 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleIniter( lua_State* L )
 	{
-		luaT_defRegsBgn(initer)
-		luaT_defRegsEnd
-		MetatableFactory<IParticleInitializer>::create(L, initer);
+		MetatableFactory<IParticleInitializer>::create(L, 0);
 
 		luaT_defRegsBgn(basic_initer)
 			luaT_cnamedfunc(setMinColor),
@@ -342,16 +359,24 @@ namespace xihad { namespace particle
 		luaT_defRegsEnd
 		MetatableFactory<IParticleGeometricInitializer, IParticleInitializer>::create(L, geo_initer);
 
-		// TODO SET MESH FROM PARENT OR SELF
 		luaT_defRegsBgn(wmesh_initer)
 			luaT_mnamedfunc(CWrappedMeshInitializer, setMinNormalDirectionSize),
 			luaT_mnamedfunc(CWrappedMeshInitializer, setMaxNormalDirectionSize),
 			setRangeFunc(NormalDirectionSize),
 			luaT_mnamedfunc(CWrappedMeshInitializer, setOutlineOnly),
 			luaT_mnamedfunc(CWrappedMeshInitializer, setMesh),
-			luaT_mnamedfunc(CWrappedMeshInitializer, setAnimatedMesh),
 		luaT_defRegsEnd
 		MetatableFactory<CWrappedMeshInitializer, IParticleInitializer>::create(L, wmesh_initer);
+
+		luaT_defRegsBgn(wamesh_initer)
+			luaT_mnamedfunc(CWrappedAnimatedMeshInitializer, setMinNormalDirectionSize),
+			luaT_mnamedfunc(CWrappedAnimatedMeshInitializer, setMaxNormalDirectionSize),
+			setRangeFunc(NormalDirectionSize),
+			luaT_mnamedfunc(CWrappedAnimatedMeshInitializer, setOutlineOnly),
+			luaT_mnamedfunc(CWrappedAnimatedMeshInitializer, setAnimatedNode),
+		luaT_defRegsEnd
+		MetatableFactory<CWrappedAnimatedMeshInitializer, IParticleInitializer>::create(L, wamesh_initer);
+
 
 		luaT_defRegsBgn(box_initer)
 			luaT_mnamedfunc(IParticleBoxInitializer, setBox),
@@ -378,9 +403,7 @@ namespace xihad { namespace particle
 		luaT_defRegsEnd
 		MetatableFactory<IParticleRingInitializer, IParticleGeometricInitializer>::create(L, ring_initer);
 
-		luaT_defRegsBgn(comp_initer)
-		luaT_defRegsEnd
-		MetatableFactory<IParticleCompositeInitializer, IParticleInitializer>::create(L, comp_initer);
+		MetatableFactory<IParticleCompositeInitializer, IParticleInitializer>::create(L, 0);
 	}
 
 
@@ -423,9 +446,7 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleAffector( lua_State* L )
 	{
-		luaT_defRegsBgn(affector)
-		luaT_defRegsEnd
-		MetatableFactory<IParticleAffector>::create(L, affector);
+		MetatableFactory<IParticleAffector>::create(L, 0);
 
 		luaT_defRegsBgn(att_affector)
 			luaT_mnamedfunc(IParticleAttractionAffector, setPoint),

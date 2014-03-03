@@ -1,13 +1,18 @@
 #pragma once
-#include <irrlicht/IParticleGeometricInitializer.h>
+#include <irrlicht/IParticleMeshInitializer.h>
 #include <irrlicht/smartptr.h>
+
+namespace irr { namespace scene
+{
+	class IMesh;
+}}
 
 namespace xihad { namespace	 particle
 {
 	class CWrappedMeshInitializer : public irr::scene::IParticleInitializer
 	{
 	public:
-		CWrappedMeshInitializer(irr::scene::IParticleGeometricInitializer* initer) :
+		CWrappedMeshInitializer(irr::scene::IParticleMeshInitializer* initer) :
 			MeshIniter(initer)
 		{
 		}
@@ -20,12 +25,10 @@ namespace xihad { namespace	 particle
 
 		void setOutlineOnly(bool only) { MeshIniter->setOutlineOnly(only); }
 
-		void setMesh(const char* meshDesc);
-		
-		void setAnimatedMesh(const char* animatedMeshDesc);
+		void setMesh(irr::scene::IMesh*);
 		
 	private:
-		irrptr<irr::scene::IParticleGeometricInitializer> MeshIniter;
+		irrptr<irr::scene::IParticleMeshInitializer> MeshIniter;
 	};
 }}
 

@@ -33,6 +33,12 @@
     <ClCompile Include="..\src\PartilceSystemLoader\ParticleEditor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PartilceSystemLoader\CParticleEditorEnv.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\PartilceSystemLoader\IStackPusher.h">
@@ -72,6 +78,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PartilceSystemLoader\DefaultStackPusherFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PartilceSystemLoader\IParticleSystemLoaderEnv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PartilceSystemLoader\CParticleEditorEnv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -68,15 +68,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CParticleEditorEnv.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\particle_metadata.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\ParticleEditor.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CWrappedMeshInitializer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\PartilceSystemLoader\CParticleEditorEnv.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.h" />
     <ClInclude Include="..\src\PartilceSystemLoader\CWrappedIniterStackPusherFactory.h" />
     <ClInclude Include="..\src\PartilceSystemLoader\DefaultStackPusherFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IParticleSystemLoaderEnv.h" />
     <ClInclude Include="..\src\PartilceSystemLoader\IrrlichtParticleSystems.h" />
     <ClInclude Include="..\src\PartilceSystemLoader\CTplStackPusher.h" />
     <ClInclude Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.h" />

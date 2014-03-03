@@ -19,6 +19,8 @@
 #include <boost\property_tree\json_parser.hpp>
 #include "ParticleSystemComponent.h"
 #include "CEGuiHandle.h"
+#include <unordered_map>
+#include <luaT\luaT.h>
 
 using namespace xihad::ngn;
 using namespace irr;
@@ -38,7 +40,8 @@ namespace xihad { namespace render3d
 		float seconds;
 		bool firstUpdate;
 		
-		std::list<RenderComponent*> renderComponents;
+		list<RenderComponent*> renderComponents;
+		unordered_map<string, luaT::LuaRef> particleSystemCreator;
 	};
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
@@ -174,26 +177,16 @@ namespace xihad { namespace render3d
 		}
 		else if (compName == "ParticleSystem")
 		{
-			// 			ISceneManager* sm = smgr.get();
-			// 
-			// 			if (const char* path = param.getString("effectFile"))
-			// 			{
-			// 				sm->loadScene(path, nullptr);
-			// 				IParticleSystemSceneNode* particleSystem = nullptr;
-			// 				if (particleSystem = preader.getCreatedParticleSystem())
-			// 				{
-			// 					ret = new ParticleSystemComponent(
-			// 								compName, obj, particleSystem);
-			// 				}
-			// 				else
-			// 				{
-			// 					cout << "No particle system created" << endl;
-			// 				}
-			// 			}
-			// 			else
-			// 			{
-			// 				cout << "You mush specify the effectFile" << endl;
-			// 			}
+// 			if (const char* path = param.getString("path"))
+// 			{
+// 				luaT::LuaRef func;
+// 				if (auto got = StdMap::findValuePtr(mImpl->particleSystemCreator, string(path)))
+// 					func = *got;
+// 				else 
+// 				{
+// 					luaL_dofile(L, path);
+// 				}
+// 			}
 		}
 
 		return ret;
