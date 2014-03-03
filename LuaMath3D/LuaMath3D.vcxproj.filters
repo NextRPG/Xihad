@@ -35,9 +35,6 @@
     <ClCompile Include="LuaMath3D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="luaopen_vector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -54,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="luaopen_matrix.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="math3d_metadata.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

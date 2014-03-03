@@ -5,8 +5,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(matrix4,	false);
-
 namespace xihad { namespace script
 {
 	luaT_static int transform(lua_State* L)

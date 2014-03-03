@@ -15,7 +15,7 @@ namespace xihad
 		lua_State* L = scene->mainThread();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))
 		{
-			cout << "SCRIPT ERR: " << lua_tostring(L, -1) << endl;
+			cerr << "SCRIPT ERR: " << lua_tostring(L, -1) << endl;
 			lua_pop(L, 1);
 			scene->destroy();
 			scene = nullptr;

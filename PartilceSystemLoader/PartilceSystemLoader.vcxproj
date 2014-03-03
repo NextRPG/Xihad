@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}</ProjectGuid>
+    <RootNamespace>PartilceSystemLoader</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../libs;../Debug;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ScriptEngine.lib;xengine.lib;irrlicht.lib;luaT.lib;lua.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CParticleEditorEnv.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\particle_metadata.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\ParticleEditor.cpp" />
+    <ClCompile Include="..\src\PartilceSystemLoader\CWrappedMeshInitializer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\PartilceSystemLoader\CParticleEditorEnv.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CWrappedIniterStackPusherFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\DefaultStackPusherFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IParticleSystemLoaderEnv.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IrrlichtParticleSystems.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CTplStackPusher.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IrrDelegateStackPusherFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IStackPusher.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IParticleSystemScriptFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\IStackPusherFactory.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\CWrappedMeshInitializer.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\RangeSetterFunction.h" />
+    <ClInclude Include="..\src\PartilceSystemLoader\TplStackPusherFactory.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

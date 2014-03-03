@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\BitOperation.h" />
     <ClInclude Include="..\src\CppBase\CLineBreak.hpp" />
+    <ClInclude Include="..\src\CppBase\CStringSplitter.hpp" />
     <ClInclude Include="..\src\CppBase\IteratorPair.h" />
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />

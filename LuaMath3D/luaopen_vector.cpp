@@ -7,8 +7,6 @@
 using namespace luaT;
 using namespace irr::core;
 
-luaT_defMetaData(vector3df, false);
-
 namespace xihad { namespace script
 {
 	static int newVector3(lua_State* L)
