@@ -2,6 +2,9 @@ local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
 local StateMachine = require "StateMachine"
 local SkillManager = require "SkillManager"
+local PathFinder = require "PathFinder"
+local Publisher = require "Publisher"
+
 --- 
 -- 控制战斗流程
 -- @module BattleManager
@@ -9,14 +12,11 @@ local SkillManager = require "SkillManager"
 -- @license MIT
 -- @copyright NextRPG
 
-local PathFinder = require "PathFinder"
+local BattleManager = {}
 
-local BattleManager = {
-	currentState = "showCharacter"
-}
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager1
+	self.manager = manager2
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
@@ -29,8 +29,21 @@ function BattleManager:init( manager1, manager2 )
 	self:addShowSkill()
 	self:addShowTargetRange()
 	global:appendUpdateHandler(self)
+	inherit(self, Publisher)
 
 	stateMachine:setInitial("showNothing")
+end
+
+function BattleManager:AI2Hero( manager1, manager2 )
+	self.manager = manager2
+	print("round AI start")
+	self:changeState("round", self.manager.team)
+	self.manager:roundStart()
+	self.manager:runActors()
+	self.manager = manager1
+	print("round Hero start")
+	self:changeState("round", self.manager.team)
+	self.manager:roundStart()
 end
 
 function BattleManager:addShowNothing( manager1, manager2 )
@@ -52,11 +65,7 @@ function BattleManager:addShowNothing( manager1, manager2 )
 		return self.manager == manager2
 	end, 
 	function (  )
-		self.manager = manager2
-		self.manager:roundStart() 
-		self.manager:runActors()
-		self.manager = manager1
-		self.manager:roundStart()
+		self:AI2Hero(manager1, manager2)
 	end)
 
 end
@@ -89,11 +98,7 @@ function BattleManager:addShowCharacter( manager1, manager2 )
 			return self.manager:checkRoundOver()
 		end, 
 		function (  )
-			self.manager = manager2
-			self.manager:roundStart() 
-			self.manager:runActors()
-			self.manager = manager1
-			self.manager:roundStart()
+			self:AI2Hero(manager1, manager2)
 		end)
 end
 

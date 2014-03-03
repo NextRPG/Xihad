@@ -66,8 +66,11 @@ end
 
 local Tom = Character.new{}
 local John = Character.new{}
-Tom:attachSubscriber("HP", John, John.onHPchanged)
-Tom:changeState("HP", 50)
+-- Tom:attachSubscriber("HP", John, John.onHPchanged)
+-- Tom:changeState("HP", 50)
+for k,v in pairs(Tom) do
+	print(k,v)
+end
 
 -- Tom.subscribers[1] = 5
 -- for k,v in pairs(Tom.subscribers) do

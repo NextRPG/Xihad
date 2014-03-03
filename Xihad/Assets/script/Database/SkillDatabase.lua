@@ -30,20 +30,25 @@ end
 
 loadSkill{
 	id = 1,
-	name = "Å­ÁúÏÖÉí",
+	name = "æ€’é¾™çŽ°èº«",
 	maxtimes = 15,
 	minDistance = 1,
 	maxDistance = 1,
 	-- no need for range
 	damage = 40,
 	property = "P",
-	description = "½«Å­ÁúÖ®Á¦¼¯ÖÐÓÚÈ­Í·ÃÍ»÷¶Ô·½",
-	animation = "overhead attack"
+	description = "å°†æ€’é¾™ä¹‹åŠ›é›†ä¸­äºŽæ‹³å¤´çŒ›å‡»å¯¹æ–¹",
+	animation = "overhead attack",
+	effect2Target = {
+		name = "PoisonEffect",
+		damage = 15,
+		rounds = 4
+	}
 }
 
 loadSkill{
 	id = 2,
-	name  = "Åùö¨¿ñÁú",
+	name  = "éœ¹é›³ç‹‚é¾™",
 	maxtimes = 10,
 	minDistance = 0,
 	maxDistance = 0,
@@ -54,19 +59,19 @@ loadSkill{
 		},
 	damage = 50,
 	property = "P",
-	description = "¹¥»÷ÖÜÎ§µÄµÐÈË",
+	description = "æ”»å‡»å‘¨å›´çš„æ•Œäºº",
 	animation = "swipe and spin sword"
 }
 
 loadSkill{
 	id = 3,
-	name = "Õý³£¹¥»÷",
+	name = "æ­£å¸¸æ”»å‡»",
 	maxtimes = "MAX",
 	minDistance = 1,
 	maxDistance = 1,
 	damage = 10,
 	property = "N",
-	description = "¾ÍÊÇÆÕÍ¨µÄ¹¥»÷¶øÒÑ",
+	description = "å°±æ˜¯æ™®é€šçš„æ”»å‡»è€Œå·²",
 	animation = "punch and swipe sword"
 }
 

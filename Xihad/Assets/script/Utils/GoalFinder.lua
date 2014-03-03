@@ -91,7 +91,6 @@ end
 function GoalFinder:findPrevious( start, goal, maxAP)
 	local tile = self.data[hash(goal)]
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
-		print(tile.prev.leftAP)
 		tile = tile.prev
 	end
 	while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do

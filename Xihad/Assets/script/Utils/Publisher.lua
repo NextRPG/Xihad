@@ -4,7 +4,7 @@
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
-
+require "stringplus"
 local Set = require "Set"
 
 local Publisher = {
@@ -21,14 +21,14 @@ function Publisher:attachSubscriber( key, subscriber, callback )
 		self.subscribers[key] = {}
 
 	end
-	self.subscribers[key][callback] = subscriber 
+	self.subscribers[key][subscriber] = callback 
 end
 
 function Publisher:detachSubscriber( key, subscriber, callback )
 	if self.subscribers[key] == nil then
 		error("the key does not exist")
 	end
-	self.subscribers[key][callback] = nil
+	self.subscribers[key][subscriber] = nil
 end
 
 function Publisher:changeState( key, value )
@@ -39,7 +39,7 @@ function Publisher:changeState( key, value )
 	local arr = string.split(key, ".")
 	ref[arr[#arr]] = value
 	if self.subscribers[key] == nil then return end
-	for callback,subscriber in pairs(self.subscribers[key]) do
+	for subscriber, callback in pairs(self.subscribers[key]) do
 		callback(subscriber, value)
 	end
 end

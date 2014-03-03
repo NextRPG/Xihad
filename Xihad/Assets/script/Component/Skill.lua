@@ -9,6 +9,7 @@ local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
 local AIManager = require "AIManager"
 local PathFinder = require "PathFinder"
+local BaseEffect = require "BaseEffect"
 
 
 ---
@@ -36,33 +37,6 @@ local Skill = {
 	maxDistance = 1
 }
 
--- private
-
-local function checkAttack( hero, character )
-	if character and hero.team ~= character.team then
-		return true
-	end 
-	return false
-end
-
-local function checkHeal( hero, character )
-	if character and hero.team == character.team then
-		return true
-	end
-	return false
-end
-
-local function checkSkill( hero, skill, character )
-	if skill.property == "P" or skill.property == "M" or skill.property == "N" then
-		return checkAttack( hero, character )
-	elseif skill.property == "H" then
-		return checkHeal( hero, character )
-	end
-	error("don't have that kind of skill")
-end
-
-
-
 -- public
 
 ---
@@ -71,8 +45,8 @@ function Skill.new( o )
 	assert(type(o) == "table", "prototype must be a table")
 	setmetatable(o, {__index = Skill})
 
-	o.effect2Self = o.effect2Self or nil
-	o.effect2Target = o.effect2Target or nil
+	-- o.effect2Self = o.effect2Self or nil
+	-- o.effect2Target = o.effect2Target or 
 	o.range = o.range or {{x = 0, y = 0}}
 
 	o.currentTimes = o.maxTimes
@@ -181,6 +155,32 @@ function Skill:getBestTarget( center )
 	return bestTarget
 end
 
+-- private
+
+local function checkAttack( hero, character )
+	if character and hero.team ~= character.team then
+		return true
+	end 
+	return false
+end
+
+local function checkHeal( hero, character )
+	if character and hero.team == character.team then
+		return true
+	end
+	return false
+end
+
+local function checkSkill( hero, skill, character )
+	if skill.property == "P" or skill.property == "M" or skill.property == "N" then
+		return checkAttack( hero, character )
+	elseif skill.property == "H" then
+		return checkHeal( hero, character )
+	end
+	error("don't have that kind of skill")
+end
+
+
 ---
 -- 技能在某点被触发
 -- @tparam Character hero
@@ -197,9 +197,21 @@ function Skill:trigger( hero, targetTile )
 						or AIManager:getCharacterByLocation(v)
 		if checkSkill(hero, self, character) then
 			print(character.properties.currentHP)
-			if self.effect2Target then self.effect2Target:bindEffect(character) end
-			-- if self.effect2Target then character:bindEffect(self.effect2Target) end
-			if self.damage then character:handleDamage(self, hero, self.property) end
+			if self.effect2Target 
+			and BaseEffect.checkAvailable(self.effect2Target, character) 
+			then
+
+				local objName = BaseEffect.makeName(self.effect2Target, character)
+				scene:createObjectWithComponent(
+					objName, self.effect2Target.name,
+					table.merge( self.effect2Target, {
+						target = character,
+						source = hero}))
+			end
+
+			if self.damage then 
+				character:handleDamage(self, hero, self.property) 
+			end
 			print(character.properties.currentHP)
 		end
 	end

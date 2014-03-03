@@ -24,7 +24,7 @@ function HeroManager:init(heros)
 					physicalDefense = 5,
 					magicAttack = 5,
 					magicDefense = 10,  
-					maxAP = 5,			
+					maxAP = 6,			
 					maxHP = 200
 				}
 

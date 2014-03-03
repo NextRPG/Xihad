@@ -59,7 +59,7 @@ function inbound( point )
 end
 
 local function search(t, k, plist )
-	for i=1, plist.n do
+	for i=1, #plist do
 		local v = plist[i][k]
 		if type(v) == "table" then t[k] = table.copy(v) return t[k]
 		elseif v then return v
@@ -68,9 +68,22 @@ local function search(t, k, plist )
 end 
 
 function inherit( self, ... )
+	if getmetatable(self) then
+		arg[#arg + 1] = getmetatable(self) 
+	end
 	setmetatable(self, {__index = function ( t, k )
 		return search(t, k, arg)
 	end})
 	self.__index = self
 	return self
+end
+
+function scene:createObjectWithComponent( name, component, param )
+	local object = scene:createObject(c(name))
+	object:appendComponent(c(component), param)
+end
+
+function scene:createUniqueObjectWithComponent( component, param )
+	local object = scene:createUniqueObject(c(component))
+	object:appendComponent(c(component), param)
 end

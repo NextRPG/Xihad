@@ -65,14 +65,14 @@ function SkillManager:onShowSkills( object )
 	currentCharacter = object
 	local character = currentCharacter:findComponent(c"Character")
 	-- 显示技能
-	print("开始选择技能")
+	-- print("开始选择技能")
 	for i,id in ipairs(character.skills) do
 		if SkillManager:getSkill(id):hasEnemy(character:tile(), character:getEnemyManager()) then
 			print(i,id)
 		end
 	end
-	print("K", "待机")
-	print("选择你想使用的技能")
+	-- print("K", "待机")
+	-- print("选择你想使用的技能")
 end
 
 ---

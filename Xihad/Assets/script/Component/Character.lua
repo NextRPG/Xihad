@@ -163,7 +163,7 @@ end
 
 ---
 -- 处理各种属性的攻击，进行伤害值计算
--- @tparam Skill skill
+-- @tparam Skill skill 不一定是skill，可以是带有damage的能造成伤害的table
 -- @tparam Character attacker 
 -- @string property 
 function Character:handleDamage( skill, attacker, property )

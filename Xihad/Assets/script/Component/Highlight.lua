@@ -17,7 +17,7 @@ local Highlight = {
 
 function Highlight.new( o )
 	o = o or {}
-	setmetatable(o, {__index = Highlight})
+	inherit(o, Highlight)
 
 	o.Stack = Stack.new{}
 
