@@ -1,7 +1,7 @@
 #include "luaopen_all.h"
 #include <Lua/lua.hpp>
 #include "luaopen_string.h"
-#include "luaopen_ManagedUpdateHandler.h"
+#include "luaopen_UpdateHandler.h"
 #include "luaopen_CompositeUpdateHandler.h"
 #include "luaopen_Component.h"
 #include "luaopen_LuaComponent.h"
@@ -43,7 +43,7 @@ namespace xihad { namespace script
 	void luaopen_all( lua_State* L )
 	{
 		CHECKED_OPEN(L, string);
-		CHECKED_OPEN(L, ManagedUpdateHandler);
+		CHECKED_OPEN(L, UpdateHandler);
 		CHECKED_OPEN(L, CompositeUpdateHandler);
 		CHECKED_OPEN(L, Component);
 		CHECKED_OPEN(L, LuaComponent);

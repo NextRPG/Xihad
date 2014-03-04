@@ -12,8 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Xihad\CreateDevice.cpp" />
-    <ClCompile Include="..\src\Xihad\FirstIteration.cpp" />
+    <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp" />
     <ClCompile Include="..\src\Xihad\IrrlichtTest.cpp" />
+    <ClCompile Include="..\src\Xihad\LoadSceneFile.cpp" />
     <ClCompile Include="..\src\Xihad\Main.cpp" />
     <ClCompile Include="..\src\Xihad\SceneCreator.cpp" />
     <ClCompile Include="..\src\Xihad\XihadInitializer.cpp" />

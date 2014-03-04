@@ -1,9 +1,6 @@
 #pragma once
 #include <list>
-#include "ManagedUpdateHandler.h"
-#include "ICompositeUpdateHandler.h"
-#include "Destroyer.h"
-#pragma warning(disable: 4250)
+#include "UpdateHandler.h"
 
 namespace xihad { namespace ngn
 {
@@ -17,47 +14,54 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013年12月13日 14:44:43
 	 */
-	class CompositeUpdateHandler : 
-		public ManagedUpdateHandler, 
-		public virtual ICompositeUpdateHandler,
-		private virtual Destroyer
+	class CompositeUpdateHandler : public UpdateHandler
 	{
-	public:
-		typedef std::list<UpdateHandler*>::iterator iterator;
-		typedef std::list<UpdateHandler*>::const_iterator const_iterator;
+		typedef std::list<UpdateHandler*> Container;
 
-		/// 取得第一个子更新对象
-		iterator begin()
-		{
-			return mUpdateImpls.begin();
-		}
+	public:	// typedefs for iterator
+		typedef Container::iterator iterator;
+		typedef Container::const_iterator const_iterator;
 
-		/// 取得子更新对象的结尾
-		iterator end()
-		{
-			return mUpdateImpls.end();
-		}
+	public:	// list container functions
+		iterator childHandlerBegin() { return mChildHandlerList.begin(); }
+		iterator childHandlerEnd()	 { return mChildHandlerList.end();	}
+		iterator findChildHandler(UpdateHandler*);
 
-		/// 取得第一个子更新对象
-		const_iterator begin() const
-		{
-			return mUpdateImpls.begin();
-		}
+		const_iterator childHandlerBegin() const { return mChildHandlerList.begin(); }
+		const_iterator childHandlerEnd() const	 { return mChildHandlerList.end();	}
+		const_iterator findChildHandler(UpdateHandler*) const;
 
-		/// 取得子更新对象的结尾
-		const_iterator end() const
-		{
-			return mUpdateImpls.end();
-		}
+		iterator eraseChildHandler(const_iterator where) { return mChildHandlerList.erase(where); }
+		size_t getChildHandlerCount() const { return mChildHandlerList.size(); }
 
-		virtual bool containsUpdateHandler(UpdateHandler* handler) const override;
+		/// 判断是否包含对象
+		bool containsChildHandler(UpdateHandler* ) const;
 
-		virtual bool appendUpdateHandler(UpdateHandler* handler) override;
+		/// 附加更新对象
+		/**
+		 * handler 必须是一个非空并且没有被附加到其他 CompositeUpdateHandler 之上，才能够
+		 * 成功附加。
+		 * <p>如果本更新对象已经被 #start() ，那么当新的子对象被成功附加时，该子对象会立即被
+		 * #start() 。
+		 * <p>而如果将已经被 #start() 的对象附加到尚未 #start() 的组合更新对象，那么在组合
+		 * 更新对象未 #start() 之前，该对象不会得到 #update() 的机会
+		 * <p>出于效率问题，不会检查是否被添加过，用户需要自己保证这一点
+		 * 
+		 * @param handler 指定希望被附加的更新对象
+		 * @return true if append
+		 */ 
+		virtual bool appendChildHandler(UpdateHandler*);
 
-		virtual bool removeUpdateHandler(UpdateHandler* handler) override;
-
-	protected:
-		virtual ~CompositeUpdateHandler() { }
+		/// 移除并摧毁子对象
+		/**
+		 * if child#destroy() return false then child won't be erased from this
+		 * @see remove()
+		 * @return true if handler is was contained and is #destroy()-ed now
+		 */
+		virtual bool destroyChildHandler(UpdateHandler* child);
+		
+	protected:	// template method for derived classes
+		virtual ~CompositeUpdateHandler();
 
 		virtual void onStart();
 
@@ -68,13 +72,7 @@ namespace xihad { namespace ngn
 		virtual void onDestroy();
 
 	private:
-		virtual bool isDestroying() override;
-		virtual void onChildDestroy(Destroyable* toDestroty) override;
-		std::list<UpdateHandler*>::const_iterator iteratorFor(UpdateHandler* handler) const;
-
-	private:
-		std::list<UpdateHandler*> mUpdateImpls;
-		bool mDestroying;
+		Container mChildHandlerList;
 	};
 }}
 

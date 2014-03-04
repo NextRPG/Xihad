@@ -1,5 +1,4 @@
 #include "luaopen_CompositeUpdateHandler.h"
-#include "luaopen_ManagedUpdateHandler.h"
 #include <luaT/luaT.h>
 #include "Engine/CompositeUpdateHandler.h"
 #include "ScriptEngine/LuaUtil.h"
@@ -17,24 +16,29 @@ namespace xihad { namespace script
 		luaL_checkany(L, 2);
 		auto group = checkarg<CompositeUpdateHandler*>(L, 1);
 
-		ManagedUpdateHandler* updater;
+		UpdateHandler* updater;
 		if (lua_istable(L, 2))
 		{
 			updater = new LuaManagedUpdateHandler(LuaRef::fromIndex(L, 2));
 		}
-		else if ((updater = checkarg<ManagedUpdateHandler*>(L, 2)) == NULL)
+		else if ((updater = checkarg<UpdateHandler*>(L, 2)) == NULL)
 		{
 			luaL_typerror(L, 2, "appendUpdater requires table/UpdateHandler");
 		}
 
-		push<bool>(L, group->appendUpdateHandler(updater));
+		push<bool>(L, group->appendChildHandler(updater));
 		return 1;
 	}
 
 	luaT_static bool removeUpdaterImpl(CompositeUpdateHandler* group, 
-		ManagedUpdateHandler* updater)
+		UpdateHandler* updater)
 	{
-		return group->removeUpdateHandler(updater);
+		auto it = group->findChildHandler(updater);
+		if (it == group->childHandlerEnd())
+			return false;
+
+		group->eraseChildHandler(it);
+		return true;
 	}}
 
 	int luaopen_CompositeUpdateHandler(lua_State* L)
@@ -47,8 +51,7 @@ namespace xihad { namespace script
 			{ "appendUpdateHandler", appendUpdater },
 			{ "removeUpdateUpdater", removeUpdater},
 		luaT_defRegsEnd
-		MetatableFactory<CompositeUpdateHandler, 
-			ManagedUpdateHandler>::create(L, cuhRegs, 0);
+		MetatableFactory<CompositeUpdateHandler>::create(L, cuhRegs, 0);
 
 		return 0;
 	}

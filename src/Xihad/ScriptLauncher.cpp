@@ -13,7 +13,7 @@ using namespace irr;
 using namespace scene;
 using namespace xihad;
 using namespace ngn;
-int first_iter(int argc, const char** argv)
+int launchScript(int argc, const char** argv)
 {
  	IrrlichtDevice* device = createDefaultDevice();
 	initSystem(device);

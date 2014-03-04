@@ -1,10 +1,7 @@
 #pragma once
 #include <string>
-#include "..\Message\MessageListener.h"
-#include "ManagedUpdateHandler.h"
-#include "boost\scoped_ptr.hpp"
+#include "UpdateHandler.h"
 #include "BaseVisitable.h"
-#include "Destroyer.h"
 
 namespace xihad { namespace ngn
 {
@@ -22,8 +19,7 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013Äê12ÔÂ9ÈÕ 20:28:16
 	 */
-	class Component : public ManagedUpdateHandler, 
-		public BaseVisitable, public virtual Destroyer
+	class Component : public UpdateHandler, public BaseVisitable
 	{
 	public:
 		DEFINE_VISITABLE
@@ -46,33 +42,12 @@ namespace xihad { namespace ngn
 		 */
 		GameObject* getHostObject() const;
 
-		virtual void onChildDestroy( Destroyable* toDestroty ) override;
-
-		virtual bool isDestroying() override
-		{
-			return ManagedUpdateHandler::isDestroying();
-		}
-
-		/**
-		 * @see manageDestroyable()
-		 * @return if u->getDestroyer() == this
-		 */
-		bool appendDestroyable(Destroyable* u);
-		
-		/**
-		 * @see unmanageDestroyable()
-		 * @return if u->getDestroyer() == nullptr
-		 */
-		bool removeDestroyable(Destroyable* u);
-
 	protected:
 		virtual ~Component();
 
-		virtual void onDestroy() override;
-
 	private:
-		struct impl;
-		boost::scoped_ptr<impl> mImpl;
+		std::string mTypeName;
+		GameObject* mHost;
 	};
 }}
 

@@ -28,9 +28,8 @@ namespace xihad { namespace ngn
 	 * <p>
 	 * 游戏对象的职责主要包括：
 	 *	- 维护组件集合
-	 *	- 维护标签集合
-	 *	- 游戏对象的层次结构
-	 *	- 位置信息
+	 *	- 维护标签集合			// TODO 重构为 Component
+	 *	- 层次型位置信息
 	 * 
 	 * @author etnlGD
 	 * @date 2013年12月9日 20:42:23

@@ -1,6 +1,6 @@
 #pragma once
 #include "IMessageDispatcher.h"
-#include "Engine\ManagedUpdateHandler.h"
+#include "Engine\UpdateHandler.h"
 #include <list>
 #include <queue>
 #include <algorithm>
@@ -13,14 +13,11 @@
 namespace xihad { namespace ngn 
 {
 	template <typename Entity, typename EntityManager, typename Listener>
-	class MessageDispatcher : public ManagedUpdateHandler, 
-		public virtual IMessageDispatcher<Entity, EntityManager, Listener>
+	class MessageDispatcher :
+		public IMessageDispatcher<Entity, EntityManager, Listener>
  	{
 	public:
-		MessageDispatcher(EntityManager& manager) :
-			mManager(&manager)
-		{
-		}
+		MessageDispatcher(EntityManager& manager) : mManager(&manager) {}
 
 		void dispatch(ParamArg pParam, IdArg pSourceId, double timeout = 0.0) override
 		{
@@ -89,12 +86,12 @@ namespace xihad { namespace ngn
 
 		virtual void onStop() override
 		{
-			// ignore pendings
-			pendingRemove.clear();
-			pendingEvents.clear();
-
-			// TODO 检查下 clear 方法是否正确
-			listenerTree.clear();
+// 			// ignore pendings
+// 			pendingRemove.clear();
+// 			pendingEvents.clear();
+// 
+// 			// TODO 检查下 clear 方法是否正确
+// 			listenerTree.clear();
 		}
 
 	private:
@@ -105,11 +102,9 @@ namespace xihad { namespace ngn
 				auto pathItr = listenerTree.findPath(pParam.getTag());
 				while (pathItr.hasNext())
 				{
-					auto& list = *pathItr;
-					for (auto& listener : list)
-					{
+					for (auto& listener : *pathItr)
 						listener.receive(*object, pParam);
-					}
+
 					++pathItr;
 				}
 			}

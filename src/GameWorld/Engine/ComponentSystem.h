@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include "ManagedUpdateHandler.h"
+#include "UpdateHandler.h"
 #include "ComponentFactory.h"
 
 namespace xihad { namespace ngn
@@ -12,7 +11,7 @@ namespace xihad { namespace ngn
 	 * @author etnlG
 	 * @date 2013Äê12ÔÂ13ÈÕ 16:46:06
 	 */
-	class ComponentSystem : public ManagedUpdateHandler, public virtual ComponentFactory
+	class ComponentSystem : public UpdateHandler, public ComponentFactory
 	{
 	};
 }}

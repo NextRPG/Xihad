@@ -12,7 +12,7 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013Äê12ÔÂ13ÈÕ 16:25:40
 	 */
-	class MultiComponentSystemFactory : protected InheritenceTree, public virtual ComponentSystemFactory
+	class MultiComponentSystemFactory : public ComponentSystemFactory, protected InheritenceTree
 	{
 	public:
 		/**

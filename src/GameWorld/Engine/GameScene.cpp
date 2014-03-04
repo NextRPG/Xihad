@@ -100,7 +100,7 @@ namespace xihad { namespace ngn
 
 	static ComponentFactory* createComponentFactory(GameScene* scene, CompSystemMap& compSystems)
 	{
-		class SceneComponentFactory : public virtual ComponentFactory
+		class SceneComponentFactory : public ComponentFactory
 		{
 		public:
 			explicit SceneComponentFactory(GameScene* scene, CompSystemMap& systems) : 
@@ -157,9 +157,9 @@ namespace xihad { namespace ngn
 
 		mImpl->mainThread = L;
 		mImpl->dispatcher = new MessageDispatcher<GameObject, GameScene, MessageListener>(*this);
-		mImpl->systemUpdater.appendUpdateHandler(mImpl->dispatcher);
-		this->appendUpdateHandler(&mImpl->systemUpdater);
-		this->appendUpdateHandler(mImpl->rootObject);
+		mImpl->systemUpdater.appendChildHandler(mImpl->dispatcher);
+		this->appendChildHandler(&mImpl->systemUpdater);
+		this->appendChildHandler(mImpl->rootObject);
 	}
 
 	GameScene::~GameScene()
@@ -177,12 +177,12 @@ namespace xihad { namespace ngn
 		return mImpl->mainThread;
 	}
 
-	GameObject* GameScene::rootObject() const
+	GameObject* GameScene::getRootObject() const
 	{
 		return mImpl->rootObject;
 	}
 	
-	GameScene::Dispatcher* GameScene::dispatcher() const
+	GameScene::Dispatcher* GameScene::getDispatcher() const
 	{
 		return mImpl->dispatcher;
 	}
@@ -206,31 +206,12 @@ namespace xihad { namespace ngn
 			return nullptr;
 
 		GameObject* obj = new GameObject(&mImpl->depends, id);
-		obj->setParent(parent ? parent : rootObject());
+		obj->setParent(parent ? parent : getRootObject());
 
 		++mImpl->managedObjectId;
 		mImpl->sceneObjects[id] = obj;
 
 		return obj;
-	}
-
-	GameObject* GameScene::createObject( GameObject::IdArgType id, GameObject::IdArgType pid )
-	{
-		if (GameObject* parentObject = findObject(pid))
-			return createObject(id, parentObject);
-		else 
-			return nullptr;
-	}
-
-	bool GameScene::destroyObject( GameObject::IdArgType id )
-	{
-		GameObject* obj = findObject(id);
-		if (obj != nullptr && obj->getScene() == this)
-		{
-			return obj->destroy();
-		}
-
-		return false;
 	}
 
 	ComponentSystem* GameScene::requireSystem( const std::string& systemName )
@@ -243,7 +224,8 @@ namespace xihad { namespace ngn
 			(sys = factory->create(this, systemName)))
 		{
 			mImpl->compSystems[systemName] = sys;
-			mImpl->systemUpdater.appendUpdateHandler(sys);
+			if (!mImpl->systemUpdater.containsChildHandler(sys))
+				mImpl->systemUpdater.appendChildHandler(sys);
 		}
 
 		return sys;
@@ -279,7 +261,7 @@ namespace xihad { namespace ngn
 
 		if (obj == mImpl->rootObject)
 		{
-			this->removeUpdateHandler(mImpl->rootObject);
+			eraseChildHandler(findChildHandler(mImpl->rootObject));
 			mImpl->rootObject = nullptr;
 		}
 	}

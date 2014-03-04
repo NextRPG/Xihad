@@ -20,7 +20,8 @@ namespace xihad { namespace ngn
 		static void destroy();
 
 	private:
-		static std::unordered_map<std::string, ComponentSystemFactory*> sFactoryRegistry;
+		typedef std::unordered_map<std::string, ComponentSystemFactory*> Registry; 
+		static Registry sFactoryRegistry;
 		static ComponentSystemFactory* sDefaultFactory;
 	};
 }}

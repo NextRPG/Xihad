@@ -16,7 +16,7 @@ namespace xihad { namespace ngn
 	 * @date 2013Äê12ÔÂ17ÈÕ 10:10:12
 	 */
 	template <typename Entity, typename EntityManager, typename Listener>
-	class IMessageDispatcher : public virtual UpdateHandler
+	class IMessageDispatcher : public UpdateHandler
 	{
 	public:
 		typedef typename Entity::Identifier Identifier;

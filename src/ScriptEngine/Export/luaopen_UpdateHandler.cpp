@@ -1,15 +1,15 @@
-#include "luaopen_ManagedUpdateHandler.h"
+#include "luaopen_UpdateHandler.h"
 #include <luaT/luaT.h>
-#include "Engine/ManagedUpdateHandler.h"
+#include "Engine/UpdateHandler.h"
 #include <typeinfo>
 
 using namespace luaT;
 using namespace xihad::ngn;
-luaT_defMetaData(ManagedUpdateHandler, true);
+luaT_defMetaData(UpdateHandler, true);
 
 namespace xihad { namespace script
 {
-	luaT_static const char* status(ManagedUpdateHandler* handler)
+	luaT_static const char* status(UpdateHandler* handler)
 	{
 		UpdateHandler::Status stt = handler->status();
 		switch (stt)
@@ -33,16 +33,15 @@ namespace xihad { namespace script
 		}
 	}}
 
-	int luaopen_ManagedUpdateHandler( lua_State* L )
+	int luaopen_UpdateHandler( lua_State* L )
 	{
 		luaT_defRegsBgn(updater)
-			luaT_mnamedfunc(ManagedUpdateHandler, start),
-			luaT_mnamedfunc(ManagedUpdateHandler, stop),
-			luaT_mnamedfunc(ManagedUpdateHandler, destroy),
-			luaT_mnamedfunc(ManagedUpdateHandler, isDestroying),
+			luaT_mnamedfunc(UpdateHandler, start),
+			luaT_mnamedfunc(UpdateHandler, stop),
+			luaT_mnamedfunc(UpdateHandler, destroy),
 			luaT_cnamedfunc(status),
 		luaT_defRegsEnd
-		MetatableFactory<ManagedUpdateHandler>::create(L, updater, 0);
+		MetatableFactory<UpdateHandler>::create(L, updater, 0);
 
 		return 0;
 	}

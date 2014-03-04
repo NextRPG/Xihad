@@ -14,9 +14,9 @@ namespace xihad { namespace script
 		
 		table.pushSelf();
 		xassert(lua_istable(L, -1));
-		lua_pushlightuserdata(L, static_cast<ManagedUpdateHandler*>(this));
+		lua_pushlightuserdata(L, static_cast<UpdateHandler*>(this));
 		lua_setfield(L, -2, luaT::ReservedKeyword::__UDKEY);
-		Metatable::bind<ManagedUpdateHandler>(L, -1);
+		Metatable::bind<UpdateHandler>(L, -1);
 	}
 
 	void LuaManagedUpdateHandler::onStart()

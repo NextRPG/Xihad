@@ -80,13 +80,12 @@
     <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\InheritenceTree.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\ManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\GameScene.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\MapProperties.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
-    <ClCompile Include="..\src\GameWorld\Message\BaseMessageListener.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp" />
@@ -118,8 +117,7 @@
     <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />
     <ClInclude Include="..\src\GameWorld\Engine\GameObjectDepends.h" />
     <ClInclude Include="..\src\GameWorld\Engine\InheritenceTree.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ICompositeUpdateHandler.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Property.h" />
     <ClInclude Include="..\src\GameWorld\Engine\quaternion.h" />
     <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h" />
@@ -130,7 +128,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\matrix.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\TagListener.h" />
-    <ClInclude Include="..\src\GameWorld\Message\BaseMessageListener.h" />
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />
@@ -153,7 +150,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\Process.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Timeline.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Transform.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\Component.cpp" />

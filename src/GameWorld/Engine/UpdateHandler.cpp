@@ -1,4 +1,4 @@
-#include "ManagedUpdateHandler.h"
+#include "UpdateHandler.h"
 #include "Destroyer.h"
 #include "CppBase/xassert.h"
 #include <iostream>
@@ -11,17 +11,15 @@ namespace xihad { namespace ngn
 		EPS_ALL_BITS= 0xf0000000,
 	};
 
-	inline static bool pendingStatus(int statusBits, E_Pending_Status pendingBit)
+	inline 
+	static bool pendingStatus(int statusBits, E_Pending_Status pendingBit)
 	{
 		return (statusBits & pendingBit) != 0;
 	}
 
-	ManagedUpdateHandler::ManagedUpdateHandler() : 
-		mStatus(BORN), mLifeManager(nullptr)
-	{
-	}
+	UpdateHandler::UpdateHandler() : mStatus(BORN) { }
 
-	bool ManagedUpdateHandler::start()
+	bool UpdateHandler::start()
 	{
 		if (status() != BORN) return false;
 
@@ -35,7 +33,7 @@ namespace xihad { namespace ngn
 		return true;
 	}
 
-	bool ManagedUpdateHandler::update( const Timeline& tl )
+	bool UpdateHandler::update( const Timeline& tl )
 	{
 		if (status() != UPDATED) return false;
 
@@ -49,7 +47,7 @@ namespace xihad { namespace ngn
 		return true;
 	}
 
-	bool ManagedUpdateHandler::stop()
+	bool UpdateHandler::stop()
 	{
 		if (status() == STARTING || status() == UPDATING)
 		{
@@ -70,12 +68,26 @@ namespace xihad { namespace ngn
 		return false;
 	}
 
-	UpdateHandler::Status ManagedUpdateHandler::status() const 
+	bool UpdateHandler::intermediateStatus() const
+	{
+		Status mStatus = status();
+		switch (mStatus)
+		{
+		case BORN:
+		case UPDATED:
+		case DEAD:
+			return false;
+		default:
+			return true;
+		}
+	}
+
+	UpdateHandler::Status UpdateHandler::status() const 
 	{
 		return (Status) (mStatus & (~EPS_ALL_BITS));
 	}
 
-	bool ManagedUpdateHandler::destroy()  
+	bool UpdateHandler::destroy()  
 	{
 		if (intermediateStatus())
 		{
@@ -89,32 +101,19 @@ namespace xihad { namespace ngn
 		precondition(status() == BORN || status() == DEAD);
 		mStatus = DESTROYING;
 		onDestroy();
-		if (mLifeManager)
-			mLifeManager->onChildDestroy(this);
-
 		postcondition(status() == DESTROYING);
 
 		delete this;
 		return true;
 	}
 
-	void ManagedUpdateHandler::setDestroyer( Destroyer* m )  
-	{
-		mLifeManager = m;
-	}
-
-	Destroyer* ManagedUpdateHandler::getDestroyer() const  
-	{
-		return mLifeManager;
-	}
-
-	ManagedUpdateHandler::~ManagedUpdateHandler()
+	UpdateHandler::~UpdateHandler()
 	{
 		xassert(status() == DESTROYING && 
-			"Never delete UpdateHandler directly, invoke UpdateHandler::destroy() instead");
+			"Never delete UpdateHandler directly, invoke UpdateHandler::stop() instead");
 	}
 
-	void ManagedUpdateHandler::execPendingCommand(Status preStatus)
+	void UpdateHandler::execPendingCommand(Status preStatus)
 	{
 		int pendingBits = mStatus & EPS_ALL_BITS;
 
@@ -123,13 +122,8 @@ namespace xihad { namespace ngn
 			this->stop();
 	}
 
-	void ManagedUpdateHandler::onDestroy()
+	void UpdateHandler::onDestroy()
 	{
-	}
-
-	bool ManagedUpdateHandler::isDestroying() const
-	{
-		return mStatus == DESTROYING;
 	}
 
 }}

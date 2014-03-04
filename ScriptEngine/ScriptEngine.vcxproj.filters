@@ -14,9 +14,6 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_string.cpp">
       <Filter>Export</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp">
       <Filter>Export</Filter>
     </ClCompile>
@@ -30,9 +27,6 @@
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp">
@@ -61,6 +55,12 @@
     <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp">
       <Filter>Export</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />
@@ -75,9 +75,6 @@
       <Filter>Export</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_string.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.h">
       <Filter>Export</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Component.h">
@@ -101,9 +98,6 @@
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.h">
       <Filter>Export</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h">
-      <Filter>Export</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_renderSystem.h">
       <Filter>Export</Filter>
     </ClInclude>
@@ -122,6 +116,12 @@
       <Filter>Export</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Destroyable.h">
+      <Filter>Export</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h">
+      <Filter>Export</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.h">
       <Filter>Export</Filter>
     </ClInclude>
   </ItemGroup>

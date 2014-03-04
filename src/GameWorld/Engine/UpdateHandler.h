@@ -1,11 +1,7 @@
 #pragma once
-#include "CppBase/xassert.h"
-#include "Destroyable.h"
 
 namespace xihad { namespace ngn
 {
-	class UpdateStatusChangeListener;
-	class Destroyer;
 	class Timeline;
 
 	/// 游戏主循环更新对象
@@ -19,6 +15,7 @@ namespace xihad { namespace ngn
 	 *	- 中间状态时， #intermidiateStatus() return true
 	 *	- 中间状态时，任何函数调用不会改变对象状态
 	 *	- #STARTING, #UPDATING 状态时，调用 #stop() 方法，是有效的
+	 *	- #stop() 调用之后，引擎会在函数返回后的某一时刻销毁(destroy)对象
 	 *	- 除此之外，任何中间状态下的命令都会被丢弃掉
 	 *	
 	 * <p>游戏更新对象严格遵循层次结构
@@ -30,10 +27,9 @@ namespace xihad { namespace ngn
 	 *	@author etnlGD
 	 *	@date 2013年12月9日 20:28:41
 	 */
-	class UpdateHandler : public Destroyable
+	class UpdateHandler
 	{
 	public:
-
 		/// 更新对象的生命期
 		/**
 		 * 顺序是不能改变的，因此你可以做如下测试：
@@ -50,27 +46,25 @@ namespace xihad { namespace ngn
 			DESTROYING	///< #destroy() 调用中
 		};
 
-	protected:
-		virtual ~UpdateHandler() {}
-
 	public:
-
+		UpdateHandler();
+		
 		/// 开始进入游戏更新
 		/**
 		 * 函数返回后，一般会进入 #UPDATED 状态，但是如果期间调用了 #stop() 方法，则会进入 #DEAD 状态。
 		 * 如果是第一次调用此函数，那么调用过程中会处于 #STARTING 状态
 		 * @return true 如果这是一次有效的开始命令
 		 */
-		virtual bool start() = 0;
-
+		bool start();
+		
 		/// 更新对象
 		/**
 		 * 在游戏主循环中，保证会被调用。如果期间没有调用 #stop() 则恢复到 #UPDATED 状态
 		 * @param time 当前场景时间
 		 * @return true 如果有效得进行了更新
 		 */
-		virtual bool update(const Timeline& time) = 0;
-
+		bool update(const Timeline&);
+		
 		/// 停止对象更新
 		/**
 		 * 此方法调用之后，对象不能在进行 #update(), #start(). 但是你仍然可以向对象发出其他命令，
@@ -79,8 +73,8 @@ namespace xihad { namespace ngn
 		 * 
 		 * @return true 如果有效得停止了自身
 		 */
-		virtual bool stop() = 0;
-
+		bool stop();
+		
 		/// 摧毁更新对象
 		/**
 		 * 如果对象不处于 #BORN 状态，那么此方法保证会在 #~UpdateHandler() 方法调用之前调用
@@ -89,33 +83,55 @@ namespace xihad { namespace ngn
 		 * 
 		 * @return true 如果有效得摧毁了自身
 		 */
-		virtual bool destroy() = 0;
+		bool destroy();
 
 		/// 返回对象所处状态
 		/**
 		 * @see Status
 		 * @return current status
 		 */
-		virtual Status status() const = 0;
-
+		Status status() const;
+		
 		/// 是否处于中间状态
 		/**
 		 * @return true if #status() from { #STARTING, $UPDATING, #STOPPING, #DESTROYING }
 		 */
-		bool intermediateStatus() const
-		{
-			Status mStatus = status();
-			switch (mStatus)
-			{
-			case BORN:
-			case UPDATED:
-			case DEAD:
-				return false;
-			default:
-				return true;
-			}
-		}
-	};
+		bool intermediateStatus() const;
+		
+	protected:
+		virtual ~UpdateHandler();
 
+		/// 从 #STARTING 状态切换至 #UPDATED 状态时，被回调
+		virtual void onStart()  = 0;
+
+		/// 从 #UPDATING 状态切换至 #UPDATED 状态时，被回调
+		virtual void onUpdate(const Timeline&) = 0;
+
+		/// 从 #STOPPING 状态切换至 #DEAD 状态时，被回调
+		virtual void onStop()   = 0;
+
+		/// 进入析构函数之前调用
+		/**
+		 * onDestroy() 之后会立即调用析构函数，但是这个方法和析构函数还是有很大区别的（不能直接
+		 * 把这个方法的代码复制到析构函数的最前面）。如果对象是子类的实例，调用顺序为：
+		 * <pre>
+		 *		onDestroy() -> ~ChildDtor() -> ~SelfDtor()
+		 * </pre>
+		 * 因此，需要严格遵循依赖关系，将被依赖数据放在后面摧毁。比如：某段代码直接或间接得依赖子类
+		 * 的成员变量，那么就应该把这段代码放在 onDestroy() 方法中，而不应该在 ~ChildDtor() 之后
+		 * （即 ~SelfDtor() 中）。
+		 * 
+		 * 默认实现为空实现
+		 */
+		virtual void onDestroy();
+
+	private:
+		void fireStatusChanged(Status newStatus);
+
+		void execPendingCommand(Status preStatus);
+
+	private:
+		int mStatus;
+	};
 }}
 

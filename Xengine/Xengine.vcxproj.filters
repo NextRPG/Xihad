@@ -78,9 +78,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\GameObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\GameScene.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -105,9 +102,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\Timeline.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ICompositeUpdateHandler.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -128,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h">
       <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ManagedUpdateHandler.h">
-      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\BaseVisitor.h">
       <Filter>Core</Filter>
@@ -189,9 +180,6 @@
     <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h">
       <Filter>Broadcast</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\BaseMessageListener.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -209,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="..\src\CppBase\CStringSplitter.hpp">
       <Filter>CppBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,9 +242,6 @@
     <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp">
       <Filter>Core\Property</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\ManagedUpdateHandler.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\GameWorld.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -284,11 +272,11 @@
     <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp">
       <Filter>Broadcast</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Message\BaseMessageListener.cpp">
-      <Filter>Broadcast</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\Destroyer.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

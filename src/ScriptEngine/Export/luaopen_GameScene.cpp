@@ -113,10 +113,9 @@ namespace xihad { namespace script
 		luaT_defRegsBgn(sceneRegs)
 			{ "objectsWithTag", eachObjectWithTag },
 			luaT_mnamedfunc(GameScene, findObject), 
-			luaT_mnamedfunc(GameScene, dispatcher),
+			luaT_mnamedfunc(GameScene, getDispatcher),
 			{ "createObject", sceneCreateObject },
 			{ "createUniqueObject", sceneCreateUniqueObject },
-			luaT_mnamedfunc(GameScene, destroyObject),
 			{ "pushController", scenePushController },
 			{ "popController", luaT_cfunction(scenePopController) },
 		luaT_defRegsEnd

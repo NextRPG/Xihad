@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
-#include <vector>
 #include "InheritenceChain.h"
-#include "Properties.h"
 #include "NullProperpties.h"
 
 namespace xihad { namespace ngn

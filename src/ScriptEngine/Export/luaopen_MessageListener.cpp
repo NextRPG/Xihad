@@ -1,5 +1,4 @@
 #include "luaopen_MessageListener.h"
-#include "luaopen_Destroyable.h"
 #include "LuaT\luaT.h"
 #include "Message\MessageListener.h"
 
@@ -12,9 +11,7 @@ namespace xihad { namespace script
 {
 	int luaopen_MessageListener( lua_State* L )
 	{
-		luaT_defRegsBgn(regs)
-		luaT_defRegsEnd
-		MetatableFactory<MessageListener, Destroyable>::create(L, regs, 0);
+		MetatableFactory<MessageListener>::create(L, 0);
 		return 0;
 	}
 }}

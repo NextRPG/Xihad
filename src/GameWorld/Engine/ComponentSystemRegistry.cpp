@@ -1,6 +1,5 @@
 #include "ComponentSystemRegistry.h"
 #include "ComponentSystemFactory.h"
-#include "ComponentSystem.h"
 #include "CppBase\StdMap.h"
 #include <set>
 
@@ -40,13 +39,15 @@ namespace xihad { namespace ngn
 
 	void ComponentSystemRegistry::destroy()
 	{
-		std::set<ComponentSystemFactory*> allFactory;
-		for (auto& kv : sFactoryRegistry)
-			allFactory.insert(kv.second);
-		allFactory.insert(sDefaultFactory);
+		std::set<ComponentSystemFactory*> uniqueFactories;
+		for (Registry::value_type& namedFactory : sFactoryRegistry)
+			uniqueFactories.insert(namedFactory.second);
+		uniqueFactories.insert(sDefaultFactory);
 
-		for (auto factory : allFactory)
-			delete factory;
+		for (ComponentSystemFactory* f : uniqueFactories)
+			delete f;
+
+		sFactoryRegistry.clear();
 	}
 
 	ComponentSystemFactory* ComponentSystemRegistry::sDefaultFactory = NULL;
