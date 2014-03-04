@@ -11,9 +11,13 @@ local Item = {
 
 function Item.new( o )
 	assert(type(o) == "table", "prototype must be a table")
-	setmetatable(o, {__index = Item})
+	inherit(o, Item)
 
 	return o
+end
+
+function Item:trigger( hero, targetTile )
+	
 end
 
 return Item
