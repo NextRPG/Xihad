@@ -67,7 +67,7 @@ function SkillManager:onShowSkills( object )
 	-- 显示技能
 	-- print("开始选择技能")
 	for i,id in ipairs(character.skills) do
-		if SkillManager:getSkill(id):hasEnemy(character:tile(), character:getEnemyManager()) then
+		if SkillManager:getSkill(id):hasEnemy(character.tile, character:getEnemyManager()) then
 			print(i,id)
 		end
 	end
@@ -83,8 +83,8 @@ local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
 	selectSkill = scene:findObject(sname(key)):findComponent(c"Skill")
-	-- targetRange = selectSkill:getAvailableTargets(character:tile(), character:getEnemyManager())
-	targetRange = selectSkill:getTargetRange(character:tile())
+	-- targetRange = selectSkill:getAvailableTargets(character.tile, character:getEnemyManager())
+	targetRange = selectSkill:getTargetRange(character.tile)
 	Chessboard:pushArea(targetRange, "RED")
 end
 
@@ -129,7 +129,7 @@ function SkillManager:onCastSkill( tile, skill, character )
 	local anim = characterObject:findComponent(c"AnimatedMesh")
 	local rotateBy = characterObject:findComponent(c"RotateBy")
 	local rx, ry, rz = characterObject:getRotation():xyz()
-	local ty = getLogicAngle(math.p_sub(tile, character:tile()))
+	local ty = getLogicAngle(math.p_sub(tile, character.tile))
 
 	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	

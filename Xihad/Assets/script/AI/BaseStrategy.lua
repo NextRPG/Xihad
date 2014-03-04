@@ -21,7 +21,7 @@ function BaseStrategy:judgeTile(  )
 	for object in scene:objectsWithTag("Hero") do
 		repeat
 			local enemy = object:findComponent(c"Character")
-			local costAP = GoalFinder:getCostAP(actor:tile() ,enemy:tile(), actor:getProperty("maxAP"))
+			local costAP = GoalFinder:getCostAP(actor.tile ,enemy.tile, actor:getProperty("maxAP"))
 			if costAP == "MAX" then break end
 			names[#names + 1] = object:getID()
 			distances[object:getID()] = costAP
@@ -37,7 +37,7 @@ function BaseStrategy:judgeTile(  )
 
 	local name = board:getResult()
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
-	local tile = GoalFinder:getTargetTile( actor:tile(), enemy:tile(), actor:getProperty("maxAP"))
+	local tile = GoalFinder:getTargetTile( actor.tile, enemy.tile, actor:getProperty("maxAP"))
 	
 	return tile
 end
@@ -45,7 +45,7 @@ end
 function BaseStrategy:judgeSkill(  )
 	local character = self.object:findComponent(c"Character")
 	local skills = character.skills
-	local center = character:tile()
+	local center = character.tile
 
 	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do

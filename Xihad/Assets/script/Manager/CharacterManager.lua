@@ -14,13 +14,11 @@ local SkillManager = require("SkillManager")
 -- 记录当前team信息的容器
 -- @string team 标识manager的队伍信息
 -- @tparam Object currentCharacter
-local CharacterManager = {
-	team = ""
-}
+local CharacterManager = {team = ""}
 
 function CharacterManager.new( o )
 	assert(type(o) == "table", "prototype must be a table")
-	setmetatable(o, {__index = CharacterManager})
+	inherit(o, CharacterManager)
 
 	return o
 end
@@ -37,9 +35,10 @@ function CharacterManager:createCharacter( character, i, j )
 	character.team = self.team
 	local characterObject = scene:createObject(c(character.name))
 
-	local test = characterObject:appendComponent(c"Character", character)
-	assert(test)
+	characterObject:appendComponent(c"Character", character)
 	local tile = {y = i, x = j}
+	character:attachSubscriber( "tile", Chessboard, Chessboard.onTileChanged)
+	character:changeState("tile", tile)
 
 	local location = getPixelLocation(tile)
 	characterObject:concatTranslate(math3d.vector(location.x, 0, location.z))
@@ -67,6 +66,8 @@ function CharacterManager:createCharacter( character, i, j )
 	characterObject:resetScale(math3d.vector(1.5, 1.5, 1.5))
 	-- characterObject:resetScale(math3d.vector(8, 8, 8))
 
+	-- 将Chessboard加入Subscriber的列表中
+	
 	return characterObject	
 end
 
@@ -75,13 +76,8 @@ end
 -- @tab location
 -- @treturn Object characterObject or nil
 function CharacterManager:getCharacterByLocation( point )
-	for characterObject in scene:objectsWithTag(self.team) do
-		local character = characterObject:findComponent(c"Character")
-		if math.p_same(character:tile(), point) then
-		 	return characterObject:findComponent(c"Character")
-		end
-	end
-	return nil
+	local character = Chessboard:tileAt(point).character
+	return (character and character.team == self.team) and character or nil
 end
 
 --- 
@@ -142,6 +138,9 @@ function CharacterManager:onSelectTile( tile, finder )
 	follow:start(self.currentCharacter)
 	runAsyncFunc(sequence.runMoveActions, sequence, actions)
 	follow:stop()
+
+	local character = self.currentCharacter:findComponent(c"Character")
+	character:changeState("tile", tile)
 end
 
 function CharacterManager:back2ShowCharacter(  )
@@ -149,9 +148,9 @@ function CharacterManager:back2ShowCharacter(  )
 	Chessboard:popArea(PathFinder)
 	Chessboard:popArea(SkillManager.allTargets)
 	CameraManager:move2Character(self.currentCharacter)
+	local character = self.currentCharacter:findComponent(c"Character")
+	character:changeState("tile", vector2point(lastTranslate))
 end
-
-
 
 ---
 -- 回合开始时，进行初始化工作

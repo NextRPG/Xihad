@@ -37,10 +37,11 @@ function Publisher:changeState( key, value )
 		ref = ref[slice]
 	end
 	local arr = string.split(key, ".")
+	local oldValue = ref[arr[#arr]]
 	ref[arr[#arr]] = value
 	if self.subscribers[key] == nil then return end
 	for subscriber, callback in pairs(self.subscribers[key]) do
-		callback(subscriber, value)
+		callback(subscriber, value, oldValue, self)
 	end
 end
 

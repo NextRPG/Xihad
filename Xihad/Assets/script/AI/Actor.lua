@@ -36,7 +36,7 @@ function Actor:run( scheduler )
 		local strategy  = self.strategy
 		local manager   = self.manager			
 		local character = object:findComponent(c"Character")
-		local tile      = character:tile()
+		local tile      = character.tile
 
 		manager.currentCharacter = object
 
@@ -44,7 +44,7 @@ function Actor:run( scheduler )
 
 		local point = strategy:judgeTile()
 		-- runAsync
-		if not table.equal(point, character:tile()) then 
+		if not table.equal(point, character.tile) then 
 			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
 		end
 
