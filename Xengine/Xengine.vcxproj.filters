@@ -183,12 +183,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Destroyable.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Destroyer.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\position2d.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -271,9 +265,6 @@
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp">
       <Filter>Broadcast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\Destroyer.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">
       <Filter>Entity</Filter>

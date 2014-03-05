@@ -54,8 +54,8 @@ namespace xihad { namespace script
 		setField(L, -1, "control",	e.Control);	// bool
 	}
 
-	template <class Param>
-	bool callWithParam(luaT::LuaRef& lobject, const char* func, const Param& param)
+	template <class EventParam>
+	bool callWithParam(luaT::LuaRef& lobject, const char* func, const EventParam& param)
 	{
 		lua_State* L = lobject.getState();
 		StackMemo memo(L);

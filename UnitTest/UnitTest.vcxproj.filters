@@ -4,19 +4,13 @@
     <ClCompile Include="..\src\UnitTest\TestTemplate.cpp">
       <Filter>TestTemplate</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UnitTest\TestTagTree.cpp">
-      <Filter>TestCase</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\UnitTest\TestDispatchCondition.cpp">
-      <Filter>TestCase</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\UnitTest\TestMessageDispatcher.cpp">
       <Filter>TestCase</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UnitTest\TestGameScene.cpp">
       <Filter>TestCase</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UnitTest\TestUpdaterDelete.cpp">
+    <ClCompile Include="..\src\UnitTest\TestUpdateHandler.cpp">
       <Filter>TestCase</Filter>
     </ClCompile>
   </ItemGroup>

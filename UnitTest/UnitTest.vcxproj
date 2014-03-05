@@ -13,9 +13,8 @@
   <ItemGroup>
     <ClCompile Include="..\src\UnitTest\TestGameScene.cpp" />
     <ClCompile Include="..\src\UnitTest\TestMessageDispatcher.cpp" />
-    <ClCompile Include="..\src\UnitTest\TestTagTree.cpp" />
     <ClCompile Include="..\src\UnitTest\TestTemplate.cpp" />
-    <ClCompile Include="..\src\UnitTest\TestUpdaterDelete.cpp" />
+    <ClCompile Include="..\src\UnitTest\TestUpdateHandler.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4013602C-9169-4B51-B3A6-13DA20ABB5CB}</ProjectGuid>
@@ -68,7 +67,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs;../Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SRPGWorld.lib;luaT.lib;lua51.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <AdditionalDependencies>Xengine.lib;luaT.lib;lua.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

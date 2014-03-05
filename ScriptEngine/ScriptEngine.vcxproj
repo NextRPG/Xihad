@@ -70,7 +70,6 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_all.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Destroyable.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp" />
@@ -97,7 +96,6 @@
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_all.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Component.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Destroyable.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_FileSystem.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameObject.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameScene.h" />

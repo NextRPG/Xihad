@@ -36,7 +36,7 @@ namespace xihad { namespace script
 		std::string& tag = checkarg<std::string&>(L, 2);
 		luaL_checktype(L, 3, LUA_TTABLE);
 		MessageListener* lis = new LuaMessageListener(LuaRef::fromIndex(L, 3));
-		dsptch->addListener(std::string(tag), lis, nullptr);
+		dsptch->addListener(std::string(tag), lis);
 
 		return 0;
 	}

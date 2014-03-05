@@ -11,6 +11,6 @@ namespace xihad { namespace ngn
 
 	public:
 		virtual ~MessageListener() {} 
-		virtual void receive(GameObject& pSource, const Parameter& pEvent) = 0;
+		virtual void receive(GameObject& source, const Parameter&) = 0;
 	};
 }}

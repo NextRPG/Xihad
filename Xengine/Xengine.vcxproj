@@ -74,7 +74,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\BaseComponentSystem.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\Destroyer.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\EngineStats.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp" />
@@ -98,8 +97,6 @@
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
     <ClInclude Include="..\src\CppBase\xassert.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Destroyable.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Destroyer.h" />
     <ClInclude Include="..\src\GameWorld\Engine\InheritenceChain.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseVisitable.h" />

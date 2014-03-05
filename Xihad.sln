@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PartilceSystemLoader", "PartilceSystemLoader\PartilceSystemLoader.vcxproj", "{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{4013602C-9169-4B51-B3A6-13DA20ABB5CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -67,6 +69,10 @@ Global
 		{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}.Debug|Win32.Build.0 = Debug|Win32
 		{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}.Release|Win32.ActiveCfg = Release|Win32
 		{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}.Release|Win32.Build.0 = Release|Win32
+		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Debug|Win32.Build.0 = Debug|Win32
+		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.ActiveCfg = Release|Win32
+		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

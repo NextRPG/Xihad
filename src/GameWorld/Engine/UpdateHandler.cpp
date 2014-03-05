@@ -1,5 +1,4 @@
 #include "UpdateHandler.h"
-#include "Destroyer.h"
 #include "CppBase/xassert.h"
 #include <iostream>
 

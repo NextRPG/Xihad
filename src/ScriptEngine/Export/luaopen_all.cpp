@@ -10,10 +10,9 @@
 #include "luaopen_GameObject.h"
 #include "luaopen_Geometry.h"
 #include "luaopen_MessageDispatcher.h"
-#include "luaopen_Destroyable.h"
 #include "luaopen_MessageListener.h"
 #include "luaopen_2ndIteration.h"
-#include "CppBase/xassert.h"
+#include "CppBase\xassert.h"
 
 #define CHECKED_OPEN(L, module) \
 	int p_##module = lua_gettop(L);							\
@@ -52,7 +51,6 @@ namespace xihad { namespace script
 		CHECKED_OPEN(L, GameScene);
 		CHECKED_OPEN(L, GameObject);
 		CHECKED_OPEN(L, MessageDispatcher);
-		CHECKED_OPEN(L, Destroyable);
 		CHECKED_OPEN(L, MessageListener);
 		CHECKED_OPEN(L, 2ndIteration);
 	}
