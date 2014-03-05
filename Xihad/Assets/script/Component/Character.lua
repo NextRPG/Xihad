@@ -60,9 +60,9 @@ end
 --- 
 -- 找到当前Character所在的TileObject
 -- @treturn Object tileObject
-function Character:tile()
-	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
-end
+-- function Character.tile
+-- 	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
+-- end
 
 function Character:getManager(  )
 	return self.team == "Hero" and require("HeroManager") or require("AIManager")
