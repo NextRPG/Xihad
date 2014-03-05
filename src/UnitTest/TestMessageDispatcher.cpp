@@ -81,6 +81,8 @@ namespace xihad { namespace UnitTest
 
 		TEST_METHOD_INITIALIZE(initState)
 		{
+			t.reset(0);
+
 			for (int i = 0; i < 5; i++)
 				listeners[i].receivedTimes = 0;
 
@@ -152,11 +154,42 @@ namespace xihad { namespace UnitTest
 			runCheck(0, 0, 0, 0, 0);
 
 			mDispatcher->addListener(MessageTag("character.dead"), &listeners[1]);
+			mDispatcher->addListener(MessageTag("a.b"), &listeners[1]);
+			mDispatcher->addListener(MessageTag("a.d.d.d"), &listeners[1]);
+			mDispatcher->clearListener(&listeners[1]);
+			mDispatcher->dispatch(MessageParameter("a", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+			mDispatcher->dispatch(MessageParameter("character.dead", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+			// remove non-exist tag
+			mDispatcher->removeListener(MessageTag("character.move.other"), &listeners[2]);
+			mDispatcher->removeListener(MessageTag("character.move.stop.other"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), 1);
+			runCheck(0, 0, 1, 0, 0);
+
+			mDispatcher->removeListener(MessageTag("character.move.stop"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+			// remove non-exist listener
+			mDispatcher->removeListener(MessageTag("character.action"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.action", 1), 1);
+			runCheck(0, 0, 0, 1, 0);
 		}
 
 		TEST_METHOD(TestDelayedDispatcher)
 		{
-			
+			mDispatcher->dispatch(MessageParameter("character", 1), 1, 0.5);
+			t.update(0.3f);
+			runCheck(0, 0, 0, 0, 0);
+
+			t.update(0.2000001f);
+			runCheck(1, 0, 0, 0, 0);
+
+			mDispatcher->dispatch(MessageParameter("character", 1), 1, 0.5);
+			t.update(0.500001f);
+			runCheck(1, 0, 0, 0, 0);
 		}
 
 		// This method will run after run every TestMethod in current class.

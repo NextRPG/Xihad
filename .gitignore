@@ -20,3 +20,4 @@
 /Debug/*.lib
 *sublime*
 /Debug/irrlicht-*.dll
+/Debug/UnitTest.*
