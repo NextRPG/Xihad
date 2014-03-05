@@ -38,8 +38,8 @@ namespace xihad { namespace ngn
 		}
 
 	private:
-		const char mSeparator;
-		const std::string mOrginTag;
+		char mSeparator;
+		std::string mOrginTag;
 		std::list<std::string> mTags;
 	};
 	

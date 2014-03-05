@@ -1,10 +1,10 @@
 #pragma once
-#include "Engine/ManagedUpdateHandler.h"
+#include "Engine/UpdateHandler.h"
 #include "LuaT/lua_ref.h"
 
 namespace xihad { namespace script
 {
-	class LuaManagedUpdateHandler : public ngn::ManagedUpdateHandler
+	class LuaManagedUpdateHandler : public ngn::UpdateHandler
 	{
 	public:
 		LuaManagedUpdateHandler(luaT::LuaRef& table);

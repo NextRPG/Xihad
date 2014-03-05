@@ -1,5 +1,6 @@
 #include "CppUnitTest.h"
 #include <string>
+#include <vector>
 #include <iostream>
 #include "GameWorld\Message\MessageDispatcher.h"
 #include "GameWorld\Message\MessageTag.h"
@@ -7,91 +8,200 @@
 #include "GameWorld\Message\MessageListener.h"
 #include "Lua\lua.hpp"
 
-// Assert::AreEqual(), ...
-// Logger::WriteMessage()
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace xihad::ngn;
+using namespace std;
 
 namespace xihad { namespace UnitTest
 {
-	using namespace xihad::ngn;
-	using std::string;
-
-	class ListenerExample : public MessageListener
+	class Entity
 	{
 	public:
-		ListenerExample(string id): mId(id), receivedTimes(0) {}
-		virtual ~ListenerExample() {}
+		typedef int Identifier;
 
-		virtual void receive( const MessageParam& pEvent, const string& pSourceId )
-		{
-			receivedTimes++;
-			lastSourceId = pSourceId;
-		}
-	public:
-		string mId;
-		int receivedTimes;
-		string lastSourceId;
+		int id;
 	};
 
-	// TODO: 必须修改类名
+	class EntityManager
+	{
+	public:
+		Entity* findObject(Entity::Identifier id)
+		{
+			if (id < 0 || (size_t)id >= mEntities.size()) 
+				return 0;
+
+			return mEntities[id];
+		}
+
+		vector<Entity*> mEntities;
+	};
+
+	struct MessageParameter
+	{
+		MessageParameter(string tag, int arg) :
+			tag(tag), arg(arg) {}
+
+		const MessageTag& getTag() const { return tag; }
+
+		MessageTag tag;
+		int arg;
+	};
+
+	class Listener
+	{
+	public:
+		typedef MessageParameter Parameter;
+		virtual ~Listener() {}
+		virtual void receive(Entity& entity, const Parameter& param) = 0;
+	};
+
+	class CountingListener : public Listener
+	{
+	public:
+		CountingListener(int id = 100) : id(id), receivedTimes(0) {}
+
+		virtual void receive(Entity& entity, const Parameter& param)
+		{
+			++receivedTimes;
+		}
+
+		int id;
+		int receivedTimes;
+	};
+
+	typedef MessageDispatcher<Entity, EntityManager, Listener> UTDispatcher;
 	TEST_CLASS(TestMessageDispatcher)
 	{
 	public:
-		// This method will run before every TestMethod in current class.
+		lua_State* L;
+		EntityManager* mgr;
+		UTDispatcher* mDispatcher;
+		CountingListener listeners[5];
+		Timeline t;
+
 		TEST_METHOD_INITIALIZE(initState)
 		{
+			t.reset(0);
+
+			for (int i = 0; i < 5; i++)
+				listeners[i].receivedTimes = 0;
+
+			L = luaL_newstate();
+			mgr = new EntityManager;
+			for (int i = 0; i < 10; ++i)
+			{
+				Entity* e = new Entity;
+				e->id = i;
+				mgr->mEntities.push_back(e);
+			}
+
+			mDispatcher = new UTDispatcher(*mgr);
+			mDispatcher->start();
+
+			mDispatcher->addListener(MessageTag("character"), &listeners[0]);
+			mDispatcher->addListener(MessageTag("character.move"), &listeners[1]);
+			mDispatcher->addListener(MessageTag("character.move.stop"), &listeners[2]);
+			mDispatcher->addListener(MessageTag("character.action"), &listeners[3]);
+			mDispatcher->addListener(MessageTag("round.start"), &listeners[4]);
 		}
 
-		// TODO: 修改测试方法名，方便查看结果
-		TEST_METHOD(TestNoconditionDispatch)
+		void runCheck(int c1, int c2, int c3, int c4, int c5)
 		{
-			lua_State* L = luaL_newstate();
-			MessageDispatcher* mDispatcher = new MessageDispatcher(L);
-			MessageTag tag1 = MessageTag("character.action.stay");
-			MessageTag tag2 = MessageTag("skill.single.attack");
+			int arr[5];
+			arr[0] = c1; arr[1] = c2; arr[2] = c3; arr[3] = c4; arr[4] = c5;
 
-			ListenerExample e1("character.action.stay");
-			ListenerExample e2("skill");
-			ListenerExample e3("skill.single");
-			ListenerExample e4("skill.single.attack");
-			ListenerExample e5("skill.single.attack.once");
+			this->mDispatcher->update(this->t);
+			for (int i = 0; i < 5; ++i)
+				Assert::AreEqual(listeners[i].receivedTimes, arr[i]);
 
-			ListenerExample e6("skill.double");
+			// reset
+			for (int i = 0; i < 5; i++)
+				listeners[i].receivedTimes = 0;
+		}
 
-			mDispatcher->addListener(tag1, &e1, nullptr);
-			mDispatcher->addListener(tag2, &e2, nullptr);
-			mDispatcher->addListener(MessageTag(e3.mId), &e3, nullptr);
-			mDispatcher->addListener(MessageTag(e4.mId), &e4, nullptr);
-			mDispatcher->addListener(MessageTag(e5.mId), &e5, nullptr);
-			mDispatcher->addListener(MessageTag(e6.mId), &e6,nullptr);
+		TEST_METHOD(TestHierarchicalReceive)
+		{
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), 1);
+			runCheck(1, 1, 1, 0, 0);
 
-			mDispatcher->dispatch(mDispatcher->newParam(tag1), "enemy-1", DispatchCondition());
-			mDispatcher->dispatch(mDispatcher->newParam(tag2), "enemy-2", DispatchCondition());
+			mDispatcher->dispatch(MessageParameter("character.move", 1), 1);
+			runCheck(1, 1, 0, 0, 0);
 
-			Assert::AreEqual(e1.receivedTimes, 1);
-			Assert::AreEqual(e2.receivedTimes, 1);
-			Assert::AreEqual(e3.receivedTimes, 1);
-			Assert::AreEqual(e4.receivedTimes, 1);
+			mDispatcher->dispatch(MessageParameter("character", 1), 1);
+			runCheck(1, 0, 0, 0, 0);
 
-			Assert::AreEqual(e5.receivedTimes, 0);
-			Assert::AreEqual(e6.receivedTimes, 0);
+			mDispatcher->dispatch(MessageParameter("character.other", 1), 1);
+			runCheck(1, 0, 0, 0, 0);
 
-			Assert::AreEqual(e1.lastSourceId, string("enemy-1"));
-			Assert::AreEqual(e2.lastSourceId, string("enemy-2"));
-			Assert::AreEqual(e3.lastSourceId, string("enemy-2"));
-			Assert::AreEqual(e4.lastSourceId, string("enemy-2"));
+			mDispatcher->dispatch(MessageParameter("character.other.other", 1), 1);
+			runCheck(1, 0, 0, 0, 0);
 
-			mDispatcher->destroy();
+			mDispatcher->dispatch(MessageParameter("", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+#define NON_EXSIST_OBJECT_ID 100
+			// Messages from non-exsist object will be discarded
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), NON_EXSIST_OBJECT_ID);
+			runCheck(0, 0, 0, 0, 0);
+		}
+		
+		TEST_METHOD(TestRemoveListener)
+		{
+			mDispatcher->addListener(MessageTag("character.dead"), &listeners[0]);
+			
+			mDispatcher->removeListener(MessageTag("character"), &listeners[0]);
+			mDispatcher->dispatch(MessageParameter("character.dead", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+			mDispatcher->addListener(MessageTag("character.dead"), &listeners[1]);
+			mDispatcher->addListener(MessageTag("a.b"), &listeners[1]);
+			mDispatcher->addListener(MessageTag("a.d.d.d"), &listeners[1]);
+			mDispatcher->clearListener(&listeners[1]);
+			mDispatcher->dispatch(MessageParameter("a", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+			mDispatcher->dispatch(MessageParameter("character.dead", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+			// remove non-exist tag
+			mDispatcher->removeListener(MessageTag("character.move.other"), &listeners[2]);
+			mDispatcher->removeListener(MessageTag("character.move.stop.other"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), 1);
+			runCheck(0, 0, 1, 0, 0);
+
+			mDispatcher->removeListener(MessageTag("character.move.stop"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.move.stop", 1), 1);
+			runCheck(0, 0, 0, 0, 0);
+
+			// remove non-exist listener
+			mDispatcher->removeListener(MessageTag("character.action"), &listeners[2]);
+			mDispatcher->dispatch(MessageParameter("character.action", 1), 1);
+			runCheck(0, 0, 0, 1, 0);
 		}
 
 		TEST_METHOD(TestDelayedDispatcher)
 		{
+			mDispatcher->dispatch(MessageParameter("character", 1), 1, 0.5);
+			t.update(0.3f);
+			runCheck(0, 0, 0, 0, 0);
 
+			t.update(0.2000001f);
+			runCheck(1, 0, 0, 0, 0);
+
+			mDispatcher->dispatch(MessageParameter("character", 1), 1, 0.5);
+			t.update(0.500001f);
+			runCheck(1, 0, 0, 0, 0);
 		}
 
 		// This method will run after run every TestMethod in current class.
 		TEST_METHOD_CLEANUP(cleanupState)
 		{
+			lua_close(L);
+
+			for (Entity* e : mgr->mEntities)
+				delete e;
+			delete mgr;
+
+			mDispatcher->destroy();
 		}
 	};
 }}

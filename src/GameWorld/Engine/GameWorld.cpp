@@ -1,8 +1,8 @@
 #include "GameWorld.h"
+#include <algorithm>
 #include "Timeline.h"
 #include "CppBase/XiAssert.h"
 #include "CompositeUpdateHandler.h"
-#include <algorithm>
 #include "GameScene.h"
 
 using namespace std;
@@ -37,8 +37,12 @@ namespace xihad { namespace ngn
 			return nullptr;
 
 		GameScene* prev = mImpl->scene;
-		mImpl->updaters.removeUpdateHandler(prev);
-		mImpl->updaters.appendUpdateHandler(scene);
+
+		auto iter = mImpl->updaters.findChildHandler(prev);
+		if (iter != mImpl->updaters.childHandlerEnd())
+			mImpl->updaters.eraseChildHandler(iter);
+
+		mImpl->updaters.appendChildHandler(scene);
 		mImpl->scene = scene;
 
 		return prev;
@@ -91,12 +95,12 @@ namespace xihad { namespace ngn
 
 	void GameWorld::appendUpdateHandler( UpdateHandler* updateHandler )
 	{
-		mImpl->updaters.appendUpdateHandler(updateHandler);
+		mImpl->updaters.appendChildHandler(updateHandler);
 	}
 
 	void GameWorld::removeUpdateHandler( UpdateHandler* updateHandler )
 	{
-		mImpl->updaters.appendUpdateHandler(updateHandler);
+		mImpl->updaters.appendChildHandler(updateHandler);
 	}
 
 	GameScene* GameWorld::getScene() const

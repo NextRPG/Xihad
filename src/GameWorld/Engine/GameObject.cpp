@@ -2,6 +2,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
+#include <boost/cast.hpp>
 #include "Component.h"
 #include "Transform.h"
 #include "ComponentSystemRegistry.h"
@@ -63,7 +64,7 @@ namespace xihad { namespace ngn
 
 		inline GameScene::Dispatcher* dispatcher()
 		{
-			return scene()->dispatcher();
+			return scene()->getDispatcher();
 		}
 
 		inline GameScene* scene()
@@ -131,7 +132,7 @@ namespace xihad { namespace ngn
 				for (const string& superclass : ancestors)
 					mImpl->components[superclass] = result.first;
 
-				appendUpdateHandler(result.first);
+				appendChildHandler(result.first);
 			}
 		}
 			
@@ -153,9 +154,7 @@ namespace xihad { namespace ngn
 				xassert(sz == 1);
 			}
 
-			removeUpdateHandler(comp);
-			comp->destroy();
-			return true;
+			return destroyChildHandler(comp);
 		}
 		
 		return false;
@@ -168,19 +167,14 @@ namespace xihad { namespace ngn
 
 	void GameObject::addTag( TagArgType tag )
 	{
-		auto result = mImpl->tags.insert(tag);
-		if (result.second) // insert success
-		{
+		if (mImpl->tags.insert(tag).second) // insert success
 			mImpl->listener()->onTagAdded(this, tag);
-		}
 	}
 
 	void GameObject::removeTag( TagArgType tag )
 	{
-		if (mImpl->tags.erase(tag) > 0)
-		{
+		if (mImpl->tags.erase(tag))
 			mImpl->listener()->onTagRemoved(this, tag);
-		}
 	}
 
 	void GameObject::clearTags()
@@ -200,16 +194,14 @@ namespace xihad { namespace ngn
 
 	void GameObject::updateChildrenWorldMatrix()
 	{
-		if (mImpl->transfromDirtyBits) // already updated?
+		if (mImpl->transfromDirtyBits ||	// already updated?
+			mImpl->childrenList->getChildHandlerCount() == 0)  // no child?	
 			return;
 
-		if (mImpl->childrenList->begin() == mImpl->childrenList->end()) // no child?	
-			return;
-
-		for (UpdateHandler* child : *mImpl->childrenList)
+		CompositeUpdateHandler::iterator it = mImpl->childrenList->childHandlerBegin();
+		while (it != mImpl->childrenList->childHandlerEnd())
 		{
-			GameObject* go = dynamic_cast<GameObject*>(child);
-			if (go != nullptr)
+			if (GameObject* go = polymorphic_downcast<GameObject*>(*it))
 			{
 				go->mImpl->transfromDirtyBits |= PARENT_DIRTY;
 				go->updateChildrenWorldMatrix();
@@ -219,6 +211,8 @@ namespace xihad { namespace ngn
 				cerr << "Non-GameObject updater found" << endl;
 				xassert(false);
 			}
+
+			++it;
 		}
 	}
 
@@ -305,7 +299,7 @@ namespace xihad { namespace ngn
 	bool GameObject::identityParent() const
 	{
 		return  mImpl->parent == nullptr || 
-				mImpl->parent == mImpl->scene()->rootObject();
+				mImpl->parent == mImpl->scene()->getRootObject();
 	}
 
 	void GameObject::setParent( GameObject* newParent )
@@ -318,11 +312,14 @@ namespace xihad { namespace ngn
 
 		// unlink
 		if (oldParent != nullptr)
-			oldParent->mImpl->childrenList->removeUpdateHandler(this);
+		{
+			CompositeUpdateHandler* list = oldParent->mImpl->childrenList;
+			list->eraseChildHandler(list->findChildHandler(this));
+		}
 
 		// link
 		if (newParent != nullptr)
-			newParent->mImpl->childrenList->appendUpdateHandler(this);
+			newParent->mImpl->childrenList->appendChildHandler(this);
 
 		mImpl->transfromDirtyBits |= PARENT_DIRTY;
 	}
@@ -334,13 +331,13 @@ namespace xihad { namespace ngn
 
 	GameObject::child_iterator GameObject::firstChild() const
 	{
-		auto it = mImpl->childrenList->begin();
+		auto it = mImpl->childrenList->childHandlerBegin();
 		return *reinterpret_cast<child_iterator*>(&it);
 	}
 
 	GameObject::child_iterator GameObject::lastChild() const
 	{
-		auto it = mImpl->childrenList->end();
+		auto it = mImpl->childrenList->childHandlerEnd();
 		return *reinterpret_cast<child_iterator*>(&it);
 	}
 

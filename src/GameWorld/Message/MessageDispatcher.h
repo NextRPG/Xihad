@@ -1,26 +1,21 @@
 #pragma once
 #include "IMessageDispatcher.h"
-#include "Engine\ManagedUpdateHandler.h"
 #include <list>
 #include <queue>
-#include <algorithm>
+#include <functional>		// for std::greater
 #include "SourceFilter.h"
 #include "TagTree.h"
-#include "ListenerWrapper.h"
 #include "MessageTag.h"
 #include "Engine\Timeline.h"
 
 namespace xihad { namespace ngn 
 {
 	template <typename Entity, typename EntityManager, typename Listener>
-	class MessageDispatcher : public ManagedUpdateHandler, 
-		public virtual IMessageDispatcher<Entity, EntityManager, Listener>
+	class MessageDispatcher :
+		public IMessageDispatcher<Entity, EntityManager, Listener>
  	{
 	public:
-		MessageDispatcher(EntityManager& manager) :
-			mManager(&manager)
-		{
-		}
+		MessageDispatcher(EntityManager& manager) : mManager(&manager) {}
 
 		void dispatch(ParamArg pParam, IdArg pSourceId, double timeout = 0.0) override
 		{
@@ -29,12 +24,10 @@ namespace xihad { namespace ngn
 			pendingEvents.push_back(e);
 		}
 		
-		void addListener(const MessageTag& pEventTag, Listener* pListener, SourceFilter* pFilter) override
+		void addListener(const MessageTag& pEventTag, Listener* pListener) override
 		{
-			if (pListener == nullptr)
-				return;
-
-			listenerTree.insert(pEventTag, ListenerWrapper(pListener, pFilter));
+			if (pListener != nullptr)
+				listenerTree.insert(pEventTag, pListener);
 		}
 
 		void clearListener(Listener* pListener) override
@@ -89,12 +82,6 @@ namespace xihad { namespace ngn
 
 		virtual void onStop() override
 		{
-			// ignore pendings
-			pendingRemove.clear();
-			pendingEvents.clear();
-
-			// TODO 检查下 clear 方法是否正确
-			listenerTree.clear();
 		}
 
 	private:
@@ -102,14 +89,12 @@ namespace xihad { namespace ngn
 		{
 			if (Entity* object = mManager->findObject(pSourceId))
 			{
-				auto pathItr = listenerTree.findPath(pParam.getTag());
+				TagTree<Listener*>::PathIterator pathItr = listenerTree.findPath(pParam.getTag());
 				while (pathItr.hasNext())
 				{
-					auto& list = *pathItr;
-					for (auto& listener : list)
-					{
-						listener.receive(*object, pParam);
-					}
+					for (Listener* listener : *pathItr)
+						listener->receive(*object, pParam);
+
 					++pathItr;
 				}
 			}
@@ -120,16 +105,15 @@ namespace xihad { namespace ngn
 			auto piter = pendingRemove.begin();
 			while (piter != pendingRemove.end())
 			{
-				TagTree<ListenerWrapper>::SubtreeIterator tree_iter;
+				TagTree<Listener*>::SubtreeIterator tree_iter;
 				if (piter->first.empty())
-					tree_iter = listenerTree.begin();
+					tree_iter = listenerTree.begin();	// remove all 
 				else
-					tree_iter = listenerTree.find(piter->first);
-
+					tree_iter = listenerTree.findSubtree(piter->first);	// remove specified tag
 
 				while (tree_iter.hasNext()) 
 				{
-					(*tree_iter).remove(ListenerWrapper(piter->second));
+					(*tree_iter).remove(piter->second);
 					++tree_iter;
 				}
 
@@ -181,10 +165,10 @@ namespace xihad { namespace ngn
 			int arriveIndex;
 		};
 
-		typedef std::priority_queue<Event, std::vector<Event>, std::greater<Event>> MessageQueue;
+		typedef std::priority_queue<Event, std::vector<Event>, std::greater<Event> > MessageQueue;
 
 		EntityManager* mManager;
-		TagTree<ListenerWrapper> listenerTree;
+		TagTree<Listener*> listenerTree;
 		std::list<Event> pendingEvents;
 		std::list<std::pair<MessageTag, Listener*> > pendingRemove;
 		MessageQueue awaitMessageQueue;

@@ -249,7 +249,7 @@ namespace xihad { namespace ngn
 		 * @return	返回以找到的节点开始的 SubtreeIterator ，如果 messageTag 为空或者
 		 *			没有找到对应的节点，则返回一个到达尾部的 SubtreeIterator 
 		 */
-		SubtreeIterator find(const MessageTag& messageTag)
+		SubtreeIterator findSubtree(const MessageTag& messageTag)
 		{
 			if (messageTag.empty())
 			{
@@ -273,7 +273,7 @@ namespace xihad { namespace ngn
 				return PathIterator(this, nullptr);
 			}
 
-			Node* found = findImpl(messageTag);
+			Node* found = findPathImpl(messageTag);
 			return PathIterator(this, found);
 		}
 
@@ -339,17 +339,43 @@ namespace xihad { namespace ngn
 			do 
 			{
 				bool same = *(*current) == (*itr);			// will excute at least once
-				if (stepOutDetection<ValueType>(same, itr, current, messageTag)) 
+				if (stepOutDetection<ValueType>(same, itr, current, messageTag))
 				{
-					if (same && itr == messageTag.end())
-					{
+					if (same && itr == messageTag.end()) 
 						return current;
-					}
+					break;
 				}
 			} while (itr != messageTag.end());
 
 			return nullptr;
 		}
+
+		Node* findPathImpl(const MessageTag& messageTag)
+		{
+			Node* current = &mHead;
+			auto itr = messageTag.begin();
+
+			do 
+			{
+				bool same = *(*current) == (*itr);			// will excute at least once
+
+				if ((!same && !current->right()))
+				{
+					return current->parent();
+				}
+				
+				if (same && (++itr == messageTag.end() || !current->left()))
+				{
+					return current;
+				}
+
+				if (!same) current = current->right(); 
+				if (same) current = current->left();
+			} while (itr != messageTag.end());
+
+			return nullptr;
+		}
+
 
 		ReturnType getList(Node* node)
 		{

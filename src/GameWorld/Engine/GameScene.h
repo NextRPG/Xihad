@@ -22,8 +22,7 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013年12月13日 02:12:17
 	 */
-	class GameScene : public CompositeUpdateHandler,
-		public virtual UserEventReceiver
+	class GameScene : public CompositeUpdateHandler, public UserEventReceiver
 	{
 	public:
 		typedef IMessageDispatcher<GameObject, GameScene, MessageListener> Dispatcher;
@@ -36,10 +35,10 @@ namespace xihad { namespace ngn
 		lua_State* mainThread() const;
 
 		/// 取得场景中的根节点对象
-		GameObject* rootObject() const;
+		GameObject* getRootObject() const;
 
 		/// 取得消息的分发者
-		Dispatcher* dispatcher() const;
+		Dispatcher* getDispatcher() const;
 
 		virtual ComponentSystem* requireSystem(const std::string& systemName);
 
@@ -64,14 +63,6 @@ namespace xihad { namespace ngn
 		 */
 		virtual GameObject* createObject(GameObject::IdArgType id, GameObject* parent = NULL);
 
-		/// 创建游戏对象
-		/**
-		 * @param id 指定 ID 
-		 * @param pid 指定父节点 ID
-		 * @return NULL 如果该 ID 已经被占用，或者场景中不存在指定的 ID 为 pid 的节点
-		 */
-		GameObject* createObject(GameObject::IdArgType id, GameObject::IdArgType pid);
-
 		/// 创建拥有唯一标识符的游戏对象
 		/** 
 		 * 通常会有如下结果：
@@ -90,8 +81,6 @@ namespace xihad { namespace ngn
 		 */
 		virtual GameObject* createUniqueObject(
 			GameObject::TagArgType header, GameObject* parent = NULL, bool addHeaderToTag = true);
-
-		bool destroyObject(GameObject::IdArgType id);
 
 		virtual bool onForegroundEvent(const KeyEvent& event);
 

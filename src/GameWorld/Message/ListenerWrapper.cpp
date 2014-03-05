@@ -2,7 +2,6 @@
 #include "SourceFilter.h"
 #include "CppBase\xassert.h"
 #include "MessageListener.h"
-#include "MessageParam.h"
 
 namespace xihad { namespace ngn 
 {

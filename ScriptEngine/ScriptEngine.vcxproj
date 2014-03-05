@@ -22,7 +22,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -57,6 +57,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -70,13 +71,12 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_all.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Destroyable.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Geometry.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageListener.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.cpp" />
@@ -97,14 +97,13 @@
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_all.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Component.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Destroyable.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_FileSystem.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameObject.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameScene.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Geometry.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_macro.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_ManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageListener.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.h" />

@@ -1,10 +1,10 @@
 #pragma once
-#include "Message\BaseMessageListener.h"
+#include "Message\MessageListener.h"
 #include "luaT\lua_ref.h"
 
 namespace xihad { namespace script
 {
-	class LuaMessageListener : public ngn::BaseMessageListener
+	class LuaMessageListener : public ngn::MessageListener
 	{
 	public:
 		explicit LuaMessageListener(luaT::LuaRef& obj);
@@ -13,8 +13,6 @@ namespace xihad { namespace script
 
 	protected:
 		~LuaMessageListener();
-
-		virtual void onDestroy() override;
 
 	private:
 		luaT::LuaRef mObject;

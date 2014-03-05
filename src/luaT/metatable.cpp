@@ -9,8 +9,7 @@ namespace luaT
 		luaL_getmetatable(L, name);
 
 		bool noMetatable = lua_isnil(L, -1);
-		if (noMetatable)
-			xassert(!noMetatable && 
+		xassert(!noMetatable && 
 			"Did you register your lib? No Metatable for this metatableName.");
 	}
 

@@ -1,7 +1,7 @@
 #include "XihadInitializer.h"
-#include "WorldRender3D\Geometry.h"
 #include "irrlicht\IrrlichtDevice.h"
 #include "irrlicht\ISceneManager.h"
+#include "WorldRender3D\Geometry.h"
 #include "WorldRender3D\IrrlichtComponentSystemFactory.h"
 #include "ScriptEngine\LuaComponentSystemFactory.h"
 #include "Engine\ComponentSystemRegistry.h"

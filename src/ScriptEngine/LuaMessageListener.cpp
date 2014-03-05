@@ -43,18 +43,5 @@ namespace xihad { namespace script
 	LuaMessageListener::~LuaMessageListener()
 	{
 	}
-
-	void LuaMessageListener::onDestroy()
-	{
-		lua_State* L = mObject.getState();
-		StackMemo memo(L);
-
-		mObject.pushSelf();
-		luaT::getField(L, -1, "onDestroy");
-
-		if (lua_pcall(L, 0, 0, 0) != 0)
-			LuaUtil::outputErrorMessage(L, "LuaMessageListener::onMessage");
-	}
-
 }}
 

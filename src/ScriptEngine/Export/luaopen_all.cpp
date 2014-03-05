@@ -1,7 +1,7 @@
 #include "luaopen_all.h"
 #include <Lua/lua.hpp>
 #include "luaopen_string.h"
-#include "luaopen_ManagedUpdateHandler.h"
+#include "luaopen_UpdateHandler.h"
 #include "luaopen_CompositeUpdateHandler.h"
 #include "luaopen_Component.h"
 #include "luaopen_LuaComponent.h"
@@ -10,10 +10,9 @@
 #include "luaopen_GameObject.h"
 #include "luaopen_Geometry.h"
 #include "luaopen_MessageDispatcher.h"
-#include "luaopen_Destroyable.h"
 #include "luaopen_MessageListener.h"
 #include "luaopen_2ndIteration.h"
-#include "CppBase/xassert.h"
+#include "CppBase\xassert.h"
 
 #define CHECKED_OPEN(L, module) \
 	int p_##module = lua_gettop(L);							\
@@ -43,7 +42,7 @@ namespace xihad { namespace script
 	void luaopen_all( lua_State* L )
 	{
 		CHECKED_OPEN(L, string);
-		CHECKED_OPEN(L, ManagedUpdateHandler);
+		CHECKED_OPEN(L, UpdateHandler);
 		CHECKED_OPEN(L, CompositeUpdateHandler);
 		CHECKED_OPEN(L, Component);
 		CHECKED_OPEN(L, LuaComponent);
@@ -52,7 +51,6 @@ namespace xihad { namespace script
 		CHECKED_OPEN(L, GameScene);
 		CHECKED_OPEN(L, GameObject);
 		CHECKED_OPEN(L, MessageDispatcher);
-		CHECKED_OPEN(L, Destroyable);
 		CHECKED_OPEN(L, MessageListener);
 		CHECKED_OPEN(L, 2ndIteration);
 	}
