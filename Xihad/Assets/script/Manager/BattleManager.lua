@@ -16,7 +16,7 @@ local BattleManager = {}
 
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager2
+	self.manager = manager1
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine
@@ -36,14 +36,14 @@ end
 
 function BattleManager:AI2Hero( manager1, manager2 )
 	self.manager = manager2
+	self.manager:roundStart()
 	print("round AI start")
 	self:changeState("round", self.manager.team)
-	self.manager:roundStart()
 	self.manager:runActors()
 	self.manager = manager1
+	self.manager:roundStart()
 	print("round Hero start")
 	self:changeState("round", self.manager.team)
-	self.manager:roundStart()
 end
 
 function BattleManager:addShowNothing( manager1, manager2 )

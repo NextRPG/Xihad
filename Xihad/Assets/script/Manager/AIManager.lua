@@ -22,7 +22,7 @@ function AIManager:init( AIs )
 				getExp = 0,
 				
 				name = "Tom" .. i,
-				skills = { 1, 3 },
+				skills = { 1, 2, 3 },
 
 				properties = {
 					physicalAttack = 5,
@@ -43,8 +43,12 @@ end
 function AIManager:runActors(  )
 	for characterObject in scene:objectsWithTag(self.team) do
 		local actor = characterObject:findComponent(c"Actor")
-		actor:run(coroutine.running())
-		coroutine.yield()
+		local character = characterObject:findComponent(c"Character")
+		if not character.states.TURNOVER then
+			actor:run(coroutine.running())
+			coroutine.yield()
+			character.states.TURNOVER = true
+		end
 	end
 end
 
