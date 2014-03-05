@@ -16,7 +16,6 @@ namespace xihad { namespace dialogue
 
 	protected:
 		virtual bool onTick() = 0;
-		virtual void checkEvent();
 
 	private:
 		float mStandardCycle;
