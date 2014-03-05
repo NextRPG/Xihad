@@ -38,10 +38,5 @@ namespace xihad { namespace dialogue
 		}
 	}
 
-	void CBaseTickMethod::checkEvent()
-	{
-		// TODO
-	}
-
 }}
 
