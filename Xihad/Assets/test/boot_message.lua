@@ -1,3 +1,9 @@
+---
+-- 严格区分两种类型的 MessageListener
+-- 1. 属于 Component 的一部分，只有等到 Component stop 的时候才会失效
+-- 2. 自治体，生命期完全由 Dispatcher 掌握，一旦不再接收任何类型的消息就失效
+-- 第一种情况需要在对应的 Component 的 onStop() 方法中调用 drop()
+-- 第二种情况需要在创建出 MessageListener 之后调用 drop()
 local ListenerManager = {}
 ListenerManager.__index = ListenerManager
 
@@ -11,53 +17,30 @@ function ListenerManager.new(p, obj)
 end
 
 function ListenerManager:onStart()
-	-- 妈的闭包竟然不能访问 self 
-	local comp = self
-	
 	-- 初始化消息接收器，不能从构造函数中初始化
-	self.testListener = {}
-	local lsn = self.testListener
-	function lsn:onMessage(src, param, tag)
-		-- 不要随意使用全局的 scene ，在未来的版本中可能会移除
-		local dsp = comp.object:getScene():dispatcher()
-		if param == "kill component" then
-			assert(comp.object:removeComponent(c"ListenerManager"))
-			dsp:dispatch(c"test", "I wont receive this message", c"sb")
-		elseif param =="kill listener" then
-			assert(comp:removeDestroyable(lsn))
-			assert(lsn:destroy())
-			dsp:dispatch(c"test", "I wont receive this message", c"sb")
-		else 
-			print(string.format("Got message from %q with parameter %s", src:getID(), tostring(param)))
+	self.testListener = {
+		onMessage = function(self, srcObject, param, msgTag)
+			print("Got message: ", param)
 		end
-	end
+	}
 	
-	self:attatchListener(lsn, "test")
+	local dispatcher = self.object:getScene():getDispatcher()
+	dispatcher:addListener("test", self.testListener)
 end
 
-function ListenerManager:attatchListener(lsn, ...)
-	local dsp = self.object:getScene():dispatcher()
+function ListenerManager:onStop()
+	-- 不要随意使用全局的 scene ，在未来的版本中可能会移除
+	local dispatcher = self.object:getScene():getDispatcher()
 	
-	function lsn:onDestroy()
-		print("listener:onDestroy()")
-		dsp:clearListener(lsn)
-	end
-	
-	-- register listener
-	for i=1,select('#', ...) do
-		dsp:addListener(c(select(i, ...)), lsn)
-	end
-	
-	-- 让消息接收器的生命期伴随这个组件
-	self:appendDestroyable(lsn)
+	-- dispatcher:removeListener("test", self.testListener)
+	dispatcher:clearListener(self.testListener)
+	self.testListener:drop()
 end
 
-local dsp = scene:dispatcher()
+local dispatcher = scene:getDispatcher()
 local go = scene:createObject(c"sb")
 local lm = go:appendComponent(c"ListenerManager")
 
-dsp:dispatch(c"test", "test message", c"__ROOT__", 0.1)
--- dsp:dispatch(c"test", "kill component", c"__ROOT__", 0.15)
-dsp:dispatch(c"test", "kill listener", c"__ROOT__", 0.15)
-
--- TODO 测试用例增加 dispatcher:remove()
+dispatcher:dispatch("test", "msg param", c"__ROOT__", 0.1)
+dispatcher:dispatch("test", { param = "second" }, c"__ROOT__", 0.15)
+print("message deliverd");

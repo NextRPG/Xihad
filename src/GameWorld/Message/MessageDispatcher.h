@@ -2,8 +2,8 @@
 #include "IMessageDispatcher.h"
 #include <list>
 #include <queue>
+#include <boost\intrusive_ptr.hpp>
 #include <functional>		// for std::greater
-#include "SourceFilter.h"
 #include "TagTree.h"
 #include "MessageTag.h"
 #include "Engine\Timeline.h"
@@ -26,24 +26,20 @@ namespace xihad { namespace ngn
 		
 		void addListener(const MessageTag& pEventTag, Listener* pListener) override
 		{
-			if (pListener != nullptr)
-				listenerTree.insert(pEventTag, pListener);
+			if (!pEventTag.empty() && pListener)
+				pendingOps.push_back(PendingOps(ADD, pEventTag, pListener));
 		}
 
 		void clearListener(Listener* pListener) override
 		{
-			if (pListener == nullptr) 
-				return;
-
-			pendingRemove.push_back(std::make_pair(MessageTag(), pListener));
+			if (pListener) 
+				pendingOps.push_back(PendingOps(CLEAR, MessageTag(), pListener));
 		}
 
 		void removeListener(const MessageTag& tag, Listener* pListener) override
 		{
-			if (tag.empty() || pListener == nullptr)
-				return;
-
-			pendingRemove.push_back(std::make_pair(tag, pListener));
+			if (!tag.empty() && pListener)
+				pendingOps.push_back(PendingOps(REMOVE, tag, pListener));
 		}
 
 	protected:
@@ -58,7 +54,7 @@ namespace xihad { namespace ngn
 		virtual void onUpdate(const Timeline& pTimeline) override
 		{
 			// clear or remove listener until next update
-			handlePendingRemovals();
+			handlePendingOps();
 
 			// insert pending messages into events queue
 			handlePendingMessages(pTimeline);
@@ -82,6 +78,9 @@ namespace xihad { namespace ngn
 
 		virtual void onStop() override
 		{
+			pendingEvents.clear();
+			pendingOps.clear();
+			listenerTree.clear();
 		}
 
 	private:
@@ -89,10 +88,10 @@ namespace xihad { namespace ngn
 		{
 			if (Entity* object = mManager->findObject(pSourceId))
 			{
-				TagTree<Listener*>::PathIterator pathItr = listenerTree.findPath(pParam.getTag());
+				TagTreeT::PathIterator pathItr = listenerTree.findPath(pParam.getTag());
 				while (pathItr.hasNext())
 				{
-					for (Listener* listener : *pathItr)
+					for (boost::intrusive_ptr<Listener> listener : *pathItr)
 						listener->receive(*object, pParam);
 
 					++pathItr;
@@ -100,24 +99,36 @@ namespace xihad { namespace ngn
 			}
 		}
 
-		inline void handlePendingRemovals()
+		inline void handlePendingOps()
 		{
-			auto piter = pendingRemove.begin();
-			while (piter != pendingRemove.end())
+			auto piter = pendingOps.begin();
+			while (piter != pendingOps.end())
 			{
-				TagTree<Listener*>::SubtreeIterator tree_iter;
-				if (piter->first.empty())
-					tree_iter = listenerTree.begin();	// remove all 
-				else
-					tree_iter = listenerTree.findSubtree(piter->first);	// remove specified tag
-
-				while (tree_iter.hasNext()) 
+				if (piter->opcode == ADD)
 				{
-					(*tree_iter).remove(piter->second);
-					++tree_iter;
+					listenerTree.insert(piter->tag, piter->listener);
+				}
+				else
+				{
+					TagTreeT::SubtreeIterator tree_iter;
+					switch (piter->opcode)
+					{
+					case CLEAR:
+						tree_iter = listenerTree.begin();
+						break;
+					case REMOVE:
+						tree_iter = listenerTree.findSubtree(piter->tag);
+						break;
+					}
+
+					while (tree_iter.hasNext()) 
+					{
+						(*tree_iter).remove(piter->listener);
+						++tree_iter;
+					}
 				}
 
-				piter = pendingRemove.erase(piter);
+				piter = pendingOps.erase(piter);
 			}
 		}
 
@@ -165,12 +176,24 @@ namespace xihad { namespace ngn
 			int arriveIndex;
 		};
 
+		enum PendingOpCode { ADD, REMOVE, CLEAR };
+		struct PendingOps
+		{
+			PendingOps(PendingOpCode opcode, const MessageTag& tag, Listener* li) :
+				opcode(opcode), tag(tag), listener(li) {}
+
+			PendingOpCode opcode;
+			MessageTag tag;
+			boost::intrusive_ptr<Listener> listener;
+		};
+
 		typedef std::priority_queue<Event, std::vector<Event>, std::greater<Event> > MessageQueue;
+		typedef TagTree<boost::intrusive_ptr<Listener> > TagTreeT;
 
 		EntityManager* mManager;
-		TagTree<Listener*> listenerTree;
+		TagTreeT listenerTree;
 		std::list<Event> pendingEvents;
-		std::list<std::pair<MessageTag, Listener*> > pendingRemove;
+		std::list<PendingOps> pendingOps;
 		MessageQueue awaitMessageQueue;
 	};
 }}

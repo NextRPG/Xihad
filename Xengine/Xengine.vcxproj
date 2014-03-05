@@ -88,13 +88,13 @@
     <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp" />
-    <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\BitOperation.h" />
     <ClInclude Include="..\src\CppBase\CLineBreak.hpp" />
     <ClInclude Include="..\src\CppBase\CStringSplitter.hpp" />
     <ClInclude Include="..\src\CppBase\IteratorPair.h" />
+    <ClInclude Include="..\src\CppBase\ReferenceCounted.h" />
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
     <ClInclude Include="..\src\CppBase\xassert.h" />
@@ -129,7 +129,6 @@
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />
-    <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageListener.h" />
     <ClInclude Include="..\src\GameWorld\Message\SourceFilter.h" />

@@ -51,21 +51,33 @@ namespace xihad { namespace UnitTest
 	{
 	public:
 		typedef MessageParameter Parameter;
+		Listener() : ref_count(1) {}
 		virtual ~Listener() {}
 		virtual void receive(Entity& entity, const Parameter& param) = 0;
+
+		int ref_count;
 	};
+
+	void intrusive_ptr_add_ref(Listener* l)
+	{
+		++l->ref_count;
+	}
+
+	void intrusive_ptr_release(Listener* l)
+	{
+		--l->ref_count;
+	}
 
 	class CountingListener : public Listener
 	{
 	public:
-		CountingListener(int id = 100) : id(id), receivedTimes(0) {}
+		CountingListener(int id = 100) : receivedTimes(0) {}
 
 		virtual void receive(Entity& entity, const Parameter& param)
 		{
 			++receivedTimes;
 		}
 
-		int id;
 		int receivedTimes;
 	};
 
@@ -176,6 +188,11 @@ namespace xihad { namespace UnitTest
 			mDispatcher->removeListener(MessageTag("character.action"), &listeners[2]);
 			mDispatcher->dispatch(MessageParameter("character.action", 1), 1);
 			runCheck(0, 0, 0, 1, 0);
+
+			mDispatcher->removeListener(MessageTag("test"), &listeners[0]);
+			mDispatcher->addListener(MessageTag("test"), &listeners[0]);
+			mDispatcher->dispatch(MessageParameter("test", 1), 1);
+			runCheck(1, 0, 0, 0, 0 );
 		}
 
 		TEST_METHOD(TestDelayedDispatcher)
@@ -202,6 +219,8 @@ namespace xihad { namespace UnitTest
 			delete mgr;
 
 			mDispatcher->destroy();
+			for (int i = 0; i < 5; ++i)
+				Assert::AreEqual(listeners[i].ref_count, 1);
 		}
 	};
 }}
