@@ -14,7 +14,7 @@ function BaseStrategy.new( o )
 	return o
 end
 
-function BaseStrategy:judgeTile(  )
+function BaseStrategy:judgePerson(  )
 	local actor = self.object:findComponent(c"Character")
 	local names, distances, HPs = {}, {}, {}
 
@@ -36,6 +36,11 @@ function BaseStrategy:judgeTile(  )
 	board:appendValue( HPs, self.HPFactor )
 
 	local name = board:getResult()
+	return name
+end
+
+function BaseStrategy:judgeTile(  )
+	local name = self:judgePerson(  )
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
 	local tile = GoalFinder:getTargetTile( actor.tile, enemy.tile, actor:getProperty("maxAP"))
 	

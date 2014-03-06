@@ -9,8 +9,9 @@ local BaseStrategy = require "BaseStrategy"
 local Scoreboard = require "Scoreboard"
 
 local RemoteStrategy = {
-	judgeTile_aux = BaseStrategy.judgeTile,
-	judgeSkill_aux = BaseStrategy.judgeSkill
+	-- judgeTile_aux = BaseStrategy.judgeTile,
+	-- judgeSkill_aux = BaseStrategy.judgeSkill
+	judgePerson = BaseStrategy.judgePerson
 }
 
 function RemoteStrategy.new( o )

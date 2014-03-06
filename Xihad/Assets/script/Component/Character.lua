@@ -107,7 +107,7 @@ function Character:handleDamage_aux( param )
 	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
 	if (self:getProperty("currentHP") < 0) then
 		self.properties.currentHP = 0
-		-- self.object:stop()
+		self.object:stop()
 	end
 end
 
