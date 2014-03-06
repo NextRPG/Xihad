@@ -6,6 +6,7 @@
 -- @copyright NextRPG
 
 local CharacterManager = require "CharacterManager"
+local StrategyDatabase = require "StrategyDatabase"
 
 
 local AIManager = CharacterManager.new{team = "AI"}
@@ -30,13 +31,16 @@ function AIManager:init( AIs )
 					magicAttack = 5,
 					magicDefense = 10,  
 					maxAP = 5,			
-					maxHP = 200
+					maxHP = 200,
+					maxMP = 100
 				}
 
 			}
 		character.name = AI.name
+		character.strategy = StrategyDatabase:createStrategy(1)
 		self.currentCharacter = self:createCharacter(character, AI.y, AI.x)
-		self.currentCharacter:appendComponent(c"Actor", {manager = self})
+		self.currentCharacter:appendComponent(c"Actor", 
+			{manager = self, strategy = character.strategy})
 	end
 end
 

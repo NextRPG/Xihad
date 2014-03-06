@@ -53,16 +53,15 @@ function Character.new( o )
 	end
 	o.properties.currentHP = o.properties.maxHP:calculate()
 	o.properties.currentAP = o.properties.maxAP:calculate()
+	o.properties.currentMP = o.properties.maxMP:calculate()
 
 	return o
 end
 
---- 
--- 找到当前Character所在的TileObject
--- @treturn Object tileObject
--- function Character.tile
--- 	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
--- end
+function Character:canTrigger( skill )
+	return self:getProperty("currentMP") - skill.consumeMP >= 0
+end
+
 
 function Character:getManager(  )
 	return self.team == "Hero" and require("HeroManager") or require("AIManager")
@@ -71,31 +70,6 @@ end
 function Character:getEnemyManager(  )
 	return self.team == "Hero" and require("AIManager") or require("HeroManager")  
 end
-
--- EffectTarget
--- unused
--- function Character:bindEffect( effect )
--- 	assert(effect, "effect can't be nil")
--- 	self.effects[effect] = #self.effects
--- end
-
--- function Character:unbindEffect( effect )
--- 	assert(effect, "effect can't be nil")
--- 	self.effects[effect] = nil	
--- end
-
--- function Character:updateEffects(  )
--- 	for k,v in pairs(self.effects) do
--- 		k:roundUpdate(self)
--- 	end
--- end
-
--- function Character:resetEffects(  )
--- 	self.effects = {}
--- end
-
--- EquipTarget
--- unused
 
 function Character:equip( equipment )
 	if equipment:equip(self) then
@@ -133,7 +107,7 @@ function Character:handleDamage_aux( param )
 	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
 	if (self:getProperty("currentHP") < 0) then
 		self.properties.currentHP = 0
-		self.object:stop()
+		-- self.object:stop()
 	end
 end
 

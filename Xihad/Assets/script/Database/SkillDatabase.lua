@@ -30,7 +30,6 @@ end
 loadSkill{
 	id = 1,
 	name = "怒龙现身",
-	maxtimes = 15,
 	minDistance = 1,
 	maxDistance = 1,
 	-- no need for range
@@ -41,13 +40,13 @@ loadSkill{
 	effect2Target = {
 		name = "SleepEffect",
 		rounds = 2
-	}
+	},
+	consumeMP = 10
 }
 
 loadSkill{
 	id = 2,
 	name  = "霹雳狂龙",
-	maxtimes = 10,
 	minDistance = 2,
 	maxDistance = 3,
 	rangeTable = {
@@ -58,19 +57,20 @@ loadSkill{
 	damage = 50,
 	property = "P",
 	description = "攻击周围的敌人",
-	animation = "swipe and spin sword"
+	animation = "swipe and spin sword",
+	consumeMP = 100
 }
 
 loadSkill{
 	id = 3,
 	name = "正常攻击",
-	maxtimes = "MAX",
 	minDistance = 1,
 	maxDistance = 1,
 	damage = 10,
 	property = "N",
 	description = "就是普通的攻击而已",
 	animation = "punch and swipe sword",
+	consumeMP = 5
 }
 
 return SkillDatabase

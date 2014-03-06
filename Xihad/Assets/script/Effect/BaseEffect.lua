@@ -16,7 +16,7 @@ function BaseEffect:checkUpdate( currentTeam )
 		self.rounds = self.rounds - 1
 		return true
 	elseif self.rounds == 0 then
-		self.object:stop()
+		-- self.object:stop()
 	end
 	return false
 end

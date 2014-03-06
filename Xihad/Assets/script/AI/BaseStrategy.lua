@@ -4,13 +4,13 @@ local ScoreBoard = require "ScoreBoard"
 local Chessboard = require "Chessboard"
 
 local BaseStrategy = {
-
+	object = nil
 }
 
 function BaseStrategy.new( o )
 	assert(type(o) == "table", "prototype RandomStratedy must be a table")
 	setmetatable(o, {__index = BaseStrategy})
-
+	
 	return o
 end
 
@@ -32,8 +32,8 @@ function BaseStrategy:judgeTile(  )
 	local board = ScoreBoard.new{}
 
 	board:appendKey( names )
-	board:appendValue( distances, 0.5 )
-	board:appendValue( HPs, 0.5 )
+	board:appendValue( distances, self.distanceFactor )
+	board:appendValue( HPs, self.HPFactor )
 
 	local name = board:getResult()
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
@@ -47,14 +47,18 @@ function BaseStrategy:judgeSkill(  )
 	local skills = character.skills
 	local center = character.tile
 
-	local names, damages, currentTimes, ranges = {},{},{},{}
+	local names, damages, consumeMPs, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
 		repeat
 			local skill = SkillManager:getSkill(id)
-			if not skill:hasEnemy( center, character:getEnemyManager()) then break end			
+
+			if not character:canTrigger(skill) or
+			   not skill:hasEnemy( center, character:getEnemyManager())
+			then break end		
+
 			names[#names + 1] = skill.id
 			damages[skill.id] = skill.damage
-			currentTimes[skill.id] = skill.currentTimes
+			consumeMPs[skill.id] = skill.consumeMP
 			ranges[skill.id] = #skill.range
 		until true
 	end	
@@ -66,9 +70,9 @@ function BaseStrategy:judgeSkill(  )
 	local board = ScoreBoard.new{}
 
 	board:appendKey( names )
-	board:appendValue( damages, 0.3 )
-	board:appendValue( currentTimes, 0.3 )
-	board:appendValue( ranges, 0.4 )
+	board:appendValue( damages, self.damageFactor )
+	board:appendValue( consumeMPs, self.consumeMPFactor )
+	board:appendValue( ranges, self.rangeFactor )
 
 	local selectSkill = SkillManager:getSkill(board:getResult())
 	local target = selectSkill:getBestTarget(center)
