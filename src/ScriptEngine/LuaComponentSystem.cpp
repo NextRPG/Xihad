@@ -9,7 +9,7 @@
 #include <iostream>
 #include "LuaUtil.h"
 #include "LuaComponent.h"
-#include "Engine/InheritenceTree.h"
+#include "Engine/InheritanceTree.h"
 #include "Export/luaopen_all.h"
 #include "CppBase/XiAssert.h"
 #include "Engine/Timeline.h"
@@ -30,7 +30,7 @@ namespace xihad { namespace script
 	{
 		lua_State* L;
 		LuaRef lHandle;
-		InheritenceTree hierarchy;
+		InheritanceTree hierarchy;
 	};
 
 	LuaComponentSystem::LuaComponentSystem( IrrlichtDevice* dev,
@@ -100,7 +100,7 @@ namespace xihad { namespace script
 		delete mImpl;
 	}
 
-	ngn::InheritenceChain LuaComponentSystem::hierarchy( const std::string& compName )
+	ngn::InheritancePath LuaComponentSystem::hierarchy( const std::string& compName )
 	{
 		StackMemo memo(mImpl->L);
 		if (!mImpl->hierarchy.containsType(compName) && !loadComponent(compName))
@@ -109,7 +109,7 @@ namespace xihad { namespace script
 			LuaUtil::outputErrorMessage(mImpl->L);
 		}
 
-		return mImpl->hierarchy.getInheritenceChain(compName);
+		return mImpl->hierarchy.getInheritanceChain(compName);
 	}
 
 	Component* LuaComponentSystem::create( const std::string& compName, 
@@ -228,7 +228,7 @@ namespace xihad { namespace script
 		return mImpl->L;
 	}
 
-	static void invokeSystem(LuaComponentSystem* sys, InheritenceTree& hierarchy, const char* method)
+	static void invokeSystem(LuaComponentSystem* sys, InheritanceTree& hierarchy, const char* method)
 	{
 		lua_State* L = sys->getLuaState();
 

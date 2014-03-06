@@ -139,6 +139,7 @@ int main(int argc, char** argv)
 	{
 		video::SColor bg = device->isWindowActive() ? video::SColor(0) : video::SColor(0xff101010);
 		device->getVideoDriver()->beginScene(true, true, bg);
+		device->getSceneManager()->onAnimate();
 		device->getSceneManager()->drawAll();
 		device->getVideoDriver()->endScene();
 	}

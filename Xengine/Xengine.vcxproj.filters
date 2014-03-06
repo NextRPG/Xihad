@@ -141,12 +141,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\Process.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceTree.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceChain.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\CompositeUpdateHandler.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -193,6 +187,13 @@
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CppBase\ReferenceCounted.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
@@ -240,12 +241,6 @@
     <ClCompile Include="..\src\GameWorld\Engine\Process.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceTree.cpp">
-      <Filter>Component\Inheritence</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp">
-      <Filter>Component\Inheritence</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\CompositeUpdateHandler.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
@@ -263,6 +258,12 @@
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">
       <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\InheritancePath.cpp">
+      <Filter>Component\Inheritence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp">
+      <Filter>Component\Inheritence</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 
 #include "../../CEGUI.h"
 #include <Irrlicht/irrlicht.h>
+#pragma warning(disable: 4819)
 
 namespace CEGUI
 {

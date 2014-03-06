@@ -3,12 +3,12 @@
 namespace xihad { namespace ngn
 {
 	
-	InheritenceChain BaseComponentSystem::hierarchy( const std::string& compName )
+	InheritancePath BaseComponentSystem::hierarchy( const std::string& compName )
 	{
-		return mHierarchyTree.getInheritenceChain(compName);
+		return mHierarchyTree.getInheritanceChain(compName);
 	}
 
-	BaseComponentSystem::BaseComponentSystem( const InheritenceTree& hierarchy ) :
+	BaseComponentSystem::BaseComponentSystem( const InheritanceTree& hierarchy ) :
 		mHierarchyTree(hierarchy)
 	{
 	}

@@ -108,12 +108,12 @@ namespace xihad { namespace ngn
 			{
 			}
 
-			virtual InheritenceChain hierarchy(const std::string& compName) override
+			virtual InheritancePath hierarchy(const std::string& compName) override
 			{
 				if (ComponentSystem* sys = scene->requireSystem(compName))
 					return sys->hierarchy(compName);
 				else
-					return InheritenceChain();
+					return InheritancePath();
 			}
 
 			virtual Component* create( const std::string& typeName, 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "InheritenceChain.h"
+#include "InheritancePath.h"
 #include "NullProperpties.h"
 
 namespace xihad { namespace ngn
@@ -20,12 +20,12 @@ namespace xihad { namespace ngn
 		
 		/// 获得指定类型的继承关系链
 		/**
-		 * 如果返回的关系链的 InheritenceChain::begin() == InheritenceChain::end() ，
+		 * 如果返回的关系链的 InheritanceChain::begin() == InheritanceChain::end() ，
 		 * 则此工厂无法创建该类型名的组件。
 		 * 
 		 * @param typeName 指定组件类型名
 		 */
-		virtual InheritenceChain hierarchy(const std::string& typeName) = 0;
+		virtual InheritancePath hierarchy(const std::string& typeName) = 0;
 
 		/// 创建指定类型的组件
 		/**

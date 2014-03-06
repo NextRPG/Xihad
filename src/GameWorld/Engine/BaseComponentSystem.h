@@ -1,6 +1,6 @@
 #pragma once
 #include "ComponentSystem.h"
-#include "InheritenceTree.h"
+#include "InheritanceTree.h"
 
 namespace xihad { namespace ngn
 {
@@ -12,12 +12,12 @@ namespace xihad { namespace ngn
 		 * @param hierarchy 层次关系必须和 #create() 方法实现对应。即，如果包含某个类型，那么
 		 *					#create() 方法必须返回一个非空组件
 		 */
-		BaseComponentSystem(const InheritenceTree& hierarchy);
+		BaseComponentSystem(const InheritanceTree& hierarchy);
 
-		virtual InheritenceChain hierarchy( const std::string& compName ) override;
+		virtual InheritancePath hierarchy( const std::string& compName ) override;
 
 	private:
-		const InheritenceTree& mHierarchyTree;
+		const InheritanceTree& mHierarchyTree;
 	};
 }}
 

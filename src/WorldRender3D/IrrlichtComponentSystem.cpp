@@ -37,8 +37,6 @@ namespace xihad { namespace render3d
 		irr_ptr<ISceneManager> smgr;
 		AnimationClipsCache* clipCaches;
 		CeguiHandle* ceguiSystem;
-		float seconds;
-		bool firstUpdate;
 		
 		list<RenderComponent*> renderComponents;
 		unordered_map<string, luaT::LuaRef> particleSystemCreator;
@@ -46,7 +44,7 @@ namespace xihad { namespace render3d
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
 		IrrlichtDevice* device, ISceneManager* scene, 
-		const InheritenceTree& tree, AnimationClipsCache& gCache,
+		const InheritanceTree& tree, AnimationClipsCache& gCache,
 		CeguiHandle* ceguiSystem) :
 	BaseComponentSystem(tree), mImpl(new IrrlichtComponentSystemImpl)
 	{
@@ -57,7 +55,6 @@ namespace xihad { namespace render3d
 		mImpl->driver = device->getVideoDriver();
 		mImpl->smgr = scene;
 		mImpl->clipCaches = &gCache;
-		mImpl->firstUpdate = true;
 		mImpl->ceguiSystem = ceguiSystem;
 	}
 
@@ -194,7 +191,6 @@ namespace xihad { namespace render3d
 
 	void IrrlichtComponentSystem::onStart()
 	{
-		mImpl->seconds = 0;
 	}
 
 	static void syncSceneNode(ISceneNode* node)
@@ -213,22 +209,11 @@ namespace xihad { namespace render3d
 
 	void IrrlichtComponentSystem::onUpdate( const Timeline& tl )
 	{
-		// mImpl->seconds += tl.getLastTimeChange();
-		// Timer::setTime(mImpl->seconds*1000);
-
-		// ....
-		// 第一次更新时，场景还未更新，所以所以游戏对象都处于原点，会造成人工痕迹
 		mImpl->ceguiSystem->update(tl);
-
-
 		mImpl->driver->beginScene(true, true, SColor(255,100,101,140));
-		if (mImpl->firstUpdate)
-		{
-			mImpl->firstUpdate = false;
-		}
-		else
 		{
 			syncSceneNode(mImpl->smgr->getRootSceneNode());
+			mImpl->smgr->onAnimate((s32) (tl.getElapsedSeconds()*1000));
 			mImpl->smgr->drawAll();
 			mImpl->ceguiSystem->renderFrame();
 		}

@@ -51,7 +51,7 @@ namespace xihad { namespace script
 			{ "appendUpdateHandler", appendUpdater },
 			{ "removeUpdateUpdater", removeUpdater},
 		luaT_defRegsEnd
-		MetatableFactory<CompositeUpdateHandler>::create(L, cuhRegs, 0);
+		MetatableFactory<CompositeUpdateHandler, UpdateHandler>::create(L, cuhRegs, 0);
 
 		return 0;
 	}

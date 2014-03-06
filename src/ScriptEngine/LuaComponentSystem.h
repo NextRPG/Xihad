@@ -20,7 +20,7 @@ namespace xihad { namespace script
 		LuaComponentSystem(irr::IrrlichtDevice* dev, ngn::GameScene* scene, const std::string& compBase);
 		virtual ~LuaComponentSystem();
 
-		ngn::InheritenceChain hierarchy(const std::string& compName) override;
+		ngn::InheritancePath hierarchy(const std::string& compName) override;
 
 		ngn::Component* create(const std::string& compName, ngn::GameObject& obj, 
 			const ngn::Properties& param = ngn::NullProperties()) override;

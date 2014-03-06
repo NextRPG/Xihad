@@ -18,7 +18,7 @@ namespace xihad { namespace audio
 		float soundVolume;
 	};
 
-	AudioComponentSystem::AudioComponentSystem(float musicVolume, float soundVolume, const ngn::InheritenceTree& tree) :
+	AudioComponentSystem::AudioComponentSystem(float musicVolume, float soundVolume, const ngn::InheritanceTree& tree) :
 		BaseComponentSystem(tree), mImpl(new AudioComponentSystemImpl)
 	{
 #ifdef _DEBUG

@@ -1058,6 +1058,9 @@ namespace scene
 		virtual u32 registerNodeForRendering(ISceneNode* node,
 			E_SCENE_NODE_RENDER_PASS pass = ESNRP_AUTOMATIC) = 0;
 
+		//! if now < 0, then use irrlicht engine timer
+		virtual void onAnimate(s32 nowMs = -1) = 0;
+
 		//! Draws all the scene nodes.
 		/** This can only be invoked between
 		IVideoDriver::beginScene() and IVideoDriver::endScene(). Please note that

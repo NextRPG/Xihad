@@ -21,7 +21,7 @@ namespace xihad { namespace render3d
 	public:
 		IrrlichtComponentSystem(
 			irr::IrrlichtDevice* device, irr::scene::ISceneManager* scene,
-			const ngn::InheritenceTree& tree, AnimationClipsCache& gCache,
+			const ngn::InheritanceTree& tree, AnimationClipsCache& gCache,
 			CeguiHandle* ceguiSystem);
 
 		virtual ~IrrlichtComponentSystem();

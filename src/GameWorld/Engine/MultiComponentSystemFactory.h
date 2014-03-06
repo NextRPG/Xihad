@@ -1,6 +1,6 @@
 #pragma once
 #include "ComponentSystemFactory.h"
-#include "InheritenceTree.h"
+#include "InheritanceTree.h"
 
 namespace xihad { namespace ngn
 {
@@ -12,7 +12,7 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013年12月13日 16:25:40
 	 */
-	class MultiComponentSystemFactory : public ComponentSystemFactory, protected InheritenceTree
+	class MultiComponentSystemFactory : public ComponentSystemFactory, protected InheritanceTree
 	{
 	public:
 		/**
@@ -37,11 +37,11 @@ namespace xihad { namespace ngn
 
 		/// 注册继承自 #getBaseTypeName() 的类型
 		/**
-		 * @see InheritenceTree::registerType()
+		 * @see InheritanceTree::registerType()
 		 */
 		RegisterResult registerDerivedType(const std::string& typeName);
 
-		InheritenceTree& inheritenceTree()
+		InheritanceTree& inheritenceTree()
 		{
 			return *this;
 		}

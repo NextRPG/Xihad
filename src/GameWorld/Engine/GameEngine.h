@@ -9,7 +9,6 @@ namespace irr
 }
 namespace xihad { namespace ngn
 {
-	struct GameEngineImpl;
 	class GameWorld;
 
 	/// ÓÎÏ·ÒıÇæÆô¶¯Æ÷
