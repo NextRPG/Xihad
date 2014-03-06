@@ -177,9 +177,6 @@
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h">
       <Filter>Broadcast</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -195,6 +192,7 @@
     <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\CppBase\ReferenceCounted.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
@@ -261,9 +259,6 @@
       <Filter>Broadcast</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp">
-      <Filter>Broadcast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp">
       <Filter>Broadcast</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">

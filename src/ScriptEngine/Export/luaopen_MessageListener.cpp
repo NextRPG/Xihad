@@ -11,7 +11,11 @@ namespace xihad { namespace script
 {
 	int luaopen_MessageListener( lua_State* L )
 	{
-		MetatableFactory<MessageListener>::create(L, 0);
+		luaT_defRegsBgn(msgLister)
+			luaT_cnnamefunc(intrusive_ptr_add_ref, grab),
+			luaT_cnnamefunc(intrusive_ptr_release, drop),
+		luaT_defRegsEnd
+		MetatableFactory<MessageListener>::create(L, msgLister);
 		return 0;
 	}
 }}

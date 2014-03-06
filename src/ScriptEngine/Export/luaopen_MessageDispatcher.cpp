@@ -12,11 +12,11 @@ luaT_defMetaData(Dispatcher, false);
 namespace xihad { namespace script
 {
 	// Dispatcher::dispatch(tagString, any, sourceObjID[, timeout])
-	int dispatch(lua_State* L)
+	static int dispatch(lua_State* L)
 	{
 		Dispatcher* dsptch = checkarg<Dispatcher*>(L, 1);
-		const std::string& tagString = checkarg<std::string&>(L, 2);
-		Dispatcher::Parameter param(tagString, LuaRef::fromIndex(L, 3));
+		const char* tagString = checkarg<const char*>(L, 2);
+		Dispatcher::Parameter param(std::string(tagString), LuaRef::fromIndex(L, 3));
 		const std::string& objID = checkarg<std::string&>(L, 4);
 
 		if (lua_gettop(L) == 4)
@@ -30,10 +30,10 @@ namespace xihad { namespace script
 		return 0;
 	}
 
-	int addListener(lua_State* L)
+	static int addListener(lua_State* L)
 	{
 		Dispatcher* dsptch = checkarg<Dispatcher*>(L, 1);
-		std::string& tag = checkarg<std::string&>(L, 2);
+		const char* tag = checkarg<const char*>(L, 2);
 		luaL_checktype(L, 3, LUA_TTABLE);
 		MessageListener* lis = new LuaMessageListener(LuaRef::fromIndex(L, 3));
 		dsptch->addListener(std::string(tag), lis);
