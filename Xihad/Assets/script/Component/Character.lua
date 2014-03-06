@@ -32,6 +32,7 @@ local Character = {
 	exp = 0,
 	name = "",
 	skills = {},
+	skillTimes = {},
 	effects = Set.new{},
 	equipments = {}, -- Consts.parts
 	properties = {},
@@ -59,7 +60,7 @@ function Character.new( o )
 end
 
 function Character:canTrigger( skill )
-	return self:getProperty("currentMP") - skill.consumeMP >= 0
+	return self.skillTimes[skill.id] > 0
 end
 
 
@@ -96,7 +97,7 @@ function Character:getProperty( name )
 end
 
 function Character:levelUp( level )
-	-- body
+	
 end
 
 function Character:handleDamage_aux( param )
@@ -105,9 +106,10 @@ function Character:handleDamage_aux( param )
 	(skillPower * attack*3)/(defense + attack)*(1.1 - math.random() * 0.2))
 	print("cause" .. damage .. "damage")
 	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
-	if (self:getProperty("currentHP") < 0) then
+	if (self:getProperty("currentHP") <= 0) then
 		self.properties.currentHP = 0
 		self.object:stop()
+		print("stop " .. self.name)
 	end
 end
 
@@ -149,6 +151,10 @@ end
 
 function Character:handleHeal( heal )
 	-- 需要公式
+end
+
+function Character:onStop(  )
+	Chessboard:tileAt(self.tile).character = nil
 end
 
 return Character

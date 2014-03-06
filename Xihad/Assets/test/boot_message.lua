@@ -25,7 +25,8 @@ function ListenerManager:onStart()
 	}
 	
 	local dispatcher = self.object:getScene():getDispatcher()
-	dispatcher:addListener("test", self.testListener)
+	dispatcher:addListener("test.a", self.testListener)
+	
 end
 
 function ListenerManager:onStop()
@@ -41,6 +42,6 @@ local dispatcher = scene:getDispatcher()
 local go = scene:createObject(c"sb")
 local lm = go:appendComponent(c"ListenerManager")
 
-dispatcher:dispatch("test", "msg param", c"__ROOT__", 0.1)
-dispatcher:dispatch("test", { param = "second" }, c"__ROOT__", 0.15)
+dispatcher:dispatch("test.a", "msg param", c"__ROOT__", 0.1)
+dispatcher:dispatch("test.a", { param = "second" }, c"__ROOT__", 0.15)
 print("message deliverd");

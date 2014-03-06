@@ -29,7 +29,19 @@ loadSreategy{
 	HPFactor = 0.5,
 	-- judgeSkill
 	damageFactor = 0.3,
-	consumeMPFactor = 0.3,
+	currentTimeFactor = 0.3,
+	rangeFactor = 0.4
+}
+
+loadSreategy{
+	id = 2,
+	name = "RemoteStrategy",
+	-- judgeTile
+	distanceFactor = 0.5,
+	HPFactor = 0.5,
+	-- judgeSkill
+	damageFactor = 0.3,
+	currentTimeFactor = 0.3,
 	rangeFactor = 0.4
 }
 

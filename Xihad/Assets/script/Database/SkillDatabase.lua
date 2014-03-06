@@ -41,7 +41,7 @@ loadSkill{
 		name = "SleepEffect",
 		rounds = 2
 	},
-	consumeMP = 10
+	maxTimes = 5
 }
 
 loadSkill{
@@ -58,7 +58,7 @@ loadSkill{
 	property = "P",
 	description = "攻击周围的敌人",
 	animation = "swipe and spin sword",
-	consumeMP = 100
+	maxTimes = 5
 }
 
 loadSkill{
@@ -70,7 +70,7 @@ loadSkill{
 	property = "N",
 	description = "就是普通的攻击而已",
 	animation = "punch and swipe sword",
-	consumeMP = 5
+	maxTimes = 5
 }
 
 return SkillDatabase

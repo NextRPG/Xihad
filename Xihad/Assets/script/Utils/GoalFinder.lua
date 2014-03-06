@@ -93,7 +93,8 @@ function GoalFinder:findPrevious( start, goal, maxAP)
 	while fakeMaxAP - tile.prev.leftAP > maxAP do
 		tile = tile.prev
 	end
-	while tile.prev ~= start and AIManager:getCharacterByLocation(tile.prev) do
+	while tile.prev ~= start 
+		and AIManager:getCharacterByLocation(tile.prev) do
 		tile = tile.prev
 	end
 	return tile.prev
@@ -109,6 +110,16 @@ function GoalFinder:getTargetTile( start, goal, maxAP )
 		self:Astar(start, goal, maxAP)
 		return self:findPrevious(start, goal, maxAP)
 	end
+end
+
+function GoalFinder:getTargetTileRemote( start, goal, maxAP, minDistance )
+	local tile = self:getTargetTile(start, goal, maxAP)
+	while tile.prev ~= start 
+		and AIManager:getCharacterByLocation(tile.prev) 
+		and math.p_distance(goal, tile.prev) < minDistance do
+		tile = tile.prev
+	end
+	return tile.prev
 end
 
 function GoalFinder:cleanUp(  )

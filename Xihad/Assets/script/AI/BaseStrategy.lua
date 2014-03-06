@@ -40,6 +40,7 @@ function BaseStrategy:judgePerson(  )
 end
 
 function BaseStrategy:judgeTile(  )
+	local actor = self.object:findComponent(c"Character")
 	local name = self:judgePerson(  )
 	local enemy = scene:findObject(c(name)):findComponent(c"Character")
 	local tile = GoalFinder:getTargetTile( actor.tile, enemy.tile, actor:getProperty("maxAP"))
@@ -52,7 +53,7 @@ function BaseStrategy:judgeSkill(  )
 	local skills = character.skills
 	local center = character.tile
 
-	local names, damages, consumeMPs, ranges = {},{},{},{}
+	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
 		repeat
 			local skill = SkillManager:getSkill(id)
@@ -63,7 +64,7 @@ function BaseStrategy:judgeSkill(  )
 
 			names[#names + 1] = skill.id
 			damages[skill.id] = skill.damage
-			consumeMPs[skill.id] = skill.consumeMP
+			currentTimes[skill.id] = character.skillTimes[skill.id] 
 			ranges[skill.id] = #skill.range
 		until true
 	end	
@@ -76,7 +77,7 @@ function BaseStrategy:judgeSkill(  )
 
 	board:appendKey( names )
 	board:appendValue( damages, self.damageFactor )
-	board:appendValue( consumeMPs, self.consumeMPFactor )
+	board:appendValue( currentTimes, self.currentTimeFactor )
 	board:appendValue( ranges, self.rangeFactor )
 
 	local selectSkill = SkillManager:getSkill(board:getResult())

@@ -214,9 +214,7 @@ function Skill:trigger( hero, targetTile )
 			print(character.properties.currentHP)
 		end
 	end
-	hero:changeState("properties.currentMP",
-		 hero:getProperty("currentMP") - self.consumeMP)
-	print(hero:getProperty("currentMP"))
+	hero.skillTimes[self.id] = hero.skillTimes[self.id] - 1
 	print("attack end")
 end
 

@@ -23,7 +23,7 @@ function AIManager:init( AIs )
 				getExp = 0,
 				
 				name = "Tom" .. i,
-				skills = { 1, 2, 3 },
+				skills = { 2 },
 
 				properties = {
 					physicalAttack = 5,
@@ -37,7 +37,7 @@ function AIManager:init( AIs )
 
 			}
 		character.name = AI.name
-		character.strategy = StrategyDatabase:createStrategy(1)
+		character.strategy = StrategyDatabase:createStrategy(2)
 		self.currentCharacter = self:createCharacter(character, AI.y, AI.x)
 		self.currentCharacter:appendComponent(c"Actor", 
 			{manager = self, strategy = character.strategy})

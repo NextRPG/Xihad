@@ -7,10 +7,11 @@
 
 local BaseStrategy = require "BaseStrategy"
 local Scoreboard = require "Scoreboard"
+local GoalFinder = require "GoalFinder"
 
 local RemoteStrategy = {
 	-- judgeTile_aux = BaseStrategy.judgeTile,
-	-- judgeSkill_aux = BaseStrategy.judgeSkill
+	judgeSkill = BaseStrategy.judgeSkill,
 	judgePerson = BaseStrategy.judgePerson
 }
 
@@ -22,11 +23,12 @@ function RemoteStrategy.new( o )
 end
 
 function RemoteStrategy:judgeTile(  )
-	
-end
-
-function RemoteStrategy:judgeSkill(  )
-	
+	local actor = self.object:findComponent(c"Character")
+	local name = self:judgePerson(  )
+	print("attacking " .. name)
+	local enemy = scene:findObject(c(name)):findComponent(c"Character")
+	local tile = GoalFinder:getTargetTileRemote( actor.tile, enemy.tile, actor:getProperty("maxAP"), 2)
+	return tile
 end
 
 return RemoteStrategy

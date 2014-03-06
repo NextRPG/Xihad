@@ -60,6 +60,7 @@ function CharacterManager:createCharacter( character, i, j )
 
 	for i,v in ipairs(character.skills) do
 		SkillManager:createSkill(v)
+		character.skillTimes[v] = SkillManager:getSkill(v).maxTimes
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
