@@ -19,7 +19,7 @@ namespace xihad { namespace ngn
 		 * @param singleStep setSingleStepSeconds()
 		 */
 		explicit Timeline(double initTimeSeconds = 0.0) : 
-			mElapsedSeconds(initTimeSeconds) {}
+			mElapsedSeconds(initTimeSeconds), mDeltaSeconds(0) {}
 
 		/// 重置时间线
 		/**
@@ -35,7 +35,7 @@ namespace xihad { namespace ngn
 
 		/// 更新时间线
 		void update(float dtSeconds)
-		{		
+		{
 			mDeltaSeconds = dtSeconds;
 			mElapsedSeconds += mDeltaSeconds;
 		}

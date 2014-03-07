@@ -5,6 +5,11 @@
 namespace xihad { namespace ngn
 {
 
+	FrameRateAdjuster::FrameRateAdjuster( float supposedUpdateInterval, float debugThreshold) :
+		minInterval(supposedUpdateInterval), debugThreshold(debugThreshold)
+	{
+	}
+
 	void FrameRateAdjuster::onFrameBegin( GameEngine* source, float nowSecs )
 	{
 	}

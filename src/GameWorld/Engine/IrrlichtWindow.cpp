@@ -43,9 +43,9 @@ namespace xihad { namespace ngn
 		public:
 			IrrlichtWindowRenderer(video::IVideoDriver* d) : driver(d) {}
 
-			virtual void clearBuffer()
+			virtual void clearBuffer(bool back, bool z, const SColor& color)
 			{
-				driver->beginScene(true, true, video::SColor(255, 192, 168, 100));
+				driver->beginScene(back, z, color);
 			}
 
 			virtual void swapBuffer()

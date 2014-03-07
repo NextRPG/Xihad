@@ -11,6 +11,7 @@
 #include "Engine/FPSCounter.h"
 #include "Engine/WindowTitleUpdater.h"
 #include "Engine/WindowEventTransmitter.h"
+#include "Engine/FrameRateAdjuster.h"
 
 using namespace irr;
 using namespace scene;
@@ -29,6 +30,10 @@ int launchScript(int argc, const char** argv)
 		NativeWindow* wnd = new IrrlichtWindow(*device);
 		GameEngine* engine = new GameEngine(*wnd);
 		wnd->drop();
+
+		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
+		engine->addFrameObserver(*adj);
+		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;
 		if (argc>2 && strcmp(argv[2], "-showfps") == 0)

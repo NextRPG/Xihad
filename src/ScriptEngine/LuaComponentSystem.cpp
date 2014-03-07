@@ -78,8 +78,6 @@ namespace xihad { namespace script
 				setField(L, -1, LUA_G_TIME_CHANGE, 0);
 				// _G.Time.global
 				setField(L, -1, LUA_G_TIME_GLOBAL, 0);
-				// _G.Time.paused
-				setField(L, -1, LUA_G_TIME_PAUSED, false);
 			}
 			lua_setfield(L, -2, LUA_G_TIME);	// TODO: read-only?
 

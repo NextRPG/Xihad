@@ -1,5 +1,6 @@
 #pragma once
 #include "CppBase\ReferenceCounted.h"
+#include "Engine\SColor.h"
 
 namespace xihad { namespace ngn
 {
@@ -8,7 +9,7 @@ namespace xihad { namespace ngn
 	public:
 		virtual ~WindowRenderer() {}
 
-		virtual void clearBuffer() = 0;
+		virtual void clearBuffer(bool backbuffer, bool zbuffer, const SColor& color) = 0;
 
 		virtual void swapBuffer() = 0;
 	};
