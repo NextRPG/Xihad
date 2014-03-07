@@ -183,24 +183,46 @@
     <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CppBase\ReferenceCounted.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h" />
     <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h">
       <Filter>Component\Inheritence</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h">
       <Filter>Component\Inheritence</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h" />
     <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CppBase\ReferenceCounted.h">
+      <Filter>CppBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
@@ -266,11 +288,23 @@
     <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp">
       <Filter>Component\Inheritence</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
