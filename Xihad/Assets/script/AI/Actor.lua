@@ -44,10 +44,11 @@ function Actor:run( scheduler )
 
 		CameraManager:move2Character(object)
 
-		local point = strategy:judgeTile()
+		local point, finder = strategy:judgeTile()
+		finder = finder or require("GoalFinder")
 		-- runAsync
 		if not math.p_same(point, character.tile) then 
-			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
+			manager:onSelectTile(Chessboard:tileAt(point), finder)
 		end
 
 		local selectSkill, target = strategy:judgeSkill() -- component

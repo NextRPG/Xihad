@@ -63,6 +63,14 @@ function Character:canTrigger( skill )
 	return self.skillTimes[skill.id] > 0
 end
 
+function Character:getSkills(  )
+	local SkillManager = require "SkillManager"
+	local skills = {}
+	for i,id in ipairs(self.skills) do
+		skills[#skills + 1] = SkillManager:getSkill(id)
+	end
+	return skills
+end
 
 function Character:getManager(  )
 	return self.team == "Hero" and require("HeroManager") or require("AIManager")

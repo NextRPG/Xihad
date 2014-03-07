@@ -53,7 +53,17 @@ function AIManager:runActors(  )
 			coroutine.yield()
 			character.states.TURNOVER = true
 		end
+		-- print(scene:objectsWithTag(self.team))
 	end
+end
+
+function AIManager:getFarthestAI( center )
+	local list = makeList(self:getCharacters(), "name", "tile")
+	for name,tile in pairs(list) do
+		list[name] = math.p_distance(center, tile)
+	end
+	local name = findMax(list)
+	return scene:findObject(c(name)):findComponent(c"Character").tile
 end
 
 return AIManager

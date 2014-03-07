@@ -24,6 +24,14 @@ function runAsyncFunc( func, ... )
 	coroutine.yield(func, t)
 end
 
+function makeList( array, k, v )
+	local list = {}
+	for i,element in ipairs(array) do
+		list[element[k]] = element[v] 		
+	end
+	return list
+end
+
 function findMax( list )
 	local maxKey, maxValue = next(list)
 	for k,v in pairs(list) do
@@ -97,7 +105,7 @@ function serialize( o )
 	elseif type(o) == "table" then
 		io.write(" {\n")
 		for k,v in pairs(o) do
-			-- io.write(" ", k, " = ")
+			io.write(" ", k, " = ")
 			io.write(" [")
 			serialize(k)
 			io.write("] = ")
@@ -108,4 +116,20 @@ function serialize( o )
 	else
 		error("cannot serialize a " .. type(o))
 	end
+end
+
+function scene:hasObjectWithTag( tag )
+	local count = 0
+	for object in scene:objectsWithTag(tag) do
+		count = count + 1
+	end
+	return count ~= 0
+end
+
+function scene:getObjectWithTag( tag )
+	local result
+	for object in scene:objectsWithTag(tag) do
+		result = object
+	end
+	return result
 end

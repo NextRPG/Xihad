@@ -81,6 +81,14 @@ function CharacterManager:getCharacterByLocation( point )
 	return (character and character.team == self.team) and character or nil
 end
 
+function CharacterManager:getCharacters(  )
+	local characters = {}
+	for characterObject in scene:objectsWithTag(self.team) do
+		characters[#characters + 1] = characterObject:findComponent(c"Character")
+	end
+	return characters
+end
+
 --- 
 -- 选中角色后的行为
 -- @tparam Object characterObject
@@ -156,6 +164,7 @@ end
 ---
 -- 回合开始时，进行初始化工作
 function CharacterManager:roundStart(  )
+	self.currentCharacter = nil
 	-- handle message that round on Character has started
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")

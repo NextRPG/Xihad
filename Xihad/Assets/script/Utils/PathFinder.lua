@@ -77,6 +77,7 @@ end
 function PathFinder:constructPath( tile )
 	local path = {}	
 	local tile = self.data[hash(tile)]
+	print(debug.traceback())
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction
 		tile = tile.prev

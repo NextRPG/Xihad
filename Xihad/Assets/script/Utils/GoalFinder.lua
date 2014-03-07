@@ -114,12 +114,12 @@ end
 
 function GoalFinder:getTargetTileRemote( start, goal, maxAP, minDistance )
 	local tile = self:getTargetTile(start, goal, maxAP)
-	while tile.prev ~= start 
-		and AIManager:getCharacterByLocation(tile.prev) 
-		and math.p_distance(goal, tile.prev) < minDistance do
+	while tile ~= start 
+		and (AIManager:getCharacterByLocation(tile) 
+		or math.p_distance(goal, tile) < minDistance) do
 		tile = tile.prev
 	end
-	return tile.prev
+	return tile
 end
 
 function GoalFinder:cleanUp(  )
