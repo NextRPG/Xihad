@@ -31,7 +31,7 @@
 #define _CEGUIDefaultResourceProvider_h_
 
 #include "CEGUI/Base.h"
-#include "CEGUI/ResourceProvider.h"
+#include <CEGUI/ResourceProvider.h>
 
 #include <map>
 

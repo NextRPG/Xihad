@@ -1,5 +1,5 @@
 #include "IrrlichtComponentSystem.h"
-#include "CppBase/xassert.h"
+#include "CppBase\xassert.h"
 #include <string>
 #include "irrlicht\ISceneManager.h"
 #include "irrlicht\IVideoDriver.h"
@@ -210,14 +210,10 @@ namespace xihad { namespace render3d
 	void IrrlichtComponentSystem::onUpdate( const Timeline& tl )
 	{
 		mImpl->ceguiSystem->update(tl);
-		mImpl->driver->beginScene(true, true, SColor(255,100,101,140));
-		{
-			syncSceneNode(mImpl->smgr->getRootSceneNode());
-			mImpl->smgr->onAnimate((s32) (tl.getElapsedSeconds()*1000));
-			mImpl->smgr->drawAll();
-			mImpl->ceguiSystem->renderFrame();
-		}
-		mImpl->driver->endScene();
+		syncSceneNode(mImpl->smgr->getRootSceneNode());
+		mImpl->smgr->onAnimate((s32) (tl.getElapsedSeconds()*1000));
+		mImpl->smgr->drawAll();
+		mImpl->ceguiSystem->renderFrame();
 	}
 
 	void IrrlichtComponentSystem::onStop()

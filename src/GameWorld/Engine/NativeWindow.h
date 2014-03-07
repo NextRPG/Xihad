@@ -1,12 +1,19 @@
 #pragma once
+#include "CppBase/ReferenceCounted.h"
 
 namespace xihad { namespace ngn
 {
-	class NativeWindow
+	class UserEventReceiver;
+	class WindowRenderer;
+	class NativeWindow : public virtual ReferenceCounted
 	{
-	public:	
-		virtual ~NativeWindow() {}
-		
+	public:
+		virtual void setEventReceiver(UserEventReceiver*) = 0;
+
+		virtual UserEventReceiver* getEventReceiver() = 0;
+
+		virtual WindowRenderer* getRenderer() = 0;
+
 		virtual void handleSystemMessage() = 0;
 
 		virtual bool isClosed() const = 0;

@@ -2,6 +2,7 @@
 #include "IrrlichtComponentSystem.h"
 #include "irrlicht/Irrlicht.h"
 #include "Engine/GameScene.h"
+#include "Engine/UserEventReceiverStack.h"
 #include "CEGuiHandle.h"
 #include "CeguiEventReceiver.h"
 
@@ -54,7 +55,7 @@ namespace xihad { namespace render3d
 		CeguiHandle* ceguiSystem = new CeguiHandle;
 		ceguiSystem->initialise(getDevice(), scene->mainThread());
 		UserEventReceiver* eventReceiver = new CeguiEventReceiver(*ceguiSystem->getEventPusher());
-		scene->controllerStack().push_back(boost::shared_ptr<UserEventReceiver>(eventReceiver));
+		scene->getControllerStack().pushReceiver(eventReceiver);
 		
 		return new IrrlichtComponentSystem(
 					mDevice.get(), newScene.get(), *this, mCachedClips, ceguiSystem);

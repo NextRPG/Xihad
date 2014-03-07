@@ -15,64 +15,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeometryBuffer.cpp">
+    <ClCompile Include="..\src\CEGUI\GeometryBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ImageCodec.cpp">
+    <ClCompile Include="..\src\CEGUI\ImageCodec.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryFile.cpp">
+    <ClCompile Include="..\src\CEGUI\MemoryFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="..\src\CEGUI\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceProvider.cpp">
+    <ClCompile Include="..\src\CEGUI\ResourceProvider.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextureTarget.cpp">
+    <ClCompile Include="..\src\CEGUI\Texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="..\src\CEGUI\TextureTarget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowTarget.cpp">
+    <ClCompile Include="..\src\CEGUI\WindowTarget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUI\EventPusher.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\EventPusher.h">
+    <ClInclude Include="..\src\CEGUI\EventPusher.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\GeometryBuffer.h">
+    <ClInclude Include="..\src\CEGUI\GeometryBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\ImageCodec.h">
+    <ClInclude Include="..\src\CEGUI\ImageCodec.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\MemoryFile.h">
+    <ClInclude Include="..\src\CEGUI\MemoryFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\Renderer.h">
+    <ClInclude Include="..\src\CEGUI\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\RendererDef.h">
+    <ClInclude Include="..\src\CEGUI\RendererDef.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\RenderTarget.h">
+    <ClInclude Include="..\src\CEGUI\RenderTarget.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\ResourceProvider.h">
+    <ClInclude Include="..\src\CEGUI\ResourceProvider.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\Texture.h">
+    <ClInclude Include="..\src\CEGUI\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\TextureTarget.h">
+    <ClInclude Include="..\src\CEGUI\TextureTarget.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\WindowTarget.h">
+    <ClInclude Include="..\src\CEGUI\WindowTarget.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\CEGUI\Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

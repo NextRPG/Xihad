@@ -10,6 +10,36 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\CEGUI\EventPusher.cpp" />
+    <ClCompile Include="..\src\CEGUI\GeometryBuffer.cpp" />
+    <ClCompile Include="..\src\CEGUI\ImageCodec.cpp" />
+    <ClCompile Include="..\src\CEGUI\MemoryFile.cpp" />
+    <ClCompile Include="..\src\CEGUI\Renderer.cpp" />
+    <ClCompile Include="..\src\CEGUI\ResourceProvider.cpp" />
+    <ClCompile Include="..\src\CEGUI\Texture.cpp" />
+    <ClCompile Include="..\src\CEGUI\TextureTarget.cpp" />
+    <ClCompile Include="..\src\CEGUI\WindowTarget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CEGUI\EventPusher.h" />
+    <ClInclude Include="..\src\CEGUI\GeometryBuffer.h" />
+    <ClInclude Include="..\src\CEGUI\ImageCodec.h" />
+    <ClInclude Include="..\src\CEGUI\MemoryFile.h" />
+    <ClInclude Include="..\src\CEGUI\Renderer.h" />
+    <ClInclude Include="..\src\CEGUI\RendererDef.h" />
+    <ClInclude Include="..\src\CEGUI\RenderTarget.h" />
+    <ClInclude Include="..\src\CEGUI\ResourceProvider.h" />
+    <ClInclude Include="..\src\CEGUI\Texture.h" />
+    <ClInclude Include="..\src\CEGUI\TextureTarget.h" />
+    <ClInclude Include="..\src\CEGUI\WindowTarget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\CEGUI\Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DA66CB0F-46D8-49C0-B4A4-689464075B42}</ProjectGuid>
     <RootNamespace>CEGUIIrrlichtRenderer</RootNamespace>
@@ -51,7 +81,8 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>CEGUIBase-0_d.lib;Irrlicht.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\libs;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\libs;..\Debug;</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -60,7 +91,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../include;../include/irrlicht;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CEGUIIRRLICHTRENDERER_EXPORTS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -69,31 +100,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\libs;..\Release;</AdditionalLibraryDirectories>
       <AdditionalDependencies>CEGUIBase-0.lib;Irrlicht.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="GeometryBuffer.cpp" />
-    <ClCompile Include="ImageCodec.cpp" />
-    <ClCompile Include="MemoryFile.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ResourceProvider.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureTarget.cpp" />
-    <ClCompile Include="WindowTarget.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\EventPusher.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\GeometryBuffer.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\ImageCodec.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\MemoryFile.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\Renderer.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\RendererDef.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\RenderTarget.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\ResourceProvider.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\Texture.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\TextureTarget.h" />
-    <ClInclude Include="..\include\CEGUI\RendererModules\Irrlicht\WindowTarget.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

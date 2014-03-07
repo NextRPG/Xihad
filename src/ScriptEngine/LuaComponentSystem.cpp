@@ -259,7 +259,6 @@ namespace xihad { namespace script
 		lua_getglobal(L, LUA_G_TIME);
 		setField(L, -1, LUA_G_TIME_GLOBAL, time.getElapsedSeconds());
 		setField(L, -1, LUA_G_TIME_CHANGE, time.getLastTimeChange());
-		setField(L, -1, LUA_G_TIME_PAUSED, time.isPaused());
 		lua_pop(L, 1);
 	}
 

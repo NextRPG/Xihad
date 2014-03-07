@@ -1,7 +1,9 @@
 #include "CeguiEventReceiver.h"
 #include <CEGUI\System.h>
 #include <CEGUI\GUIContext.h>
-#include <CEGUI\RendererModules\Irrlicht\EventPusher.h>
+#include "CEGUI\EventPusher.h"
+
+using namespace xihad::ngn;
 
 CeguiEventReceiver::CeguiEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher)
 	: d_eventPusher(eventPusher)
@@ -12,33 +14,6 @@ CeguiEventReceiver::CeguiEventReceiver(const CEGUI::IrrlichtEventPusher& eventPu
 CeguiEventReceiver::~CeguiEventReceiver()
 {
 
-}
-
-bool CeguiEventReceiver::onForegroundEvent( const xihad::ngn::KeyEvent& event )
-{
-	if(event.PressedDown)
-	{
-		return OnKeyDown(event.Key, event.Char, event.Control, event.Shift);
-	}
-	else
-	{
-		return OnKeyUp(event.Key, event.Char, event.Control, event.Shift);
-	}
-}
-
-bool CeguiEventReceiver::onForegroundEvent( const xihad::ngn::MouseEvent& event )
-{
-	return OnMouse(event.X, event.Y, event.Wheel, event.Event);
-}
-
-bool CeguiEventReceiver::onBackgroundEvent( const xihad::ngn::KeyEvent& event )
-{
-	return onForegroundEvent(event);
-}
-
-bool CeguiEventReceiver::onBackgroundEvent( const xihad::ngn::MouseEvent& event )
-{
-	return onForegroundEvent(event);
 }
 
 //----------------------------------------------------------------------------//
@@ -114,5 +89,18 @@ bool CeguiEventReceiver::OnMouse(irr::s32 x, irr::s32 y, irr::f32 w, irr::EMOUSE
 	}
 	return handled;
 
+}
+
+int CeguiEventReceiver::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
+{
+	if(event.PressedDown)
+		return OnKeyDown(event.Key, event.Char, event.Control, event.Shift) ? 0 : 1;
+	else
+		return OnKeyUp(event.Key, event.Char, event.Control, event.Shift) ? 0 : 1;
+}
+
+int CeguiEventReceiver::onMouseEvent( const MouseEvent& event, int argFromPreviousReceiver )
+{
+	return OnMouse(event.X, event.Y, event.Wheel, event.Event) ? 0 : 1;
 }
 

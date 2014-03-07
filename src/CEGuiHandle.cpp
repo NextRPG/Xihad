@@ -1,13 +1,15 @@
 #include "CEGuiHandle.h"
-#include "CEGUI/RendererModules/Irrlicht/ImageCodec.h"
-#include "CEGUI/RendererModules/Irrlicht/ResourceProvider.h"
-#include "CEGUI/RendererModules/Irrlicht/Renderer.h"
+#include "CEGUI/CEGUI.h"
+#include "CEGUI/ImageCodec.h"
+#include "CEGUI/ResourceProvider.h"
+#include "CEGUI/Renderer.h"
 #include "CEGUI/System.h"
 #include "CEGUI/GUIContext.h"
 
-#include "CEGUI/RendererModules/Irrlicht/EventPusher.h"
+#include "CEGUI/EventPusher.h"
 #include "CEGUI/ScriptModules/Lua/ScriptModule.h"
 #include "Engine/Timeline.h"
+#include <irrlicht/IrrlichtDevice.h>
 
 CeguiHandle::CeguiHandle() :
 	d_device(0),
@@ -24,21 +26,12 @@ void CeguiHandle::initialise(irr::IrrlichtDevice* devece, lua_State* L, const ch
 	using namespace irr;
 
 	d_device = devece;
-	d_device->getCursorControl()->setVisible(false);
-
-	video::IVideoDriver* driver = d_device->getVideoDriver();
-	driver->setTextureCreationFlag(irr::video::ETCF_ALWAYS_32_BIT, true);
-	driver->setTextureCreationFlag(irr::video::ETCF_ALWAYS_16_BIT, false);
-	driver->setTextureCreationFlag(irr::video::ETCF_CREATE_MIP_MAPS, false);
-	driver->setTextureCreationFlag(irr::video::ETCF_OPTIMIZED_FOR_QUALITY, true);
-
-	d_device->setResizable(true);
 
 	// create irrlicht renderer, image codec and resource provider.
 	CEGUI::IrrlichtRenderer& renderer = CEGUI::IrrlichtRenderer::create(*d_device);
 
 	d_renderer = &renderer;
-	d_imageCodec = &renderer.createIrrlichtImageCodec(*driver);
+	d_imageCodec = &renderer.createIrrlichtImageCodec(*d_device->getVideoDriver());
 	d_resourceProvider =
 		&renderer.createIrrlichtResourceProvider(*d_device->getFileSystem());
 

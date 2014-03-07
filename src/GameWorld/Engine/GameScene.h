@@ -1,17 +1,15 @@
 #pragma once
 #include "CompositeUpdateHandler.h"
-#include "boost\shared_ptr.hpp"
-#include "UserEventReceiver.h"
+#include <list>
 #include "GameObject.h"
-#include "Message\MessageParam.h"
 #include "Message\IMessageDispatcher.h"
 #include "Message\MessageListener.h"
-#include <list>
 
 struct lua_State;
 namespace xihad { namespace ngn
 {
 	class ComponentSystem;
+	class UserEventReceiverStack;
 	/// 游戏场景对象
 	/**
 	 * 游戏场景负责管理其中的游戏对象，让游戏对象之间可以通讯。
@@ -22,11 +20,13 @@ namespace xihad { namespace ngn
 	 * @author etnlGD
 	 * @date 2013年12月13日 02:12:17
 	 */
-	class GameScene : public CompositeUpdateHandler, public UserEventReceiver
+	class GameScene : public CompositeUpdateHandler
 	{
 	public:
+		static const GameObject::Identifier sRootObjectID;
+
+	public:
 		typedef IMessageDispatcher<GameObject, GameScene, MessageListener> Dispatcher;
-		typedef std::list<boost::shared_ptr<UserEventReceiver>> ControllerStack;
 		typedef std::list<GameObject*> ObjectGroup;
 
 	public:
@@ -82,27 +82,14 @@ namespace xihad { namespace ngn
 		virtual GameObject* createUniqueObject(
 			GameObject::TagArgType header, GameObject* parent = NULL, bool addHeaderToTag = true);
 
-		virtual bool onForegroundEvent(const KeyEvent& event);
+		virtual UserEventReceiverStack& getControllerStack();
 
-		virtual bool onForegroundEvent(const MouseEvent& event);
-
-		virtual bool onBackgroundEvent( const KeyEvent& event );
-
-		virtual bool onBackgroundEvent( const MouseEvent& event );
-
-		/// 取得场景的用户事件控制器栈
-		virtual ControllerStack& controllerStack() const;
-
-	protected:
+	protected:	// Avoid delete
 		virtual ~GameScene();
 
 	private:
 		friend class GameObject;
 		virtual void onObjectDestroyed(GameObject* obj);
-
-	public:
-		/// 根节点的 ID 
-		static const GameObject::Identifier sRootObjectID;
 
 	private:
 		struct impl;

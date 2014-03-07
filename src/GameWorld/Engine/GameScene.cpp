@@ -1,18 +1,22 @@
 #include "GameScene.h"
+
+// use in member field
 #include <unordered_map>
-#include <iostream>
-#include "GameObject.h"
 #include "TagListener.h"
-#include "ComponentSystem.h"
-#include "ComponentSystemRegistry.h"
-#include "CppBase\StdMap.h"
+#include "RootGameObject.h"
 #include "GameObjectDepends.h"
+#include "ComponentSystem.h"
 #include "ComponentFactory.h"
-#include "ComponentSystemFactory.h"
+#include "UserEventReceiverStack.h"
 #include "Message\MessageDispatcher.h"
+
+// use in implementation
+#include "ComponentSystemRegistry.h"
+#include "ComponentSystemFactory.h"
+#include "CppBase\StdMap.h"
 #include "Lua\lua.hpp"
 #include "CppBase\XiAssert.h"
-#include "RootGameObject.h"
+#include <iostream>
 
 using namespace std;
 namespace xihad { namespace ngn
@@ -41,7 +45,7 @@ namespace xihad { namespace ngn
 
 		lua_State* mainThread;
 
-		GameScene::ControllerStack controllerStack;
+		UserEventReceiverStack receiverStack;
 
 		GameScene::impl() : 
 			managedObjectId(0), 
@@ -268,58 +272,9 @@ namespace xihad { namespace ngn
 
 	//////////////////////////////////////////////////////////////////////////
 	// Event Process
-	template <typename iterator, typename Event>
-	inline static bool spreadEvent(iterator bgn, iterator end, const Event& e)
+	UserEventReceiverStack& GameScene::getControllerStack()
 	{
-		while (bgn != end)
-		{
-			if ((*bgn)->onBackgroundEvent(e))
-				return true;
-			++bgn;
-		}
-
-		return false;
-	}
-
-	template <typename Event>
-	inline static bool deliverEvent(GameScene::ControllerStack& stack, const Event& e )
-	{
-		auto receiverIter = stack.rbegin();
-		if (receiverIter == stack.rend())
-			return false;
-		else if ((*receiverIter)->onForegroundEvent(e))
-			return true;
-		else 
-			++receiverIter;
-
-		return spreadEvent(receiverIter, stack.rend(), e);
-	}
-
-	bool GameScene::onForegroundEvent( const KeyEvent& event )
-	{
-		return deliverEvent(mImpl->controllerStack, event);
-	}
-
-	bool GameScene::onForegroundEvent( const MouseEvent& event )
-	{
-		return deliverEvent(mImpl->controllerStack, event);
-	}
-
-	bool GameScene::onBackgroundEvent( const KeyEvent& event )
-	{
-		auto& stack = mImpl->controllerStack;
-		return spreadEvent(stack.rbegin(), stack.rend(), event);
-	}
-
-	bool GameScene::onBackgroundEvent( const MouseEvent& event )
-	{
-		auto& stack = mImpl->controllerStack;
-		return spreadEvent(stack.rbegin(), stack.rend(), event);
-	}
-
-	GameScene::ControllerStack& GameScene::controllerStack() const
-	{
-		return mImpl->controllerStack;
+		return mImpl->receiverStack;
 	}
 
 }}

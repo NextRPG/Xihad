@@ -1,9 +1,9 @@
 #pragma once
 #include "CppBase/ReferenceCounted.h"
+#include "MessageParam.h"
 
 namespace xihad { namespace ngn
 {
-	class MessageParam;
 	class GameObject;
 	class MessageListener : public virtual ReferenceCounted
 	{

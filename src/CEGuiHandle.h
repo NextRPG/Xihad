@@ -17,8 +17,8 @@
 #endif
 
 #include "CEGUI/Size.h"
-#include <Irrlicht/irrlicht.h>
-#include "luaT/param_types.h"
+
+struct lua_State;
 
 namespace xihad { namespace ngn
 {
@@ -34,6 +34,11 @@ namespace CEGUI
 	class EventArgs;
 	class GUIContext;
 	class ScriptModule;
+}
+
+namespace irr 
+{
+	class IrrlichtDevice;
 }
 
 class CeguiHandle

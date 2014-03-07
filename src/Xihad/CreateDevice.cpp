@@ -1,5 +1,10 @@
 #include "CreateDevice.h"
-#include "irrlicht\irrlicht.h"
+#include "irrlicht/SIrrCreationParameters.h"
+
+namespace irr {
+	extern "C" __declspec(dllimport) IrrlichtDevice* __cdecl createDeviceEx(
+		const SIrrlichtCreationParameters& parameters);
+}
 
 irr::IrrlichtDevice* createDefaultDevice()
 {

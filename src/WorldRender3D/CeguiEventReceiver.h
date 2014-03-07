@@ -13,13 +13,9 @@ public:
 
 	virtual ~CeguiEventReceiver();
 
-	virtual bool onForegroundEvent( const xihad::ngn::KeyEvent& event );
+	virtual int onKeyEvent( const xihad::ngn::KeyEvent& event, int argFromPreviousReceiver );
 
-	virtual bool onForegroundEvent( const xihad::ngn::MouseEvent& event );
-
-	virtual bool onBackgroundEvent( const xihad::ngn::KeyEvent& event );
-
-	virtual bool onBackgroundEvent( const xihad::ngn::MouseEvent& event );
+	virtual int onMouseEvent( const xihad::ngn::MouseEvent& event, int argFromPreviousReceiver );
 
 private:
 	CeguiEventReceiver(const CeguiEventReceiver&);
