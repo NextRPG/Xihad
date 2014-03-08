@@ -5,6 +5,8 @@
 #include "WorldRender3D\IrrlichtComponentSystemFactory.h"
 #include "ScriptEngine\LuaComponentSystemFactory.h"
 #include "Engine\ComponentSystemRegistry.h"
+#include "Engine\GameEngine.h"
+#include "Engine\IrrlichtWindow.h"
 
 using namespace irr;
 using namespace scene;
@@ -13,15 +15,17 @@ namespace xihad
 	using namespace ngn;
 	using namespace render3d;
 	using namespace script;
-	void initSystem( irr::IrrlichtDevice* device )
+	void initSystem( GameEngine* engine )
 	{
+		NativeWindow* wnd = engine->getWindow();
+		IrrlichtDevice* device = (static_cast<IrrlichtWindow*>(wnd))->getIrrDevice();
 		Geometry::setCreator(device->getSceneManager()->getGeometryCreator());
 
 		auto s3d = new IrrlichtComponentSystemFactory(device);
 		for (auto& clazz : s3d->inheritenceTree())
 			ComponentSystemRegistry::registerSystem(clazz.typeName, s3d);
 
-		ComponentSystemRegistry::setDefaultFactory(new LuaComponentSystemFactory(device));
+		ComponentSystemRegistry::setDefaultFactory(new LuaComponentSystemFactory(engine));
 	}
 
 	void destroySystems()

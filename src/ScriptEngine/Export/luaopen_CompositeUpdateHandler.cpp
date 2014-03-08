@@ -16,16 +16,21 @@ namespace xihad { namespace script
 		luaL_checkany(L, 2);
 		auto group = checkarg<CompositeUpdateHandler*>(L, 1);
 
-		UpdateHandler* updater;
-		if (lua_istable(L, 2))
+		UpdateHandler* updater = 0;
+		if (updater = checkarg<UpdateHandler*>(L, 2))
 		{
+			// It is a update handler
+		}
+		else if (lua_istable(L, 2))
+		{
+			// delegate it
 			updater = new LuaManagedUpdateHandler(LuaRef::fromIndex(L, 2));
 		}
-		else if ((updater = checkarg<UpdateHandler*>(L, 2)) == NULL)
+		else
 		{
 			luaL_typerror(L, 2, "appendUpdater requires table/UpdateHandler");
 		}
-
+		
 		push<bool>(L, group->appendChildHandler(updater));
 		return 1;
 	}

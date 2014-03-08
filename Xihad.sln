@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{4013602C-9169-4B51-B3A6-13DA20ABB5CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUIIrrlichtRenderer", "CEGUIIrrlichtRenderer\CEGUIIrrlichtRenderer.vcxproj", "{DA66CB0F-46D8-49C0-B4A4-689464075B42}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUI", "CEGUI\CEGUI.vcxproj", "{BC1E7282-6533-465E-BBC9-74651473ED72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,10 +56,10 @@ Global
 		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Debug|Win32.Build.0 = Debug|Win32
 		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.ActiveCfg = Release|Win32
 		{4013602C-9169-4B51-B3A6-13DA20ABB5CB}.Release|Win32.Build.0 = Release|Win32
-		{DA66CB0F-46D8-49C0-B4A4-689464075B42}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DA66CB0F-46D8-49C0-B4A4-689464075B42}.Debug|Win32.Build.0 = Debug|Win32
-		{DA66CB0F-46D8-49C0-B4A4-689464075B42}.Release|Win32.ActiveCfg = Release|Win32
-		{DA66CB0F-46D8-49C0-B4A4-689464075B42}.Release|Win32.Build.0 = Release|Win32
+		{BC1E7282-6533-465E-BBC9-74651473ED72}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BC1E7282-6533-465E-BBC9-74651473ED72}.Debug|Win32.Build.0 = Debug|Win32
+		{BC1E7282-6533-465E-BBC9-74651473ED72}.Release|Win32.ActiveCfg = Release|Win32
+		{BC1E7282-6533-465E-BBC9-74651473ED72}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

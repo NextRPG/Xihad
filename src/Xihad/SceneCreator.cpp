@@ -12,7 +12,7 @@ namespace xihad
 	{
 		GameScene* scene = new GameScene;
 		scene->requireSystem("Lua");
-		lua_State* L = scene->mainThread();
+		lua_State* L = scene->getMainThread();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))
 		{
 			cerr << "SCRIPT ERR: " << lua_tostring(L, -1) << endl;

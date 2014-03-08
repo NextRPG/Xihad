@@ -61,8 +61,8 @@ namespace xihad { namespace ngn
 		// Avoid reentrant
 		if (isRunning()) return false;
 
-		getWorld()->start();
-		mImpl->status = RUNNING;	// All updaters should be start before running.
+		getWorld()->start();	// All updaters should be start before running.
+		mImpl->status = RUNNING;
 
 		while (isRunning())
 		{
@@ -78,13 +78,7 @@ namespace xihad { namespace ngn
 			fireFrameEnd(frameBgnTime);
 		}
 
-		// sync state
-		if (mImpl->status == STOPPED)
-			mImpl->window->close();
-		else
-			mImpl->status = STOPPED;
-
-		// call world to stop
+		mImpl->window->close();
 		getWorld()->stop();
 
 		return true;

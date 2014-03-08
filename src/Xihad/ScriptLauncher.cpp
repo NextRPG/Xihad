@@ -20,30 +20,30 @@ using namespace ngn;
 int launchScript(int argc, const char** argv)
 {
  	IrrlichtDevice* device = createDefaultDevice();
-	initSystem(device);
+	IrrlichtWindow* wnd = new IrrlichtWindow(*device);
+	GameEngine* engine = new GameEngine(*wnd);
+	initSystem(engine);
 
 	std::string path = "Assets/";
 	path += argc>=2 ? argv[1] : "script/boot.lua";
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
-		NativeWindow* wnd = new IrrlichtWindow(*device);
-		GameEngine* engine = new GameEngine(*wnd);
-		wnd->drop();
-
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
 		engine->addFrameObserver(*adj);
 		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;
-		if (argc>2 && strcmp(argv[2], "-showfps") == 0)
-		{
-			FPSCounter* counter = new FPSCounter;
-			titleUpdater->setFPSCounter(counter);
-			engine->addFrameObserver(*counter);
-			counter->drop();
-		}
 		engine->addFrameObserver(*titleUpdater);
+
+		FPSCounter* counter = new FPSCounter;
+		titleUpdater->setFPSCounter(counter);
+		engine->addFrameObserver(*counter);
+		counter->drop();
+
+		if (argc>2 && strcmp(argv[2], "-showfps") == 0)
+			titleUpdater->setShowFPS(true);
+
 		titleUpdater->drop();
 
 		WindowEventTransmitter* eventTransmitter = new WindowEventTransmitter;
@@ -51,11 +51,12 @@ int launchScript(int argc, const char** argv)
 		eventTransmitter->drop();
 
 		engine->getWorld()->setScene(scene);
-		device->drop();
 		engine->launch();
 		delete engine;
 	}
 	
+	wnd->drop();
+	device->drop();
 	destroySystems();
 
 	system("pause");

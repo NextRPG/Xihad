@@ -1,22 +1,7 @@
 #pragma once
 
-#if defined(_WIN32)
-#  pragma comment(lib, "irrlicht.lib")
-#  if defined(_DEBUG)
-#      pragma comment(lib, "CEGUIIrrlichtRenderer_d.lib")
-#  else
-#      pragma comment(lib, "CEGUIIrrlichtRenderer.lib")
-#  endif
-#endif
-
-#include <limits.h>
-#ifdef _MAX_PATH
-#define PATH_MAX _MAX_PATH
-#else
-#define PATH_MAX 260
-#endif
-
 #include "CEGUI/Size.h"
+#include "Engine/irr_ptr.h"
 
 struct lua_State;
 
@@ -41,37 +26,43 @@ namespace irr
 	class IrrlichtDevice;
 }
 
-class CeguiHandle
+namespace xihad { namespace cegui
 {
-public:
-    CeguiHandle();
-    virtual ~CeguiHandle() {}
+	class CeguiHandle
+	{
+	public:
+		CeguiHandle();
 
-	void initialise(irr::IrrlichtDevice* devece, lua_State* L, const char* scriptFile = nullptr);
-	
-	void cleanup();
+		virtual ~CeguiHandle();
 
-	void update(const xihad::ngn::Timeline& tl);
+		void initialise(irr::IrrlichtDevice* devece, lua_State* L);
 
-	void renderFrame();
+		void cleanup();
 
-	const CEGUI::IrrlichtEventPusher* getEventPusher();
-private:
-	void checkWindowResize();
+		void update(float delta);
 
-	void initialiseResourceGroupDirectories();
+		void renderFrame();
 
-	void initialiseDefaultResourceGroups();
+		const CEGUI::IrrlichtEventPusher* getEventPusher();
 
-	const char* getDataPathPrefix() const;
-private:
-    irr::IrrlichtDevice*       d_device;
+	private:
+		void checkWindowResize();
 
-    //! size of display last time a change was detected.
-    CEGUI::Sizef d_lastDisplaySize;
+		void initialiseResourceGroupDirectories();
 
-	CEGUI::Renderer* d_renderer;
-	CEGUI::ImageCodec* d_imageCodec;
-	CEGUI::ResourceProvider* d_resourceProvider;
-	CEGUI::ScriptModule* d_scriptModule;
-};
+		void initialiseDefaultResourceGroups();
+
+		const char* getDataPathPrefix() const;
+
+	private:
+		irr_ptr<irr::IrrlichtDevice> d_device;
+
+		//! size of display last time a change was detected.
+		CEGUI::Sizef d_lastDisplaySize;
+
+		CEGUI::Renderer* d_renderer;
+		CEGUI::ImageCodec* d_imageCodec;
+		CEGUI::ResourceProvider* d_resourceProvider;
+		CEGUI::ScriptModule* d_scriptModule;
+	};
+}}

@@ -16,6 +16,8 @@ namespace xihad { namespace ngn
 	public:
 		explicit IrrlichtWindow(irr::IrrlichtDevice&);	
 
+		irr::IrrlichtDevice* getIrrDevice() { return device.get(); }
+
 		virtual ~IrrlichtWindow();
 
 		virtual void handleSystemMessage();

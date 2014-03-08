@@ -45,13 +45,14 @@ namespace xihad { namespace ngn
 
 		lua_State* mainThread;
 
-		UserEventReceiverStack receiverStack;
+		irr_ptr<UserEventReceiverStack> receiverStack;
 
 		GameScene::impl() : 
 			managedObjectId(0), 
 			rootObject(new RootGameObject(&depends, GameScene::sRootObjectID)),
 			systemUpdater(*new CompositeUpdateHandler),
-			normalUpdater(*new CompositeUpdateHandler)
+			normalUpdater(*new CompositeUpdateHandler),
+			receiverStack(new UserEventReceiverStack)
 		{
 			sceneObjects[GameScene::sRootObjectID] = rootObject;
 		}
@@ -176,7 +177,7 @@ namespace xihad { namespace ngn
 		lua_close(L);
 	}
 
-	lua_State* GameScene::mainThread() const
+	lua_State* GameScene::getMainThread() const
 	{
 		return mImpl->mainThread;
 	}
@@ -274,7 +275,7 @@ namespace xihad { namespace ngn
 	// Event Process
 	UserEventReceiverStack& GameScene::getControllerStack()
 	{
-		return mImpl->receiverStack;
+		return *mImpl->receiverStack;
 	}
 
 }}

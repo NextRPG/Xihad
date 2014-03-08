@@ -12,7 +12,7 @@ namespace irr
 		class ISceneManager;
 	}
 }
-class CeguiHandle;
+
 namespace xihad { namespace render3d
 {
 	struct IrrlichtComponentSystemImpl;
@@ -21,8 +21,7 @@ namespace xihad { namespace render3d
 	public:
 		IrrlichtComponentSystem(
 			irr::IrrlichtDevice* device, irr::scene::ISceneManager* scene,
-			const ngn::InheritanceTree& tree, AnimationClipsCache& gCache,
-			CeguiHandle* ceguiSystem);
+			const ngn::InheritanceTree& tree, AnimationClipsCache& gCache);
 
 		virtual ~IrrlichtComponentSystem();
 

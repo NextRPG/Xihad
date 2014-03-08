@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/ComponentSystem.h"
+#include <boost/scoped_ptr.hpp>
 
 struct lua_State;
 namespace xihad { namespace ngn
@@ -17,7 +18,7 @@ namespace xihad { namespace script
 	class LuaComponentSystem : public ngn::ComponentSystem
 	{
 	public:
-		LuaComponentSystem(irr::IrrlichtDevice* dev, ngn::GameScene* scene, const std::string& compBase);
+		LuaComponentSystem(ngn::GameScene* scene, const std::string& compBase);
 		virtual ~LuaComponentSystem();
 
 		ngn::InheritancePath hierarchy(const std::string& compName) override;
@@ -40,7 +41,7 @@ namespace xihad { namespace script
 
 	private:
 		struct impl;
-		impl* mImpl;
+		boost::scoped_ptr<impl> mImpl;
 	};
 }}
 

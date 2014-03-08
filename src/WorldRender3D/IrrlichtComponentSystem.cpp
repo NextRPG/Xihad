@@ -1,9 +1,9 @@
 #include "IrrlichtComponentSystem.h"
 #include "CppBase\xassert.h"
 #include <string>
-#include "irrlicht\ISceneManager.h"
-#include "irrlicht\IVideoDriver.h"
-#include "irrlicht\IrrlichtDevice.h"
+#include <irrlicht\ISceneManager.h>
+#include <irrlicht\IrrlichtDevice.h>
+#include <irrlicht\ICameraSceneNode.h>
 #include "Engine\Timeline.h"
 #include "MeshComponent.h"
 #include "LightComponent.h"
@@ -11,7 +11,6 @@
 #include "Engine\Properties.h"
 #include "boost\variant\get.hpp"
 #include "CppBase\StdMap.h"
-#include "irrlicht\ICameraSceneNode.h"
 #include "Engine\irr_ptr.h"
 #include "AnimatedMeshComponent.h"
 #include "Engine\dimension2d.h"
@@ -36,16 +35,14 @@ namespace xihad { namespace render3d
 		irr_ptr<IVideoDriver> driver;
 		irr_ptr<ISceneManager> smgr;
 		AnimationClipsCache* clipCaches;
-		CeguiHandle* ceguiSystem;
-		
+
 		list<RenderComponent*> renderComponents;
 		unordered_map<string, luaT::LuaRef> particleSystemCreator;
 	};
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
 		IrrlichtDevice* device, ISceneManager* scene, 
-		const InheritanceTree& tree, AnimationClipsCache& gCache,
-		CeguiHandle* ceguiSystem) :
+		const InheritanceTree& tree, AnimationClipsCache& gCache) :
 	BaseComponentSystem(tree), mImpl(new IrrlichtComponentSystemImpl)
 	{
 		xassert(device);
@@ -55,7 +52,6 @@ namespace xihad { namespace render3d
 		mImpl->driver = device->getVideoDriver();
 		mImpl->smgr = scene;
 		mImpl->clipCaches = &gCache;
-		mImpl->ceguiSystem = ceguiSystem;
 	}
 
 	IrrlichtComponentSystem::~IrrlichtComponentSystem()
@@ -209,11 +205,9 @@ namespace xihad { namespace render3d
 
 	void IrrlichtComponentSystem::onUpdate( const Timeline& tl )
 	{
-		mImpl->ceguiSystem->update(tl);
 		syncSceneNode(mImpl->smgr->getRootSceneNode());
 		mImpl->smgr->onAnimate((s32) (tl.getElapsedSeconds()*1000));
 		mImpl->smgr->drawAll();
-		mImpl->ceguiSystem->renderFrame();
 	}
 
 	void IrrlichtComponentSystem::onStop()
@@ -223,7 +217,6 @@ namespace xihad { namespace render3d
 		mImpl->smgr = nullptr;
 		mImpl->device = nullptr;
 		mImpl->driver = nullptr;
-		mImpl->ceguiSystem->cleanup();
 	}
 
 	irr::scene::ISceneManager* IrrlichtComponentSystem::getSceneManager()

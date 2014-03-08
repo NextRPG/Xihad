@@ -32,7 +32,7 @@ namespace xihad { namespace ngn
 	public:
 		explicit GameScene(lua_State* globalState = nullptr);
 
-		lua_State* mainThread() const;
+		lua_State* getMainThread() const;
 
 		/// 取得场景中的根节点对象
 		GameObject* getRootObject() const;

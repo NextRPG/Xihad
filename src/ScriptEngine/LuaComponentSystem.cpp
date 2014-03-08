@@ -1,44 +1,31 @@
 #include "LuaComponentSystem.h"
-#include <Lua/lua.hpp>
 #include <LuaT/luaT.h>
-#include <luaT/stack_memo.h>
-#include <LuaT/metatable.h>
-#include <irrlicht/IrrlichtDevice.h>
-#include <irrlicht/ISceneCollisionManager.h>
-#include <irrlicht/ISceneManager.h>
 #include <iostream>
 #include "LuaUtil.h"
 #include "LuaComponent.h"
 #include "Engine/InheritanceTree.h"
-#include "Export/luaopen_all.h"
 #include "CppBase/XiAssert.h"
 #include "Engine/Timeline.h"
 #include "LuaScriptMacro.h"
 #include "Engine/GameScene.h"
-#include "WorldRender3D/Geometry.h"
 #include "boost/cast.hpp"
-#include "WorldRender3D/IrrlichtComponentSystem.h"
 
 using namespace std;
 using namespace luaT;
 using namespace irr;
 using namespace xihad::ngn;
-using namespace xihad::render3d;
 namespace xihad { namespace script
 {
 	struct LuaComponentSystem::impl
 	{
 		lua_State* L;
-		LuaRef lHandle;
 		InheritanceTree hierarchy;
 	};
 
-	LuaComponentSystem::LuaComponentSystem( IrrlichtDevice* dev,
-		GameScene* scene, const std::string& compBase ) :
+	LuaComponentSystem::LuaComponentSystem(GameScene* scene, const std::string& compBase ) :
 		mImpl(new impl)
 	{
-		lua_State* L = mImpl->L = lua_newthread(scene->mainThread());
-		mImpl->lHandle = LuaRef::fromTop(scene->mainThread());
+		lua_State* L = mImpl->L = scene->getMainThread();
 
 		// set path
 		{
@@ -54,48 +41,10 @@ namespace xihad { namespace script
 			setField(L, -1, "path", path.c_str());
 			setField(L, -1, "cpath", "./?.dll");
 		}
-		
-
-		{
-			StackMemo memo(L);
-			// export cpp library to lua
-			luaopen_all(L);
-		}
-
-		// set global environment
-		{
-			StackMemo memo(L);
-			// set global variables
-			lua_getglobal(L, "_G");
-
-			// _G.scene 
-			setField(L, -1, LUA_G_SCENE, scene);
-
-			// _G.Time
-			lua_createtable(L, 0, 3);
-			{
-				// _G.Time.change
-				setField(L, -1, LUA_G_TIME_CHANGE, 0);
-				// _G.Time.global
-				setField(L, -1, LUA_G_TIME_GLOBAL, 0);
-			}
-			lua_setfield(L, -2, LUA_G_TIME);	// TODO: read-only?
-
-			gui::ICursorControl* cursor = dev->getCursorControl();
-			setField(L, -1, LUA_G_CURSOR, cursor);
-
-			setField(L, -1, LUA_G_GEOMETRY, Geometry::creator());
-
-			IrrlichtComponentSystem* irrSystem = 
-				dynamic_cast<IrrlichtComponentSystem*> (scene->requireSystem("Render"));
-			scene::ISceneCollisionManager* collMan = irrSystem->getSceneManager()->getSceneCollisionManager();
-			setField(L, -1, LUA_G_COLLISION, collMan);
-		}
 	}
 
 	LuaComponentSystem::~LuaComponentSystem()
 	{
-		delete mImpl;
 	}
 
 	ngn::InheritancePath LuaComponentSystem::hierarchy( const std::string& compName )

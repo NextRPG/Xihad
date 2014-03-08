@@ -11,34 +11,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\CEGUI\EventPusher.cpp" />
-    <ClCompile Include="..\src\CEGUI\GeometryBuffer.cpp" />
-    <ClCompile Include="..\src\CEGUI\ImageCodec.cpp" />
-    <ClCompile Include="..\src\CEGUI\MemoryFile.cpp" />
-    <ClCompile Include="..\src\CEGUI\Renderer.cpp" />
-    <ClCompile Include="..\src\CEGUI\ResourceProvider.cpp" />
-    <ClCompile Include="..\src\CEGUI\Texture.cpp" />
-    <ClCompile Include="..\src\CEGUI\TextureTarget.cpp" />
-    <ClCompile Include="..\src\CEGUI\WindowTarget.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\CEGUI\EventPusher.h" />
-    <ClInclude Include="..\src\CEGUI\GeometryBuffer.h" />
-    <ClInclude Include="..\src\CEGUI\ImageCodec.h" />
-    <ClInclude Include="..\src\CEGUI\MemoryFile.h" />
-    <ClInclude Include="..\src\CEGUI\Renderer.h" />
-    <ClInclude Include="..\src\CEGUI\RendererDef.h" />
-    <ClInclude Include="..\src\CEGUI\RenderTarget.h" />
-    <ClInclude Include="..\src\CEGUI\ResourceProvider.h" />
-    <ClInclude Include="..\src\CEGUI\Texture.h" />
-    <ClInclude Include="..\src\CEGUI\TextureTarget.h" />
-    <ClInclude Include="..\src\CEGUI\WindowTarget.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <Text Include="..\src\CEGUIIrrlichtRenderer\Readme.txt" />
     <Text Include="..\src\CEGUI\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source.def" />
+    <None Include="..\src\CEGUIIrrlichtRenderer\RenderTarget.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\EventPusher.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\GeometryBuffer.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\ImageCodec.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\MemoryFile.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\Renderer.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\ResourceProvider.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\Texture.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\TextureTarget.cpp" />
+    <ClCompile Include="..\src\CEGUIIrrlichtRenderer\WindowTarget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\EventPusher.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\GeometryBuffer.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\ImageCodec.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\MemoryFile.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\Renderer.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\RendererDef.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\RenderTarget.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\ResourceProvider.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\Texture.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\TextureTarget.h" />
+    <ClInclude Include="..\src\CEGUIIrrlichtRenderer\WindowTarget.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DA66CB0F-46D8-49C0-B4A4-689464075B42}</ProjectGuid>

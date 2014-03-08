@@ -58,6 +58,8 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp">
       <Filter>Export</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />
@@ -118,6 +120,8 @@
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.h">
       <Filter>Export</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.h" />
+    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Export">
