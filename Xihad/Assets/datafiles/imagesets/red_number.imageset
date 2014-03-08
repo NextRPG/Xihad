@@ -1,0 +1,14 @@
+<Imageset autoScaled="" imagefile="red_number.png" name="RedNumber" nativeHorzRes="19" nativeVertRes="37" version="2">
+    <Image height="37" name="1" width="19" xPos="0" yPos="0" />
+    <Image height="37" name="5" width="19" xPos="128" yPos="0" />
+    <Image height="37" name="4" width="19" xPos="96" yPos="0" />
+    <Image height="37" name="3" width="19" xPos="63" yPos="0" />
+    <Image height="37" name="2" width="19" xPos="32" yPos="0" />
+    <Image height="37" name="6" width="19" xPos="161" yPos="0" />
+    <Image height="37" name="7" width="19" xPos="191" yPos="0" />
+    <Image height="37" name="8" width="19" xPos="225" yPos="0" />
+    <Image height="37" name="9" width="19" xPos="257" yPos="0" />
+    <Image height="37" name="0" width="19" xPos="291" yPos="0" />
+    <Image height="37" name="+" width="19" xPos="327" yPos="0" />
+    <Image height="37" name="-" width="12" xPos="361" yPos="0" />
+</Imageset>

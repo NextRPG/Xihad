@@ -2,6 +2,7 @@
 #include "ITextElement.hpp"
 #include "ITickMethod.hpp"
 #include "IDialogueContext.hpp"
+#include "ITextContent.hpp"
 #include <algorithm>
 
 namespace xihad { namespace dialogue 
@@ -33,7 +34,7 @@ namespace xihad { namespace dialogue
 
 	static void makeAllVisible(irr_ptr<ITextElement> element)
 	{
-		element->setVisible(0, element->endIndex());
+		element->setVisible(0, element->getContent()->endIndex());
 	}
 
 	static void makeAllInvisible(irr_ptr<ITextElement> element)
@@ -57,6 +58,11 @@ namespace xihad { namespace dialogue
 			std::swap(bgn, end);
 			fnc = makeAllInvisible;
 		}
+		else if (mVisibility.endLetter == pVisibility.endLetter)	// bgn == end
+		{
+			return;
+		}
+
 		std::for_each(end, bgn, fnc);
 
 		if (pVisibility.endElement != mTextElements.begin())
@@ -112,6 +118,12 @@ namespace xihad { namespace dialogue
 			}
 			mLastTriggerEvent = ++it;
 		}
+	}
+
+	IDialogue::SDialogueVisibility CDialogue::endVisibility() const 
+	{
+		return SDialogueVisibility(mTextElements.end(), 
+			mTextElements.back()->getContent()->endIndex());
 	}
 
 }}

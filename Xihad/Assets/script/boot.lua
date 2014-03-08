@@ -32,6 +32,7 @@ local LightManager = require "LightManager"
 
 -- load resources
 require "SkillDatabase"
+require "StrategyDatabase"
 
 -- load save files
 local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsub("[^\\\/]$", "%1\\")

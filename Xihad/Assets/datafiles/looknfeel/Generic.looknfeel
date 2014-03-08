@@ -12,7 +12,7 @@
         <PropertyDefinition redrawOnWrite="true" initialValue="FF000000" type="Colour" name="NormalTextColour"/>
         <PropertyDefinition redrawOnWrite="true" initialValue="FF444444" type="Colour" name="DisabledTextColour"/>
         <PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="VerticalTextFormatting" name="VertFormatting"/>
-        <PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="HorizontalTextFormatting" name="HorzFormatting"/>
+        <PropertyDefinition redrawOnWrite="true" initialValue="LeftAligned" type="HorizontalTextFormatting" name="HorzFormatting"/>
         <Property name="Size" value="{{0, 128}, {0, 32}}" />
         <ImagerySection name="Label">
             <TextComponent>
@@ -31,7 +31,7 @@
                     </Dim>
                 </Area>
                 <VertFormatProperty name="VertFormatting"/>
-                <HorzFormatProperty name="HorzFormatting"/>
+                <HorzFormatPropertxy name="HorzFormatting"/>
             </TextComponent>
         </ImagerySection>
         <StateImagery name="Enabled">

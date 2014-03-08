@@ -60,6 +60,7 @@ function CharacterManager:createCharacter( character, i, j )
 
 	for i,v in ipairs(character.skills) do
 		SkillManager:createSkill(v)
+		character.skillTimes[v] = SkillManager:getSkill(v).maxTimes
 	end
 
 	characterObject:concatTranslate(math3d.vector(0, 3, 0))
@@ -78,6 +79,14 @@ end
 function CharacterManager:getCharacterByLocation( point )
 	local character = Chessboard:tileAt(point).character
 	return (character and character.team == self.team) and character or nil
+end
+
+function CharacterManager:getCharacters(  )
+	local characters = {}
+	for characterObject in scene:objectsWithTag(self.team) do
+		characters[#characters + 1] = characterObject:findComponent(c"Character")
+	end
+	return characters
 end
 
 --- 
@@ -155,6 +164,7 @@ end
 ---
 -- 回合开始时，进行初始化工作
 function CharacterManager:roundStart(  )
+	self.currentCharacter = nil
 	-- handle message that round on Character has started
 	for characterObject in scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")

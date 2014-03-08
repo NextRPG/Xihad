@@ -31,7 +31,7 @@
     <Image name="ButtonHoverL" xPos="398" yPos="291" width="3" height="13" />
     <Image name="ButtonHoverR" xPos="461" yPos="291" width="3" height="13" />
     <Image name="ButtonHoverT" xPos="402" yPos="287" width="58" height="3" />
-    <Image name="GenericBrush" xPos="86" yPos="603" width="7" height="7" />
+    <Image height="19" name="GenericBrush" width="134" xPos="218" yPos="464" />
     <Image name="MouseTextBar" xPos="169" yPos="548" width="11" height="23" />
     <Image name="ButtonHoverBL" xPos="398" yPos="304" width="4" height="4" />
     <Image name="ButtonHoverBR" xPos="460" yPos="304" width="4" height="4" />
