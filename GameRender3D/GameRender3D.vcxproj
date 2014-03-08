@@ -68,14 +68,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CEGuiHandle.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimatedMeshComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClips.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipsCache.h" />
     <ClInclude Include="..\src\WorldRender3D\BillboardComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\CameraComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h" />
-    <ClInclude Include="..\src\WorldRender3D\CeguiEventReceiver.h" />
     <ClInclude Include="..\src\WorldRender3D\Geometry.h" />
     <ClInclude Include="..\src\WorldRender3D\LightComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\MeshComponent.h" />
@@ -85,12 +83,10 @@
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\CEGuiHandle.cpp" />
     <ClCompile Include="..\src\WorldRender3D\AnimatedMeshComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp" />
     <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp" />
-    <ClCompile Include="..\src\WorldRender3D\CeguiEventReceiver.cpp" />
     <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp" />

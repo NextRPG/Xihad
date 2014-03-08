@@ -127,7 +127,7 @@ namespace xihad { namespace ngn
 			if (result.first = factory->create(typeName, *this, specificParam)) // create new?
 			{
 				result.second = true;
-				InheritenceChain ancestors = factory->hierarchy(typeName);
+				InheritancePath ancestors = factory->hierarchy(typeName);
 
 				for (const string& superclass : ancestors)
 					mImpl->components[superclass] = result.first;
@@ -147,7 +147,7 @@ namespace xihad { namespace ngn
 		{
 			auto facotry = mImpl->factory();
 			const string& mostDerived = comp->getComponentName();
-			InheritenceChain ancestors = facotry->hierarchy(mostDerived);
+			InheritancePath ancestors = facotry->hierarchy(mostDerived);
 			for (const string& clazz : ancestors)
 			{
 				int sz = mImpl->components.erase(clazz);

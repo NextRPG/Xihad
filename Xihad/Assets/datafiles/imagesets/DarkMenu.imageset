@@ -1,0 +1,16 @@
+<Imageset autoScaled="false" imagefile="dark-drop-down.png" name="Xihad" nativeHorzRes="200" nativeVertRes="170" version="2">
+    <Image height="1" name="MenuItemTop" width="9" xPos="9" yPos="86" />
+    <Image height="1" name="MenuItemBottom" width="9" xPos="9" yPos="85" />
+    <Image height="3" name="MenuHoverBack" width="3" xPos="9" yPos="82" />
+    <Image height="5" name="RoundedDarkFrameBack" width="5" xPos="14" yPos="95" />
+    <Image height="13" name="PopupOpen" width="13" xPos="187" yPos="28" />
+    <Image height="13" name="PopupClose" width="13" xPos="187" yPos="63" />
+    <Image height="5" name="RoundedDarkFrameLeft" width="9" xPos="0" yPos="16" />
+    <Image height="5" name="RoundedDarkFrameTopLeft" width="9" xPos="0" yPos="11" />
+    <Image height="5" name="RoundedDarkFrameTop" width="10" xPos="9" yPos="11" />
+    <Image height="12" name="RoundedDarkFrameBottomLeft" width="9" xPos="0" yPos="155" />
+    <Image height="12" name="RoundedDarkFrameBottom" width="10" xPos="9" yPos="155" />
+    <Image height="5" name="RoundedDarkFrameRight" width="9" xPos="174" yPos="16" />
+    <Image height="12" name="RoundedDarkFrameBottomRight" width="9" xPos="174" yPos="155" />
+    <Image height="5" name="RoundedDarkFrameTopRight" width="9" xPos="174" yPos="11" />
+</Imageset>

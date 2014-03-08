@@ -3,14 +3,12 @@
 #include "boost\shared_ptr.hpp"
 #include "irr_ptr.h"
 
-namespace irr
-{
-	class IrrlichtDevice;
-}
 namespace xihad { namespace ngn
 {
-	struct GameEngineImpl;
 	class GameWorld;
+	class NativeWindow;
+	class WindowRenderer;
+	class FrameObserver;
 
 	/// 游戏引擎启动器
 	/**
@@ -31,16 +29,17 @@ namespace xihad { namespace ngn
 		};
 
 	public:
-		explicit GameEngine(int frameCount = 60);
-		explicit GameEngine(GameWorld& world, int frameCount = 60);
+		explicit GameEngine(NativeWindow& wnd, float defaultFrameTime = 1.f/60);
+		explicit GameEngine(NativeWindow& wnd, GameWorld& world, float defaultFrameTime = 1.f/60);
 		virtual ~GameEngine();
 
 		boost::shared_ptr<GameWorld> getWorld();
 
-		irr_ptr<irr::IrrlichtDevice> getDevice();
+		NativeWindow* getWindow();
 
-		// if not getDevice().empty(), then just return false
-		bool initDevice(irr_ptr<irr::IrrlichtDevice> device);
+		void addFrameObserver(FrameObserver& observer);
+
+		void removeFrameObserver(FrameObserver& observer);
 
 		virtual bool isRunning() const;
 
@@ -58,35 +57,16 @@ namespace xihad { namespace ngn
 		 */
 		virtual bool stop();
 
-		/// 设置断点临界时间
-		/**
-		 * 如果单次循环的时间超过这个临界值，那么被视为触发了某个断点。下次
-		 */
-		void setBreakPointThresholdTime(float thresholdSeconds);
-
-		/// 取得断点临界时间
-		/**
-		 * @see setBreakPointThresholdTime()
-		 */
-		float breakPointThresholdTime() const;
-
-		/// 设置是否让进程提前完成单次循环后进入睡眠，等待下一次循环
-		void setNeverSleep(bool neverSleep);
-
-		/// 判断是否让进程提前完成单次循环后进入睡眠，等待下一次循环
-		bool isNeverSleep() const;
-
-		/// 设置是否显示帧率
-		void setShowFPS(bool showFPS);
-
-		/// 判断是否显示帧率
-		bool isShowFPS() const;
-
-	protected:
-		void afterWorldStep( float stepTime );
+		virtual void setFrameTime(float);
 
 	private:
-		void initWithWorld(GameWorld* world, float frameInterval);
+		WindowRenderer* getRenderer();
+
+		void init(NativeWindow&, GameWorld* world, float frameInterval);
+
+		float fireFrameBegin();
+
+		void fireFrameEnd(float bgnTime);
 		
 	private:
 		struct impl;

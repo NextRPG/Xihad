@@ -3,27 +3,22 @@
 
 namespace luaT
 {
-	void* UserdataTypeCheckerNT::castUserdata( lua_State* L, int idx, bool* valid )
+	void* UserdataTypeCheckerNT::castUserdata( lua_State* L, int idx)
 	{
-		void* userdata = NULL;
-		bool valid_ = true;
-
 		if (lua_istable(L, idx))
 		{	// table.
 			lua_getfield(L, idx, ReservedKeyword::__UDKEY);
-			if (!lua_islightuserdata(L, -1)) 
-				valid_ = false;
-			else
-				userdata = lua_touserdata(L, -1);
-			lua_pop(L, 1);
-		}
-		else if (lua_isuserdata(L, idx))
-			userdata = lua_touserdata(L, idx);
-		else if (!lua_isnil(L, idx)) 
-			valid_ = false; // now nil can be recognized as nullptr
 
-		if (valid) *valid = valid_;
-		return userdata;
+			void* userdata = lua_islightuserdata(L, -1) ? lua_touserdata(L, -1) : 0;
+			lua_pop(L, 1);
+
+			return userdata;
+		}
+
+		if (lua_isuserdata(L, idx))
+			return lua_touserdata(L, idx);
+
+		return 0;
 	}
 
 	void* UserdataTypeCheckerNT::shiftUserdata( lua_State* L, void* userdata, int targetMtIndex )

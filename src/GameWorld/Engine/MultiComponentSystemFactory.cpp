@@ -27,7 +27,7 @@ namespace xihad { namespace ngn
 		}
 	}
 
-	InheritenceTree::RegisterResult MultiComponentSystemFactory::registerDerivedType( const std::string& sysname )
+	InheritanceTree::RegisterResult MultiComponentSystemFactory::registerDerivedType( const std::string& sysname )
 	{
 		return registerType(sysname, mBaseType);
 	}

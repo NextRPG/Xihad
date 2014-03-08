@@ -1,13 +1,10 @@
 #pragma once
 
-namespace irr
-{
-	class IrrlichtDevice;
-}
-
 namespace xihad
 {
-	void initSystem(irr::IrrlichtDevice* device);
+	namespace ngn { class GameEngine; }
+
+	void initSystem(ngn::GameEngine* device);
 	void destroySystems();
 }
 
