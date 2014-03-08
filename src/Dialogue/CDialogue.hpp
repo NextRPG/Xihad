@@ -53,10 +53,7 @@ namespace xihad { namespace dialogue
 			return SDialogueVisibility(mTextElements.begin());
 		}
 
-		virtual SDialogueVisibility endVisibility()   const override
-		{
-			return SDialogueVisibility(mTextElements.end());
-		}
+		virtual SDialogueVisibility endVisibility() const override;
 
 	protected:
 		virtual void triggerEvent(ElementIter bgn, ElementIter end, bool immediate);

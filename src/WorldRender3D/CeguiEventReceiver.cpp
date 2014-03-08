@@ -2,6 +2,11 @@
 #include <CEGUI\System.h>
 #include <CEGUI\GUIContext.h>
 #include <CEGUI\RendererModules\Irrlicht\EventPusher.h>
+#include <windows.h>
+#include <stringapiset.h>
+#include <iostream>
+#include "CEGUIBasedDialogue\DialogueParser.h"
+#include "Dialogue\IDialogue.hpp"
 
 CeguiEventReceiver::CeguiEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher)
 	: d_eventPusher(eventPusher)
@@ -41,6 +46,10 @@ bool CeguiEventReceiver::onBackgroundEvent( const xihad::ngn::MouseEvent& event 
 	return onForegroundEvent(event);
 }
 
+using xihad::dialogue::DialogueParser;
+using xihad::dialogue::IDialogue;
+static DialogueParser* parser = nullptr;
+static IDialogue* dialog = nullptr;
 //----------------------------------------------------------------------------//
 bool CeguiEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool /*ctrl*/, bool /*shift*/)
 {
@@ -51,6 +60,26 @@ bool CeguiEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool /*ctrl*
 		handled = ceguiSystem->getDefaultGUIContext().injectKeyDown(ceguiKey);
 		handled = ceguiSystem->getDefaultGUIContext().injectChar(wch) || handled;
 	}
+
+	if (ceguiKey == CEGUI::Key::C)
+	{
+		parser = new DialogueParser;
+		parser->initialise();
+		dialog = parser->generateDialogue();
+	}
+	else if (ceguiKey = CEGUI::Key::P)
+	{
+		delete parser;
+	}
+	else if (ceguiKey = CEGUI::Key::D)
+	{
+		delete dialog;
+	}
+	else if (ceguiKey = CEGUI::Key::U)
+	{
+		dialog->onUpdate(0.1f);
+	}
+
 	return handled;
 }
 

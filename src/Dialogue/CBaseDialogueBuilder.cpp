@@ -81,6 +81,7 @@ namespace xihad { namespace dialogue
 			text->setOffset(offset);
 			offset += aligned->getOffset();
 			outElements.push_back(text);
+			text->drop();
 
 			aligned = aligned->getNextSection();
 		}
