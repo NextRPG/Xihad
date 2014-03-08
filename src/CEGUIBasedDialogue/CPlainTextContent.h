@@ -37,14 +37,11 @@ namespace xihad { namespace dialogue
 		virtual const CEGUI::String& getType() const;
 
 		// sub class method
-		CEGUI::String substr(unsigned bgn, unsigned end = CEGUI::String::npos) const;
+		CEGUI::String substr(unsigned bgn, unsigned len = CEGUI::String::npos) const;
 
-		float getWidth(unsigned bgn, unsigned end = CEGUI::String::npos) const;
+		float getWidth(unsigned bgn, unsigned len = CEGUI::String::npos) const;
 
 		float getHeight() const;
-
-	private:
-		unsigned getNextWordIndex(unsigned bgn) const;
 
 	private:
 		const CEGUI::Font* mFont;

@@ -24,7 +24,7 @@ namespace xihad { namespace dialogue
 
 	void CPlainTextElement::setVisible( unsigned bgnIndex, unsigned endIndex )
 	{
-		auto visible = mContent->substr(bgnIndex, endIndex);
+		auto visible = mContent->substr(bgnIndex, endIndex - bgnIndex);
 		mContainer->setText(visible);
 	}
 
