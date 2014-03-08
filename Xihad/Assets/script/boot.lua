@@ -29,6 +29,7 @@ local AIManager = require "AIManager"
 local CameraManager = require "CameraManager"
 local BattleManager = require "BattleManager"
 local LightManager = require "LightManager"
+local VictoryChecker = require "VictoryChecker"
 
 -- load resources
 require "SkillDatabase"
@@ -46,11 +47,11 @@ Chessboard:init(battle.chessboard)
 HeroManager:init(battle.heros, heros)
 AIManager:init(battle.AIs)
 BattleManager:init(HeroManager, AIManager)
+VictoryChecker:init()
 
 -- init Camera related manager
 CameraManager:init()
 LightManager:init()
-
 
 -- init Controller
 scene:pushController(require("InputController"))

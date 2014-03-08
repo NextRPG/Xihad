@@ -10,7 +10,10 @@
 -- local realKey = str:match("[^.]", -1)
 -- ref[realKey] = 2
 -- print(ref[realKey])
-key = "properties.currentHP"
-for slice in key:gmatch("([^\.]+)[\.]") do
-	print(slice)
-end
+-- key = "properties.currentHP"
+-- for slice in key:gmatch("([^\.]+)[\.]") do
+-- 	print(slice)
+-- end
+
+local str = "max"
+print()

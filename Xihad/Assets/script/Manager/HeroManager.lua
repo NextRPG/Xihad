@@ -16,8 +16,10 @@ end
 
 function HeroManager:roundStart(  )
 	local object = scene:getObjectWithTag("Hero")
-	CameraManager:move2Character(object)
-	self:roundStart_aux(  )
+	if object then
+		CameraManager:move2Character(object)
+		self:roundStart_aux(  )
+	end
 end
 
 return HeroManager

@@ -6,6 +6,6 @@ function string.split( str, spliter )
 	return arr
 end
 
-local str = "haha.hehe"
-
--- print(string.split(str, "."))
+function string.upperFirst( str )
+	return str:sub(1, 1):upper() .. str:sub(2, #str)
+end
