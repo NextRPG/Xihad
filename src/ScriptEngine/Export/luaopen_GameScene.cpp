@@ -98,8 +98,15 @@ namespace xihad { namespace script
 	{
 		luaL_checkany(L, 2);
 		GameScene* scene = checkarg<GameScene*>(L, 1);
-		LuaRef tref = LuaRef::fromIndex(L, 2);
-		scene->getControllerStack().pushReceiver(new LuaEventReceiver(tref));
+
+		UserEventReceiver* receiver;
+		if ((receiver = checkarg<UserEventReceiver*>(L, 2)) == 0)
+		{
+			LuaRef tref = LuaRef::fromIndex(L, 2);
+			receiver = new LuaEventReceiver(tref);
+		}
+		
+		scene->getControllerStack().pushReceiver(receiver);
 		return 0;
 	}
 

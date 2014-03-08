@@ -75,9 +75,9 @@ namespace xihad { namespace script
 			return false;
 		}
 
-		if (lua_isnil(L, -1))
+		if (!lua_isnumber(L, -1))
 		{
-			cout << "WARNING: EXPLICITLY return true/false in event handler" << endl;
+			cout << "WARNING: EXPLICITLY return integer in event handler" << endl;
 			return 0;
 		}
 
