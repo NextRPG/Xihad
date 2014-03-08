@@ -31,10 +31,12 @@ local Skill = {
 	damage = 0,
 	heal = 0,
 	description = "",
-	maxTimes = 0,
+	-- maxTimes = 0,
 	property = "",
 	minDistance = 1,
-	maxDistance = 1
+	maxDistance = 1,
+	consumeMP  = 0,
+	effect2Target = nil
 }
 
 -- public
@@ -45,11 +47,8 @@ function Skill.new( o )
 	assert(type(o) == "table", "prototype must be a table")
 	setmetatable(o, {__index = Skill})
 
-	-- o.effect2Self = o.effect2Self or nil
-	-- o.effect2Target = o.effect2Target or 
 	o.range = o.range or {{x = 0, y = 0}}
 
-	o.currentTimes = o.maxTimes
 	return o
 end
 
@@ -215,6 +214,7 @@ function Skill:trigger( hero, targetTile )
 			print(character.properties.currentHP)
 		end
 	end
+	hero.skillTimes[self.id] = hero.skillTimes[self.id] - 1
 	print("attack end")
 end
 

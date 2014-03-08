@@ -60,9 +60,6 @@
     <ClInclude Include="..\src\CppBase\xassert.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\EngineStats.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\Component.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -141,12 +138,6 @@
     <ClInclude Include="..\src\GameWorld\Engine\Process.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceTree.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceChain.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\CompositeUpdateHandler.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -177,9 +168,6 @@
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h">
       <Filter>Broadcast</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -195,6 +183,46 @@
     <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CppBase\ReferenceCounted.h">
+      <Filter>CppBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
@@ -202,9 +230,6 @@
     </ClCompile>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp">
       <Filter>CppBase</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\EngineStats.cpp">
-      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\Component.cpp">
       <Filter>Component</Filter>
@@ -219,9 +244,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\Transform.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\Timeline.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp">
@@ -242,12 +264,6 @@
     <ClCompile Include="..\src\GameWorld\Engine\Process.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceTree.cpp">
-      <Filter>Component\Inheritence</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp">
-      <Filter>Component\Inheritence</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\CompositeUpdateHandler.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
@@ -263,11 +279,32 @@
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp">
       <Filter>Broadcast</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp">
-      <Filter>Broadcast</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">
       <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\InheritancePath.cpp">
+      <Filter>Component\Inheritence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp">
+      <Filter>Component\Inheritence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

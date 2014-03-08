@@ -29,28 +29,29 @@ local AIManager = require "AIManager"
 local CameraManager = require "CameraManager"
 local BattleManager = require "BattleManager"
 local LightManager = require "LightManager"
+local VictoryChecker = require "VictoryChecker"
 
 -- load resources
 require "SkillDatabase"
+require "StrategyDatabase"
 
 -- load save files
 local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsub("[^\\\/]$", "%1\\")
-local battle = dofile(CUR_DIR .. "\\Save\\maptest.battle")
 local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
+local heros = dofile(CUR_DIR .. "\\Save\\Save1.hero")
 
 
 
 -- init battle related manager
 Chessboard:init(battle.chessboard)
-HeroManager:init(battle.heros)
+HeroManager:init(battle.heros, heros)
 AIManager:init(battle.AIs)
 BattleManager:init(HeroManager, AIManager)
+VictoryChecker:init()
 
 -- init Camera related manager
 CameraManager:init()
 LightManager:init()
-
-
 
 -- init Controller
 scene:pushController(require("InputController"))

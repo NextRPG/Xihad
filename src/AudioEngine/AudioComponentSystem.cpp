@@ -18,10 +18,15 @@ namespace xihad { namespace audio
 		float soundVolume;
 	};
 
-	AudioComponentSystem::AudioComponentSystem(float musicVolume, float soundVolume, const ngn::InheritenceTree& tree) :
+	AudioComponentSystem::AudioComponentSystem(float musicVolume, float soundVolume, const ngn::InheritanceTree& tree) :
 		BaseComponentSystem(tree), mImpl(new AudioComponentSystemImpl)
 	{
-		int debugState = _DEBUG & ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
+#ifdef _DEBUG
+		int debugState = ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
+#else
+		int debugState = 0;
+#endif // _DEBUG
+
 		mImpl->audioDevice = createIrrKlangDevice(ESOD_AUTO_DETECT, 
 			ESEO_MULTI_THREADED | ESEO_USE_3D_BUFFERS | debugState);
 		
@@ -41,7 +46,12 @@ namespace xihad { namespace audio
 			mImpl->audioDevice->stopAllSounds();
 			mImpl->audioDevice->drop();
 		}
-		int debugState = _DEBUG & ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
+#ifdef _DEBUG
+		int debugState = ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
+#else
+		int debugState = 0;
+#endif
+
 		mImpl->audioDevice = createIrrKlangDevice(ESOD_AUTO_DETECT, 
 			ESEO_MULTI_THREADED | ESEO_USE_3D_BUFFERS | debugState);
 	}

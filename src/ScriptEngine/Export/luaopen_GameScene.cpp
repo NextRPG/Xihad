@@ -3,12 +3,14 @@
 #include <luaT/luaT.h>
 #include "CppBase/IteratorPair.h"
 #include "Engine/GameScene.h"
+#include "Engine/UserEventReceiverStack.h"
 #include "ScriptEngine/LuaEventReceiver.h"
 
 using namespace luaT;
 using namespace xihad;
 using namespace ngn;
 luaT_defMetaData(GameScene, false);
+luaT_defMetaData(UserEventReceiver, false);
 
 namespace xihad { namespace script
 {
@@ -96,20 +98,35 @@ namespace xihad { namespace script
 	{
 		luaL_checkany(L, 2);
 		GameScene* scene = checkarg<GameScene*>(L, 1);
-		LuaRef tref = LuaRef::fromIndex(L, 2);
-		boost::shared_ptr<UserEventReceiver> rec(new LuaEventReceiver(tref));
-		scene->controllerStack().push_back(rec);
+
+		UserEventReceiver* receiver;
+		if ((receiver = checkarg<UserEventReceiver*>(L, 2)) == 0)
+		{
+			LuaRef tref = LuaRef::fromIndex(L, 2);
+			receiver = new LuaEventReceiver(tref);
+		}
+		
+		scene->getControllerStack().pushReceiver(receiver);
 		return 0;
 	}
 
-	luaT_static void scenePopController(GameScene* scene)
+	luaT_static UserEventReceiver* scenePopController(GameScene* scene)
 	{
-		auto& stack = scene->controllerStack();
-		stack.pop_back();
+		return scene->getControllerStack().popReceiver();
+	}}
+
+	luaT_static bool drop(UserEventReceiver* rec)
+	{
+		return rec->drop();
 	}}
 
 	int luaopen_GameScene( lua_State* L )
 	{
+		luaT_defRegsBgn(receiver)
+			luaT_cnamedfunc(drop),
+		luaT_defRegsEnd
+		MetatableFactory<UserEventReceiver>::create(L, receiver);
+
 		luaT_defRegsBgn(sceneRegs)
 			{ "objectsWithTag", eachObjectWithTag },
 			luaT_mnamedfunc(GameScene, findObject), 

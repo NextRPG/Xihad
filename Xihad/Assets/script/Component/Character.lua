@@ -32,6 +32,7 @@ local Character = {
 	exp = 0,
 	name = "",
 	skills = {},
+	skillTimes = {},
 	effects = Set.new{},
 	equipments = {}, -- Consts.parts
 	properties = {},
@@ -53,15 +54,22 @@ function Character.new( o )
 	end
 	o.properties.currentHP = o.properties.maxHP:calculate()
 	o.properties.currentAP = o.properties.maxAP:calculate()
+	o.properties.currentMP = o.properties.maxMP:calculate()
 
 	return o
 end
 
---- 
--- 找到当前Character所在的TileObject
--- @treturn Object tileObject
-function Character:tile()
-	return Chessboard:tileAt(vector2point(self.object:getTranslation()))
+function Character:canTrigger( skill )
+	return self.skillTimes[skill.id] > 0
+end
+
+function Character:getSkills(  )
+	local SkillManager = require "SkillManager"
+	local skills = {}
+	for i,id in ipairs(self.skills) do
+		skills[#skills + 1] = SkillManager:getSkill(id)
+	end
+	return skills
 end
 
 function Character:getManager(  )
@@ -71,31 +79,6 @@ end
 function Character:getEnemyManager(  )
 	return self.team == "Hero" and require("AIManager") or require("HeroManager")  
 end
-
--- EffectTarget
--- unused
--- function Character:bindEffect( effect )
--- 	assert(effect, "effect can't be nil")
--- 	self.effects[effect] = #self.effects
--- end
-
--- function Character:unbindEffect( effect )
--- 	assert(effect, "effect can't be nil")
--- 	self.effects[effect] = nil	
--- end
-
--- function Character:updateEffects(  )
--- 	for k,v in pairs(self.effects) do
--- 		k:roundUpdate(self)
--- 	end
--- end
-
--- function Character:resetEffects(  )
--- 	self.effects = {}
--- end
-
--- EquipTarget
--- unused
 
 function Character:equip( equipment )
 	if equipment:equip(self) then
@@ -122,7 +105,7 @@ function Character:getProperty( name )
 end
 
 function Character:levelUp( level )
-	-- body
+	
 end
 
 function Character:handleDamage_aux( param )
@@ -131,8 +114,10 @@ function Character:handleDamage_aux( param )
 	(skillPower * attack*3)/(defense + attack)*(1.1 - math.random() * 0.2))
 	print("cause" .. damage .. "damage")
 	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
-	if (self:getProperty("currentHP") < 0) then
+	if (self:getProperty("currentHP") <= 0) then
 		self.properties.currentHP = 0
+		local dispatcher = scene:getDispatcher()
+		dispatcher:dispatch( self.team .. ".die", "haha", c"__ROOT__", 0)
 		self.object:stop()
 	end
 end
@@ -175,6 +160,10 @@ end
 
 function Character:handleHeal( heal )
 	-- 需要公式
+end
+
+function Character:onStop(  )
+	Chessboard:tileAt(self.tile).character = nil
 end
 
 return Character

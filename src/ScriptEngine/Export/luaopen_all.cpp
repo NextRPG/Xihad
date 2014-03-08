@@ -11,6 +11,8 @@
 #include "luaopen_Geometry.h"
 #include "luaopen_MessageDispatcher.h"
 #include "luaopen_MessageListener.h"
+#include "luaopen_NativeWindow.h"
+#include "luaopen_GameEngine.h"
 #include "luaopen_2ndIteration.h"
 #include "CppBase\xassert.h"
 
@@ -52,6 +54,8 @@ namespace xihad { namespace script
 		CHECKED_OPEN(L, GameObject);
 		CHECKED_OPEN(L, MessageDispatcher);
 		CHECKED_OPEN(L, MessageListener);
+		CHECKED_OPEN(L, NativeWindow);
+		CHECKED_OPEN(L, GameEngine);
 		CHECKED_OPEN(L, 2ndIteration);
 	}
 

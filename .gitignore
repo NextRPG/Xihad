@@ -17,6 +17,11 @@
 /ipch/
 /docs/Reference/html
 /Xihad/math3d.*
-/Debug/*.lib
 *sublime*
-/Debug/irrlicht-*.dll
+
+CEGUIIrrlichtRenderer*.dll
+CEGUI.dll
+UnitTest.dll
+
+/Debug/*.lib
+/Release/*.lib

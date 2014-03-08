@@ -24,6 +24,14 @@ function runAsyncFunc( func, ... )
 	coroutine.yield(func, t)
 end
 
+function makeList( array, k, v )
+	local list = {}
+	for i,element in ipairs(array) do
+		list[element[k]] = element[v] 		
+	end
+	return list
+end
+
 function findMax( list )
 	local maxKey, maxValue = next(list)
 	for k,v in pairs(list) do
@@ -86,4 +94,43 @@ end
 function scene:createUniqueObjectWithComponent( component, param )
 	local object = scene:createUniqueObject(c(component))
 	object:appendComponent(c(component), param)
+end
+
+function serialize( o )
+	print(o)
+	if type(o) == "number" then
+		io.write(o)
+	elseif type(o) == "string" then
+		io.write(string.format("%q", o))
+	elseif type(o) == "table" then
+		io.write(" {\n")
+		for k,v in pairs(o) do
+			io.write(" ", k, " = ")
+			io.write(" [")
+			serialize(k)
+			io.write("] = ")
+			serialize(v)
+			io.write(",\n")
+		end
+		io.write("}")
+	else
+		error("cannot serialize a " .. type(o))
+	end
+end
+
+function scene:hasObjectWithTag( tag )
+	local count = 0
+	for object in scene:objectsWithTag(tag) do
+		count = count + 1
+	end
+	return count ~= 0
+end
+
+function scene:getObjectWithTag( tag )
+	local result
+	for object in scene:objectsWithTag(tag) do
+		result = object
+		break
+	end
+	return result
 end

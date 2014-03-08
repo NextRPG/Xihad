@@ -34,8 +34,6 @@
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h">
       <Filter>AnimationClip</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CEGuiHandle.h" />
-    <ClInclude Include="..\src\WorldRender3D\CeguiEventReceiver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -65,8 +63,6 @@
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp">
       <Filter>AnimationClip</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CEGuiHandle.cpp" />
-    <ClCompile Include="..\src\WorldRender3D\CeguiEventReceiver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">

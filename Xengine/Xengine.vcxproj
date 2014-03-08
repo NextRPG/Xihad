@@ -23,7 +23,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -64,6 +64,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../src;../Include;../src/GameWorld;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -74,10 +75,13 @@
   <ItemGroup>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\BaseComponentSystem.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\EngineStats.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceChain.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\InheritenceTree.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\InheritancePath.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\GameScene.cpp" />
@@ -85,35 +89,44 @@
     <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp" />
-    <ClCompile Include="..\src\GameWorld\Message\ListenerWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\BitOperation.h" />
     <ClInclude Include="..\src\CppBase\CLineBreak.hpp" />
     <ClInclude Include="..\src\CppBase\CStringSplitter.hpp" />
     <ClInclude Include="..\src\CppBase\IteratorPair.h" />
+    <ClInclude Include="..\src\CppBase\ReferenceCounted.h" />
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
     <ClInclude Include="..\src\CppBase\xassert.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceChain.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseVisitable.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseVisitor.h" />
     <ClInclude Include="..\src\GameWorld\Engine\ComponentFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\dimension2d.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\EngineStats.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h" />
     <ClInclude Include="..\src\GameWorld\Engine\irr_ptr.h" />
     <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h" />
     <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\position2d.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Properties.h" />
     <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />
     <ClInclude Include="..\src\GameWorld\Engine\GameObjectDepends.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\InheritenceTree.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h" />
     <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h" />
     <ClInclude Include="..\src\GameWorld\Engine\Property.h" />
     <ClInclude Include="..\src\GameWorld\Engine\quaternion.h" />
@@ -125,10 +138,12 @@
     <ClInclude Include="..\src\GameWorld\Engine\matrix.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\TagListener.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h" />
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />
-    <ClInclude Include="..\src\GameWorld\Message\ListenerWrapper.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageListener.h" />
     <ClInclude Include="..\src\GameWorld\Message\SourceFilter.h" />
@@ -155,7 +170,6 @@
     <ClCompile Include="..\src\GameWorld\Engine\GameWorld.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\GameObject.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\Process.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\Timeline.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\Transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

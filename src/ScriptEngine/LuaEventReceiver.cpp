@@ -55,7 +55,7 @@ namespace xihad { namespace script
 	}
 
 	template <class EventParam>
-	bool callWithParam(luaT::LuaRef& lobject, const char* func, const EventParam& param)
+	int callWithParam(luaT::LuaRef& lobject, const char* func, const EventParam& param, int arg)
 	{
 		lua_State* L = lobject.getState();
 		StackMemo memo(L);
@@ -68,45 +68,33 @@ namespace xihad { namespace script
 		lobject.pushSelf();
 
 		pushParam(L, param);
-		if (lua_pcall(L, 2, 1, 0))
+		lua_pushinteger(L, arg);
+		if (lua_pcall(L, 3, 1, 0))
 		{
 			LuaUtil::outputErrorMessage(L, func);
 			return false;
 		}
 
-		if (lua_isnil(L, -1))
+		if (!lua_isnumber(L, -1))
 		{
-			cout << "WARNING: EXPLICITLY return true/false in event handler" << endl;
-			return true;
+			cout << "WARNING: EXPLICITLY return integer in event handler" << endl;
+			return 0;
 		}
 
-		return lua_toboolean(L, -1) == 1;
+		return lua_tointeger(L, -1);
 	}
 
-	bool LuaEventReceiver::onForegroundEvent( const KeyEvent& event )
+	int LuaEventReceiver::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
 	{
 		if (event.PressedDown)
-			return callWithParam(lobject, "onKeyDown", event);
+			return callWithParam(lobject, "onKeyDown", event, argFromPreviousReceiver);
 		else
-			return callWithParam(lobject, "onKeyUp", event);
+			return callWithParam(lobject, "onKeyUp", event, argFromPreviousReceiver);
 	}
 
-	bool LuaEventReceiver::onForegroundEvent( const MouseEvent& event )
+	int LuaEventReceiver::onMouseEvent( const MouseEvent& event, int argFromPreviousReceiver )
 	{
-		return callWithParam(lobject, "onMouseEvent", event);
-	}
-
-	bool LuaEventReceiver::onBackgroundEvent( const KeyEvent& event )
-	{
-		if (event.PressedDown)
-			return callWithParam(lobject, "onBgKeyDown", event);
-		else
-			return callWithParam(lobject, "onBgKeyUp", event);
-	}
-
-	bool LuaEventReceiver::onBackgroundEvent( const MouseEvent& event )
-	{
-		return callWithParam(lobject, "onBgMouseEvent", event);
+		return callWithParam(lobject, "onMouseEvent", event, argFromPreviousReceiver);
 	}
 
 }}

@@ -1,8 +1,5 @@
 #include "GameWorld.h"
-#include <algorithm>
 #include "Timeline.h"
-#include "CppBase/XiAssert.h"
-#include "CompositeUpdateHandler.h"
 #include "GameScene.h"
 
 using namespace std;
@@ -11,102 +8,100 @@ namespace xihad { namespace ngn
 	struct GameWorld::impl
 	{
 		Timeline timeline;
-		CompositeUpdateHandler& updaters;
 		GameScene* scene;
 
-		GameWorld::impl() : updaters(*new CompositeUpdateHandler)
-		{
-		}
+		float singleStepSeconds;
+		float timeScale;
+		bool paused;
 	};
 
-	GameWorld::GameWorld( float defaultStepSize ) :
-		mImpl(new impl)
+	GameWorld::GameWorld( float defaultStepSize ) : mImpl(new impl)
 	{
 		mImpl->scene = nullptr;
-		mImpl->timeline.setSingleStepSeconds(defaultStepSize);
+		mImpl->singleStepSeconds = defaultStepSize;
+		mImpl->timeScale = 1.0f;
+		mImpl->paused = false;
 	}
 
 	GameWorld::~GameWorld()
 	{
-		mImpl->updaters.destroy();
+		if (mImpl->scene)
+			mImpl->scene->destroy();
 	}
 
 	GameScene* GameWorld::setScene( GameScene* scene )
 	{
-		if (!scene || mImpl->scene == scene) 
-			return nullptr;
-
-		GameScene* prev = mImpl->scene;
-
-		auto iter = mImpl->updaters.findChildHandler(prev);
-		if (iter != mImpl->updaters.childHandlerEnd())
-			mImpl->updaters.eraseChildHandler(iter);
-
-		mImpl->updaters.appendChildHandler(scene);
-		mImpl->scene = scene;
-
-		return prev;
+		std::swap(scene, mImpl->scene);
+		return scene;
 	}
 
 	void GameWorld::start()
 	{
-		if (mImpl->updaters.start())
+		if (mImpl->scene && mImpl->scene->start())
 		{
 			// TODO: 
 		}
 	}
 
-	void GameWorld::step( float dtSeconds )
+	void GameWorld::update( float dtSeconds )
 	{
-		if (mImpl->updaters.update(mImpl->timeline))
+		if (mImpl->scene && mImpl->scene->update(mImpl->timeline))
 		{
-			mImpl->timeline.update(dtSeconds);
+			float dtScaledSeconds = isPaused() ? 0 : dtSeconds*getTimeScale();
+			mImpl->timeline.update(dtScaledSeconds);
 		}
 	}
 
 	void GameWorld::stop()
 	{
-		if (mImpl->updaters.stop())
+		if (mImpl->scene && mImpl->scene->stop())
 		{
 			mImpl->timeline.reset(0.0f); 
 			// TODO: any more operation?
 		}
 	}
 
-	void GameWorld::pause()
-	{
-		mImpl->timeline.setPaused(true);
-	}
-
-	void GameWorld::resume()
-	{
-		mImpl->timeline.setPaused(false);
-	}
-
-	float GameWorld::getStepSize() const
-	{
-		return mImpl->timeline.getSingleStepSeconds();
-	}
-
-	void GameWorld::setStepSize( float secs )
-	{
-		mImpl->timeline.setSingleStepSeconds(secs);
-	}
-
-	void GameWorld::appendUpdateHandler( UpdateHandler* updateHandler )
-	{
-		mImpl->updaters.appendChildHandler(updateHandler);
-	}
-
-	void GameWorld::removeUpdateHandler( UpdateHandler* updateHandler )
-	{
-		mImpl->updaters.appendChildHandler(updateHandler);
-	}
-
 	GameScene* GameWorld::getScene() const
 	{
 		return mImpl->scene;
 	}
+
+	void GameWorld::setSingleStepSeconds( float secs )
+	{
+		mImpl->singleStepSeconds = secs;
+	}
+
+	float GameWorld::getSingleStepSeconds() const
+	{
+		return mImpl->singleStepSeconds;
+	}
+
+	void GameWorld::setPaused( bool puase )
+	{
+		mImpl->paused = puase;
+	}
+
+	bool GameWorld::isPaused() const
+	{
+		return mImpl->paused;
+	}
+
+	void GameWorld::setTimeScale( float scale )
+	{
+		mImpl->timeScale = scale;
+	}
+
+	float GameWorld::getTimeScale() const
+	{
+		return mImpl->timeScale;
+	}
+
+	void GameWorld::singleStep()
+	{
+		if (isPaused())
+			mImpl->timeline.update(getSingleStepSeconds());
+	}
+
 
 }}
 

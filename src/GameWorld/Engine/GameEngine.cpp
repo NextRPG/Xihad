@@ -1,176 +1,85 @@
 #include "GameEngine.h"
-#include <ctime>
-#include <irrlicht/IrrlichtDevice.h>
-#include <irrlicht/ISceneManager.h>
-#include <irrlicht/IFileSystem.h>
+
+// use in member field
+#include <set>
 #include "GameWorld.h"
-#include "Process.h"
-#include "WorldRender3D/Geometry.h"
+#include "FrameObserver.h"
+#include "NativeWindow.h"
+
+// use in function
+#include "WindowRenderer.h"
+#include "TimeConversion.h"
+
+
+// TODO
 #include "GameScene.h"
-#include "UserEvent.h"
-#include "EngineStats.h"
+#include "UserEventReceiverStack.h"
 
 using namespace irr;
 namespace xihad { namespace ngn
 {
 	struct GameEngine::impl
 	{
-		float updateInterval;
-		clock_t breakPointGuess;	// check for break point's big interval
+		float frameTime;
 		GameEngine::LoopStatus status;
 		boost::shared_ptr<GameWorld> gameWorld;
-		IEventReceiver* eventReceiver;
-		irr_ptr<IrrlichtDevice> device;
+		irr_ptr<NativeWindow> window;
+		std::set<irr_ptr<FrameObserver>> frameObservers;
 
-		EngineStats stas;
-		bool showFPS;
-		bool neverSleep;
-
-		impl(GameWorld* world) : gameWorld(world), stas(nullptr), 
-			showFPS(false), neverSleep(false)
-		{
-		}
+		impl(GameWorld* world) : gameWorld(world) {}
 	};
 
-	inline static clock_t toClock_t(float sec)
+	GameEngine::GameEngine(NativeWindow& wnd, float ft)
 	{
-		return (clock_t) (sec*CLOCKS_PER_SEC);
+		init(wnd, new GameWorld(ft), ft);
 	}
 
-	static IEventReceiver* createEventReceiver(GameWorld* world)
+	GameEngine::GameEngine(NativeWindow& wnd, GameWorld& world, float ft)
 	{
-		class EventReceiver : public IEventReceiver
-		{
-		public:
-			explicit EventReceiver(GameWorld* world) : 
-				mWorld(world)
-			{
-			}
-
-			virtual bool OnEvent(const SEvent& event)
-			{
-				GameScene* scene;
-				switch (event.EventType)
-				{
-				case EET_MOUSE_INPUT_EVENT:
-					if (scene = mWorld->getScene())
-						return scene->onForegroundEvent(event.MouseInput);
-					break;
-				case EET_KEY_INPUT_EVENT:
-					if (scene = mWorld->getScene())
-						return scene->onForegroundEvent(event.KeyInput);
-					break;
-				case EET_GUI_EVENT:
-				case EET_JOYSTICK_INPUT_EVENT:
-				case EET_LOG_TEXT_EVENT:
-				case EET_USER_EVENT:
-				default:
-					// not support yet.
-					break;
-				}
-
-				return false;
-			}
-
-		private:
-			GameWorld* mWorld;
-		};
-
-		return new EventReceiver(world);
+		init(wnd, &world, ft);
 	}
 
-	GameEngine::GameEngine(int frameCount)
-	{
-		float interval = 1.0f / frameCount;
-		initWithWorld(new GameWorld(interval), interval);
-	}
-
-	GameEngine::GameEngine( GameWorld& world, int frameCount )
-	{
-		initWithWorld(&world, 1.0f/frameCount);
-	}
-
-	void GameEngine::initWithWorld( GameWorld* world, float frameInterval )
+	void GameEngine::init(NativeWindow& wnd, GameWorld* world, float frameInterval)
 	{
 		mImpl.reset(new impl(world));
-		mImpl->updateInterval = frameInterval;
-		mImpl->breakPointGuess = toClock_t(frameInterval * 100);
+		mImpl->frameTime = frameInterval;
 		mImpl->status = INITIALIZED;
+		mImpl->window = &wnd;
 	}
 
 	GameEngine::~GameEngine()
 	{
-		mImpl->device->setEventReceiver(nullptr);
-		delete mImpl->eventReceiver;
 	}
 
-	inline static float calcDelta(clock_t prev, clock_t maxInterval, float supposed) 
+	void GameEngine::setFrameTime( float dt )
 	{
-		float ret = supposed;
-		clock_t current = clock();
-		clock_t delta =  current - prev;
-
-		if (delta < maxInterval)
-			ret = ((float) delta) / CLOCKS_PER_SEC;
-
-		return ret;
-	}
-
-	inline static float waitForNextFrame(float updateInterval, float dtSeconds) 
-	{
-		float restTimeInFrame = updateInterval - dtSeconds;
-		if (restTimeInFrame > 0.0f)
-		{
-			Process::sleep(restTimeInFrame);
-			return updateInterval;
-		}
-
-		return dtSeconds;
+		mImpl->frameTime = dt;
 	}
 
 	bool GameEngine::launch()
 	{
-		if (isRunning() || mImpl->device.get() == nullptr)
-			return false;
+		// Avoid reentrant
+		if (isRunning()) return false;
 
-		LoopStatus& status = mImpl->status;
-		// const clock_t& threshold = mImpl->breakPointGuess;
-		const clock_t& threshold = mImpl->breakPointGuess;
-		auto& world = mImpl->gameWorld;
+		getWorld()->start();	// All updaters should be start before running.
+		mImpl->status = RUNNING;
 
-		world->start();
-		status = RUNNING;	// All updaters should be start before running.
+		while (isRunning())
 		{
-			float supposedInterval = mImpl->updateInterval;
-			float stepTime = 0;
-			float frameTime = supposedInterval;
-			mImpl->device->setEventReceiver(mImpl->eventReceiver);
+			// TODO
+			getWindow()->setEventReceiver(&getWorld()->getScene()->getControllerStack());
 
-			while (status != STOPPED && mImpl->device->run())
-			{
-				// Everything will be done here
-				clock_t timeBeforeStep = clock();
-				world->step(frameTime);
-				stepTime = calcDelta(timeBeforeStep, threshold, supposedInterval);
+			float frameBgnTime = fireFrameBegin();
 
-				// Engine Statistics or other stuff
-				afterWorldStep(stepTime);
+			getRenderer()->clearBuffer(true, true, SColor(255, 100, 100, 140));
+			getWorld()->update(mImpl->frameTime);
+			getRenderer()->swapBuffer();
 
-				if (mImpl->neverSleep)
-					frameTime = stepTime;
-				else 
-					frameTime = waitForNextFrame(supposedInterval, stepTime);
-			}
+			fireFrameEnd(frameBgnTime);
 		}
 
-		// sync state
-		if (status == STOPPED)
-			mImpl->device->closeDevice();
-		else
-			status = STOPPED;
-
-		// call world to stop
-		world->stop();
+		mImpl->window->close();
+		getWorld()->stop();
 
 		return true;
 	}
@@ -190,78 +99,47 @@ namespace xihad { namespace ngn
 		return mImpl->status == STOPPED;
 	}
 
-	void GameEngine::setBreakPointThresholdTime( float thresholdSeconds )
-	{
-		thresholdSeconds = std::max(mImpl->updateInterval, thresholdSeconds);
-		mImpl->breakPointGuess = toClock_t(thresholdSeconds);
-	}
-
-	float GameEngine::breakPointThresholdTime() const
-	{
-		return (float) mImpl->breakPointGuess / CLOCKS_PER_SEC;
-	}
-
 	boost::shared_ptr<GameWorld> GameEngine::getWorld()
 	{
 		return mImpl->gameWorld;
 	}
 
-	irr_ptr<irr::IrrlichtDevice> GameEngine::getDevice()
+	NativeWindow* GameEngine::getWindow()
 	{
-		return mImpl->device;
+		return mImpl->window.get();
 	}
 
-	bool GameEngine::initDevice( irr_ptr<irr::IrrlichtDevice> device )
+	WindowRenderer* GameEngine::getRenderer()
 	{
-		if (mImpl->device.get() || !device.get())
-			return false;
-
-		mImpl->device = device;
-		mImpl->eventReceiver = createEventReceiver(mImpl->gameWorld.get());
-		mImpl->stas.resetDriver(device->getVideoDriver());
-
-		return true;
+		return mImpl->window->getRenderer();
 	}
 
-	void GameEngine::afterWorldStep( float stepTime )
+	void GameEngine::addFrameObserver( FrameObserver& observer )
 	{
-		EngineStats& stats = mImpl->stas;
-		stats.recordFrame(stepTime);
-
-		if (mImpl->showFPS)
-		{
-			std::wstring fps = L"XihadÒýÇæ[FPS: (T)";
-			fps += std::to_wstring(stepTime);
-			fps += L", (R)";
-			fps += std::to_wstring(stats.getRecentFPS());
-			fps += L"]";
-			fps += L"[Primitive: (C)";
-			fps += std::to_wstring(stats.getLastPrimitiveDrawn());
-			fps += L", (A)";
-			fps += std::to_wstring(stats.getAveragePrimitiveDrawnRate());
-			fps += L"]";
-			mImpl->device->setWindowCaption(fps.c_str());
-		}
+		mImpl->frameObservers.insert(&observer);
 	}
 
-	void GameEngine::setNeverSleep( bool neverSleep )
+	void GameEngine::removeFrameObserver( FrameObserver& observer )
 	{
-		mImpl->neverSleep = neverSleep;
+		mImpl->frameObservers.erase(&observer);
 	}
 
-	bool GameEngine::isNeverSleep() const
+	float GameEngine::fireFrameBegin()
 	{
-		return mImpl->neverSleep;
+		float now = clockToSeconds(clock());
+		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
+			observer->onFrameBegin(this, now);
+
+		return now;
 	}
 
-	void GameEngine::setShowFPS( bool showFPS )
+	void GameEngine::fireFrameEnd( float bgnTime )
 	{
-		mImpl->showFPS = showFPS;
-	}
+		float now = clockToSeconds(clock());
+		float delta = now - bgnTime;
 
-	bool GameEngine::isShowFPS() const
-	{
-		return mImpl->showFPS;
+		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
+			observer->onFrameEnd(this, now, delta);
 	}
 
 }}

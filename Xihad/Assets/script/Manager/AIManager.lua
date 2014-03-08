@@ -6,6 +6,7 @@
 -- @copyright NextRPG
 
 local CharacterManager = require "CharacterManager"
+local StrategyDatabase = require "StrategyDatabase"
 
 
 local AIManager = CharacterManager.new{team = "AI"}
@@ -22,7 +23,7 @@ function AIManager:init( AIs )
 				getExp = 0,
 				
 				name = "Tom" .. i,
-				skills = { 1, 2, 3 },
+				skills = { 2 },
 
 				properties = {
 					physicalAttack = 5,
@@ -30,18 +31,22 @@ function AIManager:init( AIs )
 					magicAttack = 5,
 					magicDefense = 10,  
 					maxAP = 5,			
-					maxHP = 200
+					maxHP = 200,
+					maxMP = 100
 				}
 
 			}
 		character.name = AI.name
+		character.strategy = StrategyDatabase:createStrategy(2)
 		self.currentCharacter = self:createCharacter(character, AI.y, AI.x)
-		self.currentCharacter:appendComponent(c"Actor", {manager = self})
+		self.currentCharacter:appendComponent(c"Actor", 
+			{manager = self, strategy = character.strategy})
 	end
 end
 
 function AIManager:runActors(  )
 	for characterObject in scene:objectsWithTag(self.team) do
+		if not scene:hasObjectWithTag("Hero") then break end
 		local actor = characterObject:findComponent(c"Actor")
 		local character = characterObject:findComponent(c"Character")
 		if not character.states.TURNOVER then
@@ -50,6 +55,15 @@ function AIManager:runActors(  )
 			character.states.TURNOVER = true
 		end
 	end
+end
+
+function AIManager:getFarthestAI( center )
+	local list = makeList(self:getCharacters(), "name", "tile")
+	for name,tile in pairs(list) do
+		list[name] = math.p_distance(center, tile)
+	end
+	local name = findMax(list)
+	return scene:findObject(c(name)):findComponent(c"Character").tile
 end
 
 return AIManager

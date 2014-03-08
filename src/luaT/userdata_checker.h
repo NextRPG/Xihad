@@ -25,7 +25,7 @@ namespace luaT
 
 	struct UserdataTypeCheckerNT
 	{
-		static void* castUserdata(lua_State* L, int idx, bool* valid = NULL);
+		static void* castUserdata(lua_State* L, int idx);
 		static void* shiftUserdata(lua_State* L, void* userdata, int targetMtIndex);
 	};
 
@@ -54,14 +54,9 @@ namespace luaT
 
 		static T get(lua_State* L, int idx)
 		{
-			bool valid;
-			void* userdata = UserdataTypeCheckerNT::castUserdata(L, idx, &valid);
-
-			if (!valid)
-				luaL_typerror(L, idx, "userdata/wrappeduserdata");
-
-			// push target type metatable.
-			shiftUserdataOnChecking(L, idx, &userdata);
+			void* userdata = 0;
+			if (userdata = UserdataTypeCheckerNT::castUserdata(L, idx))
+				shiftUserdataOnChecking(L, idx, &userdata);	// push target type metatable.
 
 			// null is allowed
 			return (T) userdata;
