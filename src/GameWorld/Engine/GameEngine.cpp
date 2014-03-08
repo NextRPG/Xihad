@@ -2,49 +2,42 @@
 
 // use in member field
 #include <set>
+#include "irr_ptr.h"
 #include "GameWorld.h"
-#include "FrameObserver.h"
 #include "NativeWindow.h"
+#include "FrameObserver.h"
 
 // use in function
 #include "WindowRenderer.h"
 #include "TimeConversion.h"
-
-
-// TODO
-#include "GameScene.h"
-#include "UserEventReceiverStack.h"
+#include "WindowEventSeizer.h"
 
 using namespace irr;
+using namespace std;
 namespace xihad { namespace ngn
 {
 	struct GameEngine::impl
 	{
 		float frameTime;
 		GameEngine::LoopStatus status;
-		boost::shared_ptr<GameWorld> gameWorld;
-		irr_ptr<NativeWindow> window;
-		std::set<irr_ptr<FrameObserver>> frameObservers;
 
-		impl(GameWorld* world) : gameWorld(world) {}
+		boost::scoped_ptr<GameWorld> gameWorld;
+		irr_ptr<NativeWindow> window;
+
+		set<irr_ptr<FrameObserver>> frameObservers;
 	};
 
-	GameEngine::GameEngine(NativeWindow& wnd, float ft)
+	GameEngine::GameEngine(NativeWindow& wnd, GameWorld* world, float defaultFrameTime) :
+		mImpl(new impl)
 	{
-		init(wnd, new GameWorld(ft), ft);
-	}
-
-	GameEngine::GameEngine(NativeWindow& wnd, GameWorld& world, float ft)
-	{
-		init(wnd, &world, ft);
-	}
-
-	void GameEngine::init(NativeWindow& wnd, GameWorld* world, float frameInterval)
-	{
-		mImpl.reset(new impl(world));
-		mImpl->frameTime = frameInterval;
+		mImpl->gameWorld.reset(world ? world : new GameWorld(defaultFrameTime));
+		mImpl->frameTime = defaultFrameTime;
 		mImpl->status = INITIALIZED;
 		mImpl->window = &wnd;
+		
+		// Auto seize window event into current scene
+		irr_ptr<WindowEventSeizer> wndObsv(new WindowEventSeizer(wnd), false);
+		mImpl->gameWorld->addWorldObserver(*wndObsv);
 	}
 
 	GameEngine::~GameEngine()
@@ -66,9 +59,6 @@ namespace xihad { namespace ngn
 
 		while (isRunning())
 		{
-			// TODO
-			getWindow()->setEventReceiver(&getWorld()->getScene()->getControllerStack());
-
 			float frameBgnTime = fireFrameBegin();
 
 			getRenderer()->clearBuffer(true, true, SColor(255, 100, 100, 140));
@@ -99,9 +89,9 @@ namespace xihad { namespace ngn
 		return mImpl->status == STOPPED;
 	}
 
-	boost::shared_ptr<GameWorld> GameEngine::getWorld()
+	GameWorld* GameEngine::getWorld()
 	{
-		return mImpl->gameWorld;
+		return mImpl->gameWorld.get();
 	}
 
 	NativeWindow* GameEngine::getWindow()
