@@ -17,7 +17,6 @@
 #include "BillboardComponent.h"
 #include <boost\property_tree\json_parser.hpp>
 #include "ParticleSystemComponent.h"
-#include "CEGuiHandle.h"
 #include <unordered_map>
 #include <luaT\luaT.h>
 

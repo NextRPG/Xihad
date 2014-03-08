@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\CeguiEventReceiver.cpp">
+    <ClCompile Include="..\src\CEGUI\CeguiEventReceiver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CEGuiHandle.cpp">
+    <ClCompile Include="..\src\CEGUI\CEGuiHandle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CEGUIUpdataHandler.cpp">
+    <ClCompile Include="..\src\CEGUI\CEGUIUpdataHandler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\luaopen_cegui.cpp">
+    <ClCompile Include="..\src\CEGUI\luaopen_cegui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CeguiEventReceiver.h">
+    <ClInclude Include="..\src\CEGUI\CeguiEventReceiver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CEGuiHandle.h">
+    <ClInclude Include="..\src\CEGUI\CEGuiHandle.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CEGUIUpdataHandler.h">
+    <ClInclude Include="..\src\CEGUI\CEGUIUpdataHandler.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

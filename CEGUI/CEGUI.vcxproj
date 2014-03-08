@@ -11,15 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\CeguiEventReceiver.cpp" />
-    <ClCompile Include="..\src\CEGuiHandle.cpp" />
-    <ClCompile Include="..\src\CEGUIUpdataHandler.cpp" />
-    <ClCompile Include="..\src\luaopen_cegui.cpp" />
+    <ClCompile Include="..\src\CEGUI\CeguiEventReceiver.cpp" />
+    <ClCompile Include="..\src\CEGUI\CEGuiHandle.cpp" />
+    <ClCompile Include="..\src\CEGUI\CEGUIUpdataHandler.cpp" />
+    <ClCompile Include="..\src\CEGUI\luaopen_cegui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CeguiEventReceiver.h" />
-    <ClInclude Include="..\src\CEGuiHandle.h" />
-    <ClInclude Include="..\src\CEGUIUpdataHandler.h" />
+    <ClInclude Include="..\src\CEGUI\CeguiEventReceiver.h" />
+    <ClInclude Include="..\src\CEGUI\CEGuiHandle.h" />
+    <ClInclude Include="..\src\CEGUI\CEGUIUpdataHandler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BC1E7282-6533-465E-BBC9-74651473ED72}</ProjectGuid>
@@ -76,6 +76,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../Release;../libs;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CEGUILuaScriptModule-0.lib;CEGUIIrrlichtRenderer.lib;CEGUIBase-0.lib;Xengine.lib;luaT.lib;lua.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

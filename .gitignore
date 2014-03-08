@@ -18,9 +18,10 @@
 /docs/Reference/html
 /Xihad/math3d.*
 *sublime*
+
 CEGUIIrrlichtRenderer*.dll
+CEGUI.dll
+UnitTest.dll
 
 /Debug/*.lib
-/Debug/UnitTest.*
 /Release/*.lib
-/Release/UnitTest.*
