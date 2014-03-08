@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<GUIScheme version="5" name="Xihad">
+	<Imageset filename="red_number.imageset" />
+	<Imageset filename="DarkMenu.imageset" />
+	<Font filename="simhei-14.font" />
+	<Font filename="summer-16.font" />
+	<LookNFeel filename="Xihad.looknfeel" />
+	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
+
+	<FalagardMapping windowType="Xihad/Dialog" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Dialog" />
+	<FalagardMapping windowType="Xihad/Frame" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Frame" />
+	<FalagardMapping windowType="Xihad/PopupMenu" targetType="CEGUI/PopupMenu" renderer="Core/PopupMenu" lookNFeel="Xihad/PopupMenu" />
+	<FalagardMapping windowType="Xihad/MenuItem" targetType="CEGUI/MenuItem" renderer="Core/MenuItem" lookNFeel="Xihad/MenuItem" />
+</GUIScheme>
+

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <GUIScheme version="5" name="TaharezLook">
 	<Imageset filename="TaharezLook.imageset" />
-	<Font filename="DejaVuSans-12.font" />
+	<Font filename="simhei-14.font" />
 	<LookNFeel filename="TaharezLook.looknfeel" />
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 
@@ -33,7 +33,7 @@
 	<FalagardMapping windowType="TaharezLook/ComboDropList" targetType="CEGUI/ComboDropList" renderer="Core/Listbox" lookNFeel="TaharezLook/ComboDropList" />
 	<FalagardMapping windowType="TaharezLook/ComboEditbox"  targetType="CEGUI/Editbox"	 renderer="Core/Editbox" lookNFeel="TaharezLook/ComboEditbox" />
 	<FalagardMapping windowType="TaharezLook/Combobox" targetType="CEGUI/Combobox"	 renderer="Core/Default" lookNFeel="TaharezLook/Combobox" />
-	<FalagardMapping windowType="TaharezLook/Listbox"           targetType="CEGUI/Listbox"           renderer="Core/Listbox"           lookNFeel="TaharezLook/Listbox" />
+	<FalagardMapping windowType="TaharezLook/Listbox"           targetType="CEGUI/ComboDropList"           renderer="Core/Listbox"           lookNFeel="TaharezLook/Listbox" />
 	<FalagardMapping windowType="TaharezLook/ListHeader"        targetType="CEGUI/ListHeader"        renderer="Core/ListHeader"        lookNFeel="TaharezLook/ListHeader" />
 	<FalagardMapping windowType="TaharezLook/ListHeaderSegment" targetType="CEGUI/ListHeaderSegment" renderer="Core/ListHeaderSegment" lookNFeel="TaharezLook/ListHeaderSegment" />
 	<FalagardMapping windowType="TaharezLook/MultiColumnList"   targetType="CEGUI/MultiColumnList"   renderer="Core/MultiColumnList"   lookNFeel="TaharezLook/MultiColumnList" />
@@ -47,6 +47,6 @@
 	<FalagardMapping windowType="TaharezLook/ItemListbox" targetType="CEGUI/ItemListbox" renderer="Core/ItemListbox" lookNFeel="TaharezLook/ItemListbox" />
 	<FalagardMapping windowType="TaharezLook/ListboxItem" targetType="CEGUI/ItemEntry"   renderer="Core/ItemEntry"   lookNFeel="TaharezLook/ListboxItem" />
 	<FalagardMapping windowType="TaharezLook/GroupBox" targetType="DefaultWindow"   renderer="Core/Default"   lookNFeel="TaharezLook/GroupBox" />
-      <FalagardMapping windowType="TaharezLook/Tree" targetType="CEGUI/Tree"   renderer="Core/Tree"   lookNFeel="TaharezLook/Tree" />
+    <FalagardMapping windowType="TaharezLook/Tree" targetType="CEGUI/Tree"   renderer="Core/Tree"   lookNFeel="TaharezLook/Tree" />
 </GUIScheme>
 

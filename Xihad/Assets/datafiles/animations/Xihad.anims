@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<Animations>
+	<AnimationDefinition name="TextFadeIn" duration="1.5" replayMode="once">
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0" value="0.0" />
+			<KeyFrame position="0.3" value="1.0" progression="quadratic decelerating" />
+			<KeyFrame position="1.0" value="1.0" />
+			<KeyFrame position="1.49" value="0.0" progression="quadratic accelerating" />
+		</Affector>
+
+		<Affector property="Size" interpolator="USize" applicationMethod="relative multiply">
+			<KeyFrame position="1.0" value="1.0" />
+			<KeyFrame position="1.49" value="1.5" progression="quadratic accelerating" />
+			<KeyFrame position="1.5" value="1.0" />
+		</Affector>
+
+		<Affector property="Disabled" interpolator="bool" applicationMethod="absolute">
+			<KeyFrame position="1.5" value="true"/>
+		</Affector>
+
+		<Subscription event="Enabled" action="Start" />
+	</AnimationDefinition>
+
+	<AnimationDefinition name="FrameLighter" duration="0.3" replayMode="once">
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.0" value="0.3"/>
+			<KeyFrame position="0.3" value="1.0" progression="quadratic accelerating"/>
+		</Affector>
+		<Subscription event="MouseEntersArea" action="Start"/>
+	</AnimationDefinition>
+
+	<AnimationDefinition name="FrameDarker" duration="0.3" replayMode="once">
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.0" value="1.0"/>
+			<KeyFrame position="0.3" value="0.3" progression="quadratic accelerating" />
+		</Affector>
+		<Subscription event="MouseLeavesArea" action="Start" />
+	</AnimationDefinition>
+
+
+</Animations>
+
