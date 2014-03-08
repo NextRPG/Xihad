@@ -133,7 +133,7 @@ function SkillManager:onCastSkill( tile, skill, character )
 
 	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
 	
-	CameraManager:move2Battle(characterObject)
+	CameraManager:move2Battle(characterObject, tile)
 	if skill.animation then
 		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
 		anim:playAnimation(c"idle 1")

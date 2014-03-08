@@ -105,13 +105,16 @@ function CameraManager:move2Character( characterObject )
 	self:move2vector( characterObject:getTranslate() )
 end
 
-function CameraManager:move2Battle( characterObject )
+function CameraManager:move2Battle( characterObject, tile )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	local ccom = camera:findComponent(c"Camera")
 	local action = {}
-	action.destination2 = characterObject:getTranslate() + math3d.vector(0, 15, 10)
-	action.destination = action.destination2 + math3d.vector(20, 20, 0)
+	action.destination2 = (characterObject:getTranslate() + point2vector(tile)) * 0.5 + math3d.vector(0, 20 ,0)
+	local x1, y1 = (point2vector(tile) - characterObject:getTranslate()):xyz()
+	local x2 = math.sqrt(900 / (1 + (x1 * x1) / (y1 * y1)))
+	local y2 = math.sqrt(900 - x2 * x2)
+	action.destination = action.destination2 + math3d.vector( - x2, 10, - y2)
 	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
 	runAsyncFunc(move.runAction, move, action)
 end

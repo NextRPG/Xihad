@@ -46,6 +46,7 @@ end
 
 function AIManager:runActors(  )
 	for characterObject in scene:objectsWithTag(self.team) do
+		if not scene:hasObjectWithTag("Hero") then break end
 		local actor = characterObject:findComponent(c"Actor")
 		local character = characterObject:findComponent(c"Character")
 		if not character.states.TURNOVER then
@@ -53,7 +54,6 @@ function AIManager:runActors(  )
 			coroutine.yield()
 			character.states.TURNOVER = true
 		end
-		-- print(scene:objectsWithTag(self.team))
 	end
 end
 

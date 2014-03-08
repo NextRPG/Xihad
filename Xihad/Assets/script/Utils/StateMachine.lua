@@ -5,6 +5,7 @@ function StateMachine.new( o )
 	o = o or {}
 	setmetatable(o, {__index = StateMachine})
 	o.ASYNC = false
+	o.STOP = false
 	return o
 end
 
@@ -31,11 +32,15 @@ end
 
 function StateMachine:update( ... )
 	for condition, action in pairs(self[self.currentState]) do
-		if condition( ... ) and not self.ASYNC then
+		if condition( ... ) and not self.ASYNC and not self.STOP then
 			self:pendingAndAction(action, ...)
 			break;
 		end
 	end
+end
+
+function StateMachine:stop(  )
+	self.STOP = true
 end
 
 function StateMachine:pendingAndAction( func, ... )

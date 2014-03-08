@@ -130,6 +130,7 @@ function scene:getObjectWithTag( tag )
 	local result
 	for object in scene:objectsWithTag(tag) do
 		result = object
+		break
 	end
 	return result
 end

@@ -4,36 +4,31 @@
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
+local Listener = require "Listener"
+local BattleManager = require "BattleManager"
 
-
-local VictoryChecker = {
-
-}
+local VictoryChecker = {}
 
 function VictoryChecker:init(  )
-	
+	local dispatcher = scene:getDispatcher()
+	dispatcher:addListener("AI.die", self)
+	dispatcher:addListener("Hero.die", self)
+	self:drop()
+	inherit(self, Listener)
 end
 
--- function VictoryChecker:on(  )
-	
--- end
-
-function VictoryChecker:clearEnemies(  )
-	if next(scene:objectsWithTag("AI")) == nil then
-		return true
+function VictoryChecker:onHeroDie( srcObject, param )
+	if not scene:hasObjectWithTag("Hero") then
+		print("AI won")
+		BattleManager.stateMachine:stop()
 	end
-	return false
 end
 
-function VictoryChecker:clearHeroes(  )
-	if next(scene:objectsWithTag("Hero")) == nil then
-		return true
+function VictoryChecker:onAIDie( srcObject, param )
+	if not scene:hasObjectWithTag("AI") then
+		print("Hero won")
+		BattleManager.stateMachine:stop()
 	end
-	return false
-end
-
-function VictoryChecker:( ... )
-	-- body
 end
 
 return VictoryChecker
