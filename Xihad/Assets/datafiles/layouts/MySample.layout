@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <GUILayout version="4">
 <Window name="root" type="DefaultWindow">
-	<Property name="Size" value="{{0, 300}, {0, 400	}" />
+	<Property name="MousePassThroughEnabled" value="true" />
 	<Window name="AttackDamageLabel" type="DefaultWindow">
 		<Property name="Size" value="{{0, 80}, {0,37}" />
 		<Property name="Disabled" value="true" />
