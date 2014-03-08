@@ -16,7 +16,7 @@ local BattleManager = {}
 
 
 function BattleManager:init( manager1, manager2 )
-	self.manager = manager1
+	self.manager = manager2
 
 	local stateMachine = StateMachine.new()
 	self.stateMachine = stateMachine

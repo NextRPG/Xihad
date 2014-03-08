@@ -36,7 +36,7 @@ end
 -- @int maxAP
 local directions = Consts.directions
 function PathFinder:getReachableTiles( character )
-	local start, maxAP, manager = character:tile(), character:getProperty("maxAP"), character:getEnemyManager()
+	local start, maxAP, manager = character.tile, character:getProperty("maxAP"), character:getEnemyManager()
 
 	assert(start.x) assert(maxAP)
 	self:cleanUp()
@@ -77,6 +77,7 @@ end
 function PathFinder:constructPath( tile )
 	local path = {}	
 	local tile = self.data[hash(tile)]
+	print(debug.traceback())
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction
 		tile = tile.prev

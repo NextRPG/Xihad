@@ -12,6 +12,7 @@ local Tile = {
 	x = 0,
 	y = 0,
 	terrain = nil,
+	charater = nil
 }
 
 function Tile.new( o )

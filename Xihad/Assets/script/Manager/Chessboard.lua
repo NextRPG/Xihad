@@ -33,6 +33,9 @@ local function resetColor( tileObject )
 end
 
 local function tname( tile )
+	if (tile == nil) then
+		print(debug.traceback())
+	end
 	return tile.x .. " " .. tile.y
 end
 
@@ -94,9 +97,8 @@ end
 -- 查询地图块上是否有CharacterObject
 -- @tab location
 -- @return bool
-function Chessboard:hasCharacter( location )
-	local AIManager, HeroManager = require "AIManager", require "HeroManager"
-	return AIManager:getCharacterByLocation(location) or HeroManager:getCharacterByLocation(location)
+function Chessboard:hasCharacter( point )
+	return Chessboard:tileAt(point).character
 end
 
 ---
@@ -130,6 +132,15 @@ function Chessboard:clearAll(  )
 	for highlightObject in scene:objectsWithTag("Highlight") do
 		highlightObject:findComponent(c"Highlight"):clear()
 	end
+end
+
+--- 
+-- listeners
+
+function Chessboard:onTileChanged( newTile, oldTile, character )
+	Chessboard:tileAt(newTile).character = character
+	if oldTile == nil then return end
+	Chessboard:tileAt(oldTile).character = nil
 end
 
 return Chessboard

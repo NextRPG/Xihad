@@ -6,36 +6,17 @@ local HeroManager = CharacterManager.new{
 	roundStart_aux = CharacterManager.roundStart
 }
 
-function HeroManager:init(heros)
+function HeroManager:init(points, heros)
 	-- init heroes on map
-	for i,hero in ipairs(heros) do
-		local character = 
-			{
-				career = "WARRIOR",
-
-				level = 1,
-				currentExp = 0,
-				getExp = 0,
-				
-				name = "Tom" .. i,
-				skills = { 1, 2, 3 },
-				properties = {
-					physicalAttack = 5,
-					physicalDefense = 5,
-					magicAttack = 5,
-					magicDefense = 10,  
-					maxAP = 6,			
-					maxHP = 200
-				}
-
-			}
-		character.name = hero.name
-		self.currentCharacter = self:createCharacter(character, hero.y, hero.x)
+	self.characters = {}
+	for i,point in ipairs(points) do
+		self.currentCharacter = self:createCharacter(heros[i], point.y, point.x)
 	end
 end
 
 function HeroManager:roundStart(  )
-	CameraManager:move2Character(self.currentCharacter)
+	local object = scene:getObjectWithTag("Hero")
+	CameraManager:move2Character(object)
 	self:roundStart_aux(  )
 end
 

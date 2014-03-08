@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local PathFinder = require "PathFinder"
-local BaseStrategy = require "BaseStrategy"
+-- local BaseStrategy = require "BaseStrategy"
 local Chessboard = require "Chessboard"
 local SkillManager = require "SkillManager"
 local CameraManager = require "CameraManager"
@@ -23,7 +23,9 @@ function Actor.new( o, object )
 	setmetatable(o, {__index = Actor})
 	assert(o.manager)
 
-	o.strategy = BaseStrategy.new{object = object}
+	o.strategy.object = object
+	o.strategy = require(o.strategy.name).new(o.strategy)
+	-- o.strategy = BaseStrategy.new{object = object}
 	return o
 end
 
@@ -36,16 +38,17 @@ function Actor:run( scheduler )
 		local strategy  = self.strategy
 		local manager   = self.manager			
 		local character = object:findComponent(c"Character")
-		local tile      = character:tile()
+		local tile      = character.tile
 
 		manager.currentCharacter = object
 
 		CameraManager:move2Character(object)
 
-		local point = strategy:judgeTile()
+		local point, finder = strategy:judgeTile()
+		finder = finder or require("GoalFinder")
 		-- runAsync
-		if not table.equal(point, character:tile()) then 
-			manager:onSelectTile(Chessboard:tileAt(point), require("GoalFinder"))
+		if not math.p_same(point, character.tile) then 
+			manager:onSelectTile(Chessboard:tileAt(point), finder)
 		end
 
 		local selectSkill, target = strategy:judgeSkill() -- component

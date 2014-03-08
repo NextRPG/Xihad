@@ -60,8 +60,8 @@ namespace luaT
 			// THIS SHOULD BE CONSTANT!!!
 			int PTR_OFFSET = ((int)(_1stPtr2PBase)(_1stPtr2TBase) 1) - 1;
 
-			if (PTR_OFFSET != 0)
-				xassert(TypeTraits<P>::ptrcount == 0 && "Cannot cast from T** to P**");
+			xassert((PTR_OFFSET==0 || TypeTraits<P>::ptrcount==0) && 
+				"Cannot cast from T** to P**");
 
 			InheritenceResolver::link(L, PTR_OFFSET, MetatableData<P>::name);
 		}
