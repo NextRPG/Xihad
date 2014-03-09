@@ -1,8 +1,7 @@
 #include "AudioComponentSystem.h"
-#include "AudioEngineDefine.h"
+#include <irrKlang/irrKlang.h>
 #include "AudioComponent.h"
-#include "SoundComponent.h"
-#include "MusicComponent.h"
+#include "VectorConverter.h"
 
 using namespace irrklang;
 using namespace boost;
@@ -11,15 +10,14 @@ using namespace xihad::ngn;
 
 namespace xihad { namespace audio 
 {
-	struct AudioComponentSystemImpl
+	struct AudioComponentSystem::impl
 	{
-		AudioDevice* audioDevice;
-		float musicVolume;
-		float soundVolume;
+		ISoundEngine* audioDevice;
+		float playbackScale;
 	};
 
-	AudioComponentSystem::AudioComponentSystem(float musicVolume, float soundVolume, const ngn::InheritanceTree& tree) :
-		BaseComponentSystem(tree), mImpl(new AudioComponentSystemImpl)
+	AudioComponentSystem::AudioComponentSystem(const ngn::InheritanceTree& tree) :
+		BaseComponentSystem(tree), mImpl(new impl)
 	{
 #ifdef _DEBUG
 		int debugState = ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
@@ -29,95 +27,40 @@ namespace xihad { namespace audio
 
 		mImpl->audioDevice = createIrrKlangDevice(ESOD_AUTO_DETECT, 
 			ESEO_MULTI_THREADED | ESEO_USE_3D_BUFFERS | debugState);
-		
-		mImpl->musicVolume = musicVolume;
-		mImpl->soundVolume = soundVolume;
 	}
 
 	AudioComponentSystem::~AudioComponentSystem()
 	{
-
+		mImpl->audioDevice->drop();
+		mImpl->audioDevice = nullptr;
 	}
 
-	void AudioComponentSystem::createNewAudioEngine()
+	void AudioComponentSystem::stopAllAudios()
 	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->audioDevice->stopAllSounds();
-			mImpl->audioDevice->drop();
-		}
-#ifdef _DEBUG
-		int debugState = ESEO_PRINT_DEBUG_INFO_TO_STDOUT;
-#else
-		int debugState = 0;
-#endif
-
-		mImpl->audioDevice = createIrrKlangDevice(ESOD_AUTO_DETECT, 
-			ESEO_MULTI_THREADED | ESEO_USE_3D_BUFFERS | debugState);
+		mImpl->audioDevice->stopAllSounds();
 	}
 
-	void AudioComponentSystem::stopAllAudio()
+	void AudioComponentSystem::setAllAudiosPaused( bool pause )
 	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->audioDevice->stopAllSounds();
-		}
+		mImpl->audioDevice->setAllSoundsPaused(false);
 	}
 
-	void AudioComponentSystem::pauseAllAudio()
+	void AudioComponentSystem::setListenerPosition(const ngn::vector3df& position, 
+		const ngn::vector3df& lookdir, const ngn::vector3df& upVec)
 	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->audioDevice->setAllSoundsPaused(true);
-		}
+		mImpl->audioDevice->setListenerPosition(
+			to_irrklang_vector3d(position), 
+			to_irrklang_vector3d(lookdir), 
+			vec3df(), 
+			to_irrklang_vector3d(upVec));
 	}
 
-	void AudioComponentSystem::resumeAllAudio()
-	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->audioDevice->setAllSoundsPaused(false);
-		}
-;	}
-
-	void AudioComponentSystem::setListenerPosition( ngn::vector3df& position, ngn::vector3df& lookdir )
-	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->audioDevice->setListenerPosition(irrklang::vec3d<float>(position.X, position.Y, position.Z), 
-				irrklang::vec3d<float>(lookdir.X, lookdir.Y, lookdir.Z));
-		}
-	}
-
-	void AudioComponentSystem::setGlobalMusicVolume( float volume )
-	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->musicVolume = volume;
-		}
-	}
-
-	void AudioComponentSystem::setGlobalSoundVolume( float volume )
-	{
-		if (mImpl->audioDevice != nullptr)
-		{
-			mImpl->soundVolume = volume;
-		}
-	}
-	
 	Component* AudioComponentSystem::create( const string& typeName, GameObject& hostObject, const Properties& param /*= ngn::NullProperties()*/ )
 	{
-		Component* ret = nullptr;
-
-		if (typeName == "Sound")
-		{
-			ret = new SoundComponent(typeName, hostObject, mImpl->audioDevice, mImpl->soundVolume);
-		}
-		else if (typeName == "Music")
-		{
-			ret = new MusicComponent(typeName, hostObject, mImpl->audioDevice, mImpl->musicVolume);
-		}
-		return ret;
+		if (typeName == "Audio")
+			return new AudioComponent(typeName, hostObject, mImpl->audioDevice);
+		else 
+			return 0;
 	}
 
 	void AudioComponentSystem::onStart()
@@ -126,15 +69,46 @@ namespace xihad { namespace audio
 
 	void AudioComponentSystem::onUpdate( const ngn::Timeline& )
 	{
+		// TODO
+		// 更新听者信息，根据世界的 TimeScale 设置所有声音的播放速度
+		// if (mImpl->playbackScale != )
+		mImpl->audioDevice->update();
 	}
 
 	void AudioComponentSystem::onStop()
 	{
 		if (mImpl->audioDevice != nullptr)
-		{
 			mImpl->audioDevice->stopAllSounds();
-			mImpl->audioDevice->drop();
-			mImpl->audioDevice = nullptr;
-		}
 	}
+
+	void AudioComponentSystem::setSoundVolume( float volume )
+	{
+		mImpl->audioDevice->setSoundVolume(volume);
+	}
+
+	float AudioComponentSystem::getSoundVolume()
+	{
+		return mImpl->audioDevice->getSoundVolume();
+	}
+
+	void AudioComponentSystem::setDefault3DSoundMinDistance( float minDistance )
+	{
+		mImpl->audioDevice->setDefault3DSoundMinDistance(minDistance);
+	}
+
+	float AudioComponentSystem::getDefault3DSoundMinDistance()
+	{
+		return mImpl->audioDevice->getDefault3DSoundMinDistance();
+	}
+
+	void AudioComponentSystem::setDefault3DSoundMaxDistance( float maxDistance )
+	{
+		mImpl->audioDevice->setDefault3DSoundMaxDistance(maxDistance);
+	}
+
+	float AudioComponentSystem::getDefault3DSoundMaxDistance()
+	{
+		return mImpl->audioDevice->getDefault3DSoundMaxDistance();
+	}
+
 }}

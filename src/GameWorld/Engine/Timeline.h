@@ -18,7 +18,7 @@ namespace xihad { namespace ngn
 		 * @param initTimeSeconds reset()
 		 * @param singleStep setSingleStepSeconds()
 		 */
-		explicit Timeline(double initTimeSeconds = 0.0) : 
+		Timeline(double initTimeSeconds = 0.0) : 
 			mElapsedSeconds(initTimeSeconds), mDeltaSeconds(0) {}
 
 		/// 重置时间线

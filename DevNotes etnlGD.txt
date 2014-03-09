@@ -18,6 +18,9 @@
 + 重新分配 GameWorld 和 Timeline 的职责
 + 将 ISceneManager 的 OnAnimate 从 drawAll 中分离
 	+ 完整得支持慢动作与快进
++ 重新组织 CEGUIIrrlichtRenderer 项目代码
++ 音频引擎接口完善
+
 
 ### TODO
 + 集成音频引擎
@@ -28,7 +31,6 @@
 + 对话解析系统
 + 材质的控制
 + 新的几何体
-
 
 ### TO REFACTOR
 + LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化

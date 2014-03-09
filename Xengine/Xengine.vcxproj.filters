@@ -223,9 +223,15 @@
     <ClInclude Include="..\src\CppBase\ReferenceCounted.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WorldObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\TimelineObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventSeizer.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WindowEventSeizer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\WorldObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameWorld\Engine\TimelineObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
@@ -309,6 +315,8 @@
     <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventSeizer.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\WindowEventSeizer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
