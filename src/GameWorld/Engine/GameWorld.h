@@ -6,6 +6,8 @@ namespace xihad { namespace ngn
 	struct GameWorldImpl;
 	class UpdateHandler;
 	class GameScene;
+	class WorldObserver;
+	class TimelineObserver;
 
 	/// 维护游戏世界的时间线来控制游戏场景与逻辑的更新
 	class GameWorld
@@ -60,6 +62,12 @@ namespace xihad { namespace ngn
 		 * @see isPaused() getSingleStepSeconds()
 		 */
 		virtual void singleStep();
+
+		virtual void addWorldObserver(WorldObserver&);
+		virtual void removeWorldObserver(WorldObserver&);
+
+		virtual void addTimelineObserver(TimelineObserver&);
+		virtual void removeTimelineObserver(TimelineObserver&);
 
 	private:
 		struct impl;

@@ -15,8 +15,9 @@ namespace xihad { namespace dialogue
 	CAlignedTextSection* CAlignedTextSection::split( unsigned index )
 	{
 		ITextContent* splitted = mContent->split(index);
-
-		return splitted ? new CAlignedTextSection(splitted) : nullptr;
+		CAlignedTextSection* section = splitted ? new CAlignedTextSection(splitted) : nullptr;
+		if (splitted) splitted->drop();
+		return section; 
 	}
 
 }}

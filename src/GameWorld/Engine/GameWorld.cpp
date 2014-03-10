@@ -1,6 +1,10 @@
 #include "GameWorld.h"
+#include <set>
 #include "Timeline.h"
 #include "GameScene.h"
+#include "irr_ptr.h"
+#include "WorldObserver.h"
+#include "TimelineObserver.h"
 
 using namespace std;
 namespace xihad { namespace ngn
@@ -13,6 +17,9 @@ namespace xihad { namespace ngn
 		float singleStepSeconds;
 		float timeScale;
 		bool paused;
+
+		set<irr_ptr<WorldObserver>> worldObservers;
+		set<irr_ptr<TimelineObserver>> timeObservers;
 	};
 
 	GameWorld::GameWorld( float defaultStepSize ) : mImpl(new impl)
@@ -31,7 +38,14 @@ namespace xihad { namespace ngn
 
 	GameScene* GameWorld::setScene( GameScene* scene )
 	{
-		std::swap(scene, mImpl->scene);
+		if (mImpl->scene != scene)
+		{
+			std::swap(scene, mImpl->scene);
+
+			for (auto observer : mImpl->worldObservers)
+				observer->onSceneChanged(this, scene);
+		}
+
 		return scene;
 	}
 
@@ -78,7 +92,14 @@ namespace xihad { namespace ngn
 
 	void GameWorld::setPaused( bool puase )
 	{
-		mImpl->paused = puase;
+		if (mImpl->paused != puase)
+		{
+			mImpl->paused = puase;
+
+			// Notify observers if pause state changed
+			for (auto observer : mImpl->timeObservers)
+				observer->onTimePaused(this);
+		}
 	}
 
 	bool GameWorld::isPaused() const
@@ -88,7 +109,14 @@ namespace xihad { namespace ngn
 
 	void GameWorld::setTimeScale( float scale )
 	{
-		mImpl->timeScale = scale;
+		if (mImpl->timeScale != scale)
+		{
+			mImpl->timeScale = scale;
+
+			// Notify observers if pause state changed
+			for (auto observer : mImpl->timeObservers)
+				observer->onTimeScaled(this);
+		}
 	}
 
 	float GameWorld::getTimeScale() const
@@ -100,6 +128,26 @@ namespace xihad { namespace ngn
 	{
 		if (isPaused())
 			mImpl->timeline.update(getSingleStepSeconds());
+	}
+
+	void GameWorld::addWorldObserver( WorldObserver& observer )
+	{
+		mImpl->worldObservers.insert(&observer);
+	}
+
+	void GameWorld::removeWorldObserver( WorldObserver& observer )
+	{
+		mImpl->worldObservers.erase(&observer);
+	}
+
+	void GameWorld::addTimelineObserver( TimelineObserver& observer )
+	{
+		mImpl->timeObservers.insert(&observer);
+	}
+
+	void GameWorld::removeTimelineObserver( TimelineObserver& observer )
+	{
+		mImpl->timeObservers.erase(&observer);
 	}
 
 

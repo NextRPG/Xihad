@@ -22,7 +22,7 @@ using namespace irr;
 namespace xihad { namespace script 
 {
 	LuaComponentSystemFactory::LuaComponentSystemFactory(GameEngine* engn) :
-		mScriptPath("Assets/Script"), mEngine(engn) 
+		mEngine(engn) 
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace xihad { namespace script
 		if (systemName == sharedSystem)
 		{
 			initScriptEnv(scene);
-			return new LuaComponentSystem(scene, mScriptPath);
+			return new LuaComponentSystem(scene);
 		}
 		else
 		{

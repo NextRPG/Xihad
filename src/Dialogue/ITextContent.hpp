@@ -27,10 +27,10 @@ namespace xihad { namespace dialogue
 		/// 获取指定位置所属的单词区间
 		virtual void getWordRange(unsigned& bgnIndex, unsigned* endIndex = 0) const = 0;
 
-		/// Split text into two parts [0, index) and [index, end)
+		/// Split text into two parts [0, index) and [index, end), both parts' len > 0
 		/**
 		 * @param index The letter contains the specified index will be the end of left part (i.e, this)
-		 * @return splitted text. If index is not valid, then return nullptr.
+		 * @return splitted text. If index is not valid, then return nullptr. valid interval is (0, end)
 		 */
 		virtual ITextContent* split(unsigned index) = 0;
 

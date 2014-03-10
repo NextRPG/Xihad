@@ -4,15 +4,22 @@
     <ClCompile Include="..\src\AudioEngine\AudioComponent.cpp" />
     <ClCompile Include="..\src\AudioEngine\AudioComponentSystem.cpp" />
     <ClCompile Include="..\src\AudioEngine\AudioComponentSystemFactory.cpp" />
-    <ClCompile Include="..\src\AudioEngine\MusicComponent.cpp" />
-    <ClCompile Include="..\src\AudioEngine\SoundComponent.cpp" />
+    <ClCompile Include="..\src\AudioEngine\luaopen_AudioEngine.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioEngine\NullSound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\AudioEngine\AudioComponent.h" />
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystem.h" />
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystemFactory.h" />
-    <ClInclude Include="..\src\AudioEngine\AudioEngineDefine.h" />
-    <ClInclude Include="..\src\AudioEngine\MusicComponent.h" />
-    <ClInclude Include="..\src\AudioEngine\SoundComponent.h" />
+    <ClInclude Include="..\src\AudioEngine\AudioStopListener.h" />
+    <ClInclude Include="..\src\AudioEngine\NullSound.h" />
+    <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Export">
+      <UniqueIdentifier>{57bfafe7-95aa-4110-a95d-94be561192c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

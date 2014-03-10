@@ -40,9 +40,10 @@ namespace xihad { namespace dialogue
 
 	ITextContent* CPlainTextContent::split( unsigned index )
 	{
+		if (index < 1 || index > mText.length()) return nullptr;
+
 		String tail = mText.substr(index);
 		mText = mText.substr(0, index);
-
 		return new CPlainTextContent(*mFont, tail);
 	}
 
@@ -110,7 +111,7 @@ namespace xihad { namespace dialogue
 	CPlainTextContent::~CPlainTextContent()
 	{
 #ifdef _DEBUG
-		std:: cout << "CPlainTextContent(" << mText << ") deleted." << std::endl;
+		std:: cout << "CPlainTextContent deleted." << std::endl;
 #endif // _DEBUG
 	}
 

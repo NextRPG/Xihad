@@ -78,8 +78,8 @@ namespace xihad { namespace dialogue
 		while (aligned)
 		{
 			ITextElement* text = mFactory->create(aligned->getContent());
-			text->setOffset(offset);
 			offset += aligned->getOffset();
+			text->setOffset(offset);
 			outElements.push_back(text);
 			text->drop();
 

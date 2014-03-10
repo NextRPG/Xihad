@@ -89,6 +89,7 @@
     <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
+    <ClCompile Include="..\src\GameWorld\Engine\WindowEventSeizer.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp" />
     <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp" />
     <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h" />
     <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h" />
     <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\TimelineObserver.h" />
     <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h" />
     <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h" />
     <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h" />
@@ -138,9 +140,11 @@
     <ClInclude Include="..\src\GameWorld\Engine\matrix.h" />
     <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h" />
     <ClInclude Include="..\src\GameWorld\Engine\TagListener.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WindowEventSeizer.h" />
     <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h" />
     <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h" />
     <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h" />
+    <ClInclude Include="..\src\GameWorld\Engine\WorldObserver.h" />
     <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
     <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />

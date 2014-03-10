@@ -211,11 +211,6 @@ namespace xihad { namespace render3d
 
 	void IrrlichtComponentSystem::onStop()
 	{
-		xassert (mImpl->smgr);
-
-		mImpl->smgr = nullptr;
-		mImpl->device = nullptr;
-		mImpl->driver = nullptr;
 	}
 
 	irr::scene::ISceneManager* IrrlichtComponentSystem::getSceneManager()

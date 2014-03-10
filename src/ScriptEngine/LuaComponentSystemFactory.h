@@ -17,21 +17,10 @@ namespace xihad { namespace script
 
 		virtual ngn::ComponentSystem* create(ngn::GameScene* scene, const std::string& systemName) ;
 
-		void setScriptPath(const std::string& path)
-		{
-			mScriptPath = path;
-		}
-
-		const std::string& getScriptPath() const
-		{
-			return mScriptPath;
-		}
-
 	protected:
 		void initScriptEnv(ngn::GameScene*);
 
 	private:
-		std::string mScriptPath;
 		ngn::GameEngine* mEngine;
 	};
 }}

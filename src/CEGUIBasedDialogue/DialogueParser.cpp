@@ -34,9 +34,11 @@ namespace xihad { namespace dialogue
 		mBaseWindow = root->createChild("Xihad/Frame");
 		mBaseWindow->setProperty("Position", "{{0, 0}, {0.5, 0}}");
 		mBaseWindow->setProperty("Size", "{{1, 0}, {0.5, 0}}");
-		
+
 		CDialogueContext* factory = new CDialogueContext(*mBaseWindow);
 		CDialogueAlignmenter* alignmenter = new CDialogueAlignmenter(400);
+		alignmenter->setKerningHeight(10);
+		alignmenter->setKerningNewLine(ngn::dimension2di(20, 15));
 		mBuilder = new CAlignedDialogueBuilder(factory, alignmenter);
 
 		factory->drop();

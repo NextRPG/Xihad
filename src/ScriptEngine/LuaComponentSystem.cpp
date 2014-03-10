@@ -22,25 +22,10 @@ namespace xihad { namespace script
 		InheritanceTree hierarchy;
 	};
 
-	LuaComponentSystem::LuaComponentSystem(GameScene* scene, const std::string& compBase ) :
+	LuaComponentSystem::LuaComponentSystem(GameScene* scene) :
 		mImpl(new impl)
 	{
-		lua_State* L = mImpl->L = scene->getMainThread();
-
-		// set path
-		{
-			StackMemo memo(L);
-			lua_getglobal(L, "package");
-			string path;
-			((path += compBase) += "/") += "?.lua;";
-			((path += compBase) += "/") += "?.luac;";
-#ifdef _DEBUG
-			((path += "Assets/test") += "/") += "?.lua;";
-			((path += "Assets/test") += "/") += "?.luac;";
-#endif
-			setField(L, -1, "path", path.c_str());
-			setField(L, -1, "cpath", "./?.dll");
-		}
+		mImpl->L = scene->getMainThread();
 	}
 
 	LuaComponentSystem::~LuaComponentSystem()

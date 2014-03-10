@@ -18,7 +18,8 @@ namespace xihad { namespace script
 	class LuaComponentSystem : public ngn::ComponentSystem
 	{
 	public:
-		LuaComponentSystem(ngn::GameScene* scene, const std::string& compBase);
+		LuaComponentSystem(ngn::GameScene* scene);
+
 		virtual ~LuaComponentSystem();
 
 		ngn::InheritancePath hierarchy(const std::string& compName) override;

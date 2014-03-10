@@ -1,7 +1,5 @@
 #pragma once
 #include "boost\scoped_ptr.hpp"
-#include "boost\shared_ptr.hpp"
-#include "irr_ptr.h"
 
 namespace xihad { namespace ngn
 {
@@ -29,17 +27,17 @@ namespace xihad { namespace ngn
 		};
 
 	public:
-		explicit GameEngine(NativeWindow& wnd, float defaultFrameTime = 1.f/60);
-		explicit GameEngine(NativeWindow& wnd, GameWorld& world, float defaultFrameTime = 1.f/60);
+		explicit GameEngine(NativeWindow& wnd, GameWorld* world = 0, float defaultFrameTime = 1.f/60);
+
 		virtual ~GameEngine();
 
-		boost::shared_ptr<GameWorld> getWorld();
+		GameWorld* getWorld();
 
 		NativeWindow* getWindow();
 
-		void addFrameObserver(FrameObserver& observer);
+		virtual void addFrameObserver(FrameObserver& observer);
 
-		void removeFrameObserver(FrameObserver& observer);
+		virtual void removeFrameObserver(FrameObserver& observer);
 
 		virtual bool isRunning() const;
 
@@ -61,8 +59,6 @@ namespace xihad { namespace ngn
 
 	private:
 		WindowRenderer* getRenderer();
-
-		void init(NativeWindow&, GameWorld* world, float frameInterval);
 
 		float fireFrameBegin();
 

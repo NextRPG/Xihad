@@ -6,10 +6,11 @@
 namespace xihad { namespace dialogue 
 {
 	CDialogueAlignmenter::CDialogueAlignmenter(unsigned widthLimit, ngn::dimension2di knl) :
-		mWidthLimit(widthLimit), mKerningHeight(0), mKerningNewLine(knl),
-		mCurrentLineHeight(0), mRelativeOffsetToPrev(knl.Width, 0), 
+		mWidthLimit(widthLimit), mKerningHeight(0),
+		mCurrentLineHeight(0), mPrevWidth(0), mRelativeOffsetToPrev(knl.Width, 0), 
 		mDialogueHead(nullptr), mCurrentLineHead(nullptr), mLastInserted(nullptr)
 	{
+		setKerningNewLine(knl);
 	}
 
 	unsigned CDialogueAlignmenter::getTotalHeight() const
@@ -20,7 +21,7 @@ namespace xihad { namespace dialogue
 	void CDialogueAlignmenter::setWidthLimit( unsigned widthLimit )
 	{
 		mWidthLimit = widthLimit;
-		checkKNL();
+		setKerningNewLine(mKerningNewLine);	// check knl
 		if (mOffset.X > 0 && (unsigned)mOffset.X > mWidthLimit)
 			wrapLine();
 	}
@@ -28,9 +29,7 @@ namespace xihad { namespace dialogue
 	void CDialogueAlignmenter::newLine()
 	{
 		onLineFilled();
-		mOffset.X = mKerningNewLine.Width;
-		assert(mOffset.X < 0 || (unsigned) mOffset.X <= mWidthLimit);
-		mOffset.Y += mKerningHeight + mKerningNewLine.Height;
+		wrapLine(true);
 	}
 
 	int CDialogueAlignmenter::insert(ITextContent* text)
@@ -77,8 +76,9 @@ namespace xihad { namespace dialogue
 	void CDialogueAlignmenter::linkNewSection( CAlignedTextSection* newSection )
 	{
 		if (mLastInserted)
-			mLastInserted->link(newSection, mRelativeOffsetToPrev);
+			mLastInserted->link(newSection);
 
+		newSection->setOffset(mRelativeOffsetToPrev);
 		mLastInserted = newSection;
 
 		if (!mCurrentLineHead)
@@ -110,6 +110,24 @@ namespace xihad { namespace dialogue
 			mDialogueHead = buff;
 		}
 		assert(mDialogueHead == nullptr);
+	}
+
+	void CDialogueAlignmenter::setKerningNewLine( ngn::dimension2di knl )
+	{
+		std::swap(mKerningNewLine, knl);
+		checkKNL();
+
+		if (mCurrentLineHead == 0)
+		{
+			int dx = (mKerningNewLine.Width - knl.Width);
+			int dy = (mKerningNewLine.Height - knl.Height);
+			mOffset.X += dx;
+			mOffset.Y += dy;
+			mRelativeOffsetToPrev.X += dx;
+			mRelativeOffsetToPrev.Y += dy;
+
+			mPrevWidth = knl.Width;
+		}
 	}
 
 }}

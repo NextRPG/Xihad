@@ -4,15 +4,21 @@
 namespace xihad { namespace dialogue
 {
 	class IDialogue;
-	class CTickAll : public CBaseTickMethod
+	class CTickAll : public ITickMethod
 	{
 	public:
-		explicit CTickAll(IDialogue& target, float standardCycle, float initSpeed = 1.0f);
+		explicit CTickAll(IDialogue& target);
 
 		virtual ~CTickAll();
 
-	protected:
-		virtual bool onTick() override;
+		virtual void setTickSpeed( float speed ) override { }
+
+		virtual float getTickSpeed() const override
+		{
+			return 100000000.f;
+		}
+
+		virtual void tick( float delta ) override;
 
 	private:
 		IDialogue& mTarget;
