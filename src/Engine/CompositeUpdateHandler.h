@@ -23,6 +23,8 @@ namespace xihad { namespace ngn
 		typedef Container::const_iterator const_iterator;
 
 	public:	// list container functions
+		CompositeUpdateHandler();
+
 		iterator childHandlerBegin() { return mChildHandlerList.begin(); }
 		iterator childHandlerEnd()	 { return mChildHandlerList.end();	}
 		iterator findChildHandler(UpdateHandler*);

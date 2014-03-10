@@ -202,9 +202,6 @@
     <ClInclude Include="..\src\Engine\Message\TagTree.h">
       <Filter>Broadcast</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\TagListener.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Engine\Timeline.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -228,6 +225,11 @@
     </ClInclude>
     <ClInclude Include="..\src\Engine\Message\TreeNode.h">
       <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\MemoryLeakDetector.h" />
+    <ClInclude Include="..\src\Engine\xptr.h" />
+    <ClInclude Include="..\src\Engine\TagListener.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -315,5 +317,6 @@
     <ClCompile Include="..\src\Engine\UpdateHandler.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp" />
   </ItemGroup>
 </Project>

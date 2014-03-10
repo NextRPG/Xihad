@@ -7,7 +7,10 @@ namespace xihad { namespace ngn
 	class WindowEventSeizer : public WorldObserver
 	{
 	public:
-		WindowEventSeizer(NativeWindow& wnd) : wnd(wnd) {}
+		WindowEventSeizer(NativeWindow& wnd) : wnd(wnd) 
+		{
+			setDebugName("WindowEventSeizer"); 
+		}
 
 		virtual void onSceneChanged(GameWorld* world, GameScene* prev);
 		

@@ -4,6 +4,7 @@
 #include "NullSound.h"
 #include "Engine/GameObject.h"
 #include <iostream>
+#include "Engine/Process.h"
 
 using namespace std;
 using namespace xihad::ngn;
@@ -34,18 +35,12 @@ namespace xihad { namespace audio
 
 	void AudioComponent::onStop()
 	{
-		audio->stop();
-
-		if (audio != &NullSound::getSingleton())
-			setSound(0);
-		else
-			cerr << "Sound stop failed" << endl;
+		setSound(0);
 	}
 
 	void AudioComponent::playMusic(const char* filename, E_STREAM_MODE mode)
 	{
-		setSound(audioEngine->play2D(filename, false, false, true, mode, true));
-		audio->setSoundStopEventReceiver(this);
+		setSound(audioEngine->play2D(filename, true, false, true, mode, true));
 	}
 
 	void AudioComponent::playSound( const char* filename, E_STREAM_MODE mode )
@@ -53,8 +48,7 @@ namespace xihad { namespace audio
 		vector3df pos = getHostObject()->getWorldTransformMatrix().getTranslation();
 		vec3df ikpos(pos.X, pos.Y, pos.Z);
 		
-		setSound(audioEngine->play3D(filename, ikpos, true, false, true, mode, false));
-		audio->setSoundStopEventReceiver(this);
+		setSound(audioEngine->play3D(filename, ikpos, false, false, true, mode, false));
 	}
 
 	void AudioComponent::OnSoundStopped( irrklang::ISound* sound, E_STOP_EVENT_CAUSE reason, void* userData )
@@ -68,7 +62,51 @@ namespace xihad { namespace audio
 		for (auto listener : listeners)
 			listener->onSoundStopped(this, reason);
 
-		setSound(0);
+		assert(!isNull(audio));
+		{
+			audio->setSoundStopEventReceiver(0);
+			audio->drop();
+			audio = &NullSound::getSingleton();
+		}
+		assert(isNull(audio));
+		// assert(There isn't any ISound keeping this pointer as its StopEventReceiver);
+	}
+
+	void AudioComponent::setSound( irrklang::ISound* newSound )
+	{
+		newSound = newSound ? newSound : &NullSound::getSingleton();
+
+		bool wasPaused = newSound->getIsPaused();
+
+		newSound->setIsPaused(true);
+		setSound_(newSound);
+
+		assert(isNull(audio) || !newSound->isFinished());
+		newSound->setIsPaused(wasPaused);
+	}
+
+	void AudioComponent::setSound_( irrklang::ISound* newSound )
+	{
+		assert(newSound->getIsPaused());
+		assert(newSound);
+
+		assert(audio && "Audio must be ISound or NullSound");
+		{	// Stop audio and wait until audio was dropped
+			audio->stop();
+
+			while (!isNull(audio))
+				Process::sleep(0);
+		}
+		assert(isNull(audio));
+
+		// Process::sleep(1); // Test extreme case for dead lock 
+
+		// Avoid to listen a finished sound
+		if (!newSound->isFinished())
+		{
+			audio = newSound;
+			audio->setSoundStopEventReceiver(this);
+		}
 	}
 
 	void AudioComponent::addAudioStopListener( AudioStopListener& listener )
@@ -79,17 +117,6 @@ namespace xihad { namespace audio
 	void AudioComponent::removeAudioStopListener( AudioStopListener& listener )
 	{
 		listeners.erase(&listener);
-	}
-
-	void AudioComponent::setSound( irrklang::ISound* newSound )
-	{
-		assert(audio != 0);
-
-		if (audio != newSound)
-		{
-			audio->drop();
-			audio = newSound ? newSound : &NullSound::getSingleton();
-		}
 	}
 
 //////////////////////////
@@ -188,6 +215,11 @@ namespace xihad { namespace audio
 	unsigned AudioComponent::getPlayLength()
 	{
 		return audio->getPlayLength();
+	}
+
+	bool AudioComponent::isNull( irrklang::ISound* sound )
+	{
+		return sound == &NullSound::getSingleton() || !sound;
 	}
 
 }}

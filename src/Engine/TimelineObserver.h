@@ -7,7 +7,8 @@ namespace xihad { namespace ngn
 	class TimelineObserver : public virtual ReferenceCounted
 	{
 	public:
-		virtual ~TimelineObserver() {}
+		TimelineObserver() { XIHAD_MLD_NEW_OBJECT; }
+		virtual ~TimelineObserver() { XIHAD_MLD_DEL_OBJECT; }
 
 		virtual void onTimePaused(GameWorld*) = 0;
 		virtual void onTimeResumed(GameWorld*) = 0;

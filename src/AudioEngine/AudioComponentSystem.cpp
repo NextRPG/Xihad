@@ -73,7 +73,7 @@ namespace xihad { namespace audio
 		// TODO
 		// 更新听者信息，根据世界的 TimeScale 设置所有声音的播放速度
 		// if (mImpl->playbackScale != )
-		mImpl->audioDevice->update();
+		// mImpl->audioDevice->update();
 	}
 
 	void AudioComponentSystem::onStop()

@@ -9,6 +9,8 @@ namespace xihad { namespace script
 	public:
 		explicit LuaEventReceiver(const luaT::LuaRef& object);
 
+		virtual ~LuaEventReceiver();
+
 		virtual int onKeyEvent( const ngn::KeyEvent& event, int argFromPreviousReceiver );
 
 		virtual int onMouseEvent( const ngn::MouseEvent& event, int argFromPreviousReceiver );

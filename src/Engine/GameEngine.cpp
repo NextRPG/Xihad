@@ -1,8 +1,9 @@
 #include "GameEngine.h"
 
 // use in member field
-#include <set>
-#include "irr_ptr.h"
+#include <map>
+#include <unordered_map>
+#include "xptr.h"
 #include "GameWorld.h"
 #include "NativeWindow.h"
 #include "FrameObserver.h"
@@ -11,20 +12,34 @@
 #include "WindowRenderer.h"
 #include "TimeConversion.h"
 #include "WindowEventSeizer.h"
+#include "CppBase\StdMap.h"
 
-using namespace irr;
 using namespace std;
 namespace xihad { namespace ngn
 {
+	struct hash_observer
+	{
+		size_t operator()(const xptr<FrameObserver>& key) const
+		{
+			return (size_t) (key.get());
+		}
+	};
+
+	typedef multimap<int, xptr<FrameObserver>> FrameObservers;
+	typedef unordered_map<
+		xptr<FrameObserver>, 
+		FrameObservers::iterator,
+		hash_observer> Index;
 	struct GameEngine::impl
 	{
 		float frameTime;
 		GameEngine::LoopStatus status;
 
 		boost::scoped_ptr<GameWorld> gameWorld;
-		irr_ptr<NativeWindow> window;
+		xptr<NativeWindow> window;
 
-		set<irr_ptr<FrameObserver>> frameObservers;
+		FrameObservers frameObservers;
+		Index observerIndex;
 	};
 
 	GameEngine::GameEngine(NativeWindow& wnd, GameWorld* world, float defaultFrameTime) :
@@ -36,12 +51,15 @@ namespace xihad { namespace ngn
 		mImpl->window = &wnd;
 		
 		// Auto seize window event into current scene
-		irr_ptr<WindowEventSeizer> wndObsv(new WindowEventSeizer(wnd), false);
+		xptr<WindowEventSeizer> wndObsv(new WindowEventSeizer(wnd), false);
 		mImpl->gameWorld->addWorldObserver(*wndObsv);
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	GameEngine::~GameEngine()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	void GameEngine::setFrameTime( float dt )
@@ -104,21 +122,29 @@ namespace xihad { namespace ngn
 		return mImpl->window->getRenderer();
 	}
 
-	void GameEngine::addFrameObserver( FrameObserver& observer )
+	void GameEngine::addFrameObserver( FrameObserver& observer, int order )
 	{
-		mImpl->frameObservers.insert(&observer);
+		auto pos = mImpl->frameObservers.insert(std::make_pair(order, &observer));
+		mImpl->observerIndex[&observer] = pos;
 	}
 
 	void GameEngine::removeFrameObserver( FrameObserver& observer )
 	{
-		mImpl->frameObservers.erase(&observer);
+		xptr<FrameObserver> key(&observer);
+		auto indexPos = mImpl->observerIndex.find(key);
+		if (indexPos != mImpl->observerIndex.end())
+		{
+			auto pos = indexPos->second;
+			mImpl->frameObservers.erase(pos);
+			mImpl->observerIndex.erase(indexPos);
+		}
 	}
 
 	float GameEngine::fireFrameBegin()
 	{
 		float now = clockToSeconds(clock());
-		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
-			observer->onFrameBegin(this, now);
+		for (auto observerPair : mImpl->frameObservers)
+			observerPair.second->onFrameBegin(this, now);
 
 		return now;
 	}
@@ -128,8 +154,17 @@ namespace xihad { namespace ngn
 		float now = clockToSeconds(clock());
 		float delta = now - bgnTime;
 
-		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
-			observer->onFrameEnd(this, now, delta);
+#ifdef _DEBUG
+		int priority = 0x80000000;
+#endif
+		for (auto& observerPair : mImpl->frameObservers)
+		{
+#ifdef _DEBUG
+			assert(priority <= observerPair.first);
+			priority = observerPair.first;
+#endif
+			observerPair.second->onFrameEnd(this, now, delta);
+		}
 	}
 
 }}

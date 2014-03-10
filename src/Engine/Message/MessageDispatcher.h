@@ -15,7 +15,10 @@ namespace xihad { namespace ngn
 		public IMessageDispatcher<Entity, EntityManager, Listener>
  	{
 	public:
-		MessageDispatcher(EntityManager& manager) : mManager(&manager) {}
+		MessageDispatcher(EntityManager& manager) : mManager(&manager) 
+		{
+			XIHAD_MLD_NEW_OBJECT;
+		}
 
 		void dispatch(ParamArg pParam, IdArg pSourceId, double timeout = 0.0) override
 		{
@@ -45,6 +48,7 @@ namespace xihad { namespace ngn
 	protected:
 		virtual ~MessageDispatcher()
 		{
+			XIHAD_MLD_DEL_OBJECT;
 		}
 
 		virtual void onStart() override

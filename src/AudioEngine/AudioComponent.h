@@ -4,7 +4,7 @@
 #include <set>
 #include "Engine/Component.h"
 #include "Engine/vector3d.h"
-#include "Engine/irr_ptr.h"
+#include "Engine/xptr.h"
 
 namespace irrklang 
 {
@@ -168,10 +168,15 @@ namespace xihad { namespace audio
 
 		void setSound(irrklang::ISound* newSound);
 
+		/// newSound != 0 && newSound is paused
+		void setSound_(irrklang::ISound* newSound);
+
+		bool isNull(irrklang::ISound*);
+
 	private:
 		irrklang::ISoundEngine* audioEngine;
 		irrklang::ISound* audio;
-		std::set<irr_ptr<AudioStopListener> > listeners;
+		std::set<xptr<AudioStopListener> > listeners;
 	};
 
 }}

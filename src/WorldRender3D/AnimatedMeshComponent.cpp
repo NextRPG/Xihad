@@ -111,6 +111,7 @@ namespace xihad { namespace render3d
 			if (sel != nullptr)
 			{
 				getNode()->setTriangleSelector(sel);
+				sel->drop();
 				return true;
 			}
 		}

@@ -9,6 +9,8 @@ namespace xihad { namespace render3d
 	public:
 		LuaAnimationCallback(const luaT::LuaRef& ref);
 
+		virtual ~LuaAnimationCallback();
+
 		virtual void OnAnimationEnd( 
 			irr::scene::IAnimatedMeshSceneNode* node ) override;
 

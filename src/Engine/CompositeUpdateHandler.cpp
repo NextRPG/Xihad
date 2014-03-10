@@ -1,13 +1,19 @@
 #include "CompositeUpdateHandler.h"
 #include <algorithm>
 #include "CppBase\XiAssert.h"
+#include "MemoryLeakDetector.h"
 
 using namespace std;
 namespace xihad { namespace ngn
 {
+	CompositeUpdateHandler::CompositeUpdateHandler()
+	{
+		XIHAD_MLD_NEW_OBJECT;
+	}
 
 	CompositeUpdateHandler::~CompositeUpdateHandler()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	bool CompositeUpdateHandler::appendChildHandler( UpdateHandler* handler )
@@ -60,9 +66,18 @@ namespace xihad { namespace ngn
 		auto riter = mChildHandlerList.rbegin();
 		while (riter != mChildHandlerList.rend())
 		{
+#ifdef _DEBUG
+			size_t sizeBeforeDestroy = mChildHandlerList.size();
 			(*riter)->destroy();
+			xassert(sizeBeforeDestroy == mChildHandlerList.size() && 
+				"UpdateHandler's destroy() function shouldn't remoe self from CompositeUpdateHandler's childrenList");
+#else
+			(*riter)->destroy();
+#endif
 			eraseChildHandler(--riter.base());
 		}
+
+		xassert(mChildHandlerList.empty());
 	}
 
 	bool CompositeUpdateHandler::destroyChildHandler( UpdateHandler* h )

@@ -8,7 +8,9 @@ namespace xihad { namespace ngn
 	class UserEventReceiver : public ReferenceCounted
 	{
 	public:
-		virtual ~UserEventReceiver() {}
+		UserEventReceiver() { XIHAD_MLD_NEW_OBJECT; }
+
+		virtual ~UserEventReceiver() { XIHAD_MLD_DEL_OBJECT; }
 
 		//! 处理键盘事件
 		/**

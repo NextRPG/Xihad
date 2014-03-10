@@ -35,7 +35,7 @@ namespace xihad { namespace ngn
 
 		NativeWindow* getWindow();
 
-		virtual void addFrameObserver(FrameObserver& observer);
+		virtual void addFrameObserver(FrameObserver& observer, int order = 0);
 
 		virtual void removeFrameObserver(FrameObserver& observer);
 

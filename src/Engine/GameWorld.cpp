@@ -2,7 +2,7 @@
 #include <set>
 #include "Timeline.h"
 #include "GameScene.h"
-#include "irr_ptr.h"
+#include "xptr.h"
 #include "WorldObserver.h"
 #include "TimelineObserver.h"
 
@@ -18,8 +18,8 @@ namespace xihad { namespace ngn
 		float timeScale;
 		bool paused;
 
-		set<irr_ptr<WorldObserver>> worldObservers;
-		set<irr_ptr<TimelineObserver>> timeObservers;
+		set<xptr<WorldObserver>> worldObservers;
+		set<xptr<TimelineObserver>> timeObservers;
 	};
 
 	GameWorld::GameWorld( float defaultStepSize ) : mImpl(new impl)
@@ -28,12 +28,16 @@ namespace xihad { namespace ngn
 		mImpl->singleStepSeconds = defaultStepSize;
 		mImpl->timeScale = 1.0f;
 		mImpl->paused = false;
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	GameWorld::~GameWorld()
 	{
 		if (mImpl->scene)
 			mImpl->scene->destroy();
+
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	GameScene* GameWorld::setScene( GameScene* scene )

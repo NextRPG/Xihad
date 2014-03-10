@@ -42,6 +42,8 @@ local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 local heros = dofile(CUR_DIR .. "\\Save\\Save1.hero")
 
 
+geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
+
 
 -- init battle related manager
 Chessboard:init(battle.chessboard)
@@ -58,3 +60,16 @@ LightManager:init()
 scene:pushController(require("InputController"))
 
 cursor:setVisible(true)
+
+local root = scene:findObject(c"__ROOT__")
+local bgmPlayer = root:appendComponent(c"Audio")
+bgmPlayer:playMusic("Assets/mfx/dance.ogg")
+
+-- root:appendUpdateHandler({ 
+-- 	onUpdate = function(self)
+-- 	if Time.global >= 5 then
+-- 		bgmPlayer:stopAudio()
+-- 		bgmPlayer:playSound("Assets/mfx/appear.ogg")
+-- 		self:stop()
+-- 	end
+-- end})

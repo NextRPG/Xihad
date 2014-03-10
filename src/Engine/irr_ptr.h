@@ -16,3 +16,4 @@ namespace irr
 		obj->drop();
 	}
 }
+

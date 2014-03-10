@@ -29,8 +29,10 @@ int launchScript(int argc, const char** argv)
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
+		// Usually, frame rate adjust should be the last frame observer.
+		// So, give it a big order
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
-		engine->addFrameObserver(*adj);
+		engine->addFrameObserver(*adj, 1000000);
 		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;
@@ -47,7 +49,7 @@ int launchScript(int argc, const char** argv)
 		titleUpdater->drop();
 
 		WindowEventTransmitter* eventTransmitter = new WindowEventTransmitter;
-		engine->addFrameObserver(*eventTransmitter);
+		engine->addFrameObserver(*eventTransmitter, -10);
 		eventTransmitter->drop();
 
 		engine->getWorld()->setScene(scene);
@@ -58,8 +60,6 @@ int launchScript(int argc, const char** argv)
 	wnd->drop();
 	device->drop();
 	destroySystems();
-
-	system("pause");
 	return 0;
 
 }

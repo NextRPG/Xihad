@@ -12,7 +12,7 @@ irr::IrrlichtDevice* createDefaultDevice()
 	param.WindowSize = irr::core::dimension2du(1024, 600);
 	param.DriverType = irr::video::EDT_DIRECT3D9;
 
-	param.Vsync = true;
+	param.Vsync = false;
 	param.AntiAlias = 4;
 	return irr::createDeviceEx(param);
 }

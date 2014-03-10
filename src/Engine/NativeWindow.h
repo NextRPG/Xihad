@@ -8,6 +8,10 @@ namespace xihad { namespace ngn
 	class NativeWindow : public virtual ReferenceCounted
 	{
 	public:
+		NativeWindow() { XIHAD_MLD_NEW_OBJECT; }
+
+		virtual ~NativeWindow() { XIHAD_MLD_DEL_OBJECT; }
+
 		virtual void setEventReceiver(UserEventReceiver*) = 0;
 
 		virtual UserEventReceiver* getEventReceiver() = 0;

@@ -14,7 +14,8 @@ namespace xihad { namespace audio
 	class AudioStopListener : public ReferenceCounted
 	{
 	public:
-		virtual ~AudioStopListener() {}
+		AudioStopListener() { XIHAD_MLD_NEW_OBJECT; }
+		virtual ~AudioStopListener() { XIHAD_MLD_DEL_OBJECT; }
 
 		virtual void onSoundStopped(AudioComponent* sound, E_STOP_EVENT_CAUSE reason) = 0;
 	};

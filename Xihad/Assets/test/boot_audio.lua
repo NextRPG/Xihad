@@ -22,6 +22,15 @@ cameraObject:concatTranslate(math3d.vector(0, 8, -25))
 
 
 ----- BGM
-local root = scene:findObject(c"__ROOT__")
-local bgmPlayer = root:appendComponent(c"Audio")
-bgmPlayer:playMusic("Assets/mfx/bbb.ogg")
+-- local root = scene:findObject(c"__ROOT__")
+-- local bgmPlayer = root:appendComponent(c"Audio")
+-- bgmPlayer:playMusic("Assets/mfx/bbb.ogg")
+
+-- root:appendUpdateHandler({ 
+-- 	onUpdate = function(self)
+-- 	if Time.global >= 5 then
+-- 		-- bgmPlayer:stopAudio()
+-- 		bgmPlayer:playSound("Assets/mfx/appear.ogg")
+-- 		self:stop()
+-- 	end
+-- end})

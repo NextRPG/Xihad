@@ -14,9 +14,17 @@ namespace xihad { namespace script
 	LuaEventReceiver::LuaEventReceiver( const luaT::LuaRef& object ) :
 		lobject(object)
 	{
+		setDebugName("LuaEventReceiver");
+		XIHAD_MLD_NEW_OBJECT;
+
 		StackMemo memo(lobject.getState());
 		lobject.pushSelf();
 		luaL_checktype(lobject.getState(), -1, LUA_TTABLE);
+	}
+
+	LuaEventReceiver::~LuaEventReceiver()
+	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	static void pushParam(lua_State* L, const MouseEvent& e)

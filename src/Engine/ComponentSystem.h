@@ -1,6 +1,7 @@
 #pragma once
 #include "UpdateHandler.h"
 #include "ComponentFactory.h"
+#include <Engine/MemoryLeakDetector.h>
 
 namespace xihad { namespace ngn
 {
@@ -13,6 +14,9 @@ namespace xihad { namespace ngn
 	 */
 	class ComponentSystem : public UpdateHandler, public ComponentFactory
 	{
+	public:
+		ComponentSystem() { XIHAD_MLD_NEW_OBJECT; }
+		virtual ~ComponentSystem() { XIHAD_MLD_DEL_OBJECT; }
 	};
 }}
 

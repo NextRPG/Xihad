@@ -4,7 +4,15 @@ namespace xihad { namespace ngn
 {
 
 	UserEventReceiverStack::UserEventReceiverStack(bool frontOnly) : 
-		receiveFrontEventOnly(frontOnly) { }
+		receiveFrontEventOnly(frontOnly) 
+	{
+		XIHAD_MLD_NEW_OBJECT;
+	}
+
+	UserEventReceiverStack::~UserEventReceiverStack()
+	{
+		XIHAD_MLD_DEL_OBJECT;
+	}
 
 	void UserEventReceiverStack::pushReceiver( UserEventReceiver* recv )
 	{
@@ -30,7 +38,7 @@ namespace xihad { namespace ngn
 			return argFromPreviousReceiver;
 
 		int arg = argFromPreviousReceiver;
-		for (irr_ptr<UserEventReceiver> recv : receivers)
+		for (xptr<UserEventReceiver> recv : receivers)
 		{
 			arg = recv->onKeyEvent(event, arg);
 
@@ -46,7 +54,7 @@ namespace xihad { namespace ngn
 			return argFromPreviousReceiver;
 
 		int arg = argFromPreviousReceiver;
-		for (irr_ptr<UserEventReceiver> recv : receivers)
+		for (xptr<UserEventReceiver> recv : receivers)
 		{
 			arg = recv->onMouseEvent(event, arg);
 

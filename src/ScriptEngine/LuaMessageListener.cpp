@@ -3,6 +3,7 @@
 #include <Engine/Message/MessageParam.h>
 #include <Engine/Message/MessageTag.h>
 #include "LuaUtil.h"
+#include "Engine/MemoryLeakDetector.h"
 
 using namespace luaT;
 using namespace xihad::ngn;
@@ -12,6 +13,9 @@ namespace xihad { namespace script
 	LuaMessageListener::LuaMessageListener( luaT::LuaRef& obj ) :
 		mObject(obj)
 	{
+		setDebugName("LuaMessageListener");
+		XIHAD_MLD_NEW_OBJECT;
+
 		lua_State* L = mObject.getState();
 		StackMemo memo(L);
 
@@ -42,6 +46,7 @@ namespace xihad { namespace script
 
 	LuaMessageListener::~LuaMessageListener()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 }}
 

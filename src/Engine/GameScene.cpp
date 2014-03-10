@@ -2,6 +2,7 @@
 
 // use in member field
 #include <unordered_map>
+#include "xptr.h"
 #include "TagListener.h"
 #include "RootGameObject.h"
 #include "GameObjectDepends.h"
@@ -40,16 +41,14 @@ namespace xihad { namespace ngn
 		TaggedObjectsMap taggedObjects;
 
 		CompositeUpdateHandler& systemUpdater;
-		CompositeUpdateHandler& normalUpdater;
 
-		irr_ptr<UserEventReceiverStack> receiverStack;
+		xptr<UserEventReceiverStack> receiverStack;
 
 		GameScene::impl() : 
 			managedObjectId(0), 
 			rootObject(new RootGameObject(&depends, GameScene::sRootObjectID)),
 			systemUpdater(*new CompositeUpdateHandler),
-			normalUpdater(*new CompositeUpdateHandler),
-			receiverStack(new UserEventReceiverStack)
+			receiverStack(new UserEventReceiverStack, false)
 		{
 			sceneObjects[GameScene::sRootObjectID] = rootObject;
 		}
@@ -148,14 +147,20 @@ namespace xihad { namespace ngn
 		mImpl->systemUpdater.appendChildHandler(mImpl->dispatcher);
 		this->appendChildHandler(&mImpl->systemUpdater);
 		this->appendChildHandler(mImpl->rootObject);
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	GameScene::~GameScene()
 	{
+		// clear mImpl->depends
 		delete mImpl->factory();
 		delete mImpl->tagListener();
+		mImpl->depends.scene = 0;
 
 		delete mImpl;
+
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	GameObject* GameScene::getRootObject() const
@@ -245,15 +250,10 @@ namespace xihad { namespace ngn
 		obj->clearTags();
 		XiAssert::areEqual(1U, mImpl->sceneObjects.erase(obj->getID()));
 
-		if (obj == mImpl->rootObject)
-		{
-			eraseChildHandler(findChildHandler(mImpl->rootObject));
-			mImpl->rootObject = nullptr;
-		}
+		if (obj == mImpl->rootObject && status() != UpdateHandler::DESTROYING)
+			cerr << "Destroy rootObject before scene's destroying" << endl;
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Event Process
 	UserEventReceiverStack& GameScene::getControllerStack()
 	{
 		return *mImpl->receiverStack;

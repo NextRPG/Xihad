@@ -15,7 +15,7 @@ namespace core
 
 //! map template for associative arrays using a red-black tree
 template <class KeyType, class ValueType>
-class map
+class IRRLICHT_API map
 {
 	//! red/black tree for map
 	template <class KeyTypeRB, class ValueTypeRB>

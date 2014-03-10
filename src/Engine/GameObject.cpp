@@ -12,6 +12,7 @@
 #include "GameObjectDepends.h"
 #include "CppBase/xassert.h"
 #include "GameScene.h"
+#include "MemoryLeakDetector.h"
 
 using namespace std;
 using namespace boost;
@@ -80,6 +81,8 @@ namespace xihad { namespace ngn
 		xassert(depends->factory);
 
 		mImpl.reset(new impl(depends, id));
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	/************************************************************************/
@@ -89,6 +92,8 @@ namespace xihad { namespace ngn
 	GameObject::~GameObject()
 	{
 		getScene()->onObjectDestroyed(this);
+
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	GameScene* GameObject::getScene() const
@@ -365,7 +370,10 @@ namespace xihad { namespace ngn
 	void GameObject::onDestroy()
 	{
 		// Order is reserved
-		mImpl->childrenList->destroy();
+		if (!mImpl->childrenList->destroy())
+			cerr << "GameObject children list destroy failed" << endl;
+
+		mImpl->childrenList = 0;
 		CompositeUpdateHandler::onDestroy();
 	}
 

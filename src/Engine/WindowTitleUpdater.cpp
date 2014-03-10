@@ -7,7 +7,10 @@ namespace xihad { namespace ngn
 {
 	WindowTitleUpdater::WindowTitleUpdater( 
 		const std::wstring& appName, FPSCounter* cnter) :
-		appName(appName), fpsCounter(cnter) { }
+		appName(appName), fpsCounter(cnter) 
+	{
+		setDebugName("WindowTitleUpdater");
+	}
 
 	void WindowTitleUpdater::onFrameBegin( GameEngine* source, float nowSecs )
 	{

@@ -8,7 +8,8 @@ namespace xihad { namespace ngn
 	class WorldObserver : public virtual ReferenceCounted
 	{
 	public:
-		virtual ~WorldObserver() {}
+		WorldObserver() { XIHAD_MLD_NEW_OBJECT; }
+		virtual ~WorldObserver() { XIHAD_MLD_DEL_OBJECT; }
 
 		virtual void onSceneChanged(GameWorld* world, GameScene* prev) = 0;
 	};

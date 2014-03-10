@@ -5,6 +5,11 @@
 namespace xihad { namespace ngn
 {
 
+	WindowEventTransmitter::WindowEventTransmitter()
+	{
+		setDebugName("WindowEventTransmitter");
+	}
+
 	void WindowEventTransmitter::onFrameBegin( GameEngine* source, float nowSecs )
 	{
 		source->getWindow()->handleSystemMessage();
