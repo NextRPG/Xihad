@@ -6,9 +6,6 @@
 #define LUA_G_TIME_PAUSED	"paused"
 
 #define LUA_G_SCENE			"scene"
-#define LUA_G_CURSOR		"cursor"
-#define LUA_G_GEOMETRY		"geometry"
-#define LUA_G_COLLISION		"collision"
 #define LUA_G_ENGINE		"engine"
 #define LUA_G_WINDOW		"window"
 

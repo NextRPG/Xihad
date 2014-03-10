@@ -1,7 +1,5 @@
-#include "luaopen_LuaComponent.h"
-#include "luaopen_Component.h"
 #include <luaT/luaT.h>
-#include "ScriptEngine/LuaComponent.h"
+#include "../LuaComponent.h"
 
 using namespace luaT;
 using namespace xihad::ngn;

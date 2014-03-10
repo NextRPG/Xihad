@@ -1,4 +1,3 @@
-#include "luaopen_string.h"
 #include <luaT/luaT.h>
 #include <string>
 #include "luaT/stack_memo.h"

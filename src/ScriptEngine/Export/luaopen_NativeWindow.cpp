@@ -1,4 +1,3 @@
-#include "luaopen_NativeWindow.h"
 #include "LuaT\luaT.h"
 #include "Engine\NativeWindow.h"
 

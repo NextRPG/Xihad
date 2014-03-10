@@ -5,7 +5,7 @@
     <ClCompile Include="..\src\AudioEngine\AudioComponentSystem.cpp" />
     <ClCompile Include="..\src\AudioEngine\AudioComponentSystemFactory.cpp" />
     <ClCompile Include="..\src\AudioEngine\luaopen_AudioEngine.cpp">
-      <Filter>Export</Filter>
+      <Filter>ExportToLua</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AudioEngine\NullSound.cpp" />
   </ItemGroup>
@@ -18,7 +18,7 @@
     <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Export">
+    <Filter Include="ExportToLua">
       <UniqueIdentifier>{57bfafe7-95aa-4110-a95d-94be561192c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

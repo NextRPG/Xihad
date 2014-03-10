@@ -25,11 +25,13 @@ namespace xihad { namespace script
 	LuaComponentSystem::LuaComponentSystem(GameScene* scene) :
 		mImpl(new impl)
 	{
-		mImpl->L = scene->getMainThread();
+		mImpl->L = luaL_newstate();
+		luaL_openlibs(mImpl->L);
 	}
 
 	LuaComponentSystem::~LuaComponentSystem()
 	{
+		lua_close(mImpl->L);
 	}
 
 	ngn::InheritancePath LuaComponentSystem::hierarchy( const std::string& compName )

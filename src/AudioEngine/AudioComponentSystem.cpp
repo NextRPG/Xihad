@@ -10,6 +10,7 @@ using namespace xihad::ngn;
 
 namespace xihad { namespace audio 
 {
+
 	struct AudioComponentSystem::impl
 	{
 		ISoundEngine* audioDevice;

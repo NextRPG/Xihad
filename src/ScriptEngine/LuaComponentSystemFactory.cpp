@@ -31,8 +31,9 @@ namespace xihad { namespace script
 		static string sharedSystem = "Lua";
 		if (systemName == sharedSystem)
 		{
-			initScriptEnv(scene);
-			return new LuaComponentSystem(scene);
+			LuaComponentSystem* lcs = new LuaComponentSystem(scene);
+			initScriptEnv(scene, lcs->getLuaState());
+			return lcs;
 		}
 		else
 		{
@@ -40,9 +41,8 @@ namespace xihad { namespace script
 		}
 	}
 
-	void LuaComponentSystemFactory::initScriptEnv(GameScene* scene)
+	void LuaComponentSystemFactory::initScriptEnv(GameScene* scene, lua_State* L)
 	{
-		lua_State* L = scene->getMainThread();
 		NativeWindow* wnd = mEngine->getWindow();
 		IrrlichtDevice* dev = (static_cast<IrrlichtWindow*>(wnd))->getIrrDevice();
 
@@ -70,16 +70,6 @@ namespace xihad { namespace script
 				setField(L, -1, LUA_G_TIME_GLOBAL, 0);
 			}
 			lua_setfield(L, -2, LUA_G_TIME);	// TODO: read-only?
-
-			gui::ICursorControl* cursor = dev->getCursorControl();
-			setField(L, -1, LUA_G_CURSOR, cursor);
-
-			setField(L, -1, LUA_G_GEOMETRY, Geometry::creator());
-
-			IrrlichtComponentSystem* irrSystem = 
-				dynamic_cast<IrrlichtComponentSystem*> (scene->requireSystem("Render"));
-			scene::ISceneCollisionManager* collMan = irrSystem->getSceneManager()->getSceneCollisionManager();
-			setField(L, -1, LUA_G_COLLISION, collMan);
 
 			setField(L, -1, LUA_G_ENGINE, mEngine);
 			setField(L, -1, LUA_G_WINDOW, wnd);

@@ -54,13 +54,13 @@ function InputController:onMouseEvent( e )
 		BattleManager:onMouseEvent( e )
 	end
 	lastType = e.type
-	return true
+	return 0
 end
 
 function InputController:onKeyUp( e )
 	CameraManager:onKeyUp(e)
 	BattleManager:onKeyUp(e)
-	return true
+	return 0
 end
 
 

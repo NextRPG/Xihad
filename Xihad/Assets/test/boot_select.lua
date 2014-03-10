@@ -12,11 +12,11 @@ do
 end
 anim:playAnimation(c"idle 1")
 anim:setTransitionTime(0.1)
-ninja:concatRotate(0, 180, 0)
+ninja:concatRotate(math3d.vector(0, 180, 0))
 
 local cameraObject = scene:createObject(c"camera")
 local camera = cameraObject:appendComponent(c"Camera")
-cameraObject:concatTranslate(0, 8, -25)
+cameraObject:concatTranslate(math3d.vector(0, 8, -25))
 
 local mouseSelector = {}
 function mouseSelector:onMouseEvent(e)
@@ -36,6 +36,6 @@ function mouseSelector:onMouseEvent(e)
 		end
 	end
 
-	return true
+	return 0
 end
 scene:pushController(mouseSelector)

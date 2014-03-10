@@ -6,6 +6,7 @@
 -- @copyright NextRPG
 
 package.path = package.path 
+.. ";Assets/Script/?.lua"
 .. ";Assets/Script/Action/?.lua" 
 .. ";Assets/Script/Effect/?.lua"
 .. ";Assets/Script/Utils/?.lua"

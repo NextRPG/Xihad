@@ -47,7 +47,7 @@
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
       <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>../src;../Include;../src/GameWorld;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;../Include;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -74,26 +74,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\BaseComponentSystem.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\InheritancePath.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\GameScene.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\MapProperties.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventSeizer.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp" />
-    <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp" />
-    <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp" />
+    <ClCompile Include="..\src\Engine\BaseComponentSystem.cpp" />
+    <ClCompile Include="..\src\Engine\FPSCounter.cpp" />
+    <ClCompile Include="..\src\Engine\FrameRateAdjuster.cpp" />
+    <ClCompile Include="..\src\Engine\UserEventReceiverStack.cpp" />
+    <ClCompile Include="..\src\Engine\GameEngine.cpp" />
+    <ClCompile Include="..\src\Engine\InheritancePath.cpp" />
+    <ClCompile Include="..\src\Engine\InheritanceTree.cpp" />
+    <ClCompile Include="..\src\Engine\IrrlichtWindow.cpp" />
+    <ClCompile Include="..\src\Engine\LuaProperties.cpp" />
+    <ClCompile Include="..\src\Engine\UpdateHandler.cpp" />
+    <ClCompile Include="..\src\Engine\GameScene.cpp" />
+    <ClCompile Include="..\src\Engine\MapProperties.cpp" />
+    <ClCompile Include="..\src\Engine\MultiComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\Engine\NullProperpties.cpp" />
+    <ClCompile Include="..\src\Engine\UserEvent.cpp" />
+    <ClCompile Include="..\src\Engine\WindowEventSeizer.cpp" />
+    <ClCompile Include="..\src\Engine\WindowEventTransmitter.cpp" />
+    <ClCompile Include="..\src\Engine\WindowTitleUpdater.cpp" />
+    <ClCompile Include="..\src\Engine\Message\MessageParam.cpp" />
+    <ClCompile Include="..\src\Engine\Message\MessageTag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\BitOperation.h" />
@@ -104,77 +104,76 @@
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
     <ClInclude Include="..\src\CppBase\xassert.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\TimelineObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitable.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitor.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentFactory.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\dimension2d.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\irr_ptr.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\position2d.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Properties.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\GameObjectDepends.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Property.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\quaternion.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\SColor.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UserEvent.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiver.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\vector3d.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\matrix.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\TagListener.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventSeizer.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\WorldObserver.h" />
-    <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h" />
-    <ClInclude Include="..\src\GameWorld\Message\MessageParam.h" />
-    <ClInclude Include="..\src\GameWorld\Message\MessageTag.h" />
-    <ClInclude Include="..\src\GameWorld\Message\MessageDispatcher.h" />
-    <ClInclude Include="..\src\GameWorld\Message\MessageListener.h" />
-    <ClInclude Include="..\src\GameWorld\Message\SourceFilter.h" />
-    <ClInclude Include="..\src\GameWorld\Message\TagTree.h" />
-    <ClInclude Include="..\src\GameWorld\Message\TreeNode.h" />
+    <ClInclude Include="..\src\Engine\EngineConfig.h" />
+    <ClInclude Include="..\src\Engine\FPSCounter.h" />
+    <ClInclude Include="..\src\Engine\FrameObserver.h" />
+    <ClInclude Include="..\src\Engine\FrameRateAdjuster.h" />
+    <ClInclude Include="..\src\Engine\TimeConversion.h" />
+    <ClInclude Include="..\src\Engine\TimelineObserver.h" />
+    <ClInclude Include="..\src\Engine\UserEventReceiverStack.h" />
+    <ClInclude Include="..\src\Engine\InheritancePath.h" />
+    <ClInclude Include="..\src\Engine\BaseComponentSystem.h" />
+    <ClInclude Include="..\src\Engine\BaseVisitable.h" />
+    <ClInclude Include="..\src\Engine\BaseVisitor.h" />
+    <ClInclude Include="..\src\Engine\ComponentFactory.h" />
+    <ClInclude Include="..\src\Engine\dimension2d.h" />
+    <ClInclude Include="..\src\Engine\IrrlichtWindow.h" />
+    <ClInclude Include="..\src\Engine\irr_ptr.h" />
+    <ClInclude Include="..\src\Engine\LuaProperties.h" />
+    <ClInclude Include="..\src\Engine\MapProperties.h" />
+    <ClInclude Include="..\src\Engine\NativeWindow.h" />
+    <ClInclude Include="..\src\Engine\NullProperpties.h" />
+    <ClInclude Include="..\src\Engine\position2d.h" />
+    <ClInclude Include="..\src\Engine\Properties.h" />
+    <ClInclude Include="..\src\Engine\ComponentSystemFactory.h" />
+    <ClInclude Include="..\src\Engine\GameEngine.h" />
+    <ClInclude Include="..\src\Engine\GameObjectDepends.h" />
+    <ClInclude Include="..\src\Engine\InheritanceTree.h" />
+    <ClInclude Include="..\src\Engine\UpdateHandler.h" />
+    <ClInclude Include="..\src\Engine\Property.h" />
+    <ClInclude Include="..\src\Engine\quaternion.h" />
+    <ClInclude Include="..\src\Engine\RootGameObject.h" />
+    <ClInclude Include="..\src\Engine\SColor.h" />
+    <ClInclude Include="..\src\Engine\UserEvent.h" />
+    <ClInclude Include="..\src\Engine\UserEventReceiver.h" />
+    <ClInclude Include="..\src\Engine\vector3d.h" />
+    <ClInclude Include="..\src\Engine\matrix.h" />
+    <ClInclude Include="..\src\Engine\MultiComponentSystemFactory.h" />
+    <ClInclude Include="..\src\Engine\TagListener.h" />
+    <ClInclude Include="..\src\Engine\WindowEventSeizer.h" />
+    <ClInclude Include="..\src\Engine\WindowEventTransmitter.h" />
+    <ClInclude Include="..\src\Engine\WindowRenderer.h" />
+    <ClInclude Include="..\src\Engine\WindowTitleUpdater.h" />
+    <ClInclude Include="..\src\Engine\WorldObserver.h" />
+    <ClInclude Include="..\src\Engine\Message\IMessageDispatcher.h" />
+    <ClInclude Include="..\src\Engine\Message\MessageParam.h" />
+    <ClInclude Include="..\src\Engine\Message\MessageTag.h" />
+    <ClInclude Include="..\src\Engine\Message\MessageDispatcher.h" />
+    <ClInclude Include="..\src\Engine\Message\MessageListener.h" />
+    <ClInclude Include="..\src\Engine\Message\TagTree.h" />
+    <ClInclude Include="..\src\Engine\Message\TreeNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CppBase\XiAssert.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystem.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemRegistry.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\CompositeUpdateHandler.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Component.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\GameWorld.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\GameObject.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\GameScene.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Process.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Timeline.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\Transform.h" />
+    <ClInclude Include="..\src\Engine\ComponentSystem.h" />
+    <ClInclude Include="..\src\Engine\ComponentSystemRegistry.h" />
+    <ClInclude Include="..\src\Engine\CompositeUpdateHandler.h" />
+    <ClInclude Include="..\src\Engine\Component.h" />
+    <ClInclude Include="..\src\Engine\GameWorld.h" />
+    <ClInclude Include="..\src\Engine\GameObject.h" />
+    <ClInclude Include="..\src\Engine\GameScene.h" />
+    <ClInclude Include="..\src\Engine\Process.h" />
+    <ClInclude Include="..\src\Engine\Timeline.h" />
+    <ClInclude Include="..\src\Engine\Transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\GameWorld\Engine\Component.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\ComponentSystemRegistry.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\CompositeUpdateHandler.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\GameWorld.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\GameObject.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\Process.cpp" />
-    <ClCompile Include="..\src\GameWorld\Engine\Transform.cpp" />
+    <ClCompile Include="..\src\Engine\Component.cpp" />
+    <ClCompile Include="..\src\Engine\ComponentSystemRegistry.cpp" />
+    <ClCompile Include="..\src\Engine\CompositeUpdateHandler.cpp" />
+    <ClCompile Include="..\src\Engine\GameWorld.cpp" />
+    <ClCompile Include="..\src\Engine\GameObject.cpp" />
+    <ClCompile Include="..\src\Engine\Process.cpp" />
+    <ClCompile Include="..\src\Engine\Transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

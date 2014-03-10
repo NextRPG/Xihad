@@ -1,8 +1,8 @@
 #include "PushComponentVisitor.h"
-#include "LuaT\stack_ops.h"
-#include <exception>
+#include <iostream>
+#include <LuaT\stack_ops.h>
+#include <LuaT\lua_ref.h>
 #include "LuaComponent.h"
-#include "..\LuaT\lua_ref.h"
 
 using namespace xihad;
 using namespace render3d;
@@ -40,9 +40,14 @@ namespace xihad { namespace script
 		genericVisit(c);
 	}
 
+	void PushComponentVisitor::visit( audio::AudioComponent& c )
+	{
+		genericVisit(c);
+	}
+
 	bool PushComponentVisitor::handleUnkownVisitable( ngn::BaseVisitable& c )
 	{
-		// throw std::exception("unkown object");
+		std::cerr << "Visiting unknown component" << std::endl;
 		return false;
 	}
 
