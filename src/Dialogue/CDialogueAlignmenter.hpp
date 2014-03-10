@@ -82,7 +82,9 @@ namespace xihad { namespace dialogue
 
 		void wrapLine()
 		{
-			mRelativeOffsetToPrev = ngn::position2di(-mOffset.X, mCurrentLineHeight);
+			mRelativeOffsetToPrev = ngn::position2di(
+				-mOffset.X+mPrevWidth, mCurrentLineHeight);
+
 			mOffset.X = 0;
 			mOffset.Y += mCurrentLineHeight;
 			mCurrentLineHeight = 0;
@@ -93,8 +95,8 @@ namespace xihad { namespace dialogue
 		{
 			mCurrentLineHeight = std::max(mCurrentLineHeight, height);
 			mOffset.X += horizontalDistance;
-			mRelativeOffsetToPrev.X = horizontalDistance;
-			mRelativeOffsetToPrev.Y = 0;
+
+			mPrevWidth = horizontalDistance;
 		}
 
 		int insertNonEmptySection(CAlignedTextSection* section);
@@ -107,6 +109,7 @@ namespace xihad { namespace dialogue
 		ngn::dimension2di mKerningNewLine;
 
 		int mCurrentLineHeight;
+		int mPrevWidth;
 		ngn::position2di mRelativeOffsetToPrev;
 		ngn::position2di mOffset;
 		CAlignedTextSection* mDialogueHead;

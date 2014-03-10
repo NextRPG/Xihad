@@ -7,7 +7,7 @@ namespace xihad { namespace dialogue
 {
 	CDialogueAlignmenter::CDialogueAlignmenter(unsigned widthLimit, ngn::dimension2di knl) :
 		mWidthLimit(widthLimit), mKerningHeight(0), mKerningNewLine(knl),
-		mCurrentLineHeight(0), mRelativeOffsetToPrev(knl.Width, 0), 
+		mCurrentLineHeight(0), mPrevWidth(0), mRelativeOffsetToPrev(knl.Width, 0), 
 		mDialogueHead(nullptr), mCurrentLineHead(nullptr), mLastInserted(nullptr)
 	{
 	}
@@ -44,11 +44,12 @@ namespace xihad { namespace dialogue
 	int CDialogueAlignmenter::insertNonEmptySection(CAlignedTextSection* inserting)
 	{
 		int insertCount = 0;
+		ITextContent::SFillResult res;
 		while (inserting)
 		{
 			// compute alignment info for next section
 			ITextContent* content = inserting->getContent();
-			auto res = content->fillHorizontal(mWidthLimit-mOffset.X, mCurrentLineHead!=0);
+			res = content->fillHorizontal(mWidthLimit-mOffset.X, mCurrentLineHead!=0);
 
 			unsigned idx = res.splitIndex;
 			if (idx > 0)	// ++insertCount?
@@ -67,6 +68,8 @@ namespace xihad { namespace dialogue
 			onLineFilled();
 			wrapLine();
 		}
+		mRelativeOffsetToPrev.X = res.width;
+		mRelativeOffsetToPrev.Y = 0;
 
 		return insertCount;
 	}
