@@ -93,8 +93,8 @@ namespace xihad { namespace dialogue
 		{
 			mCurrentLineHeight = std::max(mCurrentLineHeight, height);
 			mOffset.X += horizontalDistance;
-			mRelativeOffsetToPrev.X = horizontalDistance;
-			mRelativeOffsetToPrev.Y = 0;
+			// mRelativeOffsetToPrev.X = horizontalDistance;
+			// mRelativeOffsetToPrev.Y = 0;
 		}
 
 		int insertNonEmptySection(CAlignedTextSection* section);

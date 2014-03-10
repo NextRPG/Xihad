@@ -62,19 +62,5 @@
 			<Property name="NormalTextColour" value="FFFFFFFF" />
 		</Window>
 	</Window>
-
-	<Window name="Test" type="Generic/Label">
-		<Property name="Position" value="{{0.1, 0}, {0.5, 0}}" />
-		<Property name="NormalTextColour" value="FF000000" />
-		<Property name="Size" value="{{0.8, 0}, {0.5, 0}}" />
-		<Property name="Text" value="时间段" />
-	</Window>
-	<Window name="testbutton" type="TaharezLook/Button">
-		<Property name="Text" value="wuzhiqiangsb"/>
-	</Window>
-	<Window name="testbox" type="TaharezLook/Editbox">
-		<Property name="Text" value="wuzhiqiangsb"/>
-		<Property name="Position" value="{{0.1, 0}, {0.5, 0}}" />
-	</Window>
 </Window>
 </GUILayout>

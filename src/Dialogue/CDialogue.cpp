@@ -16,6 +16,7 @@ namespace xihad { namespace dialogue
 		mLastTriggerEvent = mEvents.begin();
 
 		mTextElements.swap(elements);
+		mVisibility = beginVisibility();
 	}
 
 	CDialogue::~CDialogue()
@@ -63,7 +64,7 @@ namespace xihad { namespace dialogue
 			return;
 		}
 
-		std::for_each(end, bgn, fnc);
+		std::for_each(bgn, end, fnc);
 
 		if (pVisibility.endElement != mTextElements.begin())
 		{

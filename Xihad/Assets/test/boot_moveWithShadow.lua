@@ -73,6 +73,3 @@ lightComp:castShadow(true)
 lightComp:setType "point"
 sun:concatRotate(math3d.vector(90, 0, 0))
 sun:concatTranslate(math3d.vector(20, 30, -5))
-
-local guisystem = CEGUI.System:getSingleton()
-guisystem:executeScriptFile("MySample.lua")

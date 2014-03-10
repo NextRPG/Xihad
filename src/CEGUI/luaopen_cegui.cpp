@@ -16,7 +16,7 @@ static int createGUI(lua_State* L)
 	luaT_variable(L, 1, NativeWindow*, wnd);
 	if (IrrlichtWindow* irrWnd = dynamic_cast<IrrlichtWindow*>(wnd))
 	{
-		CeguiHandle* handle = new CeguiHandle;
+		CEGUIHandle* handle = new CEGUIHandle;
 		irr::IrrlichtDevice* device = irrWnd->getIrrDevice();
 		handle->initialise(device, L);
 

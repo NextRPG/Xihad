@@ -4,22 +4,6 @@ require "cegui"
 cursor:setVisible(false)
 local guiUpdater = createCEGUIUpdateHandler(engine:getWindow())
 scene:appendUpdateHandler(guiUpdater)
-scene:pushController({
-		onMouseEvent = function(self, event, arg)
-			print (event.type)
-			if event.type == "lDoubleClick" then
-				print("Double click, Processed")
-				return 0
-			elseif event.type == "rPressed" then
-				print("right clicked, but I'm not into it")
-				return -1
-			end
-			
-			return 1
-		end
-	})
-
-
 scene:pushController(guiUpdater:getEventReceiver())
 
 local sm = CEGUI.System:getSingleton()
@@ -35,3 +19,12 @@ context:setRootWindow(root)
 context:setDefaultFont(CEGUI.FontManager:getSingleton():get("simhei-14"))
 context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
+local animMgr = CEGUI.AnimationManager:getSingleton()
+animMgr:loadAnimationsFromXML("Xihad.anims")
+
+local textFadeIn = animMgr:instantiateAnimation(animMgr:getAnimation("TextFadeIn"))
+textFadeIn:setTargetWindow(root:getChild("AttackDamageLabel"))
+local frameLighter = animMgr:instantiateAnimation(animMgr:getAnimation("FrameLighter"))
+frameLighter:setTargetWindow(root:getChild("CharacterAttributeWindow"))
+local frameDarker = animMgr:instantiateAnimation(animMgr:getAnimation("FrameDarker"))
+frameDarker:setTargetWindow(root:getChild("CharacterAttributeWindow"))

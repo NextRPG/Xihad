@@ -36,7 +36,7 @@ namespace xihad { namespace dialogue
 
 	void CAlignedDialogueBuilder::reset()
 	{
-		mAlignmenter.reset();
+		mAlignmenter->reset();
 		CBaseDialogueBuilder::reset();
 	}
 

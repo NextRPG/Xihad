@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Xihad\CreateDevice.cpp" />
+    <ClCompile Include="..\src\Xihad\GUITest.cpp" />
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp" />
     <ClCompile Include="..\src\Xihad\IrrlichtTest.cpp" />
     <ClCompile Include="..\src\Xihad\LoadSceneFile.cpp" />
@@ -64,7 +65,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs;../Debug;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CEGUIBasedDialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CEGUI.lib;CEGUIBasedDialogue.lib;Dialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

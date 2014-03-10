@@ -15,7 +15,7 @@
     <ClCompile Include="..\src\CEGUIBasedDialogue\CPlainTextContent.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CPlainTextElement.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CTickAll.cpp" />
-    <ClCompile Include="..\src\CEGUIBasedDialogue\CTickByWord.cpp" />
+    <ClCompile Include="..\src\CEGUIBasedDialogue\CTickByLetter.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueParser.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -23,7 +23,7 @@
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextContent.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextElement.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CTickAll.h" />
-    <ClInclude Include="..\src\CEGUIBasedDialogue\CTickByWord.h" />
+    <ClInclude Include="..\src\CEGUIBasedDialogue\CTickByLetter.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueParser.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\ITypedContent.h" />
   </ItemGroup>

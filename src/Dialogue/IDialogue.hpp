@@ -22,8 +22,13 @@ namespace xihad { namespace dialogue
 			{
 			}
 
-			TextElements::const_iterator endElement;
-			LetterIter endLetter;
+			bool operator==(const SDialogueVisibility& other) const
+			{
+				return endElement == other.endElement && endLetter == other.endLetter;
+			}
+
+			TextElements::const_iterator endElement;	// after current visible element
+			LetterIter endLetter;						// after current visible letter
 		};
 
 	public:

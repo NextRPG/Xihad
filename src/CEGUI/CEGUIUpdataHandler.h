@@ -9,11 +9,11 @@ namespace xihad { namespace ngn
 
 namespace xihad { namespace cegui
 {
-	class CeguiHandle;
+	class CEGUIHandle;
 	class CEGUIUpdateHandler : public ngn::UpdateHandler
 	{
 	public:
-		explicit CEGUIUpdateHandler(CeguiHandle* handle);
+		explicit CEGUIUpdateHandler(CEGUIHandle* handle);
 
 		ngn::UserEventReceiver* getEventReceiver() { return eventReceiver.get(); }
 
@@ -27,7 +27,7 @@ namespace xihad { namespace cegui
 		virtual void onStop();
 
 	private:
-		CeguiHandle* ceguiHandle;
+		CEGUIHandle* ceguiHandle;
 		irr_ptr<ngn::UserEventReceiver> eventReceiver;
 	};
 }}

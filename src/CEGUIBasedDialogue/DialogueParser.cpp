@@ -10,7 +10,8 @@
 
 #include "CDialogueContext.h"
 #include "CPlainTextContent.h"
-#include "CTickByWord.h"
+#include "CTickByLetter.h"
+#include <assert.h>
 
 using namespace CEGUI;
 namespace xihad { namespace dialogue
@@ -26,13 +27,10 @@ namespace xihad { namespace dialogue
 		if (!schemeMgr.isDefined("Generic")) schemeMgr.createFromFile("Generic.scheme");
 		if (!schemeMgr.isDefined("Xihad")) schemeMgr.createFromFile("Xihad.scheme");
 
-		//
-		Window* root = WindowManager::getSingleton().loadLayoutFromFile("MySample.layout");
 		GUIContext& context = System::getSingleton().getDefaultGUIContext();
-		context.setDefaultFont("simhei-14");
-		//
+		Window* root = context.getRootWindow();
+		assert(root);
 
-		context.setRootWindow(root);
 		mBaseWindow = root->createChild("Xihad/Frame");
 		mBaseWindow->setProperty("Position", "{{0, 0}, {0.5, 0}}");
 		mBaseWindow->setProperty("Size", "{{1, 0}, {0.5, 0}}");
@@ -62,7 +60,7 @@ namespace xihad { namespace dialogue
 		content->drop();
 
 		IDialogue* dialog = mBuilder->build();
-		ITickMethod* tickMethod = new CTickByWord(*dialog, 0.2f);
+		ITickMethod* tickMethod = new CTickByLetter(*dialog, 0.2f);
 		dialog->setTickMethod(tickMethod);
 		tickMethod->drop();
 

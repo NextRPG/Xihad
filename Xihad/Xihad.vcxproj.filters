@@ -20,6 +20,7 @@
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Xihad\GUITest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Xihad\CreateDevice.h">

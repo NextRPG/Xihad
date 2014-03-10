@@ -4,12 +4,12 @@
 namespace xihad { namespace dialogue
 {
 	class IDialogue;
-	class CTickByWord : public CBaseTickMethod
+	class CTickByLetter : public CBaseTickMethod
 	{
 	public:
-		explicit CTickByWord(IDialogue& target, float standardCycle, float initSpeed = 1.0f);
+		explicit CTickByLetter(IDialogue& target, float standardCycle, float initSpeed = 1.0f);
 
-		virtual ~CTickByWord();
+		virtual ~CTickByLetter();
 
 	protected:
 		virtual bool onTick() override;
