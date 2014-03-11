@@ -24,6 +24,16 @@ require "Consts"
 require "LuaUtils"
 require "math3d"
 
+scene:requireSystem(c"Render")	-- load Irrlicht render component system
+local colorMesh = geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
+meshManager:takeMesh("@colorCube", colorMesh)
+local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
+meshManager:takeMesh("@chessboardCube", cubeMesh)
+-- meshManager:takeMesh(id, mesh) 
+-- 等价于
+-- meshManager:addMesh(id, mesh); 	mesh:drop()
+
+
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
 local AIManager = require "AIManager"
@@ -42,9 +52,6 @@ local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 local heros = dofile(CUR_DIR .. "\\Save\\Save1.hero")
 
 
-geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
-
-
 -- init battle related manager
 Chessboard:init(battle.chessboard)
 HeroManager:init(battle.heros, heros)
@@ -57,19 +64,6 @@ CameraManager:init()
 LightManager:init()
 
 -- init Controller
-scene:pushController(require("InputController"))
-
-cursor:setVisible(true)
-
-local root = scene:findObject(c"__ROOT__")
-local bgmPlayer = root:appendComponent(c"Audio")
-bgmPlayer:playMusic("Assets/mfx/dance.ogg")
-
--- root:appendUpdateHandler({ 
--- 	onUpdate = function(self)
--- 	if Time.global >= 5 then
--- 		bgmPlayer:stopAudio()
--- 		bgmPlayer:playSound("Assets/mfx/appear.ogg")
--- 		self:stop()
--- 	end
--- end})
+local gameController = require("InputController")
+scene:pushController(gameController) 
+gameController:drop()

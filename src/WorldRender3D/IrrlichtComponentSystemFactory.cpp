@@ -39,23 +39,22 @@ namespace xihad { namespace render3d
 
 	ngn::ComponentSystem* IrrlichtComponentSystemFactory::createMainSystem(ngn::GameScene* scene)
 	{
-		scene::ISceneManager* irrScene = mDevice->getSceneManager();
+		scene::ISceneManager* newScene = mDevice->getSceneManager()->createNewSceneManager(false);
 
-		// Don't add ref in the constructor, because create function
-		// have already added a ref
-		irr_ptr<scene::ISceneManager> newScene(irrScene->createNewSceneManager(false), false);
-
+		// TODO remove the initialize process
 		float ambient = .3f;
 		newScene->setAmbientLight(video::SColorf(ambient, ambient, ambient));
 		newScene->setShadowColor(video::SColor(60,0,0,0));
 		
-		if (scene->hasSystem("Lua"))
+		auto sys = new IrrlichtComponentSystem(mDevice.get(), newScene, *this, mCachedClips);
+		if (sys && scene->hasSystem("Lua"))
 		{
 			auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
-			luaopen_All(mDevice.get(), newScene.get(), lcs->getLuaState());
+			luaopen_All(mDevice.get(), sys, lcs->getLuaState());
 		}
 
-		return new IrrlichtComponentSystem(mDevice.get(), newScene.get(), *this, mCachedClips);
+		newScene->drop();
+		return sys;
 	}
 
 }}

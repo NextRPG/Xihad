@@ -17,8 +17,8 @@
 #include "BillboardComponent.h"
 #include <boost\property_tree\json_parser.hpp>
 #include "ParticleSystemComponent.h"
-#include <unordered_map>
-#include <luaT\luaT.h>
+#include "TextureManager.h"
+#include "MeshManager.h"
 
 using namespace xihad::ngn;
 using namespace irr;
@@ -28,21 +28,22 @@ using namespace std;
 using namespace boost;
 namespace xihad { namespace render3d
 {
-	struct IrrlichtComponentSystemImpl
+	struct IrrlichtComponentSystem::impl
 	{
 		irr_ptr<IrrlichtDevice> device;
 		irr_ptr<IVideoDriver> driver;
 		irr_ptr<ISceneManager> smgr;
 		AnimationClipsCache* clipCaches;
+		boost::scoped_ptr<TextureManager> texManager;
+		boost::scoped_ptr<MeshManager> meshManager;
 
 		list<RenderComponent*> renderComponents;
-		unordered_map<string, luaT::LuaRef> particleSystemCreator;
 	};
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
 		IrrlichtDevice* device, ISceneManager* scene, 
 		const InheritanceTree& tree, AnimationClipsCache& gCache) :
-	BaseComponentSystem(tree), mImpl(new IrrlichtComponentSystemImpl)
+	BaseComponentSystem(tree), mImpl(new impl)
 	{
 		xassert(device);
 		xassert(scene);
@@ -51,6 +52,9 @@ namespace xihad { namespace render3d
 		mImpl->driver = device->getVideoDriver();
 		mImpl->smgr = scene;
 		mImpl->clipCaches = &gCache;
+
+		mImpl->texManager.reset(new TextureManager(*device->getVideoDriver()));
+		mImpl->meshManager.reset(new MeshManager(*scene));
 	}
 
 	IrrlichtComponentSystem::~IrrlichtComponentSystem()
@@ -67,7 +71,7 @@ namespace xihad { namespace render3d
 		{
 			IMesh* mesh = nullptr;
 			if (const char* path = param.getString("mesh"))
-				mesh = smgr->getMesh(path);
+				mesh = mImpl->meshManager->getMesh(path);
 
 			vector3df zero(0, 0, 0), one(1, 1, 1);
 			IMeshSceneNode* meshNode = 
@@ -96,7 +100,11 @@ namespace xihad { namespace render3d
 		{
 			IAnimatedMesh* mesh = nullptr;
 			if (const char* path = param.getString("mesh"))
-				mesh = smgr->getMesh(path);
+			{
+				// TODO 未做任何检测，因为 Irrlicht 的 IMesh API 设计问题。
+				// 将来引入自己的 MeshCache 来解决这一问题。
+				mesh = static_cast<IAnimatedMesh*>(mImpl->meshManager->getMesh(path));
+			}
 
 			if (mesh)
 			{
@@ -216,6 +224,16 @@ namespace xihad { namespace render3d
 	irr::scene::ISceneManager* IrrlichtComponentSystem::getSceneManager()
 	{
 		return mImpl->smgr.get();
+	}
+
+	TextureManager* IrrlichtComponentSystem::getTextureManager()
+	{
+		return mImpl->texManager.get();
+	}
+
+	MeshManager* IrrlichtComponentSystem::getMeshManager()
+	{
+		return mImpl->meshManager.get();
 	}
 
 }}

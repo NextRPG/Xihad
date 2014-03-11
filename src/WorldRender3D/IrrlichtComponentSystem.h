@@ -10,12 +10,14 @@ namespace irr
 	namespace scene
 	{
 		class ISceneManager;
+		class IMesh;
 	}
 }
 
 namespace xihad { namespace render3d
 {
-	struct IrrlichtComponentSystemImpl;
+	class MeshManager;
+	class TextureManager;
 	class IrrlichtComponentSystem : public ngn::BaseComponentSystem
 	{
 	public:
@@ -36,8 +38,17 @@ namespace xihad { namespace render3d
 
 		irr::scene::ISceneManager* getSceneManager();
 
+		TextureManager* getTextureManager();
+		MeshManager* getMeshManager();
+
+		void setShadowColor();
+		void setAmbientColor();
+		void getTexture();
+		void setViewport();
+
 	private:
-		boost::scoped_ptr<IrrlichtComponentSystemImpl> mImpl;
+		struct impl;
+		boost::scoped_ptr<impl> mImpl;
 	};
 }}
 

@@ -54,9 +54,9 @@ int launchScript(int argc, const char** argv)
 
 		engine->getWorld()->setScene(scene);
 		engine->launch();
-		delete engine;
 	}
 	
+	delete engine;
 	wnd->drop();
 	device->drop();
 	destroySystems();

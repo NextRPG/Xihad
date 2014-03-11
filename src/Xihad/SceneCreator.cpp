@@ -14,10 +14,10 @@ namespace xihad
 		GameScene* scene = new GameScene;
 		auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
 		
-		if (!scene->requireSystem("Render"))
-		{
-			cerr << "Error to load Render system" << endl;
-		}
+// 		if (!scene->requireSystem("Render"))
+// 		{
+// 			cerr << "Error to load Render system" << endl;
+// 		}
 
 		lua_State* L = lcs->getLuaState();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))

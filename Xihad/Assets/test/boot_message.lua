@@ -42,6 +42,6 @@ local dispatcher = scene:getDispatcher()
 local go = scene:createObject(c"sb")
 local lm = go:appendComponent(c"ListenerManager")
 
-dispatcher:dispatch("test.a", "msg param", c"__ROOT__", 0.1)
-dispatcher:dispatch("test.a", { param = "second" }, c"__ROOT__", 0.15)
+dispatcher:dispatch("test.a", "msg param", c"root", 0.1)
+dispatcher:dispatch("test.a", { param = "second" }, c"root", 0.15)
 print("message deliverd");

@@ -16,18 +16,12 @@ namespace xihad { namespace ngn
 
 	void UserEventReceiverStack::pushReceiver( UserEventReceiver* recv )
 	{
-		if (recv)
-		{
-			assert(recv->getReferenceCount() >= 1 && 
-				"When you create a new UserEventReceiver, you shouldn't drop it.");
-			receivers.push_front(recv);
-		}
+		if (recv) receivers.push_front(recv);
 	}
 
 	UserEventReceiver* UserEventReceiverStack::popReceiver()
 	{
 		UserEventReceiver* first = receivers.front().get();
-		assert(first->getReferenceCount() >= 1);
 		receivers.pop_front();
 		return first;
 	}

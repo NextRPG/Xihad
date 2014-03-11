@@ -80,10 +80,12 @@
     <ClInclude Include="..\src\WorldRender3D\Geometry.h" />
     <ClInclude Include="..\src\WorldRender3D\LightComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\MeshComponent.h" />
+    <ClInclude Include="..\src\WorldRender3D\MeshManager.h" />
     <ClInclude Include="..\src\WorldRender3D\ParticleSystemComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\RenderComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystem.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.h" />
+    <ClInclude Include="..\src\WorldRender3D\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\AnimatedMeshComponent.cpp" />
@@ -93,6 +95,7 @@
     <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_resourceManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SceneCollisionManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Cursor.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Geometry.cpp" />
@@ -100,10 +103,12 @@
     <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\MeshManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ParticleSystemComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\RenderComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\TextureManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

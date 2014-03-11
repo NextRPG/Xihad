@@ -17,8 +17,6 @@ using namespace xihad::render3d;
 using namespace irr::video;
 using namespace irr::scene;
 
-luaT_defMetaData(IMesh, true);
-luaT_defMetaData(IAnimatedMesh, false);
 luaT_defMetaData(RenderComponent, true);
 luaT_defMetaData(AnimatedMeshComponent, false);
 luaT_defMetaData(MeshComponent, false);
@@ -261,9 +259,6 @@ namespace xihad { namespace render3d
 
 	int luaopen_render3dComponents( lua_State* L )
 	{
-		MetatableFactory<IMesh>::createNull(L);
-		MetatableFactory<IAnimatedMesh, IMesh>::createNull(L);
-
 		luaT_defRegsBgn(renderRegs)
 			luaT_mnamedfunc(RenderComponent, isCulled),
 			luaT_mnamedfunc(RenderComponent, setVisible),

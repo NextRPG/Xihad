@@ -22,7 +22,7 @@ cameraObject:concatTranslate(math3d.vector(0, 8, -25))
 
 
 ----- BGM
--- local root = scene:findObject(c"__ROOT__")
+-- local root = scene:findObject(c"root")
 -- local bgmPlayer = root:appendComponent(c"Audio")
 -- bgmPlayer:playMusic("Assets/mfx/bbb.ogg")
 

@@ -21,46 +21,37 @@
 using namespace std;
 namespace xihad { namespace ngn
 {
-	const GameObject::Identifier GameScene::sRootObjectID = "__ROOT__";
+	const GameObject::Identifier GameScene::sRootObjectID = "root";
 
 	typedef GameObject::Identifier Identifier;
 	typedef GameObject::Tag Tag;
 	typedef unordered_map<Tag, std::list<GameObject*>> TaggedObjectsMap;
 	typedef unordered_map<Identifier, GameObject*> IdentifiedObjectsMap;
 	typedef unordered_map<std::string, ComponentSystem*> CompSystemMap;
-	struct GameScene::impl
+
+	struct GameScene::impl : public GameObjectDepends
 	{
-		// systemData can be RenderEngine, PhysicsEngine or AudioEngine;
-		int managedObjectId;
-		CompSystemMap compSystems;
-		GameObjectDepends depends;
+		// 1st child updater in GameScene
 		GameScene::Dispatcher* dispatcher;
 
+		// 2nd child updater in GameScene
+		CompositeUpdateHandler* systemUpdater;
+		CompSystemMap compSystems;
+
+		// 3rd child updater in GameScene
 		GameObject* rootObject;
 		IdentifiedObjectsMap sceneObjects;
 		TaggedObjectsMap taggedObjects;
+		int managedObjectId;
 
-		CompositeUpdateHandler& systemUpdater;
+		UserEventReceiverStack* receiverStack;
 
-		xptr<UserEventReceiverStack> receiverStack;
-
-		GameScene::impl() : 
-			managedObjectId(0), 
-			rootObject(new RootGameObject(&depends, GameScene::sRootObjectID)),
-			systemUpdater(*new CompositeUpdateHandler),
-			receiverStack(new UserEventReceiverStack, false)
+		GameScene::impl() : dispatcher(nullptr),
+			systemUpdater(new CompositeUpdateHandler),
+			rootObject(0), managedObjectId(0), 
+			receiverStack(new UserEventReceiverStack)
 		{
-			sceneObjects[GameScene::sRootObjectID] = rootObject;
-		}
-
-		TagListener*& tagListener()
-		{
-			return depends.listener;
-		}
-
-		ComponentFactory*& factory()
-		{
-			return depends.factory;
+			sceneObjects[sRootObjectID] = rootObject;
 		}
 	};
 
@@ -139,26 +130,32 @@ namespace xihad { namespace ngn
 
 	GameScene::GameScene() : mImpl(new impl)
 	{
-		mImpl->tagListener() = createTagListener(mImpl->taggedObjects);
-		mImpl->factory() = createComponentFactory(this, mImpl->compSystems);
-		mImpl->depends.scene = this;
+		XIHAD_MLD_NEW_OBJECT;
 
+		mImpl->listener = createTagListener(mImpl->taggedObjects);
+		mImpl->factory = createComponentFactory(this, mImpl->compSystems);
+		mImpl->scene = this;
+
+		// 1st
 		mImpl->dispatcher = new MessageDispatcher<GameObject, GameScene, MessageListener>(*this);
-		mImpl->systemUpdater.appendChildHandler(mImpl->dispatcher);
-		this->appendChildHandler(&mImpl->systemUpdater);
+		this->appendChildHandler(mImpl->dispatcher);
+
+		// 2nd
+		this->appendChildHandler(mImpl->systemUpdater);
+
+		// 3rd
+		mImpl->rootObject = new RootGameObject(mImpl.get(), sRootObjectID);
 		this->appendChildHandler(mImpl->rootObject);
 
-		XIHAD_MLD_NEW_OBJECT;
+		// Ok, wait for the rest updater
 	}
 
 	GameScene::~GameScene()
 	{
 		// clear mImpl->depends
-		delete mImpl->factory();
-		delete mImpl->tagListener();
-		mImpl->depends.scene = 0;
-
-		delete mImpl;
+		delete mImpl->factory;
+		delete mImpl->listener;
+		mImpl->scene = 0;
 
 		XIHAD_MLD_DEL_OBJECT;
 	}
@@ -191,7 +188,7 @@ namespace xihad { namespace ngn
 			StdMap::containsKey(mImpl->sceneObjects, id))
 			return nullptr;
 
-		GameObject* obj = new GameObject(&mImpl->depends, id);
+		GameObject* obj = new GameObject(mImpl.get(), id);
 		obj->setParent(parent ? parent : getRootObject());
 
 		++mImpl->managedObjectId;
@@ -210,8 +207,8 @@ namespace xihad { namespace ngn
 			(sys = factory->create(this, systemName)))
 		{
 			mImpl->compSystems[systemName] = sys;
-			if (!mImpl->systemUpdater.containsChildHandler(sys))
-				mImpl->systemUpdater.appendChildHandler(sys);
+			if (!mImpl->systemUpdater->containsChildHandler(sys))
+				mImpl->systemUpdater->appendChildHandler(sys);
 		}
 
 		return sys;
@@ -257,6 +254,15 @@ namespace xihad { namespace ngn
 	UserEventReceiverStack& GameScene::getControllerStack()
 	{
 		return *mImpl->receiverStack;
+	}
+
+	void GameScene::onDestroy()
+	{
+		// Destroy everything that may use lua_State before CompositeUpdateHandler::onDestroy()
+		mImpl->receiverStack->drop();
+		mImpl->receiverStack = 0;
+
+		CompositeUpdateHandler::onDestroy();
 	}
 
 }}

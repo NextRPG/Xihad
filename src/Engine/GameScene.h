@@ -1,5 +1,6 @@
 #pragma once
 #include "CompositeUpdateHandler.h"
+#include <boost/scoped_ptr.hpp>
 #include <list>
 #include "GameObject.h"
 #include "Message\IMessageDispatcher.h"
@@ -87,6 +88,8 @@ namespace xihad { namespace ngn
 		virtual UserEventReceiverStack& getControllerStack();
 
 	protected:	// Avoid delete
+		virtual void onDestroy();
+
 		virtual ~GameScene();
 
 	private:
@@ -95,7 +98,7 @@ namespace xihad { namespace ngn
 
 	private:
 		struct impl;
-		impl* mImpl;
+		boost::scoped_ptr<impl> mImpl;
 	};
 }}
 

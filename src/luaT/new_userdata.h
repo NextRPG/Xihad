@@ -8,8 +8,18 @@ namespace luaT {
 
 	struct UserdataAllocator
 	{
-		static void* allocate(lua_State* L, size_t size, const char* mtName);
+		template<typename T>
+		static void makeInstance(lua_State* L, int idx, T* ptr)
+		{
+			idx = normalIndex(L, idx);
+			lua_pushlightuserdata(L, ptr);
+			lua_setfield(L, idx, ReservedKeyword::__UDKEY);
+			Metatable::bind<T>(L, idx);
+		}
+
 		static void allocate_for_ptr(lua_State* L, void* ptr, const char* mtName);
+
+		static void* allocate(lua_State* L, size_t size, const char* mtName);
 	};
 
 	/************************************************************************/

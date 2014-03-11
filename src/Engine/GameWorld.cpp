@@ -72,11 +72,9 @@ namespace xihad { namespace ngn
 
 	void GameWorld::stop()
 	{
-		if (mImpl->scene && mImpl->scene->stop())
-		{
-			mImpl->timeline.reset(0.0f); 
-			// TODO: any more operation?
-		}
+		GameScene* prev = setScene(0);
+		mImpl->timeline.reset(0.0f);
+		if (prev) prev->destroy();
 	}
 
 	GameScene* GameWorld::getScene() const

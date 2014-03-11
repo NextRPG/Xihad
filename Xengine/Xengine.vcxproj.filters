@@ -226,10 +226,14 @@
     <ClInclude Include="..\src\Engine\Message\TreeNode.h">
       <Filter>Broadcast</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\MemoryLeakDetector.h" />
-    <ClInclude Include="..\src\Engine\xptr.h" />
     <ClInclude Include="..\src\Engine\TagListener.h">
       <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\xptr.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\MemoryLeakDetector.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +321,8 @@
     <ClCompile Include="..\src\Engine\UpdateHandler.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp" />
+    <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -34,10 +34,15 @@ namespace xihad { namespace script
 	{
 		Dispatcher* dsptch = checkarg<Dispatcher*>(L, 1);
 		const char* tag = checkarg<const char*>(L, 2);
-		luaL_checktype(L, 3, LUA_TTABLE);
-		MessageListener* lis = new LuaMessageListener(LuaRef::fromIndex(L, 3));
-		dsptch->addListener(std::string(tag), lis);
 
+		MessageListener* lis;
+		if ((lis = checkarg<MessageListener*>(L, 3)) == 0)
+		{
+			luaL_checktype(L, 3, LUA_TTABLE);
+			lis = new LuaMessageListener(LuaRef::fromIndex(L, 3));
+		}
+		
+		dsptch->addListener(std::string(tag), lis);
 		return 0;
 	}
 

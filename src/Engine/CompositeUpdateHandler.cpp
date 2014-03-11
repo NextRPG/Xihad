@@ -70,7 +70,7 @@ namespace xihad { namespace ngn
 			size_t sizeBeforeDestroy = mChildHandlerList.size();
 			(*riter)->destroy();
 			xassert(sizeBeforeDestroy == mChildHandlerList.size() && 
-				"UpdateHandler's destroy() function shouldn't remoe self from CompositeUpdateHandler's childrenList");
+				"UpdateHandler's destroy() function shouldn't remove self from CompositeUpdateHandler's childrenList");
 #else
 			(*riter)->destroy();
 #endif

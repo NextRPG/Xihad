@@ -36,7 +36,7 @@ namespace xihad { namespace script
 		return 1;
 	}
 
-	static int eachObjectWithTag(lua_State* L)
+	static int objectsWithTag(lua_State* L)
 	{
 		GameScene* scene = checkarg<GameScene*>(L, 1);
 		const char* tag = checkarg<const char*>(L, 2);
@@ -55,7 +55,17 @@ namespace xihad { namespace script
 		return 3;
 	}
 
-	static int sceneCreateObject(lua_State* L)
+	static int requireSystem(lua_State* L)
+	{
+		GameScene* scene = checkarg<GameScene*>(L, 1);
+		const std::string& sys = checkarg<const std::string&>(L, 2);
+		scene->requireSystem(sys);
+
+		// TODO return system
+		return 0;
+	}
+
+	static int createObject(lua_State* L)
 	{
 		luaL_checkany(L, 2);
 		GameScene* scene = checkarg<GameScene*>(L, 1);
@@ -72,7 +82,7 @@ namespace xihad { namespace script
 		return 1;
 	}
 	
-	static int sceneCreateUniqueObject(lua_State* L)
+	static int createUniqueObject(lua_State* L)
 	{
 		GameScene* scene = checkarg<GameScene*>(L, 1);
 		std::string& header = checkarg<std::string&>(L, 2);
@@ -92,7 +102,7 @@ namespace xihad { namespace script
 		push<GameObject*>(L, obj);
 		return 1;
 	}
-	static int scenePushController(lua_State* L)
+	static int pushController(lua_State* L)
 	{
 		luaL_checkany(L, 2);
 		GameScene* scene = checkarg<GameScene*>(L, 1);
@@ -108,31 +118,28 @@ namespace xihad { namespace script
 		return 0;
 	}
 
-	luaT_static UserEventReceiver* scenePopController(GameScene* scene)
+	luaT_static UserEventReceiver* popController(GameScene* scene)
 	{
 		return scene->getControllerStack().popReceiver();
-	}}
-
-	luaT_static bool drop(UserEventReceiver* rec)
-	{
-		return rec->drop();
 	}}
 
 	int luaopen_GameScene( lua_State* L )
 	{
 		luaT_defRegsBgn(receiver)
-			luaT_cnamedfunc(drop),
+			luaT_cnnamefunc(intrusive_ptr_release<UserEventReceiver>, drop),
+			luaT_cnnamefunc(intrusive_ptr_add_ref<UserEventReceiver>, grab),
 		luaT_defRegsEnd
 		MetatableFactory<UserEventReceiver>::create(L, receiver);
 
 		luaT_defRegsBgn(sceneRegs)
-			{ "objectsWithTag", eachObjectWithTag },
+			luaT_lnamedfunc(requireSystem),
+			luaT_lnamedfunc(objectsWithTag),
+			luaT_lnamedfunc(createObject),
+			luaT_lnamedfunc(createUniqueObject),
+			luaT_lnamedfunc(pushController),
+			luaT_cnamedfunc(popController),
 			luaT_mnamedfunc(GameScene, findObject), 
 			luaT_mnamedfunc(GameScene, getDispatcher),
-			{ "createObject", sceneCreateObject },
-			{ "createUniqueObject", sceneCreateUniqueObject },
-			{ "pushController", scenePushController },
-			{ "popController", luaT_cfunction(scenePopController) },
 		luaT_defRegsEnd
 		MetatableFactory<GameScene, CompositeUpdateHandler>::create(L, sceneRegs, 0);
 

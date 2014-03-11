@@ -3,19 +3,11 @@
 #include <LuaT/luaT.h>
 #include "Engine/GameScene.h"
 #include "LuaScriptMacro.h"
-#include <irrlicht/IrrlichtDevice.h>
-
-#include <irrlicht/ISceneManager.h>
-#include <irrlicht/ISceneCollisionManager.h>
-#include "WorldRender3D/IrrlichtComponentSystem.h"
-#include "WorldRender3D/Geometry.h"
 
 #include "Export/luaopen_all.h"
-#include "Engine/IrrlichtWindow.h"
 #include "Engine/GameEngine.h"
 
 using namespace xihad::ngn;
-using namespace xihad::render3d;
 using namespace std;
 using namespace luaT;
 using namespace irr;
@@ -44,7 +36,6 @@ namespace xihad { namespace script
 	void LuaComponentSystemFactory::initScriptEnv(GameScene* scene, lua_State* L)
 	{
 		NativeWindow* wnd = mEngine->getWindow();
-		IrrlichtDevice* dev = (static_cast<IrrlichtWindow*>(wnd))->getIrrDevice();
 
 		{
 			StackMemo memo(L);

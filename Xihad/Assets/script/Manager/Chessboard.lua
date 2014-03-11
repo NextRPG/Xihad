@@ -46,10 +46,9 @@ end
 -- @tparam Tile tile
 -- @treturn Object tileObject
 function Chessboard:createTile( tile )
-	local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
 	local tileObject = scene:createObject(c(tname(tile)))
-	fcomp = tileObject:appendComponent(c"Mesh")
-	fcomp:setMesh(cubeMesh)
+	local fcomp = tileObject:appendComponent(c"Mesh")
+	fcomp:setMesh(meshManager:getMesh("@chessboardCube"))
 	fcomp:createSelector(c"stupid") 
 	tileObject:appendComponent(c"Tile", tile)
 	resetColor(tileObject)
