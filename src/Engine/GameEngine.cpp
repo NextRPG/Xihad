@@ -69,8 +69,9 @@ namespace xihad { namespace ngn
 
 	bool GameEngine::launch()
 	{
-		// Avoid reentrant
-		if (isRunning()) return false;
+		// Avoid reentrant and restart
+		if (isRunning() || mImpl->status == STOPPED) 
+			return false;
 
 		getWorld()->start();	// All updaters should be start before running.
 		mImpl->status = RUNNING;
@@ -99,12 +100,11 @@ namespace xihad { namespace ngn
 
 	bool GameEngine::stop()
 	{
-		if (mImpl->status == RUNNING)
-		{
-			mImpl->status = STOPPED;
-		}
+		if (mImpl->status == INITIALIZED)
+			mImpl->window->close();
 
-		return mImpl->status == STOPPED;
+		mImpl->status = STOPPED;
+		return true;
 	}
 
 	GameWorld* GameEngine::getWorld()
