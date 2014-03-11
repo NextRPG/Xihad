@@ -9,13 +9,6 @@ using namespace xihad::render3d;
 using namespace luaT;
 using namespace irr;
 using namespace scene;
-
-luaT_defMetaData(TextureManager::Texture, false);
-luaT_defMetaData(TextureManager, false);
-luaT_defMetaData(MeshManager::Mesh, true);
-luaT_defMetaData(IAnimatedMesh, false);
-luaT_defMetaData(MeshManager, false);
-
 namespace xihad { namespace render3d
 {
 	luaT_static void takeMesh(MeshManager* mm, const char* id, IMesh* mesh)

@@ -7,8 +7,7 @@ using namespace xihad::ngn;
 using namespace luaT;
 namespace xihad { namespace script
 {
-	LuaUpdateHandler::LuaUpdateHandler(LuaRef& table) :
-		mLuaObjectRef(table)
+	LuaUpdateHandler::LuaUpdateHandler(LuaRef& table) : mLuaObjectRef(table)
 	{
 		lua_State* L = table.getState();
 		StackMemo memo(L);

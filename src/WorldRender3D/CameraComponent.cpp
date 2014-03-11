@@ -1,17 +1,67 @@
 #include "CameraComponent.h"
-#include "irrlicht/ICameraSceneNode.h"
-#include "irrlicht/ISceneManager.h"
-#include "Engine/GameObject.h"
+#include <irrlicht/ICameraSceneNode.h>
+#include <irrlicht/ISceneManager.h>
+#include <irrlicht/IVideoDriver.h>
+#include <CppBase/xassert.h>
+#include <iostream>
 
+using namespace std;
+using namespace irr::video;
 using namespace irr::scene;
 using namespace xihad::ngn;
 namespace xihad { namespace render3d
 {
-	CameraComponent::CameraComponent( const std::string& name, 
-		ngn::GameObject& host, irr::scene::ICameraSceneNode* node ) :
-		RenderComponent(name, host, node)
+	CameraComponent::RenderTarget::RenderTarget(ITexture& texture) :
+		texture(&texture), renderToTexture(true) 
 	{
 	}
+
+	CameraComponent::RenderTarget::RenderTarget(E_RENDER_TARGET target) :
+		target(target), renderToTexture(false) 
+	{
+		xassert(target != ERT_RENDER_TEXTURE);
+	}
+
+	void CameraComponent::setRendererTarget( RenderTarget renderTarget )
+	{
+		if (renderTarget.renderToTexture)
+		{
+			this->renderTarget = ERT_RENDER_TEXTURE;
+			this->renderTexture.reset(0);
+		}
+		else
+		{
+			if (renderTarget.target == ERT_MULTI_RENDER_TEXTURES)
+			{
+				cerr << "Not support Multi render texutres yet"	<<  endl;
+				return;
+			}
+
+			this->renderTarget = renderTarget.target;
+			xassert(renderTarget.texture);
+			this->renderTexture.reset(renderTarget.texture);
+		}
+	}
+
+	CameraComponent::RenderTarget CameraComponent::getRenderTarget()
+	{
+		if (renderTarget != ERT_RENDER_TEXTURE)
+		{
+			return RenderTarget(renderTarget);
+		}
+		else 
+		{
+			xassert(renderTexture.get() != nullptr);
+			return RenderTarget(*renderTexture.get());
+		}
+	}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+	CameraComponent::CameraComponent( const std::string& name, 
+		ngn::GameObject& host, ICameraSceneNode* node ) :
+		RenderComponent(name, host, node), 
+		renderTarget(ERT_FRAME_BUFFER), renderTexture(0) { }
 
 	void CameraComponent::setProjectionMatrix( const ngn::Matrix& projection, bool isOrthogonal/*=false*/ )
 	{
@@ -43,17 +93,17 @@ namespace xihad { namespace render3d
 		getNode()->setTarget(worldTarget);
 	}
 
-	const irr::core::vector3df& CameraComponent::getTarget() const
+	const vector3df& CameraComponent::getTarget() const
 	{
 		return getNode()->getTarget();
 	}
 
-	void CameraComponent::setUpVector( const irr::core::vector3df& pos )
+	void CameraComponent::setUpVector( const vector3df& pos )
 	{
 		getNode()->setUpVector(pos);
 	}
 
-	const irr::core::vector3df& CameraComponent::getUpVector() const
+	const vector3df& CameraComponent::getUpVector() const
 	{
 		return getNode()->getUpVector();
 	}
@@ -98,7 +148,7 @@ namespace xihad { namespace render3d
 		getNode()->setFOV(fovy);
 	}
 
-	const irr::scene::SViewFrustum* CameraComponent::getViewFrustum() const
+	const SViewFrustum* CameraComponent::getViewFrustum() const
 	{
 		return getNode()->getViewFrustum();
 	}
@@ -108,6 +158,7 @@ namespace xihad { namespace render3d
 		return getNode()->isOrthogonal();
 	}
 
+	/// Add self into scene manager's render queue
 	void CameraComponent::activate()
 	{
 		ISceneManager* smgr = getNode()->getSceneManager();
@@ -128,9 +179,8 @@ namespace xihad { namespace render3d
 			getNode()->getSceneManager()->setActiveCamera(nullptr);
 	}
 
-	irr::scene::ICameraSceneNode * CameraComponent::getNode() const
+	ICameraSceneNode * CameraComponent::getNode() const
 	{
-		return (irr::scene::ICameraSceneNode*) RenderComponent::getNode();
+		return (ICameraSceneNode*) RenderComponent::getNode();
 	}
-
 }}

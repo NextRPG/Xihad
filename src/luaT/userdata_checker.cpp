@@ -23,23 +23,20 @@ namespace luaT
 
 	void* UserdataTypeCheckerNT::shiftUserdata( lua_State* L, void* userdata, int targetMtIndex )
 	{
-		targetMtIndex = normalIndex(L, targetMtIndex);
+		assert(targetMtIndex > 0);
 
 		char* in_ud = (char*) (userdata);
 		// check whether this is corresponding type or derived type.
 		while(!lua_equal(L, -1, targetMtIndex))
 		{
+			if (!lua_getmetatable(L, -1))
+				return NULL;	// early jump out
+
 			// shift userdata caused by multi-inherit
 			lua_pushstring(L, ReservedKeyword::__OFFSET);
-			lua_rawget(L, -2);
+			lua_rawget(L, -3);	// mt.offset
 			in_ud += luaL_optinteger(L, -1, 0);
-			lua_pop(L, 1);	// pop offset
-
-			if (!lua_getmetatable(L, -1)) 
-			{
-				in_ud = NULL;
-				break;
-			}
+			lua_pop(L, 1);		// pop offset
 		}
 
 		return in_ud;
@@ -60,6 +57,7 @@ namespace luaT
 		return pushCount;
 	}
 
+#ifdef LUAT_OPTIMIZE_NON_POLYMORPHIC
 	void* PolyClassChecker::noShiftChecking(lua_State* L, int idx, void* ud, const char* mtName)
 	{
 		int pushCount = pushTargets(L, idx, ud, mtName);
@@ -71,22 +69,17 @@ namespace luaT
 		lua_pop(L, pushCount);
 		return ud;
 	}
+#endif
 
 	void* PolyClassChecker::shiftOnChecking(lua_State* L, int idx, void* ud, const char* mtName)
 	{
 		int pushCount = pushTargets(L, idx, ud, mtName);
-		int targetMtIdx = -pushCount;
+		int targetMtIdx = lua_gettop(L) - pushCount + 1;
 
 		if (pushCount == 2)
-		{
-			// correct target metatable index to positive index
-			targetMtIdx = normalIndex(L, targetMtIdx);
-			ud = UserdataTypeCheckerNT::shiftUserdata(L, ud, targetMtIdx);
-		}
+			ud = UserdataTypeCheckerNT::shiftUserdata(L, ud, targetMtIdx); // correct target metatable index to positive index
 		else
-		{
 			ud = NULL;
-		}
 
 		lua_settop(L, targetMtIdx-1);
 		return ud;

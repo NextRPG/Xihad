@@ -30,8 +30,8 @@ namespace luaT
 		static inline void create(lua_State* L, luaL_Reg* regs, lua_CFunction gc = DefaultDestructor<T>::result())
 		{
 			// create metatable and init it with parent
-			GeneralMetatableFactory::create(L, MetatableData<T>::name, regs, gc);
-			ParentMetatalbeSetter<P, T>::exec(L, MetatableData<T>::name);
+			GeneralMetatableFactory::create(L, MetatableData<T>::name(), regs, gc);
+			ParentMetatalbeSetter<P, T>::exec(L, MetatableData<T>::name());
 			lua_pop(L, 1);
 		}
 
@@ -55,7 +55,7 @@ namespace luaT
 
 		static inline void exec(lua_State* L, const char* currentClassName)
 		{
-			xassert(MetatableData<P>::polymorphic && "MetatableData of P must allow poly");
+			xassert(MetatableData<P>::isPolymorphic() && "MetatableData of P must allow poly");
 
 			// THIS SHOULD BE CONSTANT!!!
 			int PTR_OFFSET = ((int)(_1stPtr2PBase)(_1stPtr2TBase) 1) - 1;
@@ -63,7 +63,7 @@ namespace luaT
 			xassert((PTR_OFFSET==0 || TypeTraits<P>::ptrcount==0) && 
 				"Cannot cast from T** to P**");
 
-			InheritenceResolver::link(L, PTR_OFFSET, MetatableData<P>::name);
+			InheritenceResolver::link(L, PTR_OFFSET, MetatableData<P>::name());
 		}
 	};
 

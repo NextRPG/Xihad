@@ -31,7 +31,8 @@
 ### 3.11
 + 将几何体缓存进场景中，不需要重复创建
 + 添加 TextureManager/MeshManager
-+ 
++ RTT 测试
++ 从 LuaT 中移除 MetaData
 
 ### TODO
 + 3D音频

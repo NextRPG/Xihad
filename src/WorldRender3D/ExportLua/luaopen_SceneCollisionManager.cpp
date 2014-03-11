@@ -11,8 +11,6 @@ using namespace luaT;
 using namespace irr::scene;
 using namespace irr::core;
 using namespace boost;
-luaT_defMetaData(ISceneCollisionManager, false);
-
 namespace xihad { namespace render3d
 {
 	luaT_static line3df getRayFromScreenCoord(ISceneCollisionManager* coll,

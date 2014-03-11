@@ -66,7 +66,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp" />

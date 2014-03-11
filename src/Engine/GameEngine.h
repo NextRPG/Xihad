@@ -25,6 +25,16 @@ namespace xihad { namespace ngn
 
 		NativeWindow* getWindow();
 
+		/// add frame observer with specified order
+		/**
+		 * You can set the observer's order explicitly.
+		 * The larger the order is, the later the observer will be notified.
+		 * 
+		 * Notice: 
+		 * 1. Multiple observers can share a same order, notify order between them are not specified
+		 * 2. If add a observer which has already been added, then the latter one order will be effective.
+		 *	  You can depend on this to dynamically change a observer's order.
+		 */
 		virtual void addFrameObserver(FrameObserver& observer, int order = 0);
 
 		virtual void removeFrameObserver(FrameObserver& observer);

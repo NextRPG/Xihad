@@ -70,12 +70,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CParticleEditorEnv.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CWrappedAnimatedMeshInitializer.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.cpp" />
-    <ClCompile Include="..\src\PartilceSystemLoader\particle_metadata.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\ParticleEditor.cpp" />
     <ClCompile Include="..\src\PartilceSystemLoader\CWrappedMeshInitializer.cpp" />
   </ItemGroup>

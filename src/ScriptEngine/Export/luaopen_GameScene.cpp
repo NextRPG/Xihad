@@ -7,9 +7,6 @@
 using namespace luaT;
 using namespace xihad;
 using namespace ngn;
-luaT_defMetaData(GameScene, false);
-luaT_defMetaData(UserEventReceiver, false);
-
 namespace xihad { namespace script
 {
 	typedef IteratorPair<const GameScene::ObjectGroup> ObjectIterPair;

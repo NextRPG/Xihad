@@ -5,7 +5,6 @@
 
 using namespace luaT;
 using namespace irr::core;
-
 namespace xihad { namespace script 
 {
 	luaT_static int boxAddPoint(lua_State* L)

@@ -4,8 +4,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-luaT_defMetaData(UpdateHandler, true);
-
 namespace xihad { namespace script
 {
 	luaT_static const char* status(UpdateHandler* handler)

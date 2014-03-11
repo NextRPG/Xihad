@@ -6,9 +6,6 @@
 using namespace luaT;
 using namespace xihad::ngn;
 typedef GameScene::Dispatcher Dispatcher;
-
-luaT_defMetaData(Dispatcher, false);
-
 namespace xihad { namespace script
 {
 	// Dispatcher::dispatch(tagString, any, sourceObjID[, timeout])

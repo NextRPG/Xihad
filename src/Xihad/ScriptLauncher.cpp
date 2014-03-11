@@ -33,6 +33,7 @@ int launchScript(int argc, const char** argv)
 		// So, give it a big order
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
 		engine->addFrameObserver(*adj, 1000000);
+		engine->addFrameObserver(*adj, 10);	// change order, no duplicate instance
 		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;

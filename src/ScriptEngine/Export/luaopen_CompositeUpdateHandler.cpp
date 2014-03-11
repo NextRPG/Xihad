@@ -5,9 +5,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(CompositeUpdateHandler, true);
-
 namespace xihad { namespace script
 {
 	static int appendUpdater(lua_State* L)

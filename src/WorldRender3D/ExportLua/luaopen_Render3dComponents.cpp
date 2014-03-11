@@ -17,13 +17,6 @@ using namespace xihad::render3d;
 using namespace irr::video;
 using namespace irr::scene;
 
-luaT_defMetaData(RenderComponent, true);
-luaT_defMetaData(AnimatedMeshComponent, false);
-luaT_defMetaData(MeshComponent, false);
-luaT_defMetaData(CameraComponent, false);
-luaT_defMetaData(LightComponent, false);
-luaT_defMetaData(BillboardComponent, false);
-
 namespace xihad { namespace render3d
 {
 	inline static IAnimationEndCallBack* createEndCallback(lua_State* L, int idx)
@@ -253,7 +246,7 @@ namespace xihad { namespace render3d
 		{
 			SMaterial& mat = comp->getMaterial(i);
 			mat.ColorMaterial = false;
-			mat.DiffuseColor = SColor(255, r, g, b);
+			mat.DiffuseColor = ngn::SColor(255, r, g, b);
 		}
 	}}
 

@@ -2,6 +2,7 @@
 #include "RenderComponent.h"
 #include "Engine/matrix.h"
 #include "Engine/vector3d.h"
+#include "Engine/SColor.h"
 
 namespace irr 
 {
@@ -12,6 +13,12 @@ namespace irr
 		struct SViewFrustum;
 		class ICameraSceneNode;
 	}
+
+	namespace video
+	{
+		class ITexture;
+		enum E_RENDER_TARGET;
+	}
 }
 
 namespace xihad { namespace render3d
@@ -19,10 +26,36 @@ namespace xihad { namespace render3d
 	class CameraComponent : public RenderComponent
 	{
 	public:
+		typedef irr::video::ITexture RenderTexture;
+
+		struct RenderTarget
+		{
+			RenderTarget(RenderTexture& tex);
+
+			RenderTarget(irr::video::E_RENDER_TARGET target);
+
+			union
+			{
+				irr::video::E_RENDER_TARGET target;
+				RenderTexture* texture; 
+			};
+
+			bool renderToTexture;
+		};
+
+	public:
 		DEFINE_VISITABLE
 
 		CameraComponent(const std::string& name, ngn::GameObject& host, irr::scene::ICameraSceneNode* node);
 		
+		void setBackgroundColor(const ngn::SColor& color) { backgroundColor = color; }
+
+		const ngn::SColor& getBackgroundColor() const { return backgroundColor; }
+
+		void setRendererTarget(RenderTarget renderTarget);
+
+		RenderTarget getRenderTarget();
+
 		void activate();
 
 		bool isActivating() const;
@@ -114,6 +147,11 @@ namespace xihad { namespace render3d
 		virtual void onStop();
 
 		irr::scene::ICameraSceneNode * getNode() const;
+
+	private:
+		ngn::SColor backgroundColor;
+		irr::video::E_RENDER_TARGET renderTarget;
+		irr_ptr<RenderTexture> renderTexture;
 	};
 }}
 

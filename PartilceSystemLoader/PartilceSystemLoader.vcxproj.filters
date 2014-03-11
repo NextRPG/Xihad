@@ -15,16 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\PartilceSystemLoader\CParticleSystemScriptFactory.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\src\PartilceSystemLoader\CWrappedMeshInitializer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PartilceSystemLoader\particle_metadata.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\src\PartilceSystemLoader\luaopen_ParticleSystem.cpp">

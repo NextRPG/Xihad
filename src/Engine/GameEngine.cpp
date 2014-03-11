@@ -124,6 +124,9 @@ namespace xihad { namespace ngn
 
 	void GameEngine::addFrameObserver( FrameObserver& observer, int order )
 	{
+		if (auto value = StdMap::findValuePtr(mImpl->observerIndex, xptr<FrameObserver>(&observer)))
+			mImpl->frameObservers.erase(*value);
+
 		auto pos = mImpl->frameObservers.insert(std::make_pair(order, &observer));
 		mImpl->observerIndex[&observer] = pos;
 	}
@@ -155,7 +158,7 @@ namespace xihad { namespace ngn
 		float delta = now - bgnTime;
 
 #ifdef _DEBUG
-		int priority = 0x80000000;
+		int priority = 0x80000000;	// min integer
 #endif
 		for (auto& observerPair : mImpl->frameObservers)
 		{

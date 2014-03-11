@@ -31,7 +31,7 @@ namespace luaT {
 		// value.
 		static void exec(lua_State* L, typename TypeTraits<T>::ParameterType ptr)
 		{
-			void* mem = UserdataAllocator::allocate(L, sizeof(T), MetatableData<T>::name);
+			void* mem = UserdataAllocator::allocate(L, sizeof(T), MetatableData<T>::name());
 			new (mem) T(ptr);	// copy constructor.
 		}
 	};
@@ -44,7 +44,7 @@ namespace luaT {
 		// pointer.
 		static void exec(lua_State* L, typename TypeTraits<T>::ParameterType ptr)
 		{
-			UserdataAllocator::allocate_for_ptr(L, ptr, MD::name);
+			UserdataAllocator::allocate_for_ptr(L, ptr, MD::name());
 		}
 	};
 

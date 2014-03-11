@@ -4,9 +4,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(MessageListener, true);
-
 namespace xihad { namespace script
 {
 	int luaopen_MessageListener( lua_State* L )

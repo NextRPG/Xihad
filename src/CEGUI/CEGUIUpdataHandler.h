@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/UpdateHandler.h"
-#include "Engine/irr_ptr.h"
+#include "Engine/xptr.h"
 
 namespace xihad { namespace ngn
 {
@@ -28,7 +28,7 @@ namespace xihad { namespace cegui
 
 	private:
 		CeguiHandle* ceguiHandle;
-		irr_ptr<ngn::UserEventReceiver> eventReceiver;
+		xptr<ngn::UserEventReceiver> eventReceiver;
 	};
 }}
 

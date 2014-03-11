@@ -25,6 +25,7 @@
     <ClInclude Include="..\src\luaT\userdata_checker.h" />
     <ClInclude Include="..\src\luaT\stack_memo.h" />
     <ClInclude Include="..\src\luaT\xassert.h" />
+    <ClInclude Include="..\src\luaT\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\luaT\lua_ref.cpp" />

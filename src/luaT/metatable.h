@@ -15,13 +15,13 @@ namespace luaT {
 		template <typename T>
 		static inline void forType(lua_State* L)
 		{
-			byName(L, MetatableData<T>::name);
+			byName(L, MetatableData<T>::name());
 		}
 		
 		template <typename T>
 		static inline void bind(lua_State* L, int objIdx)
 		{
-			bind(L, objIdx, MetatableData<T>::name);
+			bind(L, objIdx, MetatableData<T>::name());
 		}
 
 		// push metatable with the specified name onto stack

@@ -53,9 +53,6 @@
     <ClCompile Include="luaopen_matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="math3d_metadata.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source.def">

@@ -7,9 +7,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(GameObject, false);
-
 namespace xihad { namespace script
 {
 	static int objectAppendComponent(lua_State* L)

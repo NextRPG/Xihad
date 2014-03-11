@@ -7,6 +7,7 @@
 #include "TagTree.h"
 #include "MessageTag.h"
 #include "Engine\Timeline.h"
+#include "MemoryLeakDetector.h"
 
 namespace xihad { namespace ngn 
 {

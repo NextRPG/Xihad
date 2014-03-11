@@ -6,9 +6,6 @@
 
 using namespace luaT;
 
-luaT_defMetaData(xihad::audio::AudioComponent, false);
-// luaT_defMetaData(xihad::audio::AudioStopListener, false);
-luaT_defMetaData(xihad::audio::AudioComponentSystem, false);
 namespace xihad { namespace audio 
 {
 	using namespace ngn;
