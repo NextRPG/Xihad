@@ -27,24 +27,27 @@ namespace xihad { namespace render3d
 
 		virtual ~IrrlichtComponentSystem();
 
-		virtual ngn::Component* create(const std::string& compName, 
-			ngn::GameObject& obj, const ngn::Properties& param = ngn::NullProperties()) override;
-
-		virtual void onStart() override;
-
-		virtual void onUpdate( const ngn::Timeline& ) override;
-
-		virtual void onStop() override;
+		virtual ngn::Component* create(
+			const std::string& compName, 
+			ngn::GameObject& obj, 
+			const ngn::Properties& param = ngn::NullProperties()) override;
 
 		irr::scene::ISceneManager* getSceneManager();
 
 		TextureManager* getTextureManager();
+
 		MeshManager* getMeshManager();
 
 		void setShadowColor();
+
 		void setAmbientColor();
-		void getTexture();
+
 		void setViewport();
+
+	protected:
+		virtual void onStart() override;
+		virtual void onUpdate( const ngn::Timeline& ) override;
+		virtual void onStop() override;
 
 	private:
 		struct impl;

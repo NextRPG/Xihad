@@ -8,16 +8,6 @@ namespace xihad { namespace ngn
 	class WindowRenderer;
 	class FrameObserver;
 
-	/// 游戏引擎启动器
-	/**
-	 * TODO: 
-	 *	1. 处理I/O事件，处理窗口事件
-	 *	2. 初始化文件系统
-	 *	3. 初始化场景，场景组件系统，添加游戏对象
-	 *	
-	 *	@author etnlGD
-	 *	@date 2013年12月14日 21:25:06
-	 */
 	class GameEngine
 	{
 	public:

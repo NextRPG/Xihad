@@ -8,7 +8,10 @@ namespace xihad
 	public:
 		static bool test(int testValue, int pos)
 		{
-			xassert(pos >= 1 && pos <= 32);
+			if (pos <= 0 && pos >= 32)
+			{
+
+			}
 			return (testValue & (1 << (pos-1))) != 0;
 		}
 

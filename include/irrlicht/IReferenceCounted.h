@@ -171,6 +171,8 @@ namespace irr
 			if (DebugName || !newName) return;
 
 			DebugName = newName;
+
+			IRR_MLD_NEW_NAMED_OBJECT;
 		}
 
 	private:
