@@ -128,5 +128,10 @@ namespace xihad { namespace ngn
 	{
 	}
 
+	bool UpdateHandler::isUpdating() const
+	{
+		return STARTING<status() && status()<DEAD;
+	}
+
 }}
 

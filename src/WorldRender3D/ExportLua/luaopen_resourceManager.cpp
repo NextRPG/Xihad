@@ -29,7 +29,7 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(TextureManager, getTexture),
 			luaT_mnamedfunc(TextureManager, renameTexture),
 			luaT_mnamedfunc(TextureManager, removeTexture),
-			// luaT_mnamedfunc(TextureManager, addRenderTargetTexture),
+			luaT_mnamedfunc(TextureManager, addRenderTargetTexture),
 		luaT_defRegsEnd
 		MetatableFactory<TextureManager>::create(L, texm);
 

@@ -245,7 +245,7 @@ namespace xihad { namespace render3d
 		for (irr::u32 i = 0; i < comp->getMaterialCount(); ++i)
 		{
 			SMaterial& mat = comp->getMaterial(i);
-			mat.ColorMaterial = false;
+			mat.ColorMaterial = ECM_NONE;
 			mat.DiffuseColor = ngn::SColor(255, r, g, b);
 		}
 	}}
@@ -295,8 +295,8 @@ namespace xihad { namespace render3d
 		MetatableFactory<MeshComponent, RenderComponent>::create(L, meshRegs, 0);
 
 		luaT_defRegsBgn(cameraRegs)
-			luaT_mnamedfunc(CameraComponent, activate),
-			luaT_mnamedfunc(CameraComponent, isActivating),
+			luaT_mnamedfunc(CameraComponent, setActive),
+			luaT_mnamedfunc(CameraComponent, isActive),
 			luaT_mnamedfunc(CameraComponent, setTarget),
 			luaT_cnamedfunc(getTarget),
 			luaT_cnamedfunc(getUpVector),

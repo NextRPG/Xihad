@@ -48,7 +48,7 @@ function ControlledMove:onUpdate()
 	if not self.dontMove then
 		local rad = self.ydir/180*math.pi
 		local dst = Time.change*self.speed
-		self.object:concatTranslate(math.sin(rad)*dst, 0, math.cos(rad)*dst)
+		self.object:concatTranslate(math3d.vector(math.sin(rad)*dst, 0, math.cos(rad)*dst))
 	end
 end
 
@@ -118,7 +118,7 @@ function ControlledMove:acquire()
 		end
 		--
 		self:updateMotion()
-		return true
+		return 0
 	end 
 
 	function controller:onKeyUp( e )
@@ -133,10 +133,11 @@ function ControlledMove:acquire()
 		end
 
 		self:updateMotion()
-		return true
+		return 0
 	end
 
 	self.object:getScene():pushController(controller)
+	controller:drop()
 end
 
 return ControlledMove

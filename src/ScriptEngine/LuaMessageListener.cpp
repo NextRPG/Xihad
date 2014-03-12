@@ -2,8 +2,8 @@
 #include <luaT/luaT.h>
 #include <Engine/Message/MessageParam.h>
 #include <Engine/Message/MessageTag.h>
+#include <Engine/MemoryLeakDetector.h>
 #include "LuaUtil.h"
-#include "Engine/MemoryLeakDetector.h"
 
 using namespace luaT;
 using namespace xihad::ngn;

@@ -1,9 +1,9 @@
 #pragma once
 #include "Engine\BaseComponentSystem.h"
 #include <boost\scoped_ptr.hpp>
-#include "AnimationClipsCache.h"
 
 struct lua_State;
+
 namespace irr
 {
 	class IrrlichtDevice;
@@ -16,14 +16,19 @@ namespace irr
 
 namespace xihad { namespace render3d
 {
+	using namespace irr;
+
 	class MeshManager;
 	class TextureManager;
+	class CameraRenderTarget;
+	class CameraComponent;
+	class AnimationClipsCache;
 	class IrrlichtComponentSystem : public ngn::BaseComponentSystem
 	{
 	public:
 		IrrlichtComponentSystem(
-			irr::IrrlichtDevice* device, irr::scene::ISceneManager* scene,
-			const ngn::InheritanceTree& tree, AnimationClipsCache& gCache);
+			IrrlichtDevice* device, scene::ISceneManager* scene,
+			const ngn::InheritanceTree& tree, AnimationClipsCache* gCache);
 
 		virtual ~IrrlichtComponentSystem();
 
@@ -32,7 +37,7 @@ namespace xihad { namespace render3d
 			ngn::GameObject& obj, 
 			const ngn::Properties& param = ngn::NullProperties()) override;
 
-		irr::scene::ISceneManager* getSceneManager();
+		scene::ISceneManager* getSceneManager();
 
 		TextureManager* getTextureManager();
 
@@ -42,7 +47,9 @@ namespace xihad { namespace render3d
 
 		void setAmbientColor();
 
-		void setViewport();
+		void addCamera(const CameraRenderTarget& rt, CameraComponent *);
+
+		void removeCamera(CameraComponent*);
 
 	protected:
 		virtual void onStart() override;

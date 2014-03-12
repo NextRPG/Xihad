@@ -1,13 +1,13 @@
 #include "LuaAnimationCallback.h"
+#include <Engine/MemoryLeakDetector.h>
 #include <ScriptEngine/LuaUtil.h>
-#include <luaT\stack_memo.h>
-#include <LuaT\stack_ops.h>
-#include <boost\cast.hpp>
+#include <luaT/stack_memo.h>
+#include <LuaT/stack_ops.h>
+#include <boost/cast.hpp>
 #include <iostream>
 
-#include "..\RenderComponent.h"
-#include "..\AnimatedMeshComponent.h"
-#include "Engine\MemoryLeakDetector.h"
+#include "../RenderComponent.h"
+#include "../AnimatedMeshComponent.h"
 
 namespace xihad { namespace render3d
 {

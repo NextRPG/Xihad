@@ -98,6 +98,8 @@ namespace xihad { namespace ngn
 		 */
 		bool intermediateStatus() const;
 		
+		bool isUpdating() const;
+
 	protected:
 		virtual ~UpdateHandler();
 

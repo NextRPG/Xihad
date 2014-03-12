@@ -61,7 +61,7 @@ namespace xihad { namespace particle
 
 	IStackPusher* CParticleSystemScriptFactory::createFrom( Registry& r, const std::string& key)
 	{
-		if (auto got = ngn::StdMap::findValuePtr(r, std::string(key)))
+		if (auto got = StdMap::findValuePtr(r, std::string(key)))
 			return (*got)->create();
 
 		return 0;

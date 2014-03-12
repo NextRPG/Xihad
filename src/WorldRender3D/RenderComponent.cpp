@@ -1,24 +1,24 @@
 #include "RenderComponent.h"
-#include "irrlicht/ISceneNode.h"
-#include "irrlicht/ISceneManager.h"
-#include "irrlicht/IVideoDriver.h"
-#include "Engine/GameObject.h"
-#include "Engine/Transform.h"
-#include "CppBase/BitOperation.h"
-#include "boost/cast.hpp"
+#include <irrlicht/ISceneNode.h>
+#include <irrlicht/ISceneManager.h>
+#include <irrlicht/IVideoDriver.h>
+#include <Engine/GameObject.h>
+#include <Engine/Transform.h>
+#include <CppBase/BitOperation.h>
+#include <boost/cast.hpp>
+#include "TextureManager.h"
 
-using namespace irr;
-using namespace scene;
-using namespace core;
-using namespace video;
 using namespace boost;
 namespace xihad { namespace render3d
 {
+	using namespace core;
+	using namespace video;
 	using namespace ngn;
+
 	using ::std::string;
 
 	// fwd
-	static void setUserdata2Node(irr::scene::ISceneNode* node, void* ud);
+	static void setUserdata2Node(ISceneNode* node, void* ud);
 
 	RenderComponent::RenderComponent(const string& name, GameObject& host, ISceneNode* node ) :
 		Component(name, host), mNode(node), mVisibility(1)
@@ -37,6 +37,30 @@ namespace xihad { namespace render3d
 		xassert(RenderComponent::getComponentFromNode(mNode.get()) == nullptr);
 	}
 
+
+	RenderComponent* RenderComponent::createSkyDomeComponent(
+		const std::string& name, ngn::GameObject& host, const ngn::Properties& param, 
+		ISceneManager* smgr, TextureManager* texManager )
+	{
+		ITexture* tex = nullptr;
+		if (const char* path = param.getString("texture"))
+			tex = texManager->getTexture(path);
+
+		if (!tex) return nullptr;
+
+		int horiRes = param.getInt("horiRes", 16);
+		int vertRes = param.getInt("vertRes", 8);
+		float texPercent = param.getFloat("texPercent", 0.9f);
+		float spherePercent = param.getFloat("spherePercent", 2.f);
+		float radius = param.getFloat("radius", 1000.f);
+
+		ISceneNode* node = smgr->addSkyDomeSceneNode(tex, horiRes, vertRes, 
+			texPercent, spherePercent, radius);
+
+		return new RenderComponent(name, host, node);
+	}
+
+
 	const RenderComponent::AABB& RenderComponent::getBoundingBox() const
 	{
 		return mNode->getBoundingBox();
@@ -47,28 +71,28 @@ namespace xihad { namespace render3d
 		return mNode->getTransformedBoundingBox();
 	}
 
-	RenderComponent::Material& RenderComponent::getMaterial( irr::u32 num )
+	RenderComponent::Material& RenderComponent::getMaterial( u32 num )
 	{
 		return mNode->getMaterial(num);
 	}
 
-	irr::u32 RenderComponent::getMaterialCount() const
+	u32 RenderComponent::getMaterialCount() const
 	{
 		return mNode->getMaterialCount();
 	}
 
-	void RenderComponent::setMaterialFlag( irr::video::E_MATERIAL_FLAG flag, bool newValue )
+	void RenderComponent::setMaterialFlag( video::E_MATERIAL_FLAG flag, bool newValue )
 	{
 		mNode->setMaterialFlag(flag, newValue);
 	}
 
-	void RenderComponent::setMaterialTexture( irr::u32 textureLayer, const irr::c8* texName )
+	void RenderComponent::setMaterialTexture( u32 textureLayer, const c8* texName )
 	{
 		ITexture* tex = mNode->getSceneManager()->getVideoDriver()->findTexture(texName);
 		setMaterialTexture(textureLayer, tex);
 	}
 
-	void RenderComponent::setMaterialTexture( irr::u32 textureLayer, Texture* texture )
+	void RenderComponent::setMaterialTexture( u32 textureLayer, Texture* texture )
 	{
 		mNode->setMaterialTexture(textureLayer, texture);
 	}
@@ -120,27 +144,26 @@ namespace xihad { namespace render3d
 
 	void RenderComponent::syncWithObject()
 	{
-		static string BASE_NAME = "Render";
-
+//		static string BASE_NAME = "Render";
 		GameObject* obj = getHostObject();
 
-		bool trulyVisible, localVisible;
-		trulyVisible = localVisible = isVisible();
+// 		bool trulyVisible, localVisible;
+// 		trulyVisible = localVisible = isVisible();
 
 		// visibility is determined by parent's render component
-		GameObject* parent;
-		if ((parent = obj->getParent()) && localVisible)
-		{
-			const string& mName = getComponentName();
-			Component* comp = parent->findComponent(BASE_NAME);
-
-			RenderComponent* rc;
-			trulyVisible = !(rc = polymorphic_downcast<RenderComponent*> (comp)) ||
-				(rc->isTrulyVisible());
-		}
-
-		BitOperation::set(mVisibility, 2, trulyVisible);
-		mNode->setVisible(trulyVisible);
+// 		GameObject* parent;
+// 		if ((parent = obj->getParent()) && localVisible)
+// 		{
+// 			const string& mName = getComponentName();
+// 			Component* comp = parent->findComponent(BASE_NAME);
+// 
+// 			RenderComponent* rc;
+// 			trulyVisible = !(rc = polymorphic_downcast<RenderComponent*> (comp)) ||
+// 				(rc->isTrulyVisible());
+// 		}
+// 
+// 		BitOperation::set(mVisibility, 2, trulyVisible);
+		mNode->setVisible(isVisible());
 
 		// sync transform
 		// TODO: try to set AbsoluteMatrix directly
@@ -157,7 +180,7 @@ namespace xihad { namespace render3d
 
 	void RenderComponent::onUpdate( const ngn::Timeline& )
 	{
-		
+			
 	}
 
 	void RenderComponent::onStop()
@@ -172,7 +195,7 @@ namespace xihad { namespace render3d
 		DATA_LENGTH  = sizeof(RenderComponent*),
 		NAME_LENGTH  = DATA_LENGTH + MAGIC_LENGTH,
 	};
-	RenderComponent* RenderComponent::getComponentFromNode( const irr::scene::ISceneNode* node )
+	RenderComponent* RenderComponent::getComponentFromNode( const ISceneNode* node )
 	{
 		const char* namedPtr = node->getName();
 		int magicNumber;
@@ -192,12 +215,12 @@ namespace xihad { namespace render3d
 		return getNode()->getSceneManager()->isCulled(getNode());
 	}
 
-	irr::scene::ITriangleSelector* RenderComponent::getTriangleSelector() const
+	ITriangleSelector* RenderComponent::getTriangleSelector() const
 	{
 		return getNode()->getTriangleSelector();
 	}
 
-	static void setUserdata2Node( irr::scene::ISceneNode* node, void* userdata )
+	static void setUserdata2Node( ISceneNode* node, void* userdata )
 	{
 		if (userdata == nullptr)
 		{

@@ -1,7 +1,7 @@
 #include "LuaUpdateHandler.h"
+#include <Engine/MemoryLeakDetector.h>
 #include "LuaUtil.h"
-#include "luaT\stack_memo.h"
-#include "Engine\MemoryLeakDetector.h"
+#include "luaT/stack_memo.h"
 
 using namespace xihad::ngn;
 using namespace luaT;

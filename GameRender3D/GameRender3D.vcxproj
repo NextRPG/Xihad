@@ -71,9 +71,12 @@
     <ClInclude Include="..\src\WorldRender3D\AnimatedMeshComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClips.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipsCache.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsJsonLoader.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsLoader.h" />
     <ClInclude Include="..\src\WorldRender3D\BillboardComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\CameraComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h" />
+    <ClInclude Include="..\src\WorldRender3D\CameraRenderTarget.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\luaopen_All.h" />
@@ -90,8 +93,11 @@
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\AnimatedMeshComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsCache.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsJsonLoader.cpp" />
     <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CameraRenderTarget.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />

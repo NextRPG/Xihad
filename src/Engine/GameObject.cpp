@@ -1,18 +1,19 @@
 #include "GameObject.h"
-#include <unordered_set>
+#include <bitset>
 #include <unordered_map>
-#include <iostream>
 #include <boost/cast.hpp>
 #include "Component.h"
 #include "Transform.h"
 #include "ComponentSystemRegistry.h"
 #include "CppBase/StdMap.h"
 #include "ComponentFactory.h"
-#include "TagListener.h"
+#include "TagManager.h"
 #include "GameObjectDepends.h"
 #include "CppBase/xassert.h"
 #include "GameScene.h"
 #include "MemoryLeakDetector.h"
+#include <iostream>
+#include "GameObjectVisitor.h"
 
 using namespace std;
 using namespace boost;
@@ -29,11 +30,13 @@ namespace xihad { namespace ngn
 		PARENT_DIRTY = 8,
 	};
 
+	typedef GameObjectDepends::TagManagerT MyTagManager;
 	using std::string;
 	struct GameObject::impl
 	{
 		GameObjectDepends* depends;
 		Identifier objectID;
+		bitset<MyTagManager::MaxTagCount> tags;
 
 		GameObject* parent;
 		CompositeUpdateHandler* childrenList;	// managed by GameObject
@@ -43,19 +46,40 @@ namespace xihad { namespace ngn
 		mutable Matrix localMatrix;
 		mutable Matrix worldMatrix;
 
-		unordered_set<GameObject::Tag> tags;
 		unordered_map<string, Component*> components;
 
 		impl(GameObjectDepends* pDepends, IdArgType id) :
 			depends(pDepends), objectID(id), parent(nullptr), 
-			childrenList(new CompositeUpdateHandler),
-			transfromDirtyBits(LOCAL_DIRTY|PARENT_DIRTY)
+			childrenList(0), transfromDirtyBits(LOCAL_DIRTY|PARENT_DIRTY)
 		{
 		}
 
-		inline TagListener* listener() 
+		CompositeUpdateHandler* notNullChildrenList(GameObject* self)
 		{
-			return depends->listener;
+			if (!childrenList)
+			{
+				childrenList = new CompositeUpdateHandler;
+				if (self->isUpdating())
+					childrenList->start();
+			}
+
+			return childrenList;
+		}
+
+		bool hasChildHandler() const
+		{
+			return childrenList && childrenList->hasChildHandler();
+		}
+
+		inline MyTagManager* tagListener() 
+		{
+			return depends->tagManager;
+		}
+
+#define ADD_IF_TAG_NOT_EXSITS true
+		unsigned getTagIndex(const GameObject::Tag& tag, bool add = false)
+		{
+			return depends->tagManager->unprojectTag(tag, add);
 		}
 
 		inline ComponentFactory* factory()
@@ -77,7 +101,7 @@ namespace xihad { namespace ngn
 	GameObject::GameObject( GameObjectDepends* depends, IdArgType id )
 	{
 		xassert(depends);
-		xassert(depends->listener);
+		xassert(depends->tagManager);
 		xassert(depends->factory);
 
 		mImpl.reset(new impl(depends, id));
@@ -167,29 +191,41 @@ namespace xihad { namespace ngn
 
 	bool GameObject::hasTag( TagArgType tag ) const
 	{
-		return mImpl->tags.find(tag) != mImpl->tags.end();
+		unsigned tidx = mImpl->getTagIndex(tag);
+		if (tidx == MyTagManager::InvalidIndex)
+			return false;
+		else 
+			return mImpl->tags.test(tidx);
 	}
 
 	void GameObject::addTag( TagArgType tag )
 	{
-		if (mImpl->tags.insert(tag).second) // insert success
-			mImpl->listener()->onTagAdded(this, tag);
+		unsigned tidx = mImpl->getTagIndex(tag, ADD_IF_TAG_NOT_EXSITS);
+		if (!mImpl->tags.test(tidx))
+		{
+			mImpl->tags.set(tidx);
+			mImpl->tagListener()->onTagAdded(this, tidx);
+		}
 	}
 
 	void GameObject::removeTag( TagArgType tag )
 	{
-		if (mImpl->tags.erase(tag))
-			mImpl->listener()->onTagRemoved(this, tag);
+		unsigned tidx = mImpl->getTagIndex(tag);
+		if (tidx != MyTagManager::InvalidIndex && mImpl->tags.test(tidx))
+		{
+			mImpl->tags.reset(tidx);
+			mImpl->tagListener()->onTagRemoved(this, tidx);
+		}
 	}
 
 	void GameObject::clearTags()
 	{
-		for (auto it = mImpl->tags.begin(); it != mImpl->tags.end(); )
-		{
-			string tag = *it;
-			it = mImpl->tags.erase(it);
-			mImpl->listener()->onTagRemoved(this, tag);
-		}
+		for (unsigned idx = 0; idx < MyTagManager::MaxTagCount; ++idx)
+			if (mImpl->tags.test(idx))
+			{
+				mImpl->tags.reset(idx);
+				mImpl->tagListener()->onTagRemoved(this, idx);
+			}
 	}
 
 	GameObject::IdArgType GameObject::getID() const
@@ -199,17 +235,17 @@ namespace xihad { namespace ngn
 
 	void GameObject::updateChildrenWorldMatrix()
 	{
-		if (mImpl->transfromDirtyBits ||	// already updated?
-			mImpl->childrenList->getChildHandlerCount() == 0)  // no child?	
+		if (mImpl->transfromDirtyBits || !mImpl->hasChildHandler())
 			return;
 
+		xassert(mImpl->childrenList);
 		CompositeUpdateHandler::iterator it = mImpl->childrenList->childHandlerBegin();
 		while (it != mImpl->childrenList->childHandlerEnd())
 		{
 			if (GameObject* go = polymorphic_downcast<GameObject*>(*it))
 			{
-				go->mImpl->transfromDirtyBits |= PARENT_DIRTY;
 				go->updateChildrenWorldMatrix();
+				go->mImpl->transfromDirtyBits |= PARENT_DIRTY;
 			}
 			else
 			{
@@ -277,9 +313,7 @@ namespace xihad { namespace ngn
 		if (mImpl->transfromDirtyBits & LOCAL_DIRTY)
 		{
 			if (mImpl->transfromDirtyBits & ROTATE_DIRTY)
-			{
 				mImpl->rotateMatrix.setRotationDegrees(getRotation());
-			}
 
 			mImpl->localMatrix = mImpl->rotateMatrix;
 			mImpl->localMatrix.setTranslation(getTranslate());
@@ -319,12 +353,13 @@ namespace xihad { namespace ngn
 		if (oldParent != nullptr)
 		{
 			CompositeUpdateHandler* list = oldParent->mImpl->childrenList;
+			xassert(list);
 			list->eraseChildHandler(list->findChildHandler(this));
 		}
 
 		// link
 		if (newParent != nullptr)
-			newParent->mImpl->childrenList->appendChildHandler(this);
+			newParent->mImpl->notNullChildrenList(this)->appendChildHandler(this);
 
 		mImpl->transfromDirtyBits |= PARENT_DIRTY;
 	}
@@ -334,43 +369,52 @@ namespace xihad { namespace ngn
 		return mImpl->parent;
 	}
 
-	GameObject::child_iterator GameObject::firstChild() const
+	void GameObject::visitChildren( GameObjectVisitor& visitor )
 	{
-		auto it = mImpl->childrenList->childHandlerBegin();
-		return *reinterpret_cast<child_iterator*>(&it);
-	}
-
-	GameObject::child_iterator GameObject::lastChild() const
-	{
-		auto it = mImpl->childrenList->childHandlerEnd();
-		return *reinterpret_cast<child_iterator*>(&it);
+		if (mImpl->hasChildHandler())
+		{
+			auto it = mImpl->childrenList->childHandlerBegin();
+			while (it != mImpl->childrenList->childHandlerEnd())
+			{
+				GameObject* go = static_cast<GameObject*>(*it);
+				visitor.onVisitObject(*go);
+				++it;
+			}
+		}
 	}
 
 	void GameObject::onStart()
 	{
 		// Let self start first. Order is reserved
 		CompositeUpdateHandler::onStart();
-		mImpl->childrenList->start();
+
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->start();
 	}
 
 	void GameObject::onUpdate( const Timeline& tm )
 	{
 		// Order is reserved
 		CompositeUpdateHandler::onUpdate(tm);
-		mImpl->childrenList->update(tm);
+
+		// There are at least half game objects having no child, therefore we can benefit from the test
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->update(tm);
 	}
 
 	void GameObject::onStop()
 	{
 		// Order is reserved
-		mImpl->childrenList->stop();
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->stop();
+
 		CompositeUpdateHandler::onStop();
 	}
 
 	void GameObject::onDestroy()
 	{
 		// Order is reserved
-		if (!mImpl->childrenList->destroy())
+		if (mImpl->hasChildHandler() && !mImpl->childrenList->destroy())
 			cerr << "GameObject children list destroy failed" << endl;
 
 		mImpl->childrenList = 0;

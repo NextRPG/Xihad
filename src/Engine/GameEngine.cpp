@@ -13,6 +13,7 @@
 #include "TimeConversion.h"
 #include "WindowEventSeizer.h"
 #include "CppBase\StdMap.h"
+#include "BiAssociateMap.h"
 
 using namespace std;
 namespace xihad { namespace ngn
@@ -25,11 +26,9 @@ namespace xihad { namespace ngn
 		}
 	};
 
-	typedef multimap<int, xptr<FrameObserver>> FrameObservers;
-	typedef unordered_map<
-		xptr<FrameObserver>, 
-		FrameObservers::iterator,
-		hash_observer> Index;
+	typedef multimap<int, xptr<FrameObserver> > OrderedObservers;
+	typedef unordered_map<xptr<FrameObserver>, OrderedObservers::iterator, hash_observer> ObserverIndex;
+	typedef BiAssociateMap<int, xptr<FrameObserver>, OrderedObservers, ObserverIndex> AssociateObserver;
 	struct GameEngine::impl
 	{
 		float frameTime;
@@ -37,9 +36,7 @@ namespace xihad { namespace ngn
 
 		boost::scoped_ptr<GameWorld> gameWorld;
 		xptr<NativeWindow> window;
-
-		FrameObservers frameObservers;
-		Index observerIndex;
+		AssociateObserver observers;
 	};
 
 	GameEngine::GameEngine(NativeWindow& wnd, GameWorld* world, float defaultFrameTime) :
@@ -124,29 +121,18 @@ namespace xihad { namespace ngn
 
 	void GameEngine::addFrameObserver( FrameObserver& observer, int order )
 	{
-		if (auto value = StdMap::findValuePtr(mImpl->observerIndex, xptr<FrameObserver>(&observer)))
-			mImpl->frameObservers.erase(*value);
-
-		auto pos = mImpl->frameObservers.insert(std::make_pair(order, &observer));
-		mImpl->observerIndex[&observer] = pos;
+		mImpl->observers.add(order, &observer);
 	}
 
 	void GameEngine::removeFrameObserver( FrameObserver& observer )
 	{
-		xptr<FrameObserver> key(&observer);
-		auto indexPos = mImpl->observerIndex.find(key);
-		if (indexPos != mImpl->observerIndex.end())
-		{
-			auto pos = indexPos->second;
-			mImpl->frameObservers.erase(pos);
-			mImpl->observerIndex.erase(indexPos);
-		}
+		mImpl->observers.remove(&observer);
 	}
 
 	float GameEngine::fireFrameBegin()
 	{
 		float now = clockToSeconds(clock());
-		for (auto observerPair : mImpl->frameObservers)
+		for (auto observerPair : mImpl->observers.pairs())
 			observerPair.second->onFrameBegin(this, now);
 
 		return now;
@@ -160,7 +146,7 @@ namespace xihad { namespace ngn
 #ifdef _DEBUG
 		int priority = 0x80000000;	// min integer
 #endif
-		for (auto& observerPair : mImpl->frameObservers)
+		for (auto& observerPair : mImpl->observers.pairs())
 		{
 #ifdef _DEBUG
 			assert(priority <= observerPair.first);

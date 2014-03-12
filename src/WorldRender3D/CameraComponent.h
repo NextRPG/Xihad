@@ -3,6 +3,7 @@
 #include "Engine/matrix.h"
 #include "Engine/vector3d.h"
 #include "Engine/SColor.h"
+#include "CameraRenderTarget.h"
 
 namespace irr 
 {
@@ -13,52 +14,39 @@ namespace irr
 		struct SViewFrustum;
 		class ICameraSceneNode;
 	}
-
-	namespace video
-	{
-		class ITexture;
-		enum E_RENDER_TARGET;
-	}
 }
 
 namespace xihad { namespace render3d
 {
+	class IrrlichtComponentSystem;
 	class CameraComponent : public RenderComponent
 	{
 	public:
-		typedef irr::video::ITexture RenderTexture;
-
-		struct RenderTarget
-		{
-			RenderTarget(RenderTexture& tex);
-
-			RenderTarget(irr::video::E_RENDER_TARGET target);
-
-			union
-			{
-				irr::video::E_RENDER_TARGET target;
-				RenderTexture* texture; 
-			};
-
-			bool renderToTexture;
-		};
+		typedef video::ITexture RenderTexture;
 
 	public:
 		DEFINE_VISITABLE
 
-		CameraComponent(const std::string& name, ngn::GameObject& host, irr::scene::ICameraSceneNode* node);
+		CameraComponent(const std::string& name, ngn::GameObject& host, 
+			ICameraSceneNode* node, IrrlichtComponentSystem*);
 		
-		void setBackgroundColor(const ngn::SColor& color) { backgroundColor = color; }
+		static CameraComponent* create(
+			const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param,
+			ISceneManager* smgr, IrrlichtComponentSystem* sys);
 
-		const ngn::SColor& getBackgroundColor() const { return backgroundColor; }
+		void setRendererTarget(CameraRenderTarget renderTarget);
 
-		void setRendererTarget(RenderTarget renderTarget);
+		void setViewport(const core::rectf& viewport)  { this->viewport = viewport; }
 
-		RenderTarget getRenderTarget();
+		const core::rectf& getViewport() const { return viewport; }
 
-		void activate();
+		core::recti CameraComponent::getAbsoluteViewport(const core::dimension2du& size ) const;
 
-		bool isActivating() const;
+		CameraRenderTarget getRenderTarget();
+
+		void setActive(bool active);
+
+		bool isActive() const;
 
 		void setProjectionMatrix(const ngn::Matrix& projection, bool isOrthogonal=false);
 
@@ -93,15 +81,15 @@ namespace xihad { namespace render3d
 
 		//! Gets the current look at target of the camera
 		/** \return The current look at target of the camera, in world co-ordinates */
-		const irr::core::vector3df& getTarget() const;
+		const core::vector3df& getTarget() const;
 
 		//! Sets the up vector of the camera.
 		/** \param pos: New upvector of the camera. */
-		void setUpVector(const irr::core::vector3df& pos);
+		void setUpVector(const core::vector3df& pos);
 
 		//! Gets the up vector of the camera.
 		/** \return The up vector of the camera, in world space. */
-		const irr::core::vector3df& getUpVector() const;
+		const core::vector3df& getUpVector() const;
 
 		//! Gets the value of the near plane of the camera.
 		/** \return The value of the near plane of the camera. */
@@ -138,7 +126,7 @@ namespace xihad { namespace render3d
 		//! Get the view frustum.
 		/** Needed sometimes by bspTree or LOD render nodes.
 		\return The current view frustum. */
-		const irr::scene::SViewFrustum* getViewFrustum() const;
+		const SViewFrustum* getViewFrustum() const;
 
 		//! Checks if a camera is orthogonal.
 		bool isOrthogonal() const;
@@ -146,12 +134,14 @@ namespace xihad { namespace render3d
 	protected:
 		virtual void onStop();
 
-		irr::scene::ICameraSceneNode * getNode() const;
+		friend class IrrlichtComponentSystem;
+		ICameraSceneNode * getNode() const;
 
 	private:
-		ngn::SColor backgroundColor;
-		irr::video::E_RENDER_TARGET renderTarget;
-		irr_ptr<RenderTexture> renderTexture;
+		IrrlichtComponentSystem* irrlichtSystem;
+		CameraRenderTarget renderTarget;
+		core::rectf viewport;
+		bool active;
 	};
 }}
 

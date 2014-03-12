@@ -133,7 +133,7 @@ namespace xihad { namespace render3d
 
 	void AnimationClips::addClip( const std::string& clipname, const AnimationClipData& d )
 	{
-		ngn::StdMap::insert(mImpl->clipDataMap, clipname, d);
+		StdMap::insert(mImpl->clipDataMap, clipname, d);
 	}
 
 	AnimationClipData* AnimationClips::getClip( const std::string& clipname )

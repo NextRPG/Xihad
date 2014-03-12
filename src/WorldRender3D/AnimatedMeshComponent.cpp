@@ -1,16 +1,18 @@
 #include "AnimatedMeshComponent.h"
 #include <irrlicht\IAnimatedMeshSceneNode.h>
-#include "irrlicht\ISceneManager.h"
-#include "CppBase\StdMap.h"
+#include <irrlicht\ISceneManager.h>
+#include <Engine\Properties.h>
+#include <CppBase\StdMap.h>
 #include "AnimationClips.h"
+#include "MeshManager.h"
+#include "AnimationClipsCache.h"
 
 using namespace std;
-using namespace xihad::ngn;
-using namespace irr;
-using namespace scene;
+using namespace boost;
 namespace xihad { namespace render3d
 {
-	
+	using namespace ngn;
+
 	AnimatedMeshComponent::AnimatedMeshComponent( 
 		string const& name, GameObject& host, 
 		IAnimatedMeshSceneNode* node ) :
@@ -47,12 +49,12 @@ namespace xihad { namespace render3d
 		return getNode()->getAnimationSpeed();
 	}
 
-	irr::scene::IBoneSceneNode* AnimatedMeshComponent::getJointNode( const char* jointName )
+	IBoneSceneNode* AnimatedMeshComponent::getJointNode( const char* jointName )
 	{
 		return getNode()->getJointNode(jointName);
 	}
 
-	irr::scene::IBoneSceneNode* AnimatedMeshComponent::getJointNode( int jointID )
+	IBoneSceneNode* AnimatedMeshComponent::getJointNode( int jointID )
 	{
 		return getNode()->getJointNode(jointID);
 	}
@@ -87,17 +89,17 @@ namespace xihad { namespace render3d
 		return getNode()->getLoopMode();
 	}
 
-	void AnimatedMeshComponent::setAnimationEndCallback( irr::scene::IAnimationEndCallBack* callback/*=0*/ )
+	void AnimatedMeshComponent::setAnimationEndCallback( IAnimationEndCallBack* callback/*=0*/ )
 	{
 		return getNode()->setAnimationEndCallback(callback);
 	}
 
-	void AnimatedMeshComponent::setMesh( irr::scene::IAnimatedMesh* mesh )
+	void AnimatedMeshComponent::setMesh( IAnimatedMesh* mesh )
 	{
 		return getNode()->setMesh(mesh);
 	}
 
-	irr::scene::IAnimatedMesh* AnimatedMeshComponent::getMesh()
+	IAnimatedMesh* AnimatedMeshComponent::getMesh()
 	{
 		return getNode()->getMesh();
 	}
@@ -172,9 +174,37 @@ namespace xihad { namespace render3d
 		return shadow;
 	}
 
-	irr::scene::IAnimatedMeshSceneNode * AnimatedMeshComponent::getNode() const
+	IAnimatedMeshSceneNode * AnimatedMeshComponent::getNode() const
 	{
-		return (irr::scene::IAnimatedMeshSceneNode*) RenderComponent::getNode();
+		return (IAnimatedMeshSceneNode*) RenderComponent::getNode();
+	}
+
+	AnimatedMeshComponent* AnimatedMeshComponent::create(
+		const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param,
+		ISceneManager* smgr, AnimationClipsCache* clipsCache, MeshManager* meshManager)
+	{
+		IAnimatedMesh* mesh = nullptr;
+
+		if (const char* path = param.getString("mesh"))
+		{
+			// TODO 未做任何检测，因为 Irrlicht 的 IMesh API 设计问题。
+			// 将来引入自己的 MeshCache 来解决这一问题。
+			mesh = static_cast<IAnimatedMesh*>(meshManager->getMesh(path));
+		}
+
+		AnimationClips clips;
+		if (const char* path = param.getString("clips"))
+			clips = clipsCache->getClips(path);
+
+		vector3df zero, one(1, 1, 1);
+		IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(
+			mesh, 0, -1, zero, zero, one, true);
+
+		auto amc = new AnimatedMeshComponent(compName, obj, node);
+
+		amc->createClips(clips);
+
+		return amc;
 	}
 
 

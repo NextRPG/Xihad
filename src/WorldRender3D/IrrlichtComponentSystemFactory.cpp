@@ -6,6 +6,7 @@
 #include "IrrlichtComponentSystem.h"
 #include "Engine/GameScene.h"
 #include "ExportLua/luaopen_All.h"
+#include "AnimationClipsJsonLoader.h"
 
 using namespace xihad::ngn;
 using namespace irr;
@@ -16,6 +17,9 @@ namespace xihad { namespace render3d
 		MultiComponentSystemFactory("Render"), mDevice(device)
 	{
 		xassert(mDevice);
+		AnimationClipsLoader* loader = new AnimationClipsJsonLoader;
+		mCachedClips.setAnimationClipsLoader(loader);
+		loader->drop();
 		init();
 	}
 
@@ -46,7 +50,7 @@ namespace xihad { namespace render3d
 		newScene->setAmbientLight(video::SColorf(ambient, ambient, ambient));
 		newScene->setShadowColor(video::SColor(60,0,0,0));
 		
-		auto sys = new IrrlichtComponentSystem(mDevice.get(), newScene, *this, mCachedClips);
+		auto sys = new IrrlichtComponentSystem(mDevice.get(), newScene, *this, &mCachedClips);
 		if (sys && scene->hasSystem("Lua"))
 		{
 			auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));

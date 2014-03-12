@@ -1,10 +1,10 @@
 #pragma once
 #include "CompositeUpdateHandler.h"
 #include <boost/scoped_ptr.hpp>
-#include <list>
+#include <set>
 #include "GameObject.h"
-#include "Message\IMessageDispatcher.h"
-#include "Message\MessageListener.h"
+#include "Message/IMessageDispatcher.h"
+#include "Message/MessageListener.h"
 
 struct lua_State;
 namespace xihad { namespace ngn
@@ -28,7 +28,7 @@ namespace xihad { namespace ngn
 
 	public:
 		typedef IMessageDispatcher<GameObject, GameScene, MessageListener> Dispatcher;
-		typedef std::list<GameObject*> ObjectGroup;
+		typedef std::set<GameObject*> ObjectGroup;
 
 	public:
 		explicit GameScene();

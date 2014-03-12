@@ -22,8 +22,7 @@ namespace xihad { namespace ngn
 
 		xassert(!containsChildHandler(handler));
 		mChildHandlerList.push_back(handler);
-		if (STARTING<UpdateHandler::status() && UpdateHandler::status()<DEAD)
-			handler->start();
+		if (isUpdating()) handler->start();
 
 		return true;
 	}
@@ -36,10 +35,10 @@ namespace xihad { namespace ngn
 
 	void CompositeUpdateHandler::onUpdate( const Timeline& tm )
 	{
-		UpdateHandler* curr = 0;
-		for(iterator iter = childHandlerBegin(); iter != childHandlerEnd();)
+		iterator endIter = childHandlerEnd();
+		for(iterator iter = childHandlerBegin(); iter != endIter;)
 		{
-			curr = *iter;
+			UpdateHandler* curr = *iter;
 
 			if (curr->status() == DEAD)
 			{
@@ -49,7 +48,7 @@ namespace xihad { namespace ngn
 			else 
 			{
 				curr->update(tm);
-				 ++iter;
+				++iter;
 			}
 		}
 	}

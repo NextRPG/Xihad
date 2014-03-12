@@ -21,6 +21,7 @@ int loadIrrScene(int argc, const char** argv)
 	while (device->run())
 	{
 		driver->beginScene(true, true, SColor(255, 144, 100, 122));
+		smgr->onAnimate();
 		smgr->drawAll();
 		driver->endScene();
 	}

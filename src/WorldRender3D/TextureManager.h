@@ -24,7 +24,7 @@ namespace xihad { namespace render3d
 		Texture* getTexture(TexID id);
 		void renameTexture(TexID newId, Texture*);
 		void removeTexture(Texture*);
-		Texture* addRenderTargetTexture(TexID, unsigned width, unsigned height, Format);
+		Texture* addRenderTargetTexture(TexID, unsigned width, unsigned height);
 
 	private:
 		irr_ptr<irr::video::IVideoDriver> driver;

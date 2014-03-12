@@ -38,7 +38,7 @@ function Highlight:changeColor(  )
 			return
 		elseif not self.object:findComponent(c"Mesh") then
 			local meshnode = self.object:appendComponent(c"Mesh")
-			meshnode:setMesh(meshManager:getMesh("colorCube"))
+			meshnode:setMesh(meshManager:getMesh("@colorCube"))
 		end
 		self.object:findComponent(c"Mesh"):setColor(hex2Color(Stack:top()))
 	else

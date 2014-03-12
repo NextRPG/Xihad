@@ -33,16 +33,27 @@
 + 添加 TextureManager/MeshManager
 + RTT 测试
 + 从 LuaT 中移除 MetaData
++ 优化游戏对象的标签存储
+
+### 3.12
++ 重构 IrrlichtComponentSystem
++ 双向关联映射表
++ 将 RenderTarget 和 Viewport 集成到 CameraComponent 之中
++ 优化游戏对象更新、绘制
++ 
 
 ### TODO
 + 3D音频
-+ 新的场景节点（公告牌优先）
++ 新的场景节点（文字优先）
 + 集成粒子系统进主游戏之中
 + 粒子系统的动画控制（关键点时间）
-+ 材质的控制
++ 脚本中对材质的控制
 + 新的几何体
 + 脚本中访问 ComponentSystem 的方法
++ 测试 MRT
++ GameObject 位置信息观察者
++ 优化 RenderComponent 与 GameObject 的同步
 
 ### TO REFACTOR
 + LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化
-+ IrrlichtComponentSystemFactory 分解类
++ 逆转 Visitor 模式

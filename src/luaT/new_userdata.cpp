@@ -23,9 +23,10 @@ namespace luaT
 			lua_setfield(L, -2, ReservedKeyword::__UDKEY); // set field __ud
 
 			Metatable::bind(L, -1, mtName);
-
+#ifdef LUAT_PROTECT_C_METATABLE
 			lua_pushstring(L, "Not Accessable");
 			lua_setfield(L, -2, "__metatable");	// protect metatable.
+#endif
 		}
 	}
 

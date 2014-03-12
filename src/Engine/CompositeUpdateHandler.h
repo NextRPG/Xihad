@@ -35,6 +35,7 @@ namespace xihad { namespace ngn
 
 		iterator eraseChildHandler(const_iterator where) { return mChildHandlerList.erase(where); }
 		size_t getChildHandlerCount() const { return mChildHandlerList.size(); }
+		bool hasChildHandler() const { return !mChildHandlerList.empty(); }
 
 		/// 判断是否包含对象
 		bool containsChildHandler(UpdateHandler* ) const;

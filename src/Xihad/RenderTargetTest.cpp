@@ -4,7 +4,12 @@
 using namespace irr;
 int rt_test(int argc, const char** argv)
 {
-	IrrlichtDevice* device = createDefaultDevice();
+	IrrlichtDevice* device = //createDefaultDevice();
+		createDevice(video::EDT_OPENGL,
+			core::dimension2du(1024,600), 32, false,
+			false, false, 0);
+
+
 	video::IVideoDriver* driver = device->getVideoDriver();
 
 
@@ -52,31 +57,27 @@ int rt_test(int argc, const char** argv)
 
 		//// prev
 		driver->setRenderTarget(prevTex, true, true);
-		// driver->beginScene();//true, true, video::SColor(255, 192, 168, 100));
+		driver->setViewPort(core::recti(0,0,256,128));
 		prevSmgr->onAnimate();
 		prevSmgr->drawAll();
-		// driver->endScene();
 
 
 // 		/// next
 // 		driver->setRenderTarget(nextTex, true, true);
-// 		// driver->beginScene();//true, true, video::SColor(255, 192, 168, 100));
 // 		nextSmgr->onAnimate();
 // 		nextSmgr->drawAll();
-// 		// driver->endScene();
-
 
 		/// main
 		driver->setRenderTarget(video::ERT_FRAME_BUFFER, true, true, video::SColor(255, 192, 168, 100));
+		// driver->setViewPort(core::rect<s32>(128, 64, 720, 512));
+		driver->setViewPort(core::recti(-128,-128,256,256));
 		mainSmgr->onAnimate();
 		mainSmgr->drawAll();
 
-
+		rot.Y += 0.5f;
+		front->setRotation(rot);
 
 		driver->endScene();
-// 
-// 		rot.Y += 2.5f;
-// 		front->setRotation(rot);
 	}
 	
 	prevSmgr->drop();

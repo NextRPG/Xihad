@@ -2,12 +2,12 @@
 #include "IMessageDispatcher.h"
 #include <list>
 #include <queue>
-#include <boost\intrusive_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <functional>		// for std::greater
 #include "TagTree.h"
 #include "MessageTag.h"
-#include "Engine\Timeline.h"
-#include "MemoryLeakDetector.h"
+#include "../Timeline.h"
+#include "../MemoryLeakDetector.h"
 
 namespace xihad { namespace ngn 
 {

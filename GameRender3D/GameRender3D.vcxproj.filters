@@ -45,6 +45,13 @@
     </ClInclude>
     <ClInclude Include="..\src\WorldRender3D\TextureManager.h" />
     <ClInclude Include="..\src\WorldRender3D\MeshManager.h" />
+    <ClInclude Include="..\src\WorldRender3D\CameraRenderTarget.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsJsonLoader.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsLoader.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -99,6 +106,13 @@
     <ClCompile Include="..\src\WorldRender3D\MeshManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_resourceManager.cpp">
       <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\CameraRenderTarget.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsCache.cpp">
+      <Filter>AnimationClip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsJsonLoader.cpp">
+      <Filter>AnimationClip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

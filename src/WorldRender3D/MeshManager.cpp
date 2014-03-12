@@ -1,8 +1,10 @@
 #include "MeshManager.h"
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IMeshCache.h>
+#include <irrlicht/EHardwareBufferFlags.h>
 
 using namespace irr;
+using namespace scene;
 namespace xihad { namespace render3d
 {
 	MeshManager::MeshManager( irr::scene::ISceneManager& smgr ) :
@@ -12,7 +14,19 @@ namespace xihad { namespace render3d
 
 	MeshManager::Mesh* MeshManager::getMesh( MeshID id )
 	{
-		return smgr->getMesh(id);
+		Mesh* mesh = smgr->getMesh(id);
+
+		/// TODO
+		if (mesh)
+		{
+			for (u32 i = 0; i < mesh->getMeshBufferCount(); i++)
+			{
+				mesh->getMeshBuffer(i)->setHardwareMappingHint(EHM_STREAM, EBT_INDEX);
+				mesh->getMeshBuffer(i)->setHardwareMappingHint(EHM_STREAM, EBT_VERTEX);
+			}
+		}
+
+		return mesh;
 	}
 
 	void MeshManager::addMesh( MeshID id, Mesh* mesh )

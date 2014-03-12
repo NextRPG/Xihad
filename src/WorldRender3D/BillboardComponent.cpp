@@ -1,17 +1,25 @@
 #include "BillboardComponent.h"
-#include "irrlicht\IBillboardSceneNode.h"
+#include <irrlicht\IBillboardSceneNode.h>
+#include <irrlicht\ISceneManager.h>
 
 using namespace std;
-using namespace xihad::ngn;
-using namespace irr;
-using namespace scene;
-using namespace video;
 namespace xihad { namespace render3d
 {
+	using namespace video;
+	using namespace ngn;
+
 	BillboardComponent::BillboardComponent( const string& name, 
 		GameObject& host, IBillboardSceneNode* node ) :
 		RenderComponent(name, host, node)
 	{
+	}
+
+	BillboardComponent* BillboardComponent::create( 
+		const std::string& name, ngn::GameObject& host, const ngn::Properties& params, 
+		ISceneManager* smgr )
+	{
+		IBillboardSceneNode* node = smgr->addBillboardSceneNode();
+		return new BillboardComponent(name, host, node);
 	}
 
 	void BillboardComponent::setSize(const ngn::dimension2df& size)
@@ -30,24 +38,24 @@ namespace xihad { namespace render3d
 		getNode()->getSize(height, bottomEdgeWidth, topEdgeWidth);
 	}
 
-	void BillboardComponent::setColor( const irr::video::SColor& overallColor )
+	void BillboardComponent::setColor( const video::SColor& overallColor )
 	{
 		getNode()->setColor(overallColor);
 	}
 
-	void BillboardComponent::setColor( const irr::video::SColor& topColor, const irr::video::SColor& bottomColor )
+	void BillboardComponent::setColor( const video::SColor& topColor, const video::SColor& bottomColor )
 	{
 		getNode()->setColor(topColor, bottomColor);
 	}
 
-	void BillboardComponent::getColor( irr::video::SColor& topColor, irr::video::SColor& bottomColor ) const
+	void BillboardComponent::getColor( video::SColor& topColor, video::SColor& bottomColor ) const
 	{
 		getNode()->getColor(topColor, bottomColor);
 	}
 
-	irr::scene::IBillboardSceneNode* BillboardComponent::getNode() const
+	IBillboardSceneNode* BillboardComponent::getNode() const
 	{
-		return (irr::scene::IBillboardSceneNode*) RenderComponent::getNode();
+		return (IBillboardSceneNode*) RenderComponent::getNode();
 	}
 }}
 

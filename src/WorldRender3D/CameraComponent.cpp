@@ -2,66 +2,68 @@
 #include <irrlicht/ICameraSceneNode.h>
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
-#include <CppBase/xassert.h>
-#include <iostream>
+#include "IrrlichtComponentSystem.h"
 
 using namespace std;
-using namespace irr::video;
-using namespace irr::scene;
-using namespace xihad::ngn;
 namespace xihad { namespace render3d
 {
-	CameraComponent::RenderTarget::RenderTarget(ITexture& texture) :
-		texture(&texture), renderToTexture(true) 
-	{
-	}
+	using namespace ngn;
+	using namespace video;
 
-	CameraComponent::RenderTarget::RenderTarget(E_RENDER_TARGET target) :
-		target(target), renderToTexture(false) 
-	{
-		xassert(target != ERT_RENDER_TEXTURE);
-	}
-
-	void CameraComponent::setRendererTarget( RenderTarget renderTarget )
-	{
-		if (renderTarget.renderToTexture)
-		{
-			this->renderTarget = ERT_RENDER_TEXTURE;
-			this->renderTexture.reset(0);
-		}
-		else
-		{
-			if (renderTarget.target == ERT_MULTI_RENDER_TEXTURES)
-			{
-				cerr << "Not support Multi render texutres yet"	<<  endl;
-				return;
-			}
-
-			this->renderTarget = renderTarget.target;
-			xassert(renderTarget.texture);
-			this->renderTexture.reset(renderTarget.texture);
-		}
-	}
-
-	CameraComponent::RenderTarget CameraComponent::getRenderTarget()
-	{
-		if (renderTarget != ERT_RENDER_TEXTURE)
-		{
-			return RenderTarget(renderTarget);
-		}
-		else 
-		{
-			xassert(renderTexture.get() != nullptr);
-			return RenderTarget(*renderTexture.get());
-		}
-	}
-
-
-///////////////////////////////////////////////////////////////////////////////////
 	CameraComponent::CameraComponent( const std::string& name, 
-		ngn::GameObject& host, ICameraSceneNode* node ) :
-		RenderComponent(name, host, node), 
-		renderTarget(ERT_FRAME_BUFFER), renderTexture(0) { }
+		ngn::GameObject& host, ICameraSceneNode* node, IrrlichtComponentSystem* sys) :
+		RenderComponent(name, host, node), active(true), irrlichtSystem(sys),
+		viewport(0, 0, 1, 1)
+	{
+		sys->addCamera(renderTarget, this);
+	}
+
+	CameraComponent* CameraComponent::create(
+		const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param,
+		ISceneManager* smgr, IrrlichtComponentSystem* sys)
+	{
+		ICameraSceneNode* cameraNode = smgr->addCameraSceneNode();
+		CameraComponent* camcom = new CameraComponent(compName, obj, cameraNode, sys);
+
+		if (param.getBool("active", true) == false)
+			camcom->setActive(false);
+
+		return camcom;
+	}
+
+	void CameraComponent::setRendererTarget( CameraRenderTarget renderTarget )
+	{
+		if (this->renderTarget != renderTarget)
+		{
+			this->renderTarget = renderTarget;
+			irrlichtSystem->addCamera(renderTarget, this);
+		}
+	}
+
+	core::recti CameraComponent::getAbsoluteViewport( const core::dimension2du& size ) const
+	{
+		return core::recti(
+			(int) (viewport.UpperLeftCorner.X  * size.Width), 
+			(int) (viewport.UpperLeftCorner.Y  * size.Height),
+			(int) (viewport.LowerRightCorner.X * size.Width),
+			(int) (viewport.LowerRightCorner.Y * size.Height));
+	}
+
+	/// Add self into scene manager's render queue
+	void CameraComponent::setActive(bool active)
+	{
+		if (this->active == active) return;
+
+		this->active = active;
+
+		ISceneManager* smgr = getNode()->getSceneManager();
+		smgr->setActiveCamera(getNode());
+	}
+
+	bool CameraComponent::isActive() const
+	{
+		return active;
+	}
 
 	void CameraComponent::setProjectionMatrix( const ngn::Matrix& projection, bool isOrthogonal/*=false*/ )
 	{
@@ -158,29 +160,15 @@ namespace xihad { namespace render3d
 		return getNode()->isOrthogonal();
 	}
 
-	/// Add self into scene manager's render queue
-	void CameraComponent::activate()
-	{
-		ISceneManager* smgr = getNode()->getSceneManager();
-		smgr->setActiveCamera(getNode());
-	}
-
-	bool CameraComponent::isActivating() const
-	{
-		ICameraSceneNode const * n = getNode();
-		ISceneManager* smgr = n->getSceneManager();
-		return smgr->getActiveCamera() == n;
-	}
-
 	void CameraComponent::onStop()
 	{
+		irrlichtSystem->removeCamera(this);
 		RenderComponent::onStop();
-		if (isActivating())
-			getNode()->getSceneManager()->setActiveCamera(nullptr);
 	}
 
 	ICameraSceneNode * CameraComponent::getNode() const
 	{
 		return (ICameraSceneNode*) RenderComponent::getNode();
 	}
+
 }}

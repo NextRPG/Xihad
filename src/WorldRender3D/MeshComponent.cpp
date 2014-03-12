@@ -1,25 +1,28 @@
 #include "MeshComponent.h"
-#include "CppBase\xassert.h"
-#include "irrlicht\IMeshSceneNode.h"
-#include "irrlicht\ISceneManager.h"
+#include <CppBase\xassert.h>
+#include <irrlicht\IMeshSceneNode.h>
+#include <irrlicht\ISceneManager.h>
+#include <Engine\Properties.h>
+#include "MeshManager.h"
 
-using namespace irr::scene;
 namespace xihad { namespace render3d
 {
-	
+	using namespace ngn;
+	using namespace core;
+
 	MeshComponent::MeshComponent( const std::string& name, 
-		ngn::GameObject& host, irr::scene::IMeshSceneNode* node ) :
+		ngn::GameObject& host, IMeshSceneNode* node ) :
 		RenderComponent(name, host, node)
 	{
 	}
 
-	void MeshComponent::setMesh( irr::scene::IMesh* mesh )
+	void MeshComponent::setMesh( IMesh* mesh )
 	{
 		xassert(getNode());
 		getNode()->setMesh(mesh);
 	}
 
-	irr::scene::IMesh* MeshComponent::getMesh()
+	IMesh* MeshComponent::getMesh()
 	{
 		xassert(getNode());
 		return getNode()->getMesh();
@@ -53,9 +56,24 @@ namespace xihad { namespace render3d
 		return false;
 	}
 
-	irr::scene::IMeshSceneNode* MeshComponent::getNode() const
+	IMeshSceneNode* MeshComponent::getNode() const
 	{
-		return (irr::scene::IMeshSceneNode*) RenderComponent::getNode();
+		return (IMeshSceneNode*) RenderComponent::getNode();
+	}
+
+	MeshComponent* MeshComponent::create( 
+		const std::string& compName, GameObject& obj, const ngn::Properties& param, 
+		ISceneManager* smgr, MeshManager* msmgr )
+	{
+		IMesh* mesh = nullptr;
+		if (const char* path = param.getString("mesh"))
+			mesh = msmgr->getMesh(path);
+
+		vector3df zero(0, 0, 0), one(1, 1, 1);
+		IMeshSceneNode* meshNode = 
+			smgr->addMeshSceneNode(mesh, 0, -1, zero, zero, one, true);
+
+		return new MeshComponent(compName, obj, meshNode);
 	}
 
 }}

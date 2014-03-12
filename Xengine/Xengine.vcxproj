@@ -77,6 +77,7 @@
     <ClCompile Include="..\src\Engine\BaseComponentSystem.cpp" />
     <ClCompile Include="..\src\Engine\FPSCounter.cpp" />
     <ClCompile Include="..\src\Engine\FrameRateAdjuster.cpp" />
+    <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp" />
     <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp" />
     <ClCompile Include="..\src\Engine\UserEventReceiverStack.cpp" />
     <ClCompile Include="..\src\Engine\GameEngine.cpp" />
@@ -105,10 +106,13 @@
     <ClInclude Include="..\src\CppBase\StdMap.h" />
     <ClInclude Include="..\src\CppBase\StringUtil.h" />
     <ClInclude Include="..\src\CppBase\xassert.h" />
+    <ClInclude Include="..\src\Engine\BiAssociateMap.h" />
     <ClInclude Include="..\src\Engine\EngineConfig.h" />
     <ClInclude Include="..\src\Engine\FPSCounter.h" />
     <ClInclude Include="..\src\Engine\FrameObserver.h" />
     <ClInclude Include="..\src\Engine\FrameRateAdjuster.h" />
+    <ClInclude Include="..\src\Engine\GameObjectTagManager.h" />
+    <ClInclude Include="..\src\Engine\GameObjectVisitor.h" />
     <ClInclude Include="..\src\Engine\MemoryLeakDetector.h" />
     <ClInclude Include="..\src\Engine\TimeConversion.h" />
     <ClInclude Include="..\src\Engine\TimelineObserver.h" />
@@ -141,7 +145,7 @@
     <ClInclude Include="..\src\Engine\vector3d.h" />
     <ClInclude Include="..\src\Engine\matrix.h" />
     <ClInclude Include="..\src\Engine\MultiComponentSystemFactory.h" />
-    <ClInclude Include="..\src\Engine\TagListener.h" />
+    <ClInclude Include="..\src\Engine\TagManager.h" />
     <ClInclude Include="..\src\Engine\WindowEventSeizer.h" />
     <ClInclude Include="..\src\Engine\WindowEventTransmitter.h" />
     <ClInclude Include="..\src\Engine\WindowRenderer.h" />

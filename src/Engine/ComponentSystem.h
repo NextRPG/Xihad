@@ -1,7 +1,7 @@
 #pragma once
 #include "UpdateHandler.h"
 #include "ComponentFactory.h"
-#include <Engine/MemoryLeakDetector.h>
+#include "MemoryLeakDetector.h"
 
 namespace xihad { namespace ngn
 {

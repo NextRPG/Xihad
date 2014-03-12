@@ -24,12 +24,11 @@ namespace xihad { namespace render3d
 		driver->removeTexture(tex);
 	}
 
-	TextureManager::Texture* TextureManager::addRenderTargetTexture( TexID id, 
-		unsigned width, unsigned height, Format format)
+	TextureManager::Texture* TextureManager::addRenderTargetTexture(TexID id, 
+		unsigned width, unsigned height)
 	{
 		core::dimension2du size(width, height);
-
-		return driver->addRenderTargetTexture(size, id, format);
+		return driver->addRenderTargetTexture(size, id);
 	}
 
 }}
