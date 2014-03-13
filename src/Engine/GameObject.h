@@ -228,6 +228,8 @@ namespace xihad { namespace ngn
 		 */
 		virtual const Matrix& getWorldTransformMatrix() const;
 
+		virtual const Transform& getWorldTransform() const;
+
 	protected:
 		virtual void onStart();
 
@@ -241,6 +243,7 @@ namespace xihad { namespace ngn
 
 	private:
 		void updateChildrenWorldMatrix();
+		void updateWorldMatrix() const;
 
 	private:
 		struct impl;

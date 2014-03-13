@@ -10,5 +10,12 @@ namespace xihad { namespace ngn
 		resetTranslate();
 	}
 
+	void Transform::setFromMatrix( const Matrix& mat )
+	{
+		mTranslate = mat.getTranslation();
+		mRotation = mat.getRotationDegrees();
+		mScale = mat.getScale();
+	}
+
 }}
 

@@ -158,7 +158,7 @@ namespace xihad { namespace ngn
 		IdentifiedObjectsMap::iterator pos = mImpl->sceneObjects.lower_bound(id);
 
 		GameObject* obj = 0;
-		if (pos->first != id)
+		if (pos == mImpl->sceneObjects.end() || pos->first != id)
 		{
 			obj = new GameObject(mImpl.get(), id);
 			obj->setParent(parent ? parent : getRootObject());

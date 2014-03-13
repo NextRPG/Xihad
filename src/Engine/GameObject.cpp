@@ -21,6 +21,10 @@ using namespace irr;
 using namespace core;
 namespace xihad { namespace ngn
 {
+	using std::string;
+	typedef GameObjectDepends::TagManagerT MyTagManager;
+
+	enum { MaxTagCount = MyTagManager::MaxTagCount };
 	enum 
 	{
 		TRANSLATE_DIRTY = 1,
@@ -30,21 +34,22 @@ namespace xihad { namespace ngn
 		PARENT_DIRTY = 8,
 	};
 
-	typedef GameObjectDepends::TagManagerT MyTagManager;
-	using std::string;
 	struct GameObject::impl
 	{
 		GameObjectDepends* depends;
 		Identifier objectID;
-		bitset<MyTagManager::MaxTagCount> tags;
+		bitset<MaxTagCount> tags;
 
 		GameObject* parent;
 		CompositeUpdateHandler* childrenList;	// managed by GameObject
 
 		mutable int transfromDirtyBits;
-		mutable Matrix rotateMatrix;
 		mutable Matrix localMatrix;
 		mutable Matrix worldMatrix;
+		mutable Transform worldTransform;
+#ifdef XIHAD_CACHE_ROTATE_MATRIX
+		mutable Matrix rotateMatrix;
+#endif
 
 		unordered_map<string, Component*> components;
 
@@ -287,6 +292,15 @@ namespace xihad { namespace ngn
 		*bits &= ~mask;
 	}
 
+	void GameObject::updateWorldMatrix() const
+	{
+		auto& base = mImpl->parent->getWorldTransformMatrix();
+
+		// update local matrix
+		mImpl->worldMatrix.setbyproduct(base, getLocalTransformMatrix());
+		mImpl->transfromDirtyBits = 0;
+	}
+
 	const Matrix& GameObject::getWorldTransformMatrix() const
 	{
 		if (identityParent())
@@ -297,32 +311,48 @@ namespace xihad { namespace ngn
 		}
 
 		if (mImpl->transfromDirtyBits)
-		{
-			auto& base = mImpl->parent->getWorldTransformMatrix();
-
-			// update local matrix
-			mImpl->worldMatrix = base * getLocalTransformMatrix();
-			mImpl->transfromDirtyBits = 0;
-		}
+			updateWorldMatrix();
 
 		return mImpl->worldMatrix;
+	}
+
+	const Transform& GameObject::getWorldTransform() const
+	{
+		if (identityParent())
+			return mTransform;
+
+		if (mImpl->transfromDirtyBits & (PARENT_DIRTY|ROTATE_DIRTY))
+		{
+			updateWorldMatrix();
+			mImpl->worldTransform.setFromMatrix(mImpl->worldMatrix);
+		}
+		else if (mImpl->transfromDirtyBits)
+		{
+			updateWorldMatrix();	// my translation and scale has updated
+			mImpl->worldTransform.resetTranslate(mImpl->worldMatrix.getTranslation());
+			mImpl->worldTransform.resetScale(mImpl->worldMatrix.getScale());
+		}
+
+		return mImpl->worldTransform;
 	}
 
 	const Matrix& GameObject::getLocalTransformMatrix() const
 	{
 		if (mImpl->transfromDirtyBits & LOCAL_DIRTY)
 		{
+#ifdef XIHAD_CACHE_ROTATE_MATRIX
 			if (mImpl->transfromDirtyBits & ROTATE_DIRTY)
 				mImpl->rotateMatrix.setRotationDegrees(getRotation());
 
 			mImpl->localMatrix = mImpl->rotateMatrix;
-			mImpl->localMatrix.setTranslation(getTranslate());
+#else
+			mImpl->localMatrix.setRotationDegrees(getRotation());
+#endif
 
-			vector3df vscale = getScale();
+			mImpl->localMatrix.setTranslation(getTranslate());
+			vector3df vscale = mTransform.getScale();
 			float mScale[] = { vscale.X, vscale.Y, vscale.Z };
-			for (int idx = 0, first = 0; 
-				 first < 12; 
-				 first += 4, ++idx)
+			for (int idx = 0, first = 0; first < 12; first += 4, ++idx)
 			{
 				mImpl->localMatrix[first+0] *= mScale[idx];
 				mImpl->localMatrix[first+1] *= mScale[idx];
@@ -337,8 +367,8 @@ namespace xihad { namespace ngn
 
 	bool GameObject::identityParent() const
 	{
-		return  mImpl->parent == nullptr || 
-				mImpl->parent == mImpl->scene()->getRootObject();
+		return  mImpl->parent == mImpl->scene()->getRootObject() || 
+				mImpl->parent == nullptr;
 	}
 
 	void GameObject::setParent( GameObject* newParent )

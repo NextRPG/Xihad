@@ -267,6 +267,7 @@ namespace scene
 				child->grab();
 				child->remove(); // remove from old parent
 				Children.push_back(child);
+				child->PositionInParent = Children.getLast();
 				child->Parent = this;
 			}
 		}
@@ -280,16 +281,13 @@ namespace scene
 		e.g. because it couldn't be found in the children list. */
 		virtual bool removeChild(ISceneNode* child)
 		{
-			ISceneNodeList::Iterator it = Children.begin();
-			for (; it != Children.end(); ++it)
-				if ((*it) == child)
-				{
-					(*it)->Parent = 0;
-					(*it)->drop();
-					Children.erase(it);
-					return true;
-				}
-
+			if (child->Parent == this)
+			{
+				child->Parent = 0;
+				Children.erase(child->PositionInParent);
+				child->PositionInParent = Children.end();
+				return true;
+			}
 			_IRR_IMPLEMENT_MANAGED_MARSHALLING_BUGFIX;
 			return false;
 		}
@@ -305,6 +303,7 @@ namespace scene
 			for (; it != Children.end(); ++it)
 			{
 				(*it)->Parent = 0;
+				(*it)->PositionInParent = Children.end();
 				(*it)->drop();
 			}
 
@@ -524,10 +523,12 @@ namespace scene
 			grab();
 			remove();
 
-			Parent = newParent;
-
-			if (Parent)
-				Parent->addChild(this);
+			_IRR_DEBUG_BREAK_IF(Parent);
+			if (newParent)
+			{
+				newParent->addChild(this);
+				_IRR_DEBUG_BREAK_IF(Parent != newParent)
+			}
 
 			drop();
 		}
@@ -575,17 +576,7 @@ namespace scene
 		//! Updates the absolute position based on the relative and the parents position
 		/** Note: This does not recursively update the parents absolute positions, so if you have a deeper
 			hierarchy you might want to update the parents first.*/
-		virtual void updateAbsolutePosition()
-		{
-			if (Parent)
-			{
-				AbsoluteTransformation =
-					Parent->getAbsoluteTransformation() * getRelativeTransformation();
-			}
-			else
-				AbsoluteTransformation = getRelativeTransformation();
-		}
-
+		virtual void updateAbsolutePosition();
 
 		//! Returns the parent of this scene node
 		/** \return A pointer to the parent. */
@@ -734,6 +725,7 @@ namespace scene
 
 		//! Pointer to the parent
 		ISceneNode* Parent;
+		core::list<ISceneNode*>::Iterator PositionInParent;
 
 		//! List of all children of this node
 		core::list<ISceneNode*> Children;

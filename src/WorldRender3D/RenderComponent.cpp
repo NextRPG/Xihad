@@ -18,7 +18,7 @@ namespace xihad { namespace render3d
 	using ::std::string;
 
 	// fwd
-	static void setUserdata2Node(ISceneNode* node, void* ud);
+	static void setUserdata2Node(ISceneNode* node, RenderComponent* ud);
 
 	RenderComponent::RenderComponent(const string& name, GameObject& host, ISceneNode* node ) :
 		Component(name, host), mNode(node), mVisibility(1)
@@ -33,7 +33,7 @@ namespace xihad { namespace render3d
 
 	RenderComponent::~RenderComponent()
 	{
-		setUserdata2Node(mNode.get(), nullptr);
+		setUserdata2Node(mNode.get(), 0);
 		xassert(RenderComponent::getComponentFromNode(mNode.get()) == nullptr);
 	}
 
@@ -167,9 +167,9 @@ namespace xihad { namespace render3d
 
 		// sync transform
 		// TODO: try to set AbsoluteMatrix directly
-		const Matrix& worldTransform = obj->getWorldTransformMatrix();
+		const Transform& worldTransform = obj->getWorldTransform();
 		mNode->setPosition(worldTransform.getTranslation());
-		mNode->setRotation(worldTransform.getRotationDegrees());
+		mNode->setRotation(worldTransform.getRotation());
 		mNode->setScale(worldTransform.getScale());
 	}
 
@@ -188,28 +188,6 @@ namespace xihad { namespace render3d
 		mNode->setParent(nullptr);
 	}
 
-	enum 
-	{
-		MAGIC_NUMBER = 0xcafebabe,
-		MAGIC_LENGTH = sizeof(int),
-		DATA_LENGTH  = sizeof(RenderComponent*),
-		NAME_LENGTH  = DATA_LENGTH + MAGIC_LENGTH,
-	};
-	RenderComponent* RenderComponent::getComponentFromNode( const ISceneNode* node )
-	{
-		const char* namedPtr = node->getName();
-		int magicNumber;
-		void* ptr;
-		memcpy(&magicNumber, namedPtr, MAGIC_LENGTH);
-		if (magicNumber != MAGIC_NUMBER)
-			return nullptr;
-		else
-		{
-			memcpy(&ptr, namedPtr+MAGIC_LENGTH, DATA_LENGTH);
-			return static_cast<RenderComponent*> (ptr);
-		}
-	}
-
 	bool RenderComponent::isCulled() const
 	{
 		return getNode()->getSceneManager()->isCulled(getNode());
@@ -220,7 +198,27 @@ namespace xihad { namespace render3d
 		return getNode()->getTriangleSelector();
 	}
 
-	static void setUserdata2Node( ISceneNode* node, void* userdata )
+
+	enum 
+	{
+		MAGIC_NUMBER = 0xcafebabe,
+		MAGIC_LENGTH = sizeof(int),
+		DATA_LENGTH  = sizeof(RenderComponent*),
+		NAME_LENGTH  = DATA_LENGTH + MAGIC_LENGTH,
+	};
+
+	union RenderComponentIntrusiveData
+	{
+		struct Data
+		{
+			int magicNumber;
+			RenderComponent* ptr;
+		} rcdata;
+
+		char name[NAME_LENGTH];
+	};
+
+	static void setUserdata2Node( ISceneNode* node, RenderComponent* userdata )
 	{
 		if (userdata == nullptr)
 		{
@@ -228,15 +226,24 @@ namespace xihad { namespace render3d
 		}
 		else
 		{
-			char renderptr2name[NAME_LENGTH+1];
-			int magicNumber = MAGIC_NUMBER;
-			memcpy(renderptr2name, &magicNumber, MAGIC_LENGTH);
-			memcpy(renderptr2name+MAGIC_LENGTH, &userdata, DATA_LENGTH);
-			renderptr2name[NAME_LENGTH] = '\0';
-
-			stringc codedName(renderptr2name, NAME_LENGTH);
+			RenderComponentIntrusiveData intrsive;
+			intrsive.rcdata.magicNumber = MAGIC_NUMBER;
+			intrsive.rcdata.ptr = userdata;
+			stringc codedName(intrsive.name, NAME_LENGTH);
 			node->setName(codedName);
 		}
+	}
+
+	RenderComponent* RenderComponent::getComponentFromNode( const ISceneNode* node )
+	{
+		char* namedPtr = const_cast<char*>(node->getName());
+		RenderComponentIntrusiveData* intrusive = 
+			reinterpret_cast<RenderComponentIntrusiveData*>(namedPtr);
+
+		if (intrusive->rcdata.magicNumber == MAGIC_NUMBER)
+			return intrusive->rcdata.ptr;
+
+		return 0;
 	}
 
 }}

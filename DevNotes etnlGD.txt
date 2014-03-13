@@ -39,8 +39,12 @@
 + 重构 IrrlichtComponentSystem
 + 双向关联映射表
 + 将 RenderTarget 和 Viewport 集成到 CameraComponent 之中
-+ 优化游戏对象更新、绘制
-+ 
++ 优化游戏对象更新、绘制、创建、销毁的运行速度
++ 优化游戏对象内存占用
++ 重新设计 TagManager
+
+### 3.13
+
 
 ### TODO
 + 3D音频

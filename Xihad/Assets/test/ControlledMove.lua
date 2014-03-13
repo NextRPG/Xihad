@@ -27,24 +27,23 @@ function ControlledMove:onUpdate()
 	local rot = self.object:getRotation()
 	local x,y,z = rot:xyz()
 	y = y % 360
-	y = y>180 and y - 360 or (y <= -180 and y + 360 or y)
+	y = y>180 and y - 360 or (y <= -180 and y + 360 or y) -- (-180, 180]
 	
 	if self.ydir ~= y then
 		local target = self.ydir
 		local dy = 0
 		local max = Time.change * 720
+		
+		-- 旋转小角度
 		if target-y > 180  then target = target - 360 end
 		if target-y < -180 then target = target + 360 end
 
-		if target > y then
-			dy = self.ydir-y > max and  max or self.ydir-y
-		else
-			dy = y-self.ydir > max and -max or self.ydir-y
-		end
-
+		dy = target-y
+		dy = dy>max and max or (dy<-max and -max or dy)
+		
 		self.object:concatRotate(math3d.vector(0, dy, 0))
 	end
-
+	
 	if not self.dontMove then
 		local rad = self.ydir/180*math.pi
 		local dst = Time.change*self.speed
@@ -83,7 +82,7 @@ function ControlledMove:acquire()
 				self.next = nil
 				anim:playAnimation(c(self.status))
 			end)
-			return true
+			return 0
 		end
 
 		if e.key == "UP" then
@@ -94,28 +93,32 @@ function ControlledMove:acquire()
 			self.direction.x = 1
 		elseif e.key == "DOWN" then
 			self.direction.z = -1
+		else
+			print("no handler") io.flush()
+			return 1
 		end
-		-- Test cegui
-		if e.key == "P" then
-			uiHandle:subscribeEvent("CommandSelected", function (args)
-				print("!!!")
-			end)
-		elseif e.key == "J" then
-			uiHandle:showWindow("CommandWindow", 
-			{ 
-				["技能"] = { shortcut = "A", list = { ["技能1"] = true , ["技能2"] = false } }, 
-				["道具"] = { list = { ["道具1"] = true} }, 
-				["待机"] = { disabled = true } 
-			})
+		
+		-- -- Test cegui
+		-- if e.key == "P" then
+		-- 	uiHandle:subscribeEvent("CommandSelected", function (args)
+		-- 		print("!!!")
+		-- 	end)
+		-- elseif e.key == "J" then
+		-- 	uiHandle:showWindow("CommandWindow", 
+		-- 	{ 
+		-- 		["技能"] = { shortcut = "A", list = { ["技能1"] = true , ["技能2"] = false } }, 
+		-- 		["道具"] = { list = { ["道具1"] = true} }, 
+		-- 		["待机"] = { disabled = true } 
+		-- 	})
 			
 
-		elseif e.key == "Q" then
-			uiHandle:hideWindow("CommandWindow")
-		elseif e.key == "I" then
-			damageNumber = damageNumber or 0
-			uiHandle:showWindow("AttackDamage", { damage = damageNumber})
-			damageNumber = (damageNumber + 5)%1000	
-		end
+		-- elseif e.key == "Q" then
+		-- 	uiHandle:hideWindow("CommandWindow")
+		-- elseif e.key == "I" then
+		-- 	damageNumber = damageNumber or 0
+		-- 	uiHandle:showWindow("AttackDamage", { damage = damageNumber})
+		-- 	damageNumber = (damageNumber + 5)%1000	
+		-- end
 		--
 		self:updateMotion()
 		return 0
@@ -130,6 +133,8 @@ function ControlledMove:acquire()
 			self.direction.x = 0
 		elseif e.key == "DOWN" then
 			self.direction.z = 0
+		else
+			return 1
 		end
 
 		self:updateMotion()

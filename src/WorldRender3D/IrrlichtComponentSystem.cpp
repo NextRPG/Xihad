@@ -87,13 +87,14 @@ namespace xihad { namespace render3d
 	static void syncSceneNode(ISceneNode* node)
 	{
 		auto iter = node->getChildren().begin();
-		while (iter != node->getChildren().end())
+		auto stop = node->getChildren().end();
+		while (iter != stop)
 		{
 			RenderComponent* component = RenderComponent::getComponentFromNode(*iter);
 			if (component)
 				component->syncWithObject();
 
-			syncSceneNode(*iter);
+			// syncSceneNode(*iter);
 			++iter;
 		}
 	}
