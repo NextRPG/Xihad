@@ -67,3 +67,4 @@ LightManager:init()
 local gameController = require("InputController")
 scene:pushController(gameController) 
 gameController:drop()
+

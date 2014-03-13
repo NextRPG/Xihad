@@ -72,6 +72,7 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameEngine.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameWorld.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp" />

@@ -14,6 +14,7 @@ namespace xihad { namespace script
 	int luaopen_MessageListener(lua_State* L);
 	int luaopen_NativeWindow(lua_State* L);
 	int luaopen_GameEngine(lua_State* L);
+	int luaopen_GameWorld(lua_State* L);
 	
 	void luaopen_all(lua_State* L)
 	{
@@ -29,6 +30,7 @@ namespace xihad { namespace script
 		luaopen_MessageListener(L);
 		luaopen_NativeWindow(L);
 		luaopen_GameEngine(L);
+		luaopen_GameWorld(L);
 	}
 }}
 

@@ -45,6 +45,9 @@
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\LuaUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameWorld.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />

@@ -7,6 +7,7 @@
 
 #define LUA_G_SCENE			"scene"
 #define LUA_G_ENGINE		"engine"
+#define LUA_G_WORLD			"world"
 #define LUA_G_WINDOW		"window"
 
 #define LUA_SYSTEM_INIT		"initSystem"

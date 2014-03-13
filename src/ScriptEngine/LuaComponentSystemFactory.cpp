@@ -63,6 +63,7 @@ namespace xihad { namespace script
 			lua_setfield(L, -2, LUA_G_TIME);	// TODO: read-only?
 
 			setField(L, -1, LUA_G_ENGINE, mEngine);
+			setField(L, -1, LUA_G_WORLD, mEngine->getWorld());
 			setField(L, -1, LUA_G_WINDOW, wnd);
 		}
 	}
