@@ -49,18 +49,22 @@
 	+ 将节点中的 Position\Rotation\Scale 替换为 RelativeMatrix
 + 优化游戏对象的世界位置信息更新
 + 游戏世界导出
++ 3D音频测试完成
++ 音频系统导出
 
-###
+
+### 3.14
+
 
 ### TODO
-+ 3D音频
 + 新的场景节点（文字优先）
 + 集成粒子系统进主游戏之中
 + 粒子系统的动画控制（关键点时间）
 + 脚本中对材质的控制
 + 新的几何体
-+ 脚本中访问 ComponentSystem 的方法
 + 测试 MRT
++ Audio Listener 更好的实现
++ 直接通过 AudioSystem 播放音乐，不需要借助 GameObject 管理
 
 ### TO REFACTOR
 + LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化

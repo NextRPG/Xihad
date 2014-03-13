@@ -1,36 +1,56 @@
 require "math3d"
+package.path = package.path..";../Xihad/Assets/test/?.lua"
 
-local param = { 
-	mesh  = "Assets/model/ninja.b3d", 
-	clips = "Assets/model/ninja.clip" 
-}
+scene:requireSystem(c"Audio")
+audioSystem:setSoundVolume(0)
 
+local param = { mesh  = "Assets/model/ninja.b3d", clips = "Assets/model/ninja.clip" }
 local ninja = scene:createObject(c"ninja")
-do
-	anim = ninja:appendComponent(c"AnimatedMesh", param)
-	anim:createSelector(c"stupid")
-end
+ninja:resetTranslation(math3d.vector(0, 0, -15))
+anim = ninja:appendComponent(c"AnimatedMesh", param)
 anim:playAnimation(c"idle 1")
 anim:setTransitionTime(0.1)
 ninja:concatRotate(math3d.vector(0, 180, 0))
+
+local ctrl = ninja:appendComponent(c'ControlledMove')
+local njaudio = ninja:appendComponent(c'Audio')
+njaudio:playSound("Assets/mfx/bbb.ogg")
+njaudio:setLooped(true)
+ctrl:acquire()	-- control ninja
 
 local cameraObject = scene:createObject(c"camera")
 local camera = cameraObject:appendComponent(c"Camera")
 cameraObject:concatTranslate(math3d.vector(0, 8, -25))
 
-
-
-
 ----- BGM
--- local root = scene:findObject(c"root")
--- local bgmPlayer = root:appendComponent(c"Audio")
--- bgmPlayer:playMusic("Assets/mfx/bbb.ogg")
+local root = scene:findObject(c"root")
+local bgmPlayer = root:appendComponent(c"Audio")
+bgmPlayer:playMusic("Assets/mfx/dance.ogg")
+bgmPlayer:setVolume(0.5)
 
--- root:appendUpdateHandler({ 
--- 	onUpdate = function(self)
--- 	if Time.global >= 5 then
--- 		-- bgmPlayer:stopAudio()
--- 		bgmPlayer:playSound("Assets/mfx/appear.ogg")
--- 		self:stop()
--- 	end
--- end})
+root:appendUpdateHandler({ 
+	onUpdate = function(self)
+	if Time.global >= 6 then
+		self:stop()
+	elseif Time.global >= 5 then
+		audioSystem:setSoundVolume(6-Time.global)
+	elseif Time.global >= 2.3 then
+		if not self.playedTwice then
+			bgmPlayer:playSound("Assets/mfx/appear.ogg")
+			self.playedTwice = true
+		end
+	elseif Time.global >= 2 then
+		if not self.played then
+			bgmPlayer:playSound("Assets/mfx/appear.ogg")
+			self.played = true
+		end
+	elseif Time.global < 1 then
+		audioSystem:setSoundVolume(Time.global)
+	end
+end})
+
+local position = cameraObject:getTranslation()
+audioSystem:setListenerPosition(
+	position,
+	camera:getTarget()-position,
+	camera:getUpVector())

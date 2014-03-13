@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <irrlicht/matrix4.h>
 #include "luaopen_util.h"
 

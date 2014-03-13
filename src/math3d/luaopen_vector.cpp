@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <new>
 #include <irrlicht/vector3d.h>
 #include <irrlicht/quaternion.h>

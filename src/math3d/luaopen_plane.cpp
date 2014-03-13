@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <irrlicht/plane3d.h>
 #include "luaopen_util.h"
 

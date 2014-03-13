@@ -3,14 +3,15 @@
 #include "CppBase/StringUtil.h"
 #include "AudioStopListener.h"
 #include "AudioComponentSystem.h"
+#include "LuaGlobalVariable.h"
 
 using namespace luaT;
-
 namespace xihad { namespace audio 
 {
+	using namespace irrklang;
 	using namespace ngn;
 	
-	static irrklang::E_STREAM_MODE popStreamMode(lua_State* L, int idx)
+	static E_STREAM_MODE popStreamMode(lua_State* L, int idx)
 	{
 		if (lua_gettop(L) >= idx)
 		{
@@ -18,15 +19,14 @@ namespace xihad { namespace audio
 			luaT_variable(L, idx, const char*, mode);
 			int midx = StringUtil::select(mode, modes);
 			if (midx != -1)
-				return (irrklang::E_STREAM_MODE) midx;
+				return (E_STREAM_MODE) midx;
 			else 
 				luaL_argerror(L, idx, "Error stream mode");
 		}
 		
-		return irrklang::ESM_AUTO_DETECT;
+		return ESM_AUTO_DETECT;
 	}
 	
-	// TODO
 	static int playMusic(lua_State* L)
 	{
 		luaT_variable(L, 1, AudioComponent*, comp);
@@ -65,7 +65,7 @@ namespace xihad { namespace audio
 // 	}
 
 
-	int luaopen_AudioComponents(lua_State* L)
+	int luaopen_AudioComponents(lua_State* L, AudioComponentSystem* acs)
 	{
 		luaT_defRegsBgn(audio)
 			luaT_mnamedfunc(AudioComponent, setPaused),
@@ -107,6 +107,10 @@ namespace xihad { namespace audio
 			luaT_mnamedfunc(AudioComponentSystem, getDefault3DSoundMaxDistance),
 		luaT_defRegsEnd
 		MetatableFactory<AudioComponentSystem>::create(L, system, 0);
+
+
+		lua_getglobal(L, "_G");
+		setField(L, -1, LUAT_G_AUDIO_SYSTEM, acs);
 
 		return 0;
 	}

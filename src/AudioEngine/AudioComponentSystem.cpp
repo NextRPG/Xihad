@@ -3,21 +3,18 @@
 #include "AudioComponent.h"
 #include "VectorConverter.h"
 
-using namespace irrklang;
 using namespace boost;
 using namespace std;
-using namespace xihad::ngn;
-
 namespace xihad { namespace audio 
 {
+	using namespace ngn;
 
 	struct AudioComponentSystem::impl
 	{
 		ISoundEngine* audioDevice;
-		float playbackScale;
 	};
 
-	AudioComponentSystem::AudioComponentSystem(const ngn::InheritanceTree& tree) :
+	AudioComponentSystem::AudioComponentSystem(const InheritanceTree& tree) :
 		BaseComponentSystem(tree), mImpl(new impl)
 	{
 #ifdef _DEBUG
@@ -33,7 +30,6 @@ namespace xihad { namespace audio
 	AudioComponentSystem::~AudioComponentSystem()
 	{
 		mImpl->audioDevice->drop();
-		mImpl->audioDevice = nullptr;
 	}
 
 	void AudioComponentSystem::stopAllAudios()
@@ -46,8 +42,8 @@ namespace xihad { namespace audio
 		mImpl->audioDevice->setAllSoundsPaused(false);
 	}
 
-	void AudioComponentSystem::setListenerPosition(const ngn::vector3df& position, 
-		const ngn::vector3df& lookdir, const ngn::vector3df& upVec)
+	void AudioComponentSystem::setListenerPosition(const vector3df& position, 
+		const vector3df& lookdir, const vector3df& upVec)
 	{
 		mImpl->audioDevice->setListenerPosition(
 			to_irrklang_vector3d(position), 
@@ -56,7 +52,7 @@ namespace xihad { namespace audio
 			to_irrklang_vector3d(upVec));
 	}
 
-	Component* AudioComponentSystem::create( const string& typeName, GameObject& hostObject, const Properties& param /*= ngn::NullProperties()*/ )
+	Component* AudioComponentSystem::create( const string& typeName, GameObject& hostObject, const Properties& param /*= NullProperties()*/ )
 	{
 		if (typeName == "Audio")
 			return new AudioComponent(typeName, hostObject, mImpl->audioDevice);
@@ -68,12 +64,8 @@ namespace xihad { namespace audio
 	{
 	}
 
-	void AudioComponentSystem::onUpdate( const ngn::Timeline& )
+	void AudioComponentSystem::onUpdate( const Timeline& )
 	{
-		// TODO
-		// 更新听者信息，根据世界的 TimeScale 设置所有声音的播放速度
-		// if (mImpl->playbackScale != )
-		// mImpl->audioDevice->update();
 	}
 
 	void AudioComponentSystem::onStop()

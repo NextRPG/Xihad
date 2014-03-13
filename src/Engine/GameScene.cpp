@@ -46,13 +46,10 @@ namespace xihad { namespace ngn
 
 		UserEventReceiverStack* receiverStack;
 
-		GameScene::impl() : dispatcher(nullptr),
-			systemUpdater(new CompositeUpdateHandler),
+		GameScene::impl() : dispatcher(nullptr), 
+			systemUpdater(new CompositeUpdateHandler), 
 			rootObject(0), managedObjectId(0), 
-			receiverStack(new UserEventReceiverStack)
-		{
-			sceneObjects[sRootObjectID] = rootObject;
-		}
+			receiverStack(new UserEventReceiverStack) { }
 	};
 
 	static ComponentFactory* createComponentFactory(GameScene* scene, CompSystemMap& compSystems)
@@ -110,6 +107,7 @@ namespace xihad { namespace ngn
 
 		// 3rd
 		mImpl->rootObject = new RootGameObject(mImpl.get(), sRootObjectID);
+		mImpl->sceneObjects[sRootObjectID] = mImpl->rootObject;
 		this->appendChildHandler(mImpl->rootObject);
 
 		// Ok, wait for the rest updater

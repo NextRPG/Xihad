@@ -77,6 +77,7 @@
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystem.h" />
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystemFactory.h" />
     <ClInclude Include="..\src\AudioEngine\AudioStopListener.h" />
+    <ClInclude Include="..\src\AudioEngine\LuaGlobalVariable.h" />
     <ClInclude Include="..\src\AudioEngine\NullSound.h" />
     <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
   </ItemGroup>

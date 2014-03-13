@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <new>
 #include <irrlicht/aabbox3d.h>
 #include "luaopen_util.h"
