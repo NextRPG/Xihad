@@ -58,11 +58,10 @@ anim:setTransitionTime(0.1)
 root:concatRotate(math3d.vector(0, 180, 0))
 
 addChildObject(root, 3)
-addnilobject(root, 15)
-addstaticobject(2^15)
+--addnilobject(root, 10)
+addstaticobject(2^18)
 
-
-scene:pushController({
+local playerSelector = {
 	onKeyDown = function (self, e)
 		local i = tonumber(e.key)
 		if not i then 
@@ -95,7 +94,9 @@ scene:pushController({
 		
 		return -99
 	end
-	})
+	}
+scene:pushController(playerSelector)
+playerSelector:drop()
 
 root:appendComponent(c"ControlledMove", moveParam):acquire()
 local co = scene:createObject(c"co")

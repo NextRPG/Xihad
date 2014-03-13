@@ -44,7 +44,10 @@
 + 重新设计 TagManager
 
 ### 3.13
-
++ 重新设置 Irrlicht 的 ISceneNode，包括：
+	+ 在节点中增加 iterator ，实现从父节点中快速删除（从 O(n) 到 O(1) ）
+	+ 将节点中的 Position\Rotation\Scale 替换为 RelativeMatrix
++ 优化游戏对象的世界位置信息更新
 
 ### TODO
 + 3D音频
@@ -55,8 +58,6 @@
 + 新的几何体
 + 脚本中访问 ComponentSystem 的方法
 + 测试 MRT
-+ GameObject 位置信息观察者
-+ 优化 RenderComponent 与 GameObject 的同步
 
 ### TO REFACTOR
 + LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化

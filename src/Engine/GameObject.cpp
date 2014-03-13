@@ -15,6 +15,13 @@
 #include <iostream>
 #include "GameObjectVisitor.h"
 
+
+template <typename T>
+inline static void clearBits(T* bits, T mask)
+{
+	*bits &= ~mask;
+}
+
 using namespace std;
 using namespace boost;
 using namespace irr;
@@ -34,6 +41,11 @@ namespace xihad { namespace ngn
 		PARENT_DIRTY = 8,
 	};
 
+	enum
+	{
+		IDENTITY_PARENT = 1,
+	};
+
 	struct GameObject::impl
 	{
 		GameObjectDepends* depends;
@@ -43,10 +55,12 @@ namespace xihad { namespace ngn
 		GameObject* parent;
 		CompositeUpdateHandler* childrenList;	// managed by GameObject
 
-		mutable int transfromDirtyBits;
+		mutable short hints;
+		mutable short transfromHints;
 		mutable Matrix localMatrix;
 		mutable Matrix worldMatrix;
 		mutable Transform worldTransform;
+		Transform localTransform;
 #ifdef XIHAD_CACHE_ROTATE_MATRIX
 		mutable Matrix rotateMatrix;
 #endif
@@ -54,9 +68,25 @@ namespace xihad { namespace ngn
 		unordered_map<string, Component*> components;
 
 		impl(GameObjectDepends* pDepends, IdArgType id) :
-			depends(pDepends), objectID(id), parent(nullptr), 
-			childrenList(0), transfromDirtyBits(LOCAL_DIRTY|PARENT_DIRTY)
+			depends(pDepends), objectID(id), parent(nullptr), childrenList(0), 
+			hints(IDENTITY_PARENT), transfromHints(LOCAL_DIRTY|PARENT_DIRTY)
 		{
+		}
+
+		bool identityParent() const
+		{
+			return hints & IDENTITY_PARENT;
+		}
+
+		void setParent(GameObject* newParent)
+		{
+			parent = newParent;
+
+			// update hints
+			if (newParent == scene()->getRootObject() || newParent == nullptr)
+				hints |= IDENTITY_PARENT;
+			else
+				clearBits(&hints,(short) IDENTITY_PARENT);
 		}
 
 		CompositeUpdateHandler* notNullChildrenList(GameObject* self)
@@ -240,7 +270,7 @@ namespace xihad { namespace ngn
 
 	void GameObject::updateChildrenWorldMatrix()
 	{
-		if (mImpl->transfromDirtyBits || !mImpl->hasChildHandler())
+		if (mImpl->transfromHints || !mImpl->hasChildHandler())
 			return;
 
 		xassert(mImpl->childrenList);
@@ -250,7 +280,7 @@ namespace xihad { namespace ngn
 			if (GameObject* go = polymorphic_downcast<GameObject*>(*it))
 			{
 				go->updateChildrenWorldMatrix();
-				go->mImpl->transfromDirtyBits |= PARENT_DIRTY;
+				go->mImpl->transfromHints |= PARENT_DIRTY;
 			}
 			else
 			{
@@ -264,32 +294,27 @@ namespace xihad { namespace ngn
 
 	void GameObject::resetScale( const vector3df& scale )
 	{
-		const vector3df& mScale = mTransform.getScale();
+		const vector3df& mScale = mImpl->localTransform.getScale();
 		if (mScale != scale)
 		{
-			mTransform.resetScale(scale);
+			mImpl->localTransform.resetScale(scale);
 			updateChildrenWorldMatrix();
-			mImpl->transfromDirtyBits |= SCALE_DIRTY;
+			mImpl->transfromHints |= SCALE_DIRTY;
 		}
 	}
 
 	void GameObject::resetRotate( const vector3df& rotate )
 	{
-		mTransform.resetRotate(rotate);
+		mImpl->localTransform.resetRotate(rotate);
 		updateChildrenWorldMatrix();
-		mImpl->transfromDirtyBits |= ROTATE_DIRTY;		
+		mImpl->transfromHints |= ROTATE_DIRTY;		
 	}
 
 	void GameObject::resetTranslate( const vector3df& trans )
 	{
-		mTransform.resetTranslate(trans);
+		mImpl->localTransform.resetTranslate(trans);
 		updateChildrenWorldMatrix();
-		mImpl->transfromDirtyBits |= TRANSLATE_DIRTY;
-	}
-
-	inline static void clearBits(int* bits, int mask)
-	{
-		*bits &= ~mask;
+		mImpl->transfromHints |= TRANSLATE_DIRTY;
 	}
 
 	void GameObject::updateWorldMatrix() const
@@ -298,19 +323,19 @@ namespace xihad { namespace ngn
 
 		// update local matrix
 		mImpl->worldMatrix.setbyproduct(base, getLocalTransformMatrix());
-		mImpl->transfromDirtyBits = 0;
+		mImpl->transfromHints = 0;
 	}
 
 	const Matrix& GameObject::getWorldTransformMatrix() const
 	{
-		if (identityParent())
+		if (mImpl->identityParent())
 		{
 			const Matrix& ret = getLocalTransformMatrix();
-			mImpl->transfromDirtyBits = 0;
+			mImpl->transfromHints = 0;
 			return ret;
 		}
 
-		if (mImpl->transfromDirtyBits)
+		if (mImpl->transfromHints)
 			updateWorldMatrix();
 
 		return mImpl->worldMatrix;
@@ -318,19 +343,17 @@ namespace xihad { namespace ngn
 
 	const Transform& GameObject::getWorldTransform() const
 	{
-		if (identityParent())
-			return mTransform;
+		if (mImpl->identityParent())
+			return mImpl->localTransform;
 
-		if (mImpl->transfromDirtyBits & (PARENT_DIRTY|ROTATE_DIRTY))
+		if (mImpl->transfromHints)
 		{
 			updateWorldMatrix();
-			mImpl->worldTransform.setFromMatrix(mImpl->worldMatrix);
-		}
-		else if (mImpl->transfromDirtyBits)
-		{
-			updateWorldMatrix();	// my translation and scale has updated
 			mImpl->worldTransform.resetTranslate(mImpl->worldMatrix.getTranslation());
 			mImpl->worldTransform.resetScale(mImpl->worldMatrix.getScale());
+
+			if (mImpl->transfromHints & (PARENT_DIRTY|ROTATE_DIRTY))
+				mImpl->worldTransform.setFromMatrix(mImpl->worldMatrix);
 		}
 
 		return mImpl->worldTransform;
@@ -338,10 +361,10 @@ namespace xihad { namespace ngn
 
 	const Matrix& GameObject::getLocalTransformMatrix() const
 	{
-		if (mImpl->transfromDirtyBits & LOCAL_DIRTY)
+		if (mImpl->transfromHints & LOCAL_DIRTY)
 		{
 #ifdef XIHAD_CACHE_ROTATE_MATRIX
-			if (mImpl->transfromDirtyBits & ROTATE_DIRTY)
+			if (mImpl->transfromHints & ROTATE_DIRTY)
 				mImpl->rotateMatrix.setRotationDegrees(getRotation());
 
 			mImpl->localMatrix = mImpl->rotateMatrix;
@@ -350,7 +373,7 @@ namespace xihad { namespace ngn
 #endif
 
 			mImpl->localMatrix.setTranslation(getTranslate());
-			vector3df vscale = mTransform.getScale();
+			vector3df vscale = mImpl->localTransform.getScale();
 			float mScale[] = { vscale.X, vscale.Y, vscale.Z };
 			for (int idx = 0, first = 0; first < 12; first += 4, ++idx)
 			{
@@ -359,7 +382,7 @@ namespace xihad { namespace ngn
 				mImpl->localMatrix[first+2] *= mScale[idx];
 			}
 
-			clearBits(&mImpl->transfromDirtyBits, LOCAL_DIRTY);
+			clearBits(&mImpl->transfromHints, (short)LOCAL_DIRTY);
 		}
 
 		return mImpl->localMatrix;
@@ -367,8 +390,7 @@ namespace xihad { namespace ngn
 
 	bool GameObject::identityParent() const
 	{
-		return  mImpl->parent == mImpl->scene()->getRootObject() || 
-				mImpl->parent == nullptr;
+		return mImpl->identityParent();
 	}
 
 	void GameObject::setParent( GameObject* newParent )
@@ -377,7 +399,7 @@ namespace xihad { namespace ngn
 		if (oldParent == newParent) 
 			return;
 
-		mImpl->parent = newParent;
+		mImpl->setParent(newParent);
 
 		// unlink
 		if (oldParent != nullptr)
@@ -391,7 +413,7 @@ namespace xihad { namespace ngn
 		if (newParent != nullptr)
 			newParent->mImpl->notNullChildrenList(this)->appendChildHandler(this);
 
-		mImpl->transfromDirtyBits |= PARENT_DIRTY;
+		mImpl->transfromHints |= PARENT_DIRTY;
 	}
 
 	GameObject* GameObject::getParent() const
@@ -453,17 +475,17 @@ namespace xihad { namespace ngn
 
 	vector3df GameObject::getScale() const
 	{
-		return mTransform.getScale();
+		return mImpl->localTransform.getScale();
 	}
 
 	vector3df GameObject::getRotation() const
 	{
-		return mTransform.getRotation();
+		return mImpl->localTransform.getRotation();
 	}
 
 	vector3df GameObject::getTranslate() const
 	{
-		return mTransform.getTranslation();
+		return mImpl->localTransform.getTranslation();
 	}
 
 }}

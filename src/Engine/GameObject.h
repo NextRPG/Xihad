@@ -247,7 +247,6 @@ namespace xihad { namespace ngn
 
 	private:
 		struct impl;
-		Transform mTransform;
 		boost::scoped_ptr<impl> mImpl;
 	};
 }}

@@ -126,9 +126,13 @@ int main(int argc, char** argv)
 
 	receiver->smgr->addSkyDomeSceneNode(device->getVideoDriver()->getTexture("../Xihad/Assets/gfx/skydome.jpg"));
 	ISceneNode* source = addNinja(receiver->smgr, core::vector3df(-10, 0, 0));
-	source->setRotation(core::vector3df(0, 90, 0));
+	core::matrix4 rel = source->getRelativeTransformation();
+	rel.setRotationDegrees(core::vector3df(0, 90, 0));
+	source->setRelativeTransformation(rel);
 	ISceneNode* target = addNinja(receiver->smgr, core::vector3df(10, 0, 0));
-	target->setRotation(core::vector3df(0, -90, 0));
+	rel = target->getRelativeTransformation();
+	rel.setRotationDegrees(core::vector3df(0, -90, 0));
+	target->setRelativeTransformation(rel);
 
 	receiver->env = irrptr<IParticleSystemLoaderEnv>(new CParticleEditorEnv(source, target), false);
 

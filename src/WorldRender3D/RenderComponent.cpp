@@ -144,33 +144,8 @@ namespace xihad { namespace render3d
 
 	void RenderComponent::syncWithObject()
 	{
-//		static string BASE_NAME = "Render";
-		GameObject* obj = getHostObject();
-
-// 		bool trulyVisible, localVisible;
-// 		trulyVisible = localVisible = isVisible();
-
-		// visibility is determined by parent's render component
-// 		GameObject* parent;
-// 		if ((parent = obj->getParent()) && localVisible)
-// 		{
-// 			const string& mName = getComponentName();
-// 			Component* comp = parent->findComponent(BASE_NAME);
-// 
-// 			RenderComponent* rc;
-// 			trulyVisible = !(rc = polymorphic_downcast<RenderComponent*> (comp)) ||
-// 				(rc->isTrulyVisible());
-// 		}
-// 
-// 		BitOperation::set(mVisibility, 2, trulyVisible);
 		mNode->setVisible(isVisible());
-
-		// sync transform
-		// TODO: try to set AbsoluteMatrix directly
-		const Transform& worldTransform = obj->getWorldTransform();
-		mNode->setPosition(worldTransform.getTranslation());
-		mNode->setRotation(worldTransform.getRotation());
-		mNode->setScale(worldTransform.getScale());
+		mNode->setRelativeTransformation(getHostObject()->getWorldTransformMatrix());
 	}
 
 	void RenderComponent::onStart()

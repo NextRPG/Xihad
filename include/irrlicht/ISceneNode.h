@@ -43,13 +43,22 @@ namespace scene
 				const core::vector3df& position = core::vector3df(0,0,0),
 				const core::vector3df& rotation = core::vector3df(0,0,0),
 				const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f))
-			: RelativeTranslation(position), RelativeRotation(rotation), RelativeScale(scale),
-				Parent(0), SceneManager(mgr), TriangleSelector(0), ID(id),
+			: Parent(0), SceneManager(mgr), TriangleSelector(0), ID(id),
 				AutomaticCullingState(EAC_BOX), DebugDataVisible(EDS_OFF),
 				IsVisible(true), IsDebugObject(false)
 		{
 			if (parent)
 				parent->addChild(this);
+
+			RelativeTransformation.setRotationDegrees(rotation);
+			RelativeTransformation.setTranslation(position);
+
+			if (scale != core::vector3df(1.f,1.f,1.f))
+			{
+				core::matrix4 smat;
+				smat.setScale(scale);
+				RelativeTransformation *= smat;
+			}
 
 			updateAbsolutePosition();
 		}
@@ -175,27 +184,20 @@ namespace scene
 		}
 
 
+		virtual const core::matrix4& getRelativeTransformation() const
+		{
+			return RelativeTransformation;
+		}
+
 		//! Returns the relative transformation of the scene node.
 		/** The relative transformation is stored internally as 3
 		vectors: translation, rotation and scale. To get the relative
 		transformation matrix, it is calculated from these values.
 		\return The relative transformation matrix. */
-		virtual core::matrix4 getRelativeTransformation() const
+		virtual void setRelativeTransformation(const core::matrix4& mat)
 		{
-			core::matrix4 mat;
-			mat.setRotationDegrees(RelativeRotation);
-			mat.setTranslation(RelativeTranslation);
-
-			if (RelativeScale != core::vector3df(1.f,1.f,1.f))
-			{
-				core::matrix4 smat;
-				smat.setScale(RelativeScale);
-				mat *= smat;
-			}
-
-			return mat;
+			RelativeTransformation = mat;
 		}
-
 
 		//! Returns whether the node should be visible (if all of its parents are visible).
 		/** This is only an option set by the user, but has nothing to
@@ -285,6 +287,7 @@ namespace scene
 			{
 				child->Parent = 0;
 				Children.erase(child->PositionInParent);
+				child->drop();
 				child->PositionInParent = Children.end();
 				return true;
 			}
@@ -382,47 +385,47 @@ namespace scene
 		If you want the absolute scale, use
 		getAbsoluteTransformation().getScale()
 		\return The scale of the scene node. */
-		virtual const core::vector3df& getScale() const
+		virtual core::vector3df getScale() const
 		{
-			return RelativeScale;
+			return RelativeTransformation.getScale();
 		}
-
-
-		//! Sets the relative scale of the scene node.
-		/** \param scale New scale of the node, relative to its parent. */
-		virtual void setScale(const core::vector3df& scale)
-		{
-			RelativeScale = scale;
-		}
-
-
+// 
+// 
+// 		//! Sets the relative scale of the scene node.
+// 		/** \param scale New scale of the node, relative to its parent. */
+// 		virtual void setScale(const core::vector3df& scale)
+// 		{
+// 			RelativeScale = scale;
+// 		}
+// 
+// 
 		//! Gets the rotation of the node relative to its parent.
 		/** Note that this is the relative rotation of the node.
 		If you want the absolute rotation, use
 		getAbsoluteTransformation().getRotation()
 		\return Current relative rotation of the scene node. */
-		virtual const core::vector3df& getRotation() const
+		virtual core::vector3df getRotation() const
 		{
-			return RelativeRotation;
+			return RelativeTransformation.getRotationDegrees();
 		}
-
-
-		//! Sets the rotation of the node relative to its parent.
-		/** This only modifies the relative rotation of the node.
-		\param rotation New rotation of the node in degrees. */
-		virtual void setRotation(const core::vector3df& rotation)
-		{
-			RelativeRotation = rotation;
-		}
-
-
+// 
+// 
+// 		//! Sets the rotation of the node relative to its parent.
+// 		/** This only modifies the relative rotation of the node.
+// 		\param rotation New rotation of the node in degrees. */
+// 		virtual void setRotation(const core::vector3df& rotation)
+// 		{
+// 			RelativeRotation = rotation;
+// 		}
+// 
+// 
 		//! Gets the position of the node relative to its parent.
 		/** Note that the position is relative to the parent. If you want
 		the position in world coordinates, use getAbsolutePosition() instead.
 		\return The current position of the node relative to the parent. */
-		virtual const core::vector3df& getPosition() const
+		virtual core::vector3df getPosition() const
 		{
-			return RelativeTranslation;
+			return RelativeTransformation.getTranslation();
 		}
 
 
@@ -431,7 +434,7 @@ namespace scene
 		\param newpos New relative position of the scene node. */
 		virtual void setPosition(const core::vector3df& newpos)
 		{
-			RelativeTranslation = newpos;
+			RelativeTransformation.setTranslation(newpos);
 		}
 
 
@@ -608,14 +611,11 @@ namespace scene
 			out->addString	("Name", Name.c_str());
 			out->addInt	("Id", ID );
 
-			out->addVector3d("Position", getPosition() );
-			out->addVector3d("Rotation", getRotation() );
-			out->addVector3d("Scale", getScale() );
-
-			out->addBool	("Visible", IsVisible );
+			out->addMatrix("Relative", getRelativeTransformation());
+			out->addBool("Visible", IsVisible );
 			out->addInt	("AutomaticCulling", AutomaticCullingState);
 			out->addInt	("DebugDataVisible", DebugDataVisible );
-			out->addBool	("IsDebugObject", IsDebugObject );
+			out->addBool("IsDebugObject", IsDebugObject );
 		}
 
 
@@ -633,9 +633,7 @@ namespace scene
 			Name = in->getAttributeAsString("Name");
 			ID = in->getAttributeAsInt("Id");
 
-			setPosition(in->getAttributeAsVector3d("Position"));
-			setRotation(in->getAttributeAsVector3d("Rotation"));
-			setScale(in->getAttributeAsVector3d("Scale"));
+			RelativeTransformation = in->getAttributeAsMatrix("Relative");
 
 			IsVisible = in->getAttributeAsBool("Visible");
 			s32 tmpState = in->getAttributeAsEnumeration("AutomaticCulling",
@@ -675,9 +673,7 @@ namespace scene
 		{
 			Name = toCopyFrom->Name;
 			AbsoluteTransformation = toCopyFrom->AbsoluteTransformation;
-			RelativeTranslation = toCopyFrom->RelativeTranslation;
-			RelativeRotation = toCopyFrom->RelativeRotation;
-			RelativeScale = toCopyFrom->RelativeScale;
+			RelativeTransformation = toCopyFrom->RelativeTransformation;
 			ID = toCopyFrom->ID;
 			setTriangleSelector(toCopyFrom->TriangleSelector);
 			AutomaticCullingState = toCopyFrom->AutomaticCullingState;
@@ -714,17 +710,11 @@ namespace scene
 		//! Absolute transformation of the node.
 		core::matrix4 AbsoluteTransformation;
 
-		//! Relative translation of the scene node.
-		core::vector3df RelativeTranslation;
-
-		//! Relative rotation of the scene node.
-		core::vector3df RelativeRotation;
-
-		//! Relative scale of the scene node.
-		core::vector3df RelativeScale;
+		core::matrix4 RelativeTransformation;
 
 		//! Pointer to the parent
 		ISceneNode* Parent;
+
 		core::list<ISceneNode*>::Iterator PositionInParent;
 
 		//! List of all children of this node

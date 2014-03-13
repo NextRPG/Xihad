@@ -8,7 +8,9 @@ namespace xihad { namespace ngn
 	/**
 	 * The order to various transform is fixeed as: 
 	 *	Scale -> Rotate -> Translate
-	 *
+	 * Therefore, the result of rotate then translate is the same as the result of
+	 * translate then scale.
+	 * 
 	 * @author etnlGD
 	 * @date 2013Äê12ÔÂ10ÈÕ 11:00:22
 	 */

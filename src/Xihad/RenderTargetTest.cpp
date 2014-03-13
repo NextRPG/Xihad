@@ -74,9 +74,6 @@ int rt_test(int argc, const char** argv)
 		mainSmgr->onAnimate();
 		mainSmgr->drawAll();
 
-		rot.Y += 0.5f;
-		front->setRotation(rot);
-
 		driver->endScene();
 	}
 	
