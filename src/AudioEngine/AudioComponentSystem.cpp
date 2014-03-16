@@ -74,32 +74,32 @@ namespace xihad { namespace audio
 			mImpl->audioDevice->stopAllSounds();
 	}
 
-	void AudioComponentSystem::setSoundVolume( float volume )
+	void AudioComponentSystem::setVolume( float volume )
 	{
 		mImpl->audioDevice->setSoundVolume(volume);
 	}
 
-	float AudioComponentSystem::getSoundVolume()
+	float AudioComponentSystem::getVolume()
 	{
 		return mImpl->audioDevice->getSoundVolume();
 	}
 
-	void AudioComponentSystem::setDefault3DSoundMinDistance( float minDistance )
+	void AudioComponentSystem::setDefault3DAudioMinDistance( float minDistance )
 	{
 		mImpl->audioDevice->setDefault3DSoundMinDistance(minDistance);
 	}
 
-	float AudioComponentSystem::getDefault3DSoundMinDistance()
+	float AudioComponentSystem::getDefault3DAudioMinDistance()
 	{
 		return mImpl->audioDevice->getDefault3DSoundMinDistance();
 	}
 
-	void AudioComponentSystem::setDefault3DSoundMaxDistance( float maxDistance )
+	void AudioComponentSystem::setDefault3DAudioMaxDistance( float maxDistance )
 	{
 		mImpl->audioDevice->setDefault3DSoundMaxDistance(maxDistance);
 	}
 
-	float AudioComponentSystem::getDefault3DSoundMaxDistance()
+	float AudioComponentSystem::getDefault3DAudioMaxDistance()
 	{
 		return mImpl->audioDevice->getDefault3DSoundMaxDistance();
 	}

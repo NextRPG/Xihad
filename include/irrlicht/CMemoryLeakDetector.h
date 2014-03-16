@@ -24,8 +24,8 @@ namespace irr
 		~CMemoryLeakDetector();
 
 	private:
-		core::map<core::stringc, int> NamedObjectCounts;
-		int TotalObjectCount;
+		struct pimpl;
+		pimpl* Pimpl;
 
 	private:
 		static CMemoryLeakDetector* sSingleton;

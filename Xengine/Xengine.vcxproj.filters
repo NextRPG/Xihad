@@ -242,6 +242,9 @@
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Engine\GameObjectVisitor.h" />
+    <ClInclude Include="..\src\CppBase\StringConventer.h">
+      <Filter>CppBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp">
@@ -332,5 +335,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp" />
+    <ClCompile Include="..\src\CppBase\StringConventer.cpp" />
   </ItemGroup>
 </Project>

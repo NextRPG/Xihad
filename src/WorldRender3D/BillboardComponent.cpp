@@ -15,8 +15,8 @@ namespace xihad { namespace render3d
 	}
 
 	BillboardComponent* BillboardComponent::create( 
-		const std::string& name, ngn::GameObject& host, const ngn::Properties& params, 
-		ISceneManager* smgr )
+		const std::string& name, ngn::GameObject& host, 
+		const ngn::Properties& params, ISceneManager* smgr )
 	{
 		IBillboardSceneNode* node = smgr->addBillboardSceneNode();
 		return new BillboardComponent(name, host, node);

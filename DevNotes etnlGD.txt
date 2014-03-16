@@ -52,19 +52,26 @@
 + 3D音频测试完成
 + 音频系统导出
 
-
 ### 3.14
+________________
 
+### 3.15
++ 音频接口统一名称、StopListener接口更改
++ 文字节点导出、测试成功
++ Irrlicht 字体工具中文字体丢失问题修复
++ 研究 freetype
 
 ### TODO
-+ 新的场景节点（文字优先）
-+ 集成粒子系统进主游戏之中
-+ 粒子系统的动画控制（关键点时间）
++ 新的场景节点（ Text/BillboardText/Terrian/ParticleSystem ）
 + 脚本中对材质的控制
 + 新的几何体
+
+## LATER
++ 集成粒子系统进主游戏之中
++ 粒子系统的动画控制（关键点时间）
 + 测试 MRT
-+ Audio Listener 更好的实现
-+ 直接通过 AudioSystem 播放音乐，不需要借助 GameObject 管理
++ 场景切换
++ 重新实现字体读取以及字体导出工具
 
 ### TO REFACTOR
 + LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化

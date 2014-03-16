@@ -184,16 +184,17 @@ namespace scene
 		}
 
 
-		virtual const core::matrix4& getRelativeTransformation() const
-		{
-			return RelativeTransformation;
-		}
-
 		//! Returns the relative transformation of the scene node.
 		/** The relative transformation is stored internally as 3
 		vectors: translation, rotation and scale. To get the relative
 		transformation matrix, it is calculated from these values.
 		\return The relative transformation matrix. */
+		virtual const core::matrix4& getRelativeTransformation() const
+		{
+			return RelativeTransformation;
+		}
+
+
 		virtual void setRelativeTransformation(const core::matrix4& mat)
 		{
 			RelativeTransformation = mat;

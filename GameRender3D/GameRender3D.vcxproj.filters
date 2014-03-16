@@ -52,6 +52,7 @@
     <ClInclude Include="..\src\WorldRender3D\AnimationClipsLoader.h">
       <Filter>AnimationClip</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\TextComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="..\src\WorldRender3D\AnimationClipsJsonLoader.cpp">
       <Filter>AnimationClip</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">

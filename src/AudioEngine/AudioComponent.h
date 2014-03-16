@@ -1,7 +1,7 @@
 #pragma once
 #include <irrKlang/ik_ISoundStopEventReceiver.h>
 #include <irrKlang/ik_EStreamModes.h>
-#include <set>
+#include <list>
 #include "Engine/Component.h"
 #include "Engine/vector3d.h"
 #include "Engine/xptr.h"
@@ -147,9 +147,9 @@ namespace xihad { namespace audio
 		a sound without actually needing to play it. */
 		virtual unsigned getPlayLength();
 
-		virtual void playMusic(const char* musicFilename, E_STREAM_MODE mode = ESM_AUTO_DETECT);
+		virtual void play2D(const char* filename, E_STREAM_MODE mode = ESM_AUTO_DETECT);
 		
-		virtual void playSound(const char* soundFileName, E_STREAM_MODE mode = ESM_AUTO_DETECT);
+		virtual void play3D(const char* filename, E_STREAM_MODE mode = ESM_AUTO_DETECT);
 
 		virtual void addAudioStopListener(AudioStopListener&);
 
@@ -174,17 +174,17 @@ namespace xihad { namespace audio
 
 		void changeSound(ISound* newSound, bool is3d)
 		{
-			is3DSound = is3d;
+			is3DAudio = is3d;
 			audio = newSound;
 		}
 
 		bool isNull(ISound*);
 
 	private:
-		bool is3DSound;
+		bool is3DAudio;
 		ISoundEngine* audioEngine;
 		ISound* audio;
-		std::set<xptr<AudioStopListener> > listeners;
+		std::list<xptr<AudioStopListener> > listeners;
 	};
 
 }}

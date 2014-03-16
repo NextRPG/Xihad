@@ -18,8 +18,8 @@
 #include "CameraComponent.h"			// |
 #include "AnimatedMeshComponent.h"		// |
 #include "BillboardComponent.h"			// |
-#include "ParticleSystemComponent.h"	// +-----> includes for all Components
-
+#include "ParticleSystemComponent.h"	// |
+#include "TextComponent.h"				// +-----> includes for all Components
 using namespace std;
 using namespace boost;
 namespace xihad { namespace render3d
@@ -36,6 +36,7 @@ namespace xihad { namespace render3d
 		AnimationClipsCache* clipsCache;
 		boost::scoped_ptr<TextureManager> texManager;
 		boost::scoped_ptr<MeshManager> meshManager;
+		video::SColor bgColor;
 
 		CameraRenderer cameraRenderers;
 	};
@@ -50,6 +51,7 @@ namespace xihad { namespace render3d
 
 		mImpl->smgr = scene;
 		mImpl->clipsCache = gCache;
+		mImpl->bgColor = video::SColor(255, 100, 100, 200);
 
 		mImpl->texManager.reset(new TextureManager(*device->getVideoDriver()));
 		mImpl->meshManager.reset(new MeshManager(*scene));
@@ -76,7 +78,9 @@ namespace xihad { namespace render3d
 			ret = CameraComponent::create(compName, obj, param, smgr, this);
 		else if (compName == "SkyDome")
 			ret = RenderComponent::createSkyDomeComponent(compName, obj, param, smgr, mImpl->texManager.get());
-		
+		else if (compName == "Text")
+			ret = TextComponent::create(compName, obj, param, smgr);
+
 		return ret;
 	}
 
@@ -125,7 +129,7 @@ namespace xihad { namespace render3d
 
 				target = kv.first.getType();
 				
-				if (!driver->setRenderTarget(target))
+				if (!driver->setRenderTarget(target, true, true, mImpl->bgColor))
 					cerr << "RenderTarget set failed" << endl;
 			}
 			else if (rt.getRenderTexture() != 0 && rt.getRenderTexture() != texture)

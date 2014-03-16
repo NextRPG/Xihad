@@ -8,6 +8,7 @@
 #include "../CameraComponent.h"
 #include "../LightComponent.h"
 #include "../BillboardComponent.h"
+#include "../TextComponent.h"
 
 #include "LuaAnimationCallback.h"
 
@@ -325,6 +326,11 @@ namespace xihad { namespace render3d
 				{ "getSize", bill_getSize },
 		luaT_defRegsEnd
 		MetatableFactory<BillboardComponent, RenderComponent>::create(L, billRegs, 0);
+
+		luaT_defRegsBgn(textRegs)
+			luaT_mnamedfunc(TextComponent, setText),
+		luaT_defRegsEnd
+		MetatableFactory<TextComponent, BillboardComponent>::create(L, textRegs, 0);
 		return 0;
 	}
 }}

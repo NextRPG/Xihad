@@ -31,9 +31,10 @@ namespace xihad { namespace render3d
 		registerDerivedType("Camera"		);
 		registerDerivedType("Light"			);
 		registerDerivedType("Terrian"		);
-		registerDerivedType("Text"			);
 		registerDerivedType("AnimatedMesh"	);
 		registerDerivedType("ParticleSystem");
+
+		registerType("Text", "Billboard");
 	}
 
 	irr::IrrlichtDevice* IrrlichtComponentSystemFactory::getDevice()

@@ -117,7 +117,7 @@ namespace xihad { namespace render3d
 
 		virtual void onStop();
 
-		ISceneNode const * getNode() const { return mNode.get(); }
+		ISceneNode * getNode() const { return mNode.get(); }
 
 	private:
 		const irr_ptr<ISceneNode> mNode;

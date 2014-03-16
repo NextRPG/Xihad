@@ -18,7 +18,10 @@ namespace xihad { namespace audio
 
 		virtual ~AudioStopListener() { XIHAD_MLD_DEL_OBJECT; }
 
-		virtual void onSoundStopped(AudioComponent* sound, E_STOP_EVENT_CAUSE reason) = 0;
+		/**
+		 * @return if this listener want to continue listening.
+		 */
+		virtual bool onAudioStopped(AudioComponent* sound, E_STOP_EVENT_CAUSE reason) = 0;
 	};
 }}
 

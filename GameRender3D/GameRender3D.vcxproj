@@ -88,6 +88,7 @@
     <ClInclude Include="..\src\WorldRender3D\RenderComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystem.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.h" />
+    <ClInclude Include="..\src\WorldRender3D\TextComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +115,7 @@
     <ClCompile Include="..\src\WorldRender3D\RenderComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\TextureManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

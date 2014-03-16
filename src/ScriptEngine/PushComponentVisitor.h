@@ -14,6 +14,7 @@ namespace xihad
 		class LightComponent;
 		class CameraComponent;
 		class BillboardComponent;
+		class TextComponent;
 		class AnimatedMeshComponent;
 	}
 
@@ -34,6 +35,7 @@ namespace xihad { namespace script
 		public ngn::Visitor<render3d::LightComponent>,
 		public ngn::Visitor<render3d::CameraComponent>,
 		public ngn::Visitor<render3d::BillboardComponent>,
+		public ngn::Visitor<render3d::TextComponent>,
 		public ngn::Visitor<audio::AudioComponent>
 	{
 	public:
@@ -48,6 +50,7 @@ namespace xihad { namespace script
 		virtual void visit(render3d::LightComponent&);
 		virtual void visit(render3d::CameraComponent&);
 		virtual void visit(render3d::BillboardComponent&);
+		virtual void visit(render3d::TextComponent&);
 		virtual void visit(script::LuaComponent&);
 
 		virtual bool handleUnkownVisitable(ngn::BaseVisitable&);

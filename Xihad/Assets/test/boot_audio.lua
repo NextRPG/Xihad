@@ -2,7 +2,7 @@ require "math3d"
 package.path = package.path..";../Xihad/Assets/test/?.lua"
 
 scene:requireSystem(c"Audio")
-audioSystem:setSoundVolume(0)
+audioSystem:setVolume(0)
 
 local param = { mesh  = "Assets/model/ninja.b3d", clips = "Assets/model/ninja.clip" }
 local ninja = scene:createObject(c"ninja")
@@ -14,7 +14,7 @@ ninja:concatRotate(math3d.vector(0, 180, 0))
 
 local ctrl = ninja:appendComponent(c'ControlledMove')
 local njaudio = ninja:appendComponent(c'Audio')
-njaudio:playSound("Assets/mfx/bbb.ogg")
+njaudio:play3D("Assets/mfx/bbb.ogg")
 njaudio:setLooped(true)
 ctrl:acquire()	-- control ninja
 
@@ -25,7 +25,7 @@ cameraObject:concatTranslate(math3d.vector(0, 8, -25))
 ----- BGM
 local root = scene:findObject(c"root")
 local bgmPlayer = root:appendComponent(c"Audio")
-bgmPlayer:playMusic("Assets/mfx/dance.ogg")
+bgmPlayer:play2D("Assets/mfx/dance.ogg")
 bgmPlayer:setVolume(0.5)
 
 root:appendUpdateHandler({ 
@@ -33,19 +33,19 @@ root:appendUpdateHandler({
 	if Time.global >= 6 then
 		self:stop()
 	elseif Time.global >= 5 then
-		audioSystem:setSoundVolume(6-Time.global)
+		audioSystem:setVolume(6-Time.global)
 	elseif Time.global >= 2.3 then
 		if not self.playedTwice then
-			bgmPlayer:playSound("Assets/mfx/appear.ogg")
+			bgmPlayer:play3D("Assets/mfx/appear.ogg")
 			self.playedTwice = true
 		end
 	elseif Time.global >= 2 then
 		if not self.played then
-			bgmPlayer:playSound("Assets/mfx/appear.ogg")
+			bgmPlayer:play3D("Assets/mfx/appear.ogg")
 			self.played = true
 		end
 	elseif Time.global < 1 then
-		audioSystem:setSoundVolume(Time.global)
+		audioSystem:setVolume(Time.global)
 	end
 end})
 

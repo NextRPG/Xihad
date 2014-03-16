@@ -261,6 +261,7 @@ namespace xihad { namespace particle
 		luaT_defRegsBgn(smat)
 			// TODO
 			// ColorMaterial, DiffuseColor, Wireframe, ColorMask
+			// ZBuffer
 			luaT_cnamedfunc(setMaterialType),
 			luaT_cnamedfunc(setBlend),
 			luaT_cnamedfunc(setLighting),

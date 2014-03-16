@@ -13,7 +13,7 @@ namespace xihad { namespace audio
 	using namespace ngn;
 
 	AudioComponent::AudioComponent(const string& name, GameObject& host, ISoundEngine* audiceDevice) :
-		Component(name, host), audioEngine(audiceDevice), is3DSound(false),
+		Component(name, host), audioEngine(audiceDevice), is3DAudio(false),
 		audio(&NullSound::getSingleton())
 	{
 		audioEngine->grab();
@@ -35,7 +35,7 @@ namespace xihad { namespace audio
 	void AudioComponent::onUpdate( const Timeline& time )
 	{
 		// TODO Reset playback speed according to game world's time scale
-		if (is3DSound && !isPaused())
+		if (is3DAudio && !isPaused())
 		{
 			const Matrix& wmat = getHostObject()->getWorldTransformMatrix();
 			audio->setPosition(wmat.getTranslation());
@@ -52,14 +52,14 @@ namespace xihad { namespace audio
 		return !getHostObject()->isUpdating();
 	}
 
-	void AudioComponent::playMusic(const char* filename, E_STREAM_MODE mode)
+	void AudioComponent::play2D(const char* filename, E_STREAM_MODE mode)
 	{
 		bool paused = shouldPauseWhenStart();
 		ISound* sound = audioEngine->play2D(filename, true, paused, true, mode);
 		setSound(sound, false);
 	}
 
-	void AudioComponent::playSound( const char* filename, E_STREAM_MODE mode )
+	void AudioComponent::play3D( const char* filename, E_STREAM_MODE mode )
 	{
 		vector3df pos = getHostObject()->getWorldTransformMatrix().getTranslation();
 		vec3df ikpos(pos.X, pos.Y, pos.Z);
@@ -77,8 +77,15 @@ namespace xihad { namespace audio
 			return;
 		}
 
-		for (auto listener : listeners)
-			listener->onSoundStopped(this, reason);
+		for (auto listener = listeners.begin(); listener != listeners.end(); /**/)
+		{
+			bool continueListening = (*listener)->onAudioStopped(this, reason);
+
+			if (!continueListening)
+				listener = listeners.erase(listener);
+			else 
+				++listener;
+		}
 
 		assert(!isNull(audio));
 		{
@@ -119,8 +126,8 @@ namespace xihad { namespace audio
 				Process::sleep(0);
 		}
 		assert(isNull(audio));
-		assert(!is3DSound);
-		// Process::sleep(1); // Test extreme case for dead lock 
+		assert(!is3DAudio);
+		// Process::sleep(1); // Test extreme case for concurrent issues
 
 		// Avoid to listen a finished sound
 		if (!newSound->isFinished())
@@ -132,12 +139,12 @@ namespace xihad { namespace audio
 
 	void AudioComponent::addAudioStopListener( AudioStopListener& listener )
 	{
-		listeners.insert(&listener);
+		listeners.push_back(&listener);
 	}
 
 	void AudioComponent::removeAudioStopListener( AudioStopListener& listener )
 	{
-		listeners.erase(&listener);
+		listeners.remove(&listener);
 	}
 
 //////////////////////////
