@@ -28,9 +28,6 @@ namespace xihad
 			scene = nullptr;
 		}
 
-		// TODO
-		scene->destroy();
-		scene = 0;
 		return scene;
 	}
 

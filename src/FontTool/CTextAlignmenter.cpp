@@ -28,7 +28,7 @@ namespace xihad { namespace font
 		}
 
 
-		bool filled = pen.Y + lineHeight > size.Height;
+		bool filled = (pen.Y + lineHeight) >= size.Height;
 		if (filled)
 		{
 			pen = vector2di();

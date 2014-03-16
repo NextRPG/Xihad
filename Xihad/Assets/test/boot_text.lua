@@ -13,8 +13,19 @@ local ctrl = ninja:appendComponent(c'ControlledMove')
 ctrl:acquire()	-- control ninja
 
 local njname = scene:createObject(c"ninjaName", ninja)
-local label = njname:appendComponent(c"Text", { font = "Assets/font/fangzheng.xml" })
-label:setText("无敌大忍者陈青青王八蛋")
+local font = "fangzheng"
+local label
+if font == 'huakang' then
+	label = njname:appendComponent(c"Text", { font = "Assets/font/huakangpipi.xml" })
+	label:setText("無敵大忍者陳青青王八蛋")
+elseif font == 'fangzheng' then
+	label = njname:appendComponent(c"Text", { font = "Assets/font/fangzheng.xml" })
+	label:setText("无敌大忍者陈青青王八蛋")
+else
+	label = njname:appendComponent(c"Text", { font = "Assets/font/speed.xml" })
+	label:setText("Nin ja 007")
+end
+
 label:setSize(1, 7, 7)
 njname:concatTranslate(math3d.vector(0, -1, 0))
 

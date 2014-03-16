@@ -24,8 +24,8 @@ namespace xihad { namespace font
 		const vector2di& pos, const dimension2du& size )
 	{
 		SFontArea area;
-		area.overhang = fp2int(metrics.horiBearingX);
-		area.underhang = fp2int(metrics.horiAdvance - (metrics.width + metrics.horiBearingX));
+		area.underhang = fp2int(metrics.horiBearingX);
+		area.overhang  = fp2int(metrics.horiAdvance - (metrics.width + metrics.horiBearingX));
 		area.rectangle.UpperLeftCorner = pos;
 		area.rectangle.LowerRightCorner.X = pos.X + size.Width;
 		area.rectangle.LowerRightCorner.Y = pos.Y + size.Height;
