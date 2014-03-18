@@ -61,8 +61,20 @@ ________________
 + Irrlicht 字体工具中文字体丢失问题修复
 + 研究 freetype
 
+### 3.16
++ 可以加载自定义字体的 FontTool
++ FontTool Build Script
+
+### 3.17
++ 二进制格式的字体文件
++ 优化读取字体文件
++ 测试各种图片格式读取速度、大小
+
+### 3.18
++ 拆分 ParticleSystemLoader 项目，以供引擎集成
+
 ### TODO
-+ 新的场景节点（ Text/BillboardText/Terrian/ParticleSystem ）
++ 新的场景节点（ Terrian/ParticleSystem ）
 + 脚本中对材质的控制
 + 新的几何体
 
@@ -71,8 +83,6 @@ ________________
 + 粒子系统的动画控制（关键点时间）
 + 测试 MRT
 + 场景切换
-+ 重新实现字体读取以及字体导出工具
 
 ### TO REFACTOR
-+ LuaComponentSystemFactory 采用注册机制来对 Lua 运行环境初始化
 + 逆转 Visitor 模式

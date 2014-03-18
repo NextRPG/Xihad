@@ -35,13 +35,8 @@ namespace xihad { namespace script
 
 	void LuaComponentSystemFactory::initScriptEnv(GameScene* scene, lua_State* L)
 	{
-		NativeWindow* wnd = mEngine->getWindow();
-
-		{
-			StackMemo memo(L);
-			// export cpp library to lua
-			luaopen_all(L);
-		}
+		// export cpp library to lua
+		luaopen_all(L);
 
 		// set global environment
 		{
@@ -64,7 +59,7 @@ namespace xihad { namespace script
 
 			setField(L, -1, LUA_G_ENGINE, mEngine);
 			setField(L, -1, LUA_G_WORLD, mEngine->getWorld());
-			setField(L, -1, LUA_G_WINDOW, wnd);
+			setField(L, -1, LUA_G_WINDOW, mEngine->getWindow());
 		}
 	}
 

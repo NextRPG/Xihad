@@ -1,13 +1,25 @@
 #pragma once
-#include "IFontWriter.h"
+#include "CSeparateImageFontWriter.h"
+
+namespace irr {
+	class IrrlichtDevice;
+}
 
 namespace xihad { namespace font
 {
-	class CBinaryFontWriter : public IFontWriter
+	class CBinaryFontWriter : public CSeparateImageFontWriter
 	{
 	public:
-		virtual bool write( const SFontInfo& );
+		CBinaryFontWriter(IrrlichtDevice* device, const char* filename, const char* fmt, bool useAlpha);
 
+		virtual ~CBinaryFontWriter();
+
+	protected:
+		virtual bool onWriteFontFile( const SFontInfo& );
+
+	private:
+		IrrlichtDevice* device;
+		bool useAlphaChannel;
 	};
 }}
 

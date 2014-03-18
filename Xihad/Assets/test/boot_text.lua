@@ -19,7 +19,7 @@ if font == 'huakang' then
 	label = njname:appendComponent(c"Text", { font = "Assets/font/huakangpipi.xml" })
 	label:setText("無敵大忍者陳青青王八蛋")
 elseif font == 'fangzheng' then
-	label = njname:appendComponent(c"Text", { font = "Assets/font/fangzheng.xml" })
+	label = njname:appendComponent(c"Text", { font = "Assets/font/fangzheng.xft" })
 	label:setText("无敌大忍者陈青青王八蛋")
 else
 	label = njname:appendComponent(c"Text", { font = "Assets/font/speed.xml" })

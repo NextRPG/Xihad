@@ -23,10 +23,13 @@
     <ClCompile Include="..\src\FontTool\CXMLFontWriter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FontTool\main.cpp">
+    <ClCompile Include="..\src\FontTool\CBinaryFontWriter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FontTool\CBinaryFontWriter.cpp">
+    <ClCompile Include="..\src\FontTool\FontTool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FontTool\CSeparateImageFontWriter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,6 +59,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\FontTool\CBinaryFontWriter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FontTool\CSeparateImageFontWriter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

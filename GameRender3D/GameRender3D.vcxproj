@@ -77,6 +77,7 @@
     <ClInclude Include="..\src\WorldRender3D\CameraComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h" />
     <ClInclude Include="..\src\WorldRender3D\CameraRenderTarget.h" />
+    <ClInclude Include="..\src\WorldRender3D\CBinaryFontReader.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\luaopen_All.h" />
@@ -99,6 +100,7 @@
     <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraRenderTarget.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />

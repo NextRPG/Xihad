@@ -1,4 +1,5 @@
 #pragma once
+#include <irrlicht/IGUIFontBuilder.h>
 #include <irrlicht/irrArray.h>
 #include <irrlicht/rect.h>
 #include <map>
@@ -12,13 +13,14 @@ namespace xihad { namespace font
 {
 	using namespace irr;
 
-	struct SFontArea
-	{
-		core::recti rectangle;
-		s32			underhang;
-		s32			overhang;
-		u32			sourceimage;
-	};
+	typedef gui::IGUIFontBuilder::SCharacterArea SFontArea;
+// 	struct SFontArea
+// 	{
+// 		core::recti rectangle;
+// 		s32			underhang;
+// 		s32			overhang;
+// 		u32			sourceimage;
+// 	};
 
 	struct SFontInfo
 	{

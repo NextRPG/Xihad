@@ -1,4 +1,4 @@
-local useReleaseVersion = true
+local pathToExe			= '../../../Release/FontTool.exe'
 local fontFileDir 		= 'F:/Projects/JAVA/_magold/assets/font'
 local fontFileName		= 'fangzheng.ttf'
 local outputFilePrefix	= string.sub(fontFileName, 1, string.find(fontFileName, '%.')-1)
@@ -14,23 +14,31 @@ local singleImageWidth 	= 2048
 local singleImageHeight = 1024	-- 0 means equal to width
 
 ---
--- Image format
-local outputImageFormat = 'bmp'
+-- + Relative loading cost for all supported formats: 
+-- 		ppm(very slow) > png(35) > pcx(17) > jpg(7.5) > bmp(1.8) > tga(1)
+-- + Image size: 
+--		jpg(32K) < pcx(196K) < png(1.69M) < bmp(6M) < tga(8M) < ppm(25M)
+-- + Formats that support alpha channel
+--		png, tga
+------ Don't use ppm and pcx
+------ If you want alpha, choose between png and tga
+------ If you don't wanna alpha, choose among jpg, bmp and tga
+local outputImageFormat = 'tga'
+local useAlphaChannel 	= true
+
+---
+-- Font file format. Use binary can speed up font loading, but not readable for debug purpose
+local outputBinary		= true
 
 ------------------------------------------------------------------------------------
-local pathToExe
-if useReleaseVersion then
-	pathToExe = '../../../Release/FontTool.exe'
-else
-	pathToExe = '../../../Debug/FontTool.exe'
-end
-
 local paramList = { 
 	pathToExe, fontFileDir..'/'..fontFileName, 
 	'-o'..outputFilePrefix, 
-	'-w'..fontPixelWidth, '-h'..fontPixelHeight, 
+	'-w'..fontPixelWidth, 	'-h'..fontPixelHeight, 
 	'-W'..singleImageWidth, '-H'..singleImageHeight, 
-	'-f'..outputImageFormat
+	'-f'..outputImageFormat, 
+	outputBinary and '-b' or '-B',
+	useAlphaChannel and '-a' or '-A',
 }
 
 local arg = table.concat( paramList, " ")

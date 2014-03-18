@@ -7,6 +7,11 @@ namespace irr { namespace scene
 	class IBillboardTextSceneNode;
 }}
 
+namespace irr { namespace gui
+{
+	class IGUIFont;
+}}
+
 namespace xihad { namespace render3d
 {
 	class TextComponent : public BillboardComponent
@@ -21,6 +26,10 @@ namespace xihad { namespace render3d
 			ISceneManager* smgr);
 
 		virtual void setText(const char* text);
+
+	private:
+		static gui::IGUIFont* getFont(scene::ISceneManager* smgr, const char* fontFilename);
+		static gui::IGUIFont* loadFont(scene::ISceneManager* smgr, const char* fontFilename);
 
 	private:
 		IBillboardTextSceneNode* getNode() const;

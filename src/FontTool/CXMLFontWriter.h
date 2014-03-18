@@ -1,6 +1,6 @@
 #pragma once
-#include "IFontWriter.h"
 #include <irrlicht/irrString.h>
+#include "CSeparateImageFontWriter.h"
 
 namespace irr {
 	class IrrlichtDevice;
@@ -8,20 +8,19 @@ namespace irr {
 
 namespace xihad { namespace font
 {
-	class CXMLFontWriter : public IFontWriter
+	class CXMLFontWriter : public CSeparateImageFontWriter
 	{
 	public:
 		CXMLFontWriter(IrrlichtDevice* device, const char* filename, const char* fmt, bool useAlpha);
 
 		virtual ~CXMLFontWriter();
 
-		virtual bool write( const SFontInfo& );
+	protected:
+		virtual bool onWriteFontFile( const SFontInfo& );
 
 	private:
 		IrrlichtDevice* device;
-		core::stringc filename;
-		core::stringc format;
-		bool UseAlphaChannel;
+		bool useAlphaChannel;
 	};
 }}
 

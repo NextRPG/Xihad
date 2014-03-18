@@ -5,6 +5,8 @@
 #include "luaT\stack_memo.h"
 #include "ScriptEngine\LuaComponentSystem.h"
 
+// #define ProfileForSceneLoading
+
 using namespace std;
 namespace xihad
 {
@@ -14,11 +16,6 @@ namespace xihad
 		GameScene* scene = new GameScene;
 		auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
 		
-// 		if (!scene->requireSystem("Render"))
-// 		{
-// 			cerr << "Error to load Render system" << endl;
-// 		}
-
 		lua_State* L = lcs->getLuaState();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))
 		{
@@ -28,6 +25,10 @@ namespace xihad
 			scene = nullptr;
 		}
 
+#ifdef ProfileForSceneLoading
+		scene->destroy();
+		scene = 0;
+#endif
 		return scene;
 	}
 

@@ -14,14 +14,16 @@
     <ClCompile Include="..\src\FontTool\CBinaryFontWriter.cpp" />
     <ClCompile Include="..\src\FontTool\CBitmapBuffer.cpp" />
     <ClCompile Include="..\src\FontTool\CFreeTypeBitmapFactory.cpp" />
+    <ClCompile Include="..\src\FontTool\CSeparateImageFontWriter.cpp" />
     <ClCompile Include="..\src\FontTool\CTextAlignmenter.cpp" />
     <ClCompile Include="..\src\FontTool\CXMLFontWriter.cpp" />
-    <ClCompile Include="..\src\FontTool\main.cpp" />
+    <ClCompile Include="..\src\FontTool\FontTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\FontTool\CBinaryFontWriter.h" />
     <ClInclude Include="..\src\FontTool\CBitmapBuffer.h" />
     <ClInclude Include="..\src\FontTool\CFreeTypeBitmapFactory.h" />
+    <ClInclude Include="..\src\FontTool\CSeparateImageFontWriter.h" />
     <ClInclude Include="..\src\FontTool\CTextAlignmenter.h" />
     <ClInclude Include="..\src\FontTool\CXMLFontWriter.h" />
     <ClInclude Include="..\src\FontTool\IFontBitmapFactory.h" />

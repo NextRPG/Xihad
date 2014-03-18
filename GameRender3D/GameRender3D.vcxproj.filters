@@ -53,6 +53,7 @@
       <Filter>AnimationClip</Filter>
     </ClInclude>
     <ClInclude Include="..\src\WorldRender3D\TextComponent.h" />
+    <ClInclude Include="..\src\WorldRender3D\CBinaryFontReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -116,6 +117,7 @@
       <Filter>AnimationClip</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">
