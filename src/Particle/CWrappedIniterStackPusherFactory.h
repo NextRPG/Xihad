@@ -5,11 +5,12 @@
 
 namespace xihad { namespace particle
 {
-	template <typename WrapT, typename T, T* (irr::scene::IParticleSystemFactory::* method)()>
+	using namespace irr;
+	template <typename WrapT, typename T, T* (scene::IParticleSystemFactory::* method)()>
 	class CWrappedIniterStackPusherFactory : 
 		public TplStackPusherFactory<WrapT>
 	{
-		typedef irr::scene::IParticleSystemFactory DelegateFactory;
+		typedef scene::IParticleSystemFactory DelegateFactory;
 
 	public:
 		CWrappedIniterStackPusherFactory(DelegateFactory* f) : mFactory(f) {}

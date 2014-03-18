@@ -11,6 +11,7 @@ namespace irr { namespace scene
 
 namespace xihad { namespace particle
 {
+	using namespace irr;
 	class IStackPusherFactory;
 	class CParticleSystemScriptFactory : public IParticleSystemScriptFactory
 	{
@@ -23,13 +24,13 @@ namespace xihad { namespace particle
 		virtual IStackPusher* affector(const char* aname);
 		virtual IStackPusher* emitter(const char* ename);
 
-		static IParticleSystemScriptFactory* createDefault(irr::scene::IParticleSystemFactory*);
+		static IParticleSystemScriptFactory* createDefault(scene::IParticleSystemFactory*);
 
 	private:
 		IStackPusher* createFrom(Registry&, const std::string&);
 
 	public:
-		irrptr<irr::scene::IParticleSystemFactory> Factory;	// for composite initer
+		irrptr<scene::IParticleSystemFactory> Factory;	// for composite initer
 		Registry Initers;
 		Registry Emitters;
 		Registry Renderers;

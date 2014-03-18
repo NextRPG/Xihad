@@ -11,16 +11,17 @@ namespace irr { namespace scene
 
 namespace xihad { namespace particle
 {
-	class IParticleSystemLoaderEnv : public virtual irr::IReferenceCounted
+	using namespace irr;
+	class IParticleSystemLoaderEnv : public virtual IReferenceCounted
 	{
 	public:	
 		virtual ~IParticleSystemLoaderEnv() {}
 		
-		virtual void setPosition(irr::scene::ISceneNode* node, const irr::core::vector3df& pos) const = 0;
-		virtual irr::core::vector3df getPosition(irr::scene::ISceneNode* node) const = 0;
-		virtual irr::core::aabbox3df getAABB(irr::scene::ISceneNode* node) const = 0;
-		virtual irr::scene::IMesh* getMesh(const char* meshDesc) const = 0;
-		virtual irr::scene::ISceneNode* getNode(const char* nodeDesc) const = 0;
+		virtual void setPosition(scene::ISceneNode* node, const core::vector3df& pos) const = 0;
+		virtual core::vector3df	getPosition(scene::ISceneNode* node) const = 0;
+		virtual core::aabbox3df	getAABB(scene::ISceneNode* node) const = 0;
+		virtual scene::IMesh*	getMesh(const char* meshDesc) const = 0;
+		virtual scene::ISceneNode* getNode(const char* nodeDesc) const = 0;
 	};
 }}
 

@@ -9,26 +9,27 @@ namespace irr { namespace scene
 
 namespace xihad { namespace	 particle
 {
-	class CWrappedMeshInitializer : public irr::scene::IParticleInitializer
+	using namespace irr;
+	class CWrappedMeshInitializer : public scene::IParticleInitializer
 	{
 	public:
-		CWrappedMeshInitializer(irr::scene::IParticleMeshInitializer* initer) :
+		CWrappedMeshInitializer(scene::IParticleMeshInitializer* initer) :
 			MeshIniter(initer)
 		{
 		}
 
-		void initialize(irr::scene::SParticle& p) { MeshIniter->initialize(p); }
+		void initialize(scene::SParticle& p) { MeshIniter->initialize(p); }
 
-		void setMinNormalDirectionSize( irr::f32 minSize ) { MeshIniter->setMinNormalDirectionSize(minSize); }
+		void setMinNormalDirectionSize( f32 minSize ) { MeshIniter->setMinNormalDirectionSize(minSize); }
 
-		void setMaxNormalDirectionSize( irr::f32 maxSize ) { MeshIniter->setMaxNormalDirectionSize(maxSize); }
+		void setMaxNormalDirectionSize( f32 maxSize ) { MeshIniter->setMaxNormalDirectionSize(maxSize); }
 
 		void setOutlineOnly(bool only) { MeshIniter->setOutlineOnly(only); }
 
-		void setMesh(irr::scene::IMesh*);
+		void setMesh(scene::IMesh*);
 		
 	private:
-		irrptr<irr::scene::IParticleMeshInitializer> MeshIniter;
+		irrptr<scene::IParticleMeshInitializer> MeshIniter;
 	};
 }}
 

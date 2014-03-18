@@ -11,10 +11,9 @@
 #include "CWrappedAnimatedMeshInitializer.h"
 #include "CWrappedIniterStackPusherFactory.h"
 
-using namespace irr::scene;
 namespace xihad { namespace particle
 {
-
+	using namespace scene;
 	int CParticleSystemScriptFactory::compositeIniter( lua_State* L )
 	{
 		if (!Factory) return 0;

@@ -1,13 +1,15 @@
 #include "CDefaultEnv.h"
-#include "CppBase\StringUtil.h"
-#include <irrlicht\ISceneManager.h>
-#include <irrlicht\IMeshSceneNode.h>
-#include <irrlicht\IAnimatedMeshSceneNode.h>
+#include <CppBase/StringUtil.h>
+#include <irrlicht/ISceneManager.h>
+#include <irrlicht/IMeshSceneNode.h>
+#include <irrlicht/IAnimatedMeshSceneNode.h>
+#include <boost/cast.hpp>
 
-using namespace irr::scene;
-using namespace irr::core;
+using namespace boost;
 namespace xihad { namespace particle
 {
+	using namespace core;
+	using namespace scene;
 	CDefaultEnv::CDefaultEnv( Node* source, Node* target ) :
 		mSource(source), mTarget(target)
 	{
@@ -16,14 +18,15 @@ namespace xihad { namespace particle
 	IMesh* CDefaultEnv::getMesh( const char* meshDesc ) const
 	{
 		if (Node* n = getNode(meshDesc))
-		{
-			if (IMeshSceneNode* mn = dynamic_cast<IMeshSceneNode*>(n))
-				return mn->getMesh();
-			else if (IAnimatedMeshSceneNode* an = dynamic_cast<IAnimatedMeshSceneNode*>(n))
-				return an->getMesh();
-			else 
+			switch (n->getType())
+			{
+			case ESNT_MESH:
+				return (polymorphic_downcast<IMeshSceneNode*>(n))->getMesh();
+			case ESNT_ANIMATED_MESH:
+				return (polymorphic_downcast<IAnimatedMeshSceneNode*>(n))->getMesh();
+			default:
 				return nullptr;
-		}
+			}
 		
 		return mSource->getSceneManager()->getMesh(meshDesc);
 	}

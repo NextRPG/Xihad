@@ -4,13 +4,11 @@
 #include <iostream>
 #include <irrlicht/IAnimatedMeshSceneNode.h>
 
-using namespace irr::scene;
 namespace xihad { namespace particle
 {
-	void CWrappedMeshInitializer::setMesh( irr::scene::IMesh* mesh )
+	void CWrappedMeshInitializer::setMesh( scene::IMesh* mesh )
 	{
 		MeshIniter->setMesh(mesh);
 	}
-
 }}
 

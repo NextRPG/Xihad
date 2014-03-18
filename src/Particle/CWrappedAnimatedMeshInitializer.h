@@ -9,26 +9,27 @@ namespace irr { namespace scene
 
 namespace xihad { namespace	 particle
 {
-	class CWrappedAnimatedMeshInitializer : public irr::scene::IParticleInitializer
+	using namespace irr;
+	class CWrappedAnimatedMeshInitializer : public scene::IParticleInitializer
 	{
 	public:
-		CWrappedAnimatedMeshInitializer(irr::scene::IParticleAnimatedMeshInitializer* initer) :
+		CWrappedAnimatedMeshInitializer(scene::IParticleAnimatedMeshInitializer* initer) :
 			MeshIniter(initer)
 		{
 		}
 
-		void initialize(irr::scene::SParticle& p) { MeshIniter->initialize(p); }
+		void initialize(scene::SParticle& p) { MeshIniter->initialize(p); }
 
-		void setMinNormalDirectionSize( irr::f32 minSize ) { MeshIniter->setMinNormalDirectionSize(minSize); }
+		void setMinNormalDirectionSize( f32 minSize ) { MeshIniter->setMinNormalDirectionSize(minSize); }
 
-		void setMaxNormalDirectionSize( irr::f32 maxSize ) { MeshIniter->setMaxNormalDirectionSize(maxSize); }
+		void setMaxNormalDirectionSize( f32 maxSize ) { MeshIniter->setMaxNormalDirectionSize(maxSize); }
 
 		void setOutlineOnly(bool only) { MeshIniter->setOutlineOnly(only); }
 
-		void setAnimatedNode(irr::scene::ISceneNode*);
+		void setAnimatedNode(scene::ISceneNode*);
 
 	private:
-		irrptr<irr::scene::IParticleAnimatedMeshInitializer> MeshIniter;
+		irrptr<scene::IParticleAnimatedMeshInitializer> MeshIniter;
 	};
 }}
 
