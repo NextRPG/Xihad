@@ -48,6 +48,12 @@ namespace xihad { namespace render3d
 
 		bool isActive() const;
 
+		void setTargetFixed(bool fixedTarget);
+
+		bool isTargetFixed() const;
+
+		core::vector3df getLookDirection() const;
+
 		void setProjectionMatrix(const ngn::Matrix& projection, bool isOrthogonal=false);
 
 		//! Gets the current projection matrix of the camera.
@@ -131,6 +137,8 @@ namespace xihad { namespace render3d
 		//! Checks if a camera is orthogonal.
 		bool isOrthogonal() const;
 
+		virtual void syncWithObject();
+
 	protected:
 		virtual void onStop();
 
@@ -142,6 +150,9 @@ namespace xihad { namespace render3d
 		CameraRenderTarget renderTarget;
 		core::rectf viewport;
 		bool active;
+
+		bool fixedTarget;
+		core::vector3df lookDir;
 	};
 }}
 

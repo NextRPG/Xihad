@@ -1,4 +1,5 @@
 #include "CameraComponent.h"
+#include <Engine/GameObject.h>
 #include <irrlicht/ICameraSceneNode.h>
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
@@ -13,7 +14,7 @@ namespace xihad { namespace render3d
 	CameraComponent::CameraComponent( const std::string& name, 
 		ngn::GameObject& host, ICameraSceneNode* node, IrrlichtComponentSystem* sys) :
 		RenderComponent(name, host, node), active(true), irrlichtSystem(sys),
-		viewport(0, 0, 1, 1)
+		viewport(0, 0, 1, 1), fixedTarget(true)
 	{
 		sys->addCamera(renderTarget, this);
 	}
@@ -169,6 +170,37 @@ namespace xihad { namespace render3d
 	ICameraSceneNode * CameraComponent::getNode() const
 	{
 		return (ICameraSceneNode*) RenderComponent::getNode();
+	}
+
+	void CameraComponent::syncWithObject()
+	{
+		RenderComponent::syncWithObject();
+		if (!fixedTarget)
+		{
+			vector3df pos = getNode()->getPosition();
+			setTarget(pos + getLookDirection());
+		}
+	}
+
+	void CameraComponent::setTargetFixed( bool fixedTarget )
+	{
+		if (!fixedTarget && this->fixedTarget)
+			lookDir = getLookDirection();
+
+		this->fixedTarget = fixedTarget;
+	}
+
+	bool CameraComponent::isTargetFixed() const
+	{
+		return this->fixedTarget;
+	}
+
+	core::vector3df CameraComponent::getLookDirection() const
+	{
+		if (!fixedTarget) return lookDir;
+
+		// fix target
+		return getTarget() - getNode()->getPosition();
 	}
 
 }}

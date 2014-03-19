@@ -67,7 +67,7 @@ function ControlledMove:acquire()
 
 		if self.status ~= "jump" and self.next ~= self.status then
 			self.status = self.next
-			anim:playAnimation(c(self.status))
+			if anim then anim:playAnimation(c(self.status)) end
 			self.next = nil
 		end
 	end
@@ -77,11 +77,13 @@ function ControlledMove:acquire()
 		if e.key == "SPACE" and self.status ~= "jump" then
 			self.status = "jump"
 			self.next = "idle 1"
-			anim:playAnimation(c"jump", function()
-				self.status = self.next
-				self.next = nil
-				anim:playAnimation(c(self.status))
-			end)
+			if anim then
+				anim:playAnimation(c"jump", function()
+					self.status = self.next
+					self.next = nil
+					anim:playAnimation(c(self.status))
+				end)
+			end
 			return 0
 		end
 

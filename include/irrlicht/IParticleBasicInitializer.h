@@ -27,10 +27,10 @@ namespace irr { namespace scene
 		virtual void setMaxLifeTime( f32 lifeTimeMax ) = 0;
 
 		//! Gets the minimum starting color for particles
-		virtual const video::SColor& getMinStartColor() const = 0;
+		virtual video::SColor getMinStartColor() const = 0;
 
 		//! Gets the maximum starting color for particles
-		virtual const video::SColor& getMaxStartColor() const = 0;
+		virtual video::SColor getMaxStartColor() const = 0;
 
 		//! Gets the maximum starting size for particles
 		virtual const core::dimension2df& getMaxStartSize() const = 0;

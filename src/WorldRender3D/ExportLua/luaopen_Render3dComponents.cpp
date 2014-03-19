@@ -273,6 +273,9 @@ namespace xihad { namespace render3d
 		MetatableFactory<MeshComponent, RenderComponent>::create(L, meshRegs, 0);
 
 		luaT_defRegsBgn(cameraRegs)
+			luaT_mnamedfunc(CameraComponent, setTargetFixed),
+			luaT_mnamedfunc(CameraComponent, isTargetFixed),
+			luaT_mnamedfunc(CameraComponent, getLookDirection),
 			luaT_mnamedfunc(CameraComponent, setActive),
 			luaT_mnamedfunc(CameraComponent, isActive),
 			luaT_mnamedfunc(CameraComponent, setTarget),

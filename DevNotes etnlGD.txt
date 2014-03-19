@@ -82,6 +82,8 @@ ________________
 + 脚本中对材质的控制
 + 脚本中颜色设置的统一化
 + luaT writeAttribute
++ 引入 SFixedPointColor 来解决 SColorf 带来的时间、空间开销
++ ParticleSystemSceneNode 内存释放
 
 ### TODO
 + 场景切换

@@ -5,7 +5,7 @@ local function createIniter(f)
 	local basic = f:initer("Basic")
 	basic:setColor(color(0x80dddddd), color(0x80ffffff))
 	basic:setLifeTime(1, 1.2)
-	basic:setWidth(0.01, 0.02)
+	basic:setWidth(0.01, 0.012)
 	basic:setHeight(0.5, 0.7)
 	
 	local bi = f:initer("Box")
@@ -28,7 +28,7 @@ return function(pnode, f, env)
 ----------------------------------------------
 -- + emitter
 	local e = f:emitter()
-	e:setPPS(500)	-- Equals to setMinPPS(600), setMaxPPS(1000)
+	e:setPPS(1000)	-- Equals to setMinPPS(600), setMaxPPS(1000)
 	e:setIniter(createIniter(f))
 	pnode:addEmitter(e)
 	
@@ -53,6 +53,6 @@ return function(pnode, f, env)
 	
 	local force = f:affector("Force")
 	force:setGravity(math3d.vector(0,-3, 0))
-	force:setForce(math3d.vector(0.003, 0, 0))
+	force:setForce(math3d.vector(0.007, 0, 0))
 	pnode:addAffector(force)
 end
