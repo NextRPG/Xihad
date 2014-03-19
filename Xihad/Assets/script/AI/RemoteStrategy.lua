@@ -30,7 +30,7 @@ function RemoteStrategy:judgeTile(  )
 	local _, min = findMin(makeList(skills, "id", "minDistance"))
 	local _, max = findMax(makeList(skills, "id", "maxDistance"))
 	local distance = math.random(min, max + 1)
-	local enemy = scene:findObject(c(name)):findComponent(c"Character")
+	local enemy = g_scene:findObject(c(name)):findComponent(c"Character")
 	local tile
 	if math.p_distance(actor.tile, enemy.tile) > distance then
 		tile = GoalFinder:getTargetTileRemote( actor.tile, enemy.tile, actor:getProperty("maxAP"), distance)

@@ -5,9 +5,9 @@
 namespace luaT
 {
 	template <typename Host, typename FieldType, FieldType Host::* FieldPtr>
-	typename TypeTraits<FieldType>::AddReferenceType writeAttrGetterAdapter(Host* object)
+	void writeAttrGetterAdapter(Host* object, const FieldType& value)
 	{
-		return object->*FieldPtr;
+		object->*FieldPtr = value;
 	}
 
 	template <typename Host, typename FieldType, FieldType Host::* FieldPtr>

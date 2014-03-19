@@ -19,7 +19,7 @@ return function(pnode, f, env)
 	
 	-- local t = env:getNode("@target")
 	-- local tpos = env:getPosition(t)
-	-- env:setPosition(pnode, tpos)-- + env:getAABB(t):center())
+	-- pnode:setPosition(tpos)-- + env:getAABB(t):center())
 
 ----------------------------------------------
 -- + emitter

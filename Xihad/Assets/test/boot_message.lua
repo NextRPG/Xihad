@@ -24,22 +24,22 @@ function ListenerManager:onStart()
 		end
 	}
 	
-	local dispatcher = self.object:getScene():getDispatcher()
+	local dispatcher = self.object:getg_scene():getDispatcher()
 	dispatcher:addListener("test.a", self.testListener)
 	
 end
 
 function ListenerManager:onStop()
-	-- 不要随意使用全局的 scene ，在未来的版本中可能会移除
-	local dispatcher = self.object:getScene():getDispatcher()
+	-- 不要随意使用全局的 g_scene ，在未来的版本中可能会移除
+	local dispatcher = self.object:getg_scene():getDispatcher()
 	
 	-- dispatcher:removeListener("test", self.testListener)
 	dispatcher:clearListener(self.testListener)
 	self.testListener:drop()
 end
 
-local dispatcher = scene:getDispatcher()
-local go = scene:createObject(c"sb")
+local dispatcher = g_scene:getDispatcher()
+local go = g_scene:createObject(c"sb")
 local lm = go:appendComponent(c"ListenerManager")
 
 dispatcher:dispatch("test.a", "msg param", c"root", 0.1)

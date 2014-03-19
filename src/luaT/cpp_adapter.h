@@ -59,12 +59,12 @@
 		{ #customName, luaT_mfunction_nret(Type::funcName) }
 
 #define luaT_mnamed_readattr(Type, attrName)					\
-		{ #attrName, luaT_read_attribute(Type, attrName) }
+		{ "get"#attrName, luaT_read_attribute(Type, attrName) }
 #define luaT_mnname_readattr(Type, attrName, customName)		\
 		{ #customName, luaT_read_attribute(Type, attrName) }
 
 #define luaT_mnamed_writeattr(Type, attrName)					\
-		{ #attrName, luaT_write_attribute(Type, attrName) }
+		{ "set"#attrName, luaT_write_attribute(Type, attrName) }
 #define luaT_mnname_writeattr(Type, attrName, customName)		\
 		{ #customName, luaT_write_attribute(Type, attrName) }
 

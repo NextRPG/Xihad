@@ -1,25 +1,18 @@
 require "math3d"
 package.path = package.path..";../Xihad/Assets/test/?.lua"
 
-scene:requireSystem(c"Render")
-local cubeMesh = geometry:createCube(50, 5, 30)
-local floor = scene:createObject(c"floor")
-local fcomp = floor:appendComponent(c"Mesh")
-fcomp:setMesh(cubeMesh)
-cubeMesh:drop()
-fcomp:setColor(255, 0, 0)
-floor:concatTranslate(math3d.vector(0, -2.5, 0))
+g_scene:requireSystem(c"Render")
 
 local param = { mesh  = "Assets/model/ninja.b3d",  clips = "Assets/model/ninja.clip" }
 local function addChildObject(parent, level)
-	local left = scene:createUniqueObject(c"ninja", parent)
+	local left = g_scene:createUniqueObject(c"ninja", parent)
 	local anim = left:appendComponent(c"AnimatedMesh", param)
 	anim:playAnimation(c"idle 1")
 	anim:setTransitionTime(0.1)
 	left:concatTranslate(math3d.vector(-5, 5, 0))
 	left:appendComponent(c"ControlledMove")
 
-	local right = scene:createUniqueObject(c"ninja", parent)
+	local right = g_scene:createUniqueObject(c"ninja", parent)
 	local anim = right:appendComponent(c"AnimatedMesh", param)
 	anim:playAnimation(c"idle 1")
 	anim:setTransitionTime(0.1)
@@ -33,9 +26,9 @@ local function addChildObject(parent, level)
 end
 
 local function addnilobject(parent, level)
-	local left = scene:createUniqueObject(c"ninja", parent)
+	local left = g_scene:createUniqueObject(c"ninja", parent)
 	left:appendComponent(c"Mesh")
-	local right = scene:createUniqueObject(c"ninja", parent)
+	local right = g_scene:createUniqueObject(c"ninja", parent)
 	right:appendComponent(c"Mesh")
 	
 	if level > 1 then
@@ -46,12 +39,12 @@ end
 
 local function addstaticobject(n)
 	for i=1,n do
-		local st = scene:createUniqueObject(c"static")
+		local st = g_scene:createUniqueObject(c"static")
 		st:appendComponent(c"Mesh")
 	end
 end
 
-local root = scene:createObject(c"ninja")
+local root = g_scene:createObject(c"ninja")
 local anim = root:appendComponent(c"AnimatedMesh", param)
 anim:playAnimation(c"idle 1")
 anim:setTransitionTime(0.1)
@@ -76,11 +69,11 @@ local playerSelector = {
 			name = "ninja".."#"..i
 		end
 		
-		local obj = scene:findObject(c(name))
+		local obj = g_scene:findObject(c(name))
 		if obj then
 			local ctrl = obj:findComponent(c"ControlledMove")
 			if ctrl then
-				scene:popController()
+				g_scene:popController()
 				ctrl:acquire()
 				return 0
 			else
@@ -95,10 +88,10 @@ local playerSelector = {
 		return -99
 	end
 	}
-scene:pushController(playerSelector)
+g_scene:pushController(playerSelector)
 playerSelector:drop()
 
 root:appendComponent(c"ControlledMove", moveParam):acquire()
-local co = scene:createObject(c"co")
+local co = g_scene:createObject(c"co")
 co:concatTranslate(math3d.vector(0, 8, -25))
 local cameraControl = co:appendComponent(c"Camera")

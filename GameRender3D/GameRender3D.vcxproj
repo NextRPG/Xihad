@@ -103,12 +103,14 @@
     <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Material.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_resourceManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SceneCollisionManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Cursor.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_RenderSystem.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SColor.cpp" />
     <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp" />

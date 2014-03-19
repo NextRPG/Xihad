@@ -15,7 +15,6 @@ namespace xihad { namespace particle
 		
 		virtual ~CDefaultEnv();
 
-		virtual void setPosition( Node* node, const core::vector3df& pos ) const;
 		virtual core::vector3df getPosition( Node* node ) const;
 		virtual core::aabbox3df getAABB( Node* node ) const;
 

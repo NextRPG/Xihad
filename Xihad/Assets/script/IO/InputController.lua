@@ -18,12 +18,12 @@ local lastTime = 0
 local function judgeType( e )
 	local type = e.type
 	if lastType == "mouseDragged" then
-		local x, y = cursor:getPosition()
+		local x, y = g_cursor:getPosition()
 		e.deltaX = x - lastX
 		e.deltaY = y - lastY
 		lastX, lastY = x, y
-		e.interval = Time.change - lastTime
-		lastTime = Time.change
+		e.interval = g_time.change - lastTime
+		lastTime = g_time.change
 		if type == "mouseMoved" then
 			return "mouseDragged"
 		elseif type == "lUplift" then
@@ -31,8 +31,8 @@ local function judgeType( e )
 			return "mouseDraggedEnd"
 		end
 	elseif lastType == "lPressed" then
-		lastX, lastY = cursor:getPosition()
-		lastTime = Time.change
+		lastX, lastY = g_cursor:getPosition()
+		lastTime = g_time.change
 		if type == "lUplift" then
 			return "lClicked"
 		elseif type == "mouseMoved" then

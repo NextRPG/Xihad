@@ -10,7 +10,7 @@ local CameraManager = {
 }
 
 function CameraManager:createCamera( name )
-	local camera = scene:createObject(c(name))
+	local camera = g_scene:createObject(c(name))
 	camera:appendComponent(c"Camera")
 	camera:appendComponent(c"ForeverMoveBy")
 	camera:appendComponent(c"CameraMoveBy")
@@ -51,7 +51,7 @@ function CameraManager:onMouseEvent( e )
 end
 
 -- local backAction = {}
--- function CameraManager:onKeyUp( e )
+function CameraManager:onKeyUp( e )
 -- 	local camera = self.camera
 -- 	local move = camera:findComponent(c"CameraMoveBy")
 -- 	local ccom = camera:findComponent(c"Camera")
@@ -75,7 +75,7 @@ end
 -- 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
 -- 	end
 -- 	-- print(ccom:getUpVector():xyz())
--- end
+end
 
 function CameraManager:adjustHeight( wheelDelta )
 	local camera = self.camera

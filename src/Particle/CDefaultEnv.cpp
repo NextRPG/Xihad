@@ -51,11 +51,6 @@ namespace xihad { namespace particle
 		return nullptr;
 	}
 
-	void CDefaultEnv::setPosition( ISceneNode* node, const vector3df& pos ) const
-	{
-		node->setPosition(pos);
-	}
-
 	irr::core::vector3df CDefaultEnv::getPosition( ISceneNode* node ) const
 	{
 		return node->getPosition();

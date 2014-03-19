@@ -1,10 +1,10 @@
 package.cpath = package.cpath ..";../Debug/?.dll" --.."../Debug/?.dll"
 require "cegui"
 
-cursor:setVisible(false)
-local guiUpdater = createCEGUIUpdateHandler(engine:getWindow())
-scene:appendUpdateHandler(guiUpdater)
-scene:pushController({
+g_cursor:setVisible(false)
+local guiUpdater = createCEGUIUpdateHandler(g_engine:getWindow())
+g_scene:appendUpdateHandler(guiUpdater)
+g_scene:pushController({
 		onMouseEvent = function(self, event, arg)
 			print (event.type)
 			if event.type == "lDoubleClick" then
@@ -20,7 +20,7 @@ scene:pushController({
 	})
 
 
-scene:pushController(guiUpdater:getEventReceiver())
+g_scene:pushController(guiUpdater:getEventReceiver())
 
 local sm = CEGUI.System:getSingleton()
 local schemeMgr = CEGUI.SchemeManager:getSingleton()

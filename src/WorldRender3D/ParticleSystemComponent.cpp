@@ -1,6 +1,7 @@
 #include "ParticleSystemComponent.h"
 #include <irrlicht/IParticleSystemSceneNode.h>
 #include <Engine/Properties.h>
+#include <irrlicht/ISceneManager.h>
 
 namespace xihad { namespace render3d
 {
@@ -11,15 +12,13 @@ namespace xihad { namespace render3d
 	{
 	}
 
+	ParticleSystemComponent::~ParticleSystemComponent() { }
+
 	ParticleSystemComponent* ParticleSystemComponent::create( 
 		const std::string& name, ngn::GameObject& host, 
 		const ngn::Properties& params, ISceneManager* smgr )
 	{
-		const char* effectPath = params.getString("effectFile");
-		params.getString("dst");
-		// gameScene->findObject(src);
-		// gameScene->findObject(dst);
-		// lua_
+		return new ParticleSystemComponent(name, host, smgr->addParticleSystemSceneNode());
 	}
 
 	IParticleSystemSceneNode* ParticleSystemComponent::getNode() const
@@ -27,9 +26,6 @@ namespace xihad { namespace render3d
 		return (IParticleSystemSceneNode*) RenderComponent::getNode();
 	}
 
-	ParticleSystemComponent::~ParticleSystemComponent()
-	{
-	}
 
 	
 }}

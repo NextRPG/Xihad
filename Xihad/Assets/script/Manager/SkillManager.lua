@@ -26,8 +26,8 @@ end
 -- @treturn Object skillObject or nil
 function SkillManager:createSkill( id )
 	assert(SkillDatabase[id], "the skill doesn't exist")
-	if scene:findObject(sname(id)) ~= nil then return nil end
-	local skillObject = scene:createObject(sname(id))
+	if g_scene:findObject(sname(id)) ~= nil then return nil end
+	local skillObject = g_scene:createObject(sname(id))
 	skillObject:appendComponent(c"Skill", SkillDatabase[id])
 	skillObject:addTag(c"Skill")
 	return skillObject
@@ -38,7 +38,7 @@ end
 -- @int id
 -- @treturn Object skillObject or nil
 function SkillManager:getSkill( id )
-	return scene:findObject(sname(id)):findComponent(c"Skill")
+	return g_scene:findObject(sname(id)):findComponent(c"Skill")
 end
 
 function SkillManager:getAllAvailableTargets( character )
@@ -82,7 +82,7 @@ local selectSkill = nil
 local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
-	selectSkill = scene:findObject(sname(key)):findComponent(c"Skill")
+	selectSkill = g_scene:findObject(sname(key)):findComponent(c"Skill")
 	-- targetRange = selectSkill:getAvailableTargets(character.tile, character:getEnemyManager())
 	targetRange = selectSkill:getTargetRange(character.tile)
 	Chessboard:pushArea(targetRange, "RED")

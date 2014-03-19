@@ -22,7 +22,7 @@ function BaseEffect:checkUpdate( currentTeam )
 end
 
 function BaseEffect.checkAvailable( newEffect, target )
-	local oldEffect = scene:findObject(c(BaseEffect.makeName(newEffect, target)))
+	local oldEffect = g_scene:findObject(c(BaseEffect.makeName(newEffect, target)))
 
 	if oldEffect then
 		oldEffect = oldEffect:findComponent(c(newEffect.name))

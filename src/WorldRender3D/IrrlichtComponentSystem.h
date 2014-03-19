@@ -14,6 +14,11 @@ namespace irr
 	}
 }
 
+namespace xihad { namespace particle
+{
+	class IParticleSystemScriptFactory;
+}}
+
 namespace xihad { namespace render3d
 {
 	using namespace irr;
@@ -36,6 +41,8 @@ namespace xihad { namespace render3d
 			const std::string& compName, 
 			ngn::GameObject& obj, 
 			const ngn::Properties& param = ngn::NullProperties()) override;
+
+		particle::IParticleSystemScriptFactory* getParticleFactory();
 
 		scene::ISceneManager* getSceneManager();
 

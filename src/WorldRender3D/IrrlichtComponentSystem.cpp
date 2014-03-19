@@ -3,11 +3,12 @@
 #include <unordered_map>				// |
 #include <Engine\BiAssociateMap.h>		// |
 #include "CameraRenderTarget.h"			// +----> includes for CameraRenderer
-#include <Engine\irr_ptr.h>
+// #include <Engine\irr_ptr.h>
 #include <irrlicht\ISceneManager.h>
 #include "TextureManager.h"
 #include "MeshManager.h"
-#include <irrlicht\IrrlichtDevice.h>	
+#include <irrlicht\IrrlichtDevice.h>
+#include <Particle\CParticleSystemScriptFactory.h>
 /* All above headers used in field */
 
 /* All below headers used in implemention */
@@ -20,10 +21,12 @@
 #include "BillboardComponent.h"			// |
 #include "ParticleSystemComponent.h"	// |
 #include "TextComponent.h"				// +-----> includes for all Components
+
 using namespace std;
 using namespace boost;
 namespace xihad { namespace render3d
 {
+	using namespace particle;
 	using namespace video;
 	using namespace ngn;
 
@@ -33,6 +36,7 @@ namespace xihad { namespace render3d
 	struct IrrlichtComponentSystem::impl
 	{
 		irr_ptr<ISceneManager> smgr;
+		irr_ptr<IParticleSystemScriptFactory> particleFactory;
 		AnimationClipsCache* clipsCache;
 		boost::scoped_ptr<TextureManager> texManager;
 		boost::scoped_ptr<MeshManager> meshManager;
@@ -55,6 +59,11 @@ namespace xihad { namespace render3d
 
 		mImpl->texManager.reset(new TextureManager(*device->getVideoDriver()));
 		mImpl->meshManager.reset(new MeshManager(*scene));
+
+		auto irrPSF = mImpl->smgr->getParticleSystemFactory();
+		auto fptr = CParticleSystemScriptFactory::createDefault(irrPSF);
+		mImpl->particleFactory.reset(fptr);
+		fptr->drop();
 	}
 
 	IrrlichtComponentSystem::~IrrlichtComponentSystem() {}
@@ -62,8 +71,8 @@ namespace xihad { namespace render3d
 	Component* IrrlichtComponentSystem::create(const string& compName, GameObject& obj, const Properties& param )
 	{
 		ISceneManager* smgr = mImpl->smgr.get();
-		RenderComponent* ret = nullptr;
 
+		RenderComponent* ret = nullptr;
 		if (compName == "Mesh")
 			ret = MeshComponent::create(compName, obj, param, smgr, mImpl->meshManager.get());
 		else if (compName == "AnimatedMesh")
@@ -71,7 +80,7 @@ namespace xihad { namespace render3d
 		else if (compName == "Billboard")
 			ret = BillboardComponent::create(compName, obj, param, smgr);
 		else if (compName == "ParticleSystem")
-			ret = 0;	// TODO
+			ret = ParticleSystemComponent::create(compName, obj, param, smgr);
 		else if (compName == "Light")
 			ret = LightComponent::create(compName, obj, param, smgr);
 		else if (compName == "Camera")
@@ -156,6 +165,11 @@ namespace xihad { namespace render3d
 	void IrrlichtComponentSystem::onStop()
 	{
 		mImpl->smgr.reset(0);
+	}
+
+	IParticleSystemScriptFactory* IrrlichtComponentSystem::getParticleFactory()
+	{
+		return mImpl->particleFactory.get();
 	}
 
 	ISceneManager* IrrlichtComponentSystem::getSceneManager()

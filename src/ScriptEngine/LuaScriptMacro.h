@@ -1,14 +1,14 @@
 #pragma once
 
-#define LUA_G_TIME			"Time"
+#define LUA_G_TIME			"g_time"
 #define LUA_G_TIME_GLOBAL	"global"
 #define LUA_G_TIME_CHANGE	"change"
 #define LUA_G_TIME_PAUSED	"paused"
 
-#define LUA_G_SCENE			"scene"
-#define LUA_G_ENGINE		"engine"
-#define LUA_G_WORLD			"world"
-#define LUA_G_WINDOW		"window"
+#define LUA_G_SCENE			"g_scene"
+#define LUA_G_ENGINE		"g_engine"
+#define LUA_G_WORLD			"g_world"
+#define LUA_G_WINDOW		"g_window"
 
 #define LUA_SYSTEM_INIT		"initSystem"
 #define LUA_SYSTEM_START	"onSystemStart"

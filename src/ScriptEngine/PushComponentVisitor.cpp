@@ -50,6 +50,11 @@ namespace xihad { namespace script
 		genericVisit(c);
 	}
 
+	void PushComponentVisitor::visit( render3d::ParticleSystemComponent& c)
+	{
+		genericVisit(c);
+	}
+
 
 	bool PushComponentVisitor::handleUnkownVisitable( ngn::BaseVisitable& c )
 	{

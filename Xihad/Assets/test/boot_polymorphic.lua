@@ -49,7 +49,7 @@ end
 
 
 -- test case
-local go = scene:createObject(c"sb")
+local go = g_scene:createObject(c"sb")
 local c1 = go:appendComponent(c"CDerived")
 local c2 = go:searchComponent(c"CBase")
 assert(c1==c2)

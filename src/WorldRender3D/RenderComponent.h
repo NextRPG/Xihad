@@ -75,19 +75,18 @@ namespace xihad { namespace render3d
 
 		// BoundingBox-Related
 		const AABB& getBoundingBox() const;
-		const AABB getTransformedBoundingBox() const;
+		const AABB getTransformedAABB() const;
 
 		// Material-Related
 		Material& getMaterial(u32 num);
 		u32 getMaterialCount() const;
 		void setMaterialFlag(video::E_MATERIAL_FLAG flag, bool newValue);
-		void setMaterialTexture(u32 textureLayer, const c8* texName);
 		void setMaterialTexture(u32 textureLayer, Texture* texture);
 
 		// Triangle-Selector
 		virtual bool createTriangleSelector(SelectorInfo info = SelectorInfo());
 		ITriangleSelector* getTriangleSelector() const;
-		void removeTriangleSelector();
+		void removeSelector();
 
 		// Visibility
 		virtual void setVisible(bool visible);

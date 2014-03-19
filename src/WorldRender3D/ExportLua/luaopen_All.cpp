@@ -4,19 +4,13 @@
 #include <irrlicht\IrrlichtDevice.h>
 #include <irrlicht\ICursorControl.h>
 #include <irrlicht\ISceneManager.h>
+#include <Particle\luaopen_ParticleSystem.h>
 #include "LuaGlobalVariable.h"
 #include "..\IrrlichtComponentSystem.h"
 #include "..\Geometry.h"
 
 namespace xihad { namespace render3d
 {
-	int luaopen_Cursor(lua_State* L);
-	int luaopen_render3dComponents(lua_State* L);
-	int luaopen_SceneCollisionManager(lua_State* L);
-	int luaopen_Geometry(lua_State* L);
-	int luaopen_RenderSystem(lua_State* L);
-	int luaopen_ResourceManager(lua_State* L);
-
 	using namespace irr;
 	using namespace luaT;
 	void luaopen_All(IrrlichtDevice* dev, IrrlichtComponentSystem* ics, lua_State* L)
@@ -29,6 +23,11 @@ namespace xihad { namespace render3d
 		luaopen_Geometry(L);
 		luaopen_RenderSystem(L);
 		luaopen_ResourceManager(L);
+		luaopen_Material(L);
+		luaopen_SColor(L);
+
+		// open particle system support
+		particle::luaopen_AllParticleSystem(L);
 
 		lua_getglobal(L, "_G");
 		gui::ICursorControl* cursor = dev->getCursorControl();
@@ -40,5 +39,8 @@ namespace xihad { namespace render3d
 
 		setField(L, -1, LUA_G_TEX_MANAGER, ics->getTextureManager());
 		setField(L, -1, LUA_G_MESH_MANAGER, ics->getMeshManager());
+
+		setField(L, -1, LUA_G_PARTICLE_FACTORY, ics->getParticleFactory());
+
 	}	
 }}

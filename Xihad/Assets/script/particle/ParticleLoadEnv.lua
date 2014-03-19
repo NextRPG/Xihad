@@ -1,8 +1,13 @@
-local Env = { source = nil, target = nil }
+local Env = { source = nil, target = nil, particleComponent = nil }
 
-function Env:setSourceTarget(source, target)
-	self.source = source
-	self.target = target
+function Env.new(pcomp, source, target)
+	local o = {
+		particleComponent = pcomp,
+		source = source,
+		target = target	
+	}
+	setmetatable(o, Env)
+	return o
 end
 
 function Env:getNode(objDesc)
@@ -12,10 +17,6 @@ function Env:getNode(objDesc)
 			return self[t]
 		end
 	end
-end
-
-function Env:setPosition(obj, pos)
-	obj:resetTranslation(pos)
 end
 
 function Env:getPosition(obj)
@@ -32,14 +33,15 @@ function Env:getMesh(meshDesc)
 		if n.getMesh then
 			return n:getMesh()
 		end
+	else
+		return g_meshManager:getMesh(meshDesc)
 	end
-	
-	return meshManager:getMesh(meshDesc)
 end
 
-function Env:deferMessage(obj, delay, msg)
+function Env:deferMessage(delay, msg)
 	local msgParam = { source = self.source, target = self.target }
-	scene:getDispatcher():dispatch(msg, msgParam, obj:getID(), delay)
+	local src = particleComponent:getHostObject():getID()
+	g_scene:getDispatcher():dispatch(msg, msgParam, src, delay)
 end
 
 return Env

@@ -34,7 +34,7 @@ function RotateBy:onUpdate(  )
 	if not self.enabled then return end
 
 	local animate = self.object:findComponent(c"AnimatedMesh")	
-	local lastFrameTime = Time.change	
+	local lastFrameTime = g_time.change	
 	local deltaY = self.destination.y * (lastFrameTime / self.leftTime)
 	self.destination.y = self.destination.y - deltaY
 

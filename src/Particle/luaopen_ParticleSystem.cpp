@@ -13,6 +13,7 @@
 #include <CppBase/StringUtil.h>
 #include "IParticleSystemLoaderEnv.h"
 #include "CWrappedAnimatedMeshInitializer.h"
+#include "Engine/SColor.h"
 
 using namespace irr;
 using namespace scene;
@@ -95,17 +96,35 @@ namespace xihad { namespace particle
 	{
 		int argc = lua_gettop(L);
 		luaT_variable(L, 1, IParticleSystemSceneNode*, pnode);
-		core::vector3df position = argc>=2 ? 
-			luaT::checkarg<core::vector3df>(L, 2) : core::vector3df();
 		core::vector3df rotation = argc>=3 ?
 			luaT::checkarg<core::vector3df>(L, 3) : core::vector3df();
 
 		ISceneManager* smgr = pnode->getSceneManager();
 		push<IParticleSystemSceneNode*>(L, 
-			smgr->addParticleSystemSceneNode(65535, pnode, -1, position, rotation));
+			smgr->addParticleSystemSceneNode(65535, pnode));
 
 		return 1;
 	}
+
+	luaT_static void setPosition(IParticleSystemSceneNode* pnode, const core::vector3df& pos)
+	{
+		pnode->setPosition(pos);
+	}}
+
+	luaT_static void setRotation(IParticleSystemSceneNode* pnode, const core::vector3df& rot)
+	{
+		core::vector3df scale = pnode->getRelativeTransformation().getScale();
+		core::vector3df pos = pnode->getRelativeTransformation().getTranslation();
+		core::matrix4 mat;
+		mat.setRotationDegrees(rot);
+		mat.setTranslation(pos);
+
+		core::matrix4 smat;
+		smat.setScale(scale);
+
+		mat *= smat;
+		pnode->setRelativeTransformation(mat);
+	}}
 
 	void luaopen_ParticleSystemNode( lua_State* L )
 	{
@@ -119,15 +138,16 @@ namespace xihad { namespace particle
 			luaT_cnamedfunc(setRenderer),
 			luaT_cnamedfunc(setRendererTexture),
 			luaT_lnamedfunc(newChild),
+			luaT_cnamedfunc(setPosition),
+			luaT_cnamedfunc(setRotation),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleSystemSceneNode, ISceneNode>::create(L, pnode);
 
 		luaT_defRegsBgn(env)
-			luaT_mnamedfunc(IParticleSystemLoaderEnv, setPosition),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, getNode),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getPosition),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getAABB),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getMesh),
-			luaT_mnamedfunc(IParticleSystemLoaderEnv, getNode),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, deferMessage),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleSystemLoaderEnv>::create(L, env);
@@ -180,11 +200,6 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle Emitter
 	////////////////////////////////////////////////////////////////////// 
-	luaT_static void grab(IParticleEmitter* e)
-	{
-		e->grab();
-	}}
-
 	luaT_static void setIniter(IParticleEmitter* emitter,  IParticleInitializer* initer) 
 	{
 		emitter->setParticleInitializer(initer);
@@ -194,7 +209,7 @@ namespace xihad { namespace particle
 	void luaopen_ParticleEmitter( lua_State* L )
 	{
 		luaT_defRegsBgn(emitter)
-			luaT_cnamedfunc(grab),
+			luaT_cnnamefunc(intrusive_ptr_add_ref<IParticleEmitter>, grab),
 			luaT_cnamedfunc(setIniter),
 			luaT_mnnamefunc(IParticleEmitter, setMinParticlesPerSecond, setMinPPS),
 			luaT_mnnamefunc(IParticleEmitter, setMaxParticlesPerSecond, setMaxPPS),
@@ -207,51 +222,6 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle Renderer
 	////////////////////////////////////////////////////////////////////// 
-	luaT_static void setMaterialType(SMaterial& mat, const char* type)
-	{
-		int idx = StringUtil::select(type, sBuiltInMaterialTypeNames);
-		if (idx != -1)
-			mat.MaterialType = (E_MATERIAL_TYPE) idx;
-		else 
-			std::cerr << "Unrecognized material type: "  << type << std::endl;
-	}}
-
-	luaT_static void setLighting(SMaterial& mat, bool b)
-	{
-		mat.Lighting = b;
-	}}
-
-	luaT_static void setZWriteEnable(SMaterial& mat, bool b)
-	{
-		mat.ZWriteEnable = b;
-	}}
-
-	luaT_static void setBlend(SMaterial& mat, const char* fsrc, const char* fdst, const char* bops)
-	{
-		static const char* sBlendFactors[] = {
-			"0", "1", "dst.rgb", "1-dst.rgb", "src.rgb", "1-src.rgb",
-			"src.alpha", "1-src.alpha", "dst.alpha", "1-dst.alpha", 0
-		};
-		static const char* sBlendOperation[] = {
-			"none", "add", "substract", "rev_substract", "min", "max", 0
-		};
-		
-		int src = StringUtil::select(fsrc, sBlendFactors, " \t\n");
-		int dst = StringUtil::select(fdst, sBlendFactors, " \t\n");
-		if (src != -1 && dst != -1)
-			mat.MaterialTypeParam = pack_textureBlendFunc((E_BLEND_FACTOR) src, (E_BLEND_FACTOR) dst);
-		else if (src == -1)
-			std::cerr << "Unrecognized src blend factor: " << fsrc << std::endl;
-		else 
-			std::cerr << "Unrecognized dst blend factor: " << fdst << std::endl;
-
-		int ops = StringUtil::select(bops, sBlendOperation);
-		if (ops != -1)
-			mat.BlendOperation = (E_BLEND_OPERATION) ops;
-		else 
-			std::cerr << "Unrecognized blend operation: " << bops << std::endl;
-	}}
-
 	luaT_static void addTexRegion(IParticleQuadRenderer* quad, f32 x, f32 y, f32 x2, f32 y2)
 	{
 		quad->addTextureRegion(core::rectf(x,y,x2,y2));
@@ -259,18 +229,8 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleRenderer( lua_State* L )
 	{
-		luaT_defRegsBgn(smat)
-			// TODO
-			// ColorMaterial, DiffuseColor, Wireframe, ColorMask
-			// ZBuffer
-			luaT_cnamedfunc(setMaterialType),
-			luaT_cnamedfunc(setBlend),
-			luaT_cnamedfunc(setLighting),
-			luaT_cnamedfunc(setZWriteEnable),
-		luaT_defRegsEnd
-		MetatableFactory<SMaterial>::create(L, smat);
-
 		luaT_defRegsBgn(renderer)
+			luaT_cnnamefunc(intrusive_ptr_add_ref<IParticleRenderer>, grab),
 			luaT_mnamedfunc(IParticleRenderer, getMaterial),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleRenderer>::create(L, renderer);
@@ -291,14 +251,14 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle Initializer
 	////////////////////////////////////////////////////////////////////// 
-	luaT_static void setMinColor(IParticleBasicInitializer* init, u32 clr)
+	luaT_static void setMinColor(IParticleBasicInitializer* init, const SColor& clr)
 	{
-		init->setMinStartColor(video::SColor(clr));
+		init->setMinStartColor(clr);
 	}}
 
-	luaT_static void setMaxColor(IParticleBasicInitializer* init, u32 clr)
+	luaT_static void setMaxColor(IParticleBasicInitializer* init, const SColor& clr)
 	{
-		init->setMaxStartColor(video::SColor(clr));
+		init->setMaxStartColor(clr);
 	}}
 
 	luaT_static void setMinWidth(IParticleBasicInitializer* init, f32 minW)
@@ -331,7 +291,10 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleIniter( lua_State* L )
 	{
-		MetatableFactory<IParticleInitializer>::create(L, 0);
+		luaT_defRegsBgn(initer)
+			luaT_cnnamefunc(intrusive_ptr_add_ref<IParticleInitializer>, grab),
+		luaT_defRegsEnd
+		MetatableFactory<IParticleInitializer>::create(L, initer);
 
 		luaT_defRegsBgn(basic_initer)
 			luaT_cnamedfunc(setMinColor),
@@ -414,9 +377,9 @@ namespace xihad { namespace particle
 	//////////////////////////////////////////////////////////////////////
 	/// Particle Affector
 	////////////////////////////////////////////////////////////////////// 
-	luaT_static void setTargetColor(IParticleFadeOutAffector* faff, u32 clr)
+	luaT_static void setTargetColor(IParticleFadeOutAffector* faff, const SColor& clr)
 	{
-		faff->setTargetColor(video::SColor(clr));
+		faff->setTargetColor(clr);
 	}}
 
 	luaT_static void setColorMask(IParticleFadeOutAffector* faff, const char* smask)
@@ -450,7 +413,10 @@ namespace xihad { namespace particle
 
 	void luaopen_ParticleAffector( lua_State* L )
 	{
-		MetatableFactory<IParticleAffector>::create(L, 0);
+		luaT_defRegsBgn(aff)
+			luaT_cnnamefunc(intrusive_ptr_add_ref<IParticleAffector>, grab),
+		luaT_defRegsEnd
+		MetatableFactory<IParticleAffector>::create(L, aff);
 
 		luaT_defRegsBgn(att_affector)
 			luaT_mnamedfunc(IParticleAttractionAffector, setPoint),

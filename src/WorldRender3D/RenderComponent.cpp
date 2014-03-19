@@ -66,7 +66,7 @@ namespace xihad { namespace render3d
 		return mNode->getBoundingBox();
 	}
 
-	const RenderComponent::AABB RenderComponent::getTransformedBoundingBox() const
+	const RenderComponent::AABB RenderComponent::getTransformedAABB() const
 	{
 		return mNode->getTransformedBoundingBox();
 	}
@@ -84,12 +84,6 @@ namespace xihad { namespace render3d
 	void RenderComponent::setMaterialFlag( video::E_MATERIAL_FLAG flag, bool newValue )
 	{
 		mNode->setMaterialFlag(flag, newValue);
-	}
-
-	void RenderComponent::setMaterialTexture( u32 textureLayer, const c8* texName )
-	{
-		ITexture* tex = mNode->getSceneManager()->getVideoDriver()->findTexture(texName);
-		setMaterialTexture(textureLayer, tex);
 	}
 
 	void RenderComponent::setMaterialTexture( u32 textureLayer, Texture* texture )
@@ -112,7 +106,7 @@ namespace xihad { namespace render3d
 		return sel != nullptr;
 	}
 
-	void RenderComponent::removeTriangleSelector()
+	void RenderComponent::removeSelector()
 	{
 		getNode()->setTriangleSelector(nullptr);
 	}

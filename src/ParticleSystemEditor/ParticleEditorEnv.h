@@ -19,7 +19,7 @@ namespace xihad { namespace particle { namespace editor
 	public:
 		ParticleEditorEnv(Node* source, Node* target, irr::IrrlichtDevice* device, clock_t now);
 
-		virtual void deferMessage(scene::ISceneNode* msgSource, float delaySecs, const char* message);
+		virtual void deferMessage(float delaySecs, const char* message);
 
 		virtual void clearMessages();
 

@@ -32,7 +32,7 @@ function ControlledMove:onUpdate()
 	if self.ydir ~= y then
 		local target = self.ydir
 		local dy = 0
-		local max = Time.change * 720
+		local max = g_time.change * 720
 		
 		-- 旋转小角度
 		if target-y > 180  then target = target - 360 end
@@ -46,7 +46,7 @@ function ControlledMove:onUpdate()
 	
 	if not self.dontMove then
 		local rad = self.ydir/180*math.pi
-		local dst = Time.change*self.speed
+		local dst = g_time.change*self.speed
 		self.object:concatTranslate(math3d.vector(math.sin(rad)*dst, 0, math.cos(rad)*dst))
 	end
 end

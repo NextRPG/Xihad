@@ -28,6 +28,7 @@
 #include <luaT/luaT.h>
 #include <irrlicht/irrlicht.h>
 #include <iostream>
+#include <WorldRender3D/ExportLua/luaopen_All.h>
 #include <Particle/luaopen_ParticleSystem.h>
 #include <Particle/CParticleSystemScriptFactory.h>
 #include "ParticleEditorEnv.h"
@@ -123,8 +124,14 @@ int main(int argc, char** argv)
 	receiver->smgr = device->getSceneManager();
 	receiver->factory = CParticleSystemScriptFactory::createDefault(receiver->smgr->getParticleSystemFactory());
 	receiver->L = luaL_newstate();
-	luaL_openlibs(receiver->L);
-	luaopen_AllParticleSystem(receiver->L);
+
+	{
+		luaT::StackMemo m(receiver->L);
+		luaL_openlibs(receiver->L);
+		luaopen_AllParticleSystem(receiver->L);
+		xihad::render3d::luaopen_Material(receiver->L);
+		xihad::render3d::luaopen_SColor(receiver->L);
+	}
 
 	receiver->smgr->addSkyDomeSceneNode(device->getVideoDriver()->getTexture("../Xihad/Assets/gfx/skydome.jpg"));
 	ISceneNode* source = addNinja(receiver->smgr, core::vector3df(-10, 0, 0));

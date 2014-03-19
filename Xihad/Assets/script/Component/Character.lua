@@ -116,7 +116,7 @@ function Character:handleDamage_aux( param )
 	self:changeState("properties.currentHP", self:getProperty("currentHP") - damage) 
 	if (self:getProperty("currentHP") <= 0) then
 		self.properties.currentHP = 0
-		local dispatcher = scene:getDispatcher()
+		local dispatcher = g_scene:getDispatcher()
 		dispatcher:dispatch( self.team .. ".die", "haha", c"root", 0)
 		self.object:stop()
 	end

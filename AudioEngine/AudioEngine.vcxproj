@@ -81,6 +81,9 @@
     <ClInclude Include="..\src\AudioEngine\NullSound.h" />
     <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ScriptEngine\ScriptEngine.vcxproj" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

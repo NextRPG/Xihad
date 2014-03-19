@@ -118,6 +118,8 @@
     </ClCompile>
     <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Material.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SColor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">

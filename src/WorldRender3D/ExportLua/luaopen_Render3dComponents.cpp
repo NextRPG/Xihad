@@ -9,17 +9,17 @@
 #include "../LightComponent.h"
 #include "../BillboardComponent.h"
 #include "../TextComponent.h"
+#include "../ParticleSystemComponent.h"
 
 #include "LuaAnimationCallback.h"
 
 using namespace luaT;
-using namespace xihad::ngn;
-using namespace xihad::render3d;
-using namespace irr::video;
-using namespace irr::scene;
-
 namespace xihad { namespace render3d
 {
+	using namespace ngn;
+	using namespace video;
+	using namespace scene;
+
 	inline static IAnimationEndCallBack* createEndCallback(lua_State* L, int idx)
 	{
 		LuaRef lcallback = LuaRef::fromIndex(L, idx);
@@ -118,7 +118,7 @@ namespace xihad { namespace render3d
 		return state;
 	}
 
-	static int render_addDebugState(lua_State* L)
+	static int addDebugState(lua_State* L)
 	{
 		RenderComponent* rc = checkarg<RenderComponent*>(L, 1);
 		rc->setDebugState(rc->getDebugState() | popStates(L, 2));
@@ -126,7 +126,7 @@ namespace xihad { namespace render3d
 		return 0;
 	}
 
-	static int render_removeDebugState(lua_State* L)
+	static int removeDebugState(lua_State* L)
 	{
 		RenderComponent* rc = checkarg<RenderComponent*>(L, 1);
 
@@ -142,7 +142,7 @@ namespace xihad { namespace render3d
 		return rc->getBoundingBox();
 	}}
 
-	static int render_createTriangleSelector(lua_State* L)
+	static int createSelector(lua_State* L)
 	{
 		static SelectorType idxToEnum[] = {
 			SelectorType::BoundingBox, Stupid, Octree, Terrian
@@ -171,18 +171,6 @@ namespace xihad { namespace render3d
 
 		return 1;
 	}
-
-	luaT_static void setMaterialTexture(RenderComponent* rc, int textureLayer, const char* texName)
-	{
-		if (textureLayer < 0) return;
-
-		rc->setMaterialTexture((size_t) textureLayer, texName);
-	}}
-
-	luaT_static int getMaterialCount(RenderComponent* rc)
-	{
-		return (int) rc->getMaterialCount();
-	}}
 
 	luaT_static vector3df getTarget(CameraComponent* cc)
 	{
@@ -241,21 +229,6 @@ namespace xihad { namespace render3d
 		}
 	}}
 
-	luaT_static void setColor(RenderComponent* comp, int r, int g, int b)
-	{
-		for (irr::u32 i = 0; i < comp->getMaterialCount(); ++i)
-		{
-			SMaterial& mat = comp->getMaterial(i);
-			mat.ColorMaterial = ECM_NONE;
-			mat.DiffuseColor = ngn::SColor(255, r, g, b);
-		}
-	}}
-
-	luaT_static void setBillboardColor(BillboardComponent* comp, int r, int g, int b)
-	{
-		comp->setColor(ngn::SColor(255, r, g, b));
-	}}
-
 	int luaopen_render3dComponents( lua_State* L )
 	{
 		luaT_defRegsBgn(renderRegs)
@@ -263,16 +236,15 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(RenderComponent, setVisible),
 			luaT_mnamedfunc(RenderComponent, isVisible),
 			luaT_mnamedfunc(RenderComponent, isTrulyVisible),
-			luaT_mnnamefunc(RenderComponent, getTransformedBoundingBox, getTransformedBBox),
+			luaT_mnamedfunc(RenderComponent, getMaterial),
+			luaT_mnamedfunc(RenderComponent, getMaterialCount),
+			luaT_mnamedfunc(RenderComponent, setMaterialTexture),
+			luaT_mnamedfunc(RenderComponent, getTransformedAABB),
 			luaT_cnamedfunc(getAABB),
-			luaT_cnamedfunc(setMaterialTexture),
-			luaT_cnamedfunc(getMaterialCount),
-			// TODO: Material
-			luaT_cnamedfunc(setColor),
-			{ "addDebugState", render_addDebugState },
-			{ "removeDebugState", render_removeDebugState },
-			{ "createSelector", render_createTriangleSelector },
-			luaT_mnnamefunc(RenderComponent, removeTriangleSelector, removeSelector),
+			luaT_lnamedfunc(addDebugState),
+			luaT_lnamedfunc(removeDebugState),
+			luaT_lnamedfunc(createSelector),
+			luaT_mnamedfunc(RenderComponent, removeSelector),
 		luaT_defRegsEnd
 		MetatableFactory<RenderComponent, Component>::create(L, renderRegs, 0);
 
@@ -326,10 +298,11 @@ namespace xihad { namespace render3d
 		MetatableFactory<LightComponent, RenderComponent>::create(L, lightRegs, 0);
 
 		luaT_defRegsBgn(billRegs)
+			luaT_lnnamefunc(bill_getSize, getSize),
 			luaT_mnamedfunc_ovl(BillboardComponent, 
 				void (BillboardComponent::*)(float, float, float), setSize),
-				{ "getSize", bill_getSize },
-			luaT_cnnamefunc(setBillboardColor, setColor),
+			luaT_mnamedfunc_ovl(BillboardComponent,
+				void (BillboardComponent::*)(const SColor&), setColor),
 		luaT_defRegsEnd
 		MetatableFactory<BillboardComponent, RenderComponent>::create(L, billRegs, 0);
 
@@ -338,6 +311,12 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(TextComponent, adjustToHeight),
 		luaT_defRegsEnd
 		MetatableFactory<TextComponent, BillboardComponent>::create(L, textRegs, 0);
+
+		luaT_defRegsBgn(particleRegs)
+			luaT_mnamedfunc(ParticleSystemComponent, getParticleNode),
+		luaT_defRegsEnd
+		MetatableFactory<ParticleSystemComponent, RenderComponent>::create(L, particleRegs, 0);
+
 		return 0;
 	}
 }}

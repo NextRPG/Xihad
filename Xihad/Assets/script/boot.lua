@@ -18,20 +18,20 @@ package.path = package.path
 .. ";Assets/Script/Manager/?.lua"
 .. ";Assets/Script/Lib/?.lua"
 
-global = scene:createObject(c("global"))
+global = g_scene:createObject(c("global"))
 
 require "Consts"
 require "LuaUtils"
 require "math3d"
 
-scene:requireSystem(c"Render")	-- load Irrlicht render component system
-local colorMesh = geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
-meshManager:takeMesh("@colorCube", colorMesh)
-local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
-meshManager:takeMesh("@chessboardCube", cubeMesh)
--- meshManager:takeMesh(id, mesh) 
+g_scene:requireSystem(c"Render")	-- load Irrlicht render component system
+local colorMesh = g_geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
+g_meshManager:takeMesh("@colorCube", colorMesh)
+local cubeMesh = g_geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
+g_meshManager:takeMesh("@chessboardCube", cubeMesh)
+-- g_meshManager:takeMesh(id, mesh) 
 -- 等价于
--- meshManager:addMesh(id, mesh); 	mesh:drop()
+-- g_meshManager:addMesh(id, mesh); 	mesh:drop()
 
 
 local Chessboard = require "Chessboard"
@@ -65,6 +65,5 @@ LightManager:init()
 
 -- init Controller
 local gameController = require("InputController")
-scene:pushController(gameController) 
+g_scene:pushController(gameController) 
 gameController:drop()
-

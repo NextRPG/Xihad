@@ -71,8 +71,8 @@ return function(pnode, f, env)
 	a:setSpeed(math3d.vector(0, 0, 2000))
 	pnode:addAffector(a, 0.7)
 	
-	env:deferMessage(pnode, 0, "skill begin")
-	env:deferMessage(pnode, 1.5, "attack begin")
-	env:deferMessage(pnode, 2, "attack end")
-	env:deferMessage(pnode, 2.5, "skill end")
+	env:deferMessage(0, 	"skill begin")
+	env:deferMessage(1.5, 	"attack begin")
+	env:deferMessage(2, 	"attack end")
+	env:deferMessage(2.5, 	"skill end")
 end

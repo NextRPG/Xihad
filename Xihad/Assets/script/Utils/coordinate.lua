@@ -48,12 +48,12 @@ end
 -- MouseEvent
 
 function getSelectedObject(  )
-	return collision:detect(
-		collision:getRayFromScreenCoord(cursor:getPosition()))
+	return g_collision:detect(
+		g_collision:getRayFromScreenCoord(g_cursor:getPosition()))
 end
 
 function isSelectedObject( id )
 	assert(id, "id can't be nil")
-	return collision:detect(
-		collision:getRayFromScreenCoord(cursor:getPosition()), id)
+	return g_collision:detect(
+		g_collision:getRayFromScreenCoord(g_cursor:getPosition()), id)
 end

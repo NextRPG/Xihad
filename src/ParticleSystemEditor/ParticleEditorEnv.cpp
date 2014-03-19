@@ -18,7 +18,7 @@ namespace xihad { namespace particle { namespace editor
 		textNode->setPosition(core::vector3df(-8, 10, 0));
 	}
 
-	void ParticleEditorEnv::deferMessage( scene::ISceneNode* msgSource, float delaySecs, const char* message )
+	void ParticleEditorEnv::deferMessage( float delaySecs, const char* message )
 	{
 		DelayedMessage dmsg;
 		dmsg.tm = now + static_cast<clock_t>(delaySecs*1000);
