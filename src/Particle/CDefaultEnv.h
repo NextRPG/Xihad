@@ -6,11 +6,14 @@ namespace xihad { namespace particle
 {
 	class CDefaultEnv : public IParticleSystemLoaderEnv
 	{
+	protected:
 		typedef scene::ISceneNode Node;
 		typedef scene::IMesh Mesh;
 
 	public:
 		CDefaultEnv(Node* source, Node* target);
+		
+		virtual ~CDefaultEnv();
 
 		virtual void setPosition( Node* node, const core::vector3df& pos ) const;
 		virtual core::vector3df getPosition( Node* node ) const;

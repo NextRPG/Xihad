@@ -17,10 +17,10 @@ static u32 charWidth  = 20;
 static u32 charHeight = 0;
 static u32 imageWidth = 2048;
 static u32 imageHeight= 1024;
-static const char* out= "out";
-static const char* fmt= "bmp";
+static const char* out= "font";
+static const char* fmt= "tga";
 static bool binary	  = true;
-static bool useAlpha  = false;
+static bool useAlpha  = true;
 
 
 class IrrlichtImageFactory : public IImageFactory

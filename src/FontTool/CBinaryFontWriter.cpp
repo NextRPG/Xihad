@@ -3,10 +3,11 @@
 #include <irrlicht\IFileSystem.h>
 #include <irrlicht\IWriteFile.h>
 
-
 namespace xihad { namespace font
 {
 	using namespace io;
+
+	enum { FONT_VERSION = 1000, };
 
 	template <typename T>
 	inline static void writeT(IWriteFile* writer, const T& t)
@@ -31,6 +32,8 @@ namespace xihad { namespace font
 		std::string filename = getFilename() + ".xft";
 		IWriteFile* writer = device->getFileSystem()->createAndWriteFile(filename.c_str());
 
+		writeT(writer, 0xabcdefff);
+		writeT(writer, (int) FONT_VERSION);
 		writeT(writer, useAlphaChannel);
 		writeT(writer, fontInfo.images.size());
 		std::string imageName;

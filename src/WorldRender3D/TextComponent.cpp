@@ -57,10 +57,6 @@ namespace xihad { namespace render3d
 	gui::IGUIFont* TextComponent::loadFont( scene::ISceneManager* smgr, const char* fontFilename )
 	{
 		core::stringc path = fontFilename;
-		int idx = path.findLastChar(".", 1);
-		if (idx == -1 || path.subString(idx+1, path.size()) != "xft")
-			return 0;
-
 		io::IFileSystem* fs = smgr->getFileSystem();
 		gui::IGUIFont* font = 0;
 		io::IReadFile* istream = fs->createAndOpenFile(path);
@@ -87,6 +83,11 @@ namespace xihad { namespace render3d
 		}
 
 		return font;
+	}
+
+	void TextComponent::adjustToHeight( float height )
+	{
+		getNode()->adjustToHeight(height);
 	}
 
 }}

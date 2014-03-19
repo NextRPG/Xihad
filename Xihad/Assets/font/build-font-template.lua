@@ -15,14 +15,15 @@ local singleImageHeight = 1024	-- 0 means equal to width
 
 ---
 -- + Relative loading cost for all supported formats: 
--- 		ppm(very slow) > png(35) > pcx(17) > jpg(7.5) > bmp(1.8) > tga(1)
+-- 		ppm(very slow) > pcx(341) > png(40.6)  > jpg(25.8) > tga(1.3) > bmp(0.8)
 -- + Image size: 
---		jpg(32K) < pcx(196K) < png(1.69M) < bmp(6M) < tga(8M) < ppm(25M)
+--		png(1.69M) < tga(8.00M)
+-- 		jpg(1.02M) < pcx(4.82M) < bmp(6M) < ppm(25M)
 -- + Formats that support alpha channel
 --		png, tga
 ------ Don't use ppm and pcx
------- If you want alpha, choose between png and tga
------- If you don't wanna alpha, choose among jpg, bmp and tga
+------ If you does 	wanna alpha, choose from { png, tga }
+------ If you don't wanna alpha, choose from { jpg, bmp }
 local outputImageFormat = 'tga'
 local useAlphaChannel 	= true
 

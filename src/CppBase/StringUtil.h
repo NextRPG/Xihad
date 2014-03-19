@@ -18,6 +18,21 @@ namespace xihad
 		 */
 		static int select(const char* target, const char* const options[]);
 
+		static int select(const char* target, 
+						  const char* const options[], 
+						  const char* eliminatables);
+
+		/// ÅÐ¶Ï×Ö·û´®³ýÈ¥Ä³Ð©×Ö·ûºóÄÜ·ñÏàµÈ
+		/**
+		 * do
+		 *	i = j = 0
+		 *	while target[i] == compare[j] or target[i++] is eliminatable
+		 * end
+		 * ("abcd efg", "abcdefg", " ") -> 1
+		 */
+		static int equal_except(const char* target, 
+								const char* compare, 
+								const char* eliminatables);
 	};
 }
 

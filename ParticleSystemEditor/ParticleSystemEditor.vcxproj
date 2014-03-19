@@ -12,6 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ParticleSystemEditor\ParticleEditor.cpp" />
+    <ClCompile Include="..\src\ParticleSystemEditor\ParticleEditorEnv.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ParticleSystemEditor\ParticleEditorEnv.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{45BB0D49-9BB5-4C17-B44D-FA3429CF590D}</ProjectGuid>
@@ -52,7 +56,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs;../$(Configuration);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ParticleSystemLoader.lib;ScriptEngine.lib;xengine.lib;irrlicht.lib;luaT.lib;lua.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ParticleSystemLoader.lib;xengine.lib;irrlicht.lib;luaT.lib;lua.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

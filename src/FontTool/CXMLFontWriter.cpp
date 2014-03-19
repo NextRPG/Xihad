@@ -21,7 +21,7 @@ namespace xihad { namespace font
 
 	bool CXMLFontWriter::onWriteFontFile( const SFontInfo& fontInfo )
 	{
-		std::string fn = getFilename() + ".xml";
+		std::string fn = getFilename() + ".xft";
 		io::IXMLWriter *writer = device->getFileSystem()->createXMLWriter(fn.c_str());
 
 		// header and line breaks

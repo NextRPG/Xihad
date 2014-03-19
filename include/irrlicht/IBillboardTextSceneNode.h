@@ -27,6 +27,8 @@ public:
 		const core::vector3df& position = core::vector3df(0,0,0))
 		: IBillboardSceneNode(parent, mgr, id, position) {}
 
+	virtual void adjustToHeight(f32 height) = 0;
+
 	//! Sets the size of the billboard.
 	virtual void setSize(const core::dimension2d<f32>& size) = 0;
 

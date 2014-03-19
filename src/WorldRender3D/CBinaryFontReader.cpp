@@ -4,6 +4,7 @@
 #include <irrlicht/IReadFile.h>
 #include <irrlicht/IGUIFontBuilder.h>
 #include <utility>
+#include <iostream>
 
 namespace xihad { namespace font
 {
@@ -53,10 +54,24 @@ namespace xihad { namespace font
 		return imagePath;
 	}
 
+	enum { SUPPORT_FONT_VERSION = 1000, };
 	IGUIFontBitmap* CBinaryFontReader::loadFont( IReadFile* reader, IGUIFontBuilder* fb )
 	{
 		try
 		{
+			// Magic number check
+			if (readT<int>(reader) != 0xabcdefff)
+			{
+				std::cerr << "The given file is not [Xihad Font File]" << std::endl;
+				return 0;
+			}
+
+			if (readT<int>(reader) != SUPPORT_FONT_VERSION)
+			{
+				std::cerr << "The font version is not supported" << std::endl;
+				return 0;
+			}
+
 			bool useAlpha = readT<bool>(reader);
 			u32 imageCount = readT<u32>(reader);
 			for (u32 i = 0; i < imageCount; ++i)

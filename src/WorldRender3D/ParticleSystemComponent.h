@@ -16,6 +16,10 @@ namespace xihad { namespace render3d
 		ParticleSystemComponent(const std::string& name, ngn::GameObject& host, 
 			irr::scene::IParticleSystemSceneNode* node);
 
+		static ParticleSystemComponent* create(
+			const std::string& name, ngn::GameObject& host, 
+			const ngn::Properties& params, ISceneManager* smgr);
+
 	protected:
 		~ParticleSystemComponent();
 

@@ -251,6 +251,11 @@ namespace xihad { namespace render3d
 		}
 	}}
 
+	luaT_static void setBillboardColor(BillboardComponent* comp, int r, int g, int b)
+	{
+		comp->setColor(ngn::SColor(255, r, g, b));
+	}}
+
 	int luaopen_render3dComponents( lua_State* L )
 	{
 		luaT_defRegsBgn(renderRegs)
@@ -324,11 +329,13 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc_ovl(BillboardComponent, 
 				void (BillboardComponent::*)(float, float, float), setSize),
 				{ "getSize", bill_getSize },
+			luaT_cnnamefunc(setBillboardColor, setColor),
 		luaT_defRegsEnd
 		MetatableFactory<BillboardComponent, RenderComponent>::create(L, billRegs, 0);
 
 		luaT_defRegsBgn(textRegs)
 			luaT_mnamedfunc(TextComponent, setText),
+			luaT_mnamedfunc(TextComponent, adjustToHeight),
 		luaT_defRegsEnd
 		MetatableFactory<TextComponent, BillboardComponent>::create(L, textRegs, 0);
 		return 0;

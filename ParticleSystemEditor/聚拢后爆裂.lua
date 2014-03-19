@@ -36,7 +36,7 @@ return function(pnode, f, env)
 	pnode:setRenderer(r)
 	
 	local mat = r:getMaterial()
-	mat:setBlend("src_alpha", "1 - src_alpha", "add")
+	mat:setBlend("src.alpha", "1 - src.alpha", "add")
 	mat:setMaterialType("trans_alphach")
 	mat:setLighting(false)		-- Default false
 	mat:setZWriteEnable(false)	-- For transparent object, set it to false. Default true
@@ -70,4 +70,9 @@ return function(pnode, f, env)
 	local a = f:affector("Rotation")
 	a:setSpeed(math3d.vector(0, 0, 2000))
 	pnode:addAffector(a, 0.7)
+	
+	env:deferMessage(pnode, 0, "skill begin")
+	env:deferMessage(pnode, 1.5, "attack begin")
+	env:deferMessage(pnode, 2, "attack end")
+	env:deferMessage(pnode, 2.5, "skill end")
 end

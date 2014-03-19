@@ -1,9 +1,19 @@
 require "math3d"
 package.path = package.path..";../Xihad/Assets/test/?.lua"
 
+--- Format loading speed statistics
+-- scene:requireSystem(c"Render")
+-- local fmts = { 'png', 'jpg', 'bmp', 'tga' }
+-- for _,fmt in ipairs(fmts) do
+-- 	for i=1,10 do
+-- 		local tex = textureManager:getTexture('Assets/font/fangzheng0.'..fmt)
+-- 		textureManager:removeTexture(tex)
+-- 	end
+-- end
+
 local param = { mesh  = "Assets/model/ninja.b3d", clips = "Assets/model/ninja.clip" }
 local ninja = scene:createObject(c"ninja")
-ninja:resetTranslation(math3d.vector(0, 0, -15))
+ninja:resetTranslation(math3d.vector(0, 0, -10))
 anim = ninja:appendComponent(c"AnimatedMesh", param)
 anim:playAnimation(c"idle 1")
 anim:setTransitionTime(0.1)
@@ -16,17 +26,19 @@ local njname = scene:createObject(c"ninjaName", ninja)
 local font = "fangzheng"
 local label
 if font == 'huakang' then
-	label = njname:appendComponent(c"Text", { font = "Assets/font/huakangpipi.xml" })
-	label:setText("無敵大忍者陳青青王八蛋")
+	label = njname:appendComponent(c"Text", { font = "Assets/font/huakangpipi.xft" })
+	label:setText("無敵忍者")
 elseif font == 'fangzheng' then
 	label = njname:appendComponent(c"Text", { font = "Assets/font/fangzheng.xft" })
-	label:setText("无敌大忍者陈青青王八蛋")
+	label:setText("无敌忍者")
 else
-	label = njname:appendComponent(c"Text", { font = "Assets/font/speed.xml" })
+	label = njname:appendComponent(c"Text", { font = "Assets/font/speed.xft" })
 	label:setText("Nin ja 007")
 end
 
-label:setSize(1, 7, 7)
+-- Everytime after you invoke setText, the label's width will be adjusted.
+label:adjustToHeight(1.5)
+label:setColor(200, 200, 100)
 njname:concatTranslate(math3d.vector(0, -1, 0))
 
 local cameraObject = scene:createObject(c"camera")

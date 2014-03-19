@@ -241,9 +241,11 @@
     <ClInclude Include="..\src\Engine\TagManager.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\GameObjectVisitor.h" />
     <ClInclude Include="..\src\CppBase\StringConventer.h">
       <Filter>CppBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameObjectVisitor.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -334,7 +336,9 @@
     <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp" />
     <ClCompile Include="..\src\CppBase\StringConventer.cpp" />
+    <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

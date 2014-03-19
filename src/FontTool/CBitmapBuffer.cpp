@@ -55,7 +55,7 @@ namespace xihad { namespace font
 			else
 			{
 				dst[3] = 255;
-				dst[0] = dst[1] = dst[2] = gray;
+				dst[0] = dst[1] = dst[2] = gray>0 ? 255 : 0;
 			}
 		}
 		else if (format == ECF_A1R5G5B5)

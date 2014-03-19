@@ -15,6 +15,8 @@ namespace xihad { namespace particle
 	{
 	}
 
+	CDefaultEnv::~CDefaultEnv() {}
+
 	IMesh* CDefaultEnv::getMesh( const char* meshDesc ) const
 	{
 		if (Node* n = getNode(meshDesc))

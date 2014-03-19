@@ -27,6 +27,8 @@ namespace xihad { namespace render3d
 
 		virtual void setText(const char* text);
 
+		virtual void adjustToHeight(float height);
+
 	private:
 		static gui::IGUIFont* getFont(scene::ISceneManager* smgr, const char* fontFilename);
 		static gui::IGUIFont* loadFont(scene::ISceneManager* smgr, const char* fontFilename);

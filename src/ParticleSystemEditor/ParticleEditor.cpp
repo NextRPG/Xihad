@@ -30,15 +30,17 @@
 #include <iostream>
 #include <Particle/luaopen_ParticleSystem.h>
 #include <Particle/CParticleSystemScriptFactory.h>
-#include <Particle/CDefaultEnv.h>
+#include "ParticleEditorEnv.h"
+#include <ctime>
 
 using namespace std;
 using namespace irr;
 using namespace scene;
 using namespace video;
 using namespace xihad::particle;
+using namespace editor;
 
-namespace xihad { namespace particle
+namespace xihad { namespace particle { namespace editor
 {
 	struct ParticleEditorReceiver : public IEventReceiver
 	{
@@ -50,6 +52,7 @@ namespace xihad { namespace particle
 
 		void removeNode()
 		{
+			env->clearMessages();
 			if (pnode)
 			{
 				pnode->remove();
@@ -81,7 +84,7 @@ namespace xihad { namespace particle
 			pnode = smgr->addParticleSystemSceneNode(65535);
 			luaT::push<decltype(pnode.get())>(L, pnode.get());
 			luaT::push<decltype(factory)>(L, factory);
-			luaT::push<decltype(env.get())>(L, env.get());
+			luaT::push<IParticleSystemLoaderEnv*>(L, env.get());
 
 			if (lua_pcall(L, 3, 0, 0) != 0)
 			{
@@ -93,11 +96,11 @@ namespace xihad { namespace particle
 		irrptr<scene::IParticleSystemSceneNode> pnode;
 		const char* scriptPath;
 		scene::ISceneManager* smgr;
-		irrptr<IParticleSystemLoaderEnv> env;
+		irrptr<ParticleEditorEnv> env;
 		IParticleSystemScriptFactory* factory;
 		lua_State* L;
 	};
-}}
+}}}
 
 static ISceneNode* addNinja(ISceneManager* smgr, core::vector3df pos)
 {
@@ -112,6 +115,7 @@ static ISceneNode* addNinja(ISceneManager* smgr, core::vector3df pos)
 
 int main(int argc, char** argv)
 {
+	clock_t current = clock();
 	IrrlichtDevice* device = createDevice(video::EDT_DIRECT3D9);
 
 	ParticleEditorReceiver* receiver = new ParticleEditorReceiver;
@@ -132,16 +136,21 @@ int main(int argc, char** argv)
 	rel.setRotationDegrees(core::vector3df(0, -90, 0));
 	target->setRelativeTransformation(rel);
 
-	receiver->env = irrptr<IParticleSystemLoaderEnv>(new CDefaultEnv(source, target), false);
+	ParticleEditorEnv* env = new ParticleEditorEnv(source, target, device, current);
+	receiver->env.reset(env);
+	env->drop();
 
 	receiver->createNewParticleSystem();
 	receiver->smgr->addCameraSceneNode(0, core::vector3df(-12,12,-12), core::vector3df(5,0, 0));
 	device->setEventReceiver(receiver);
+
 	while (device->run())
 	{
+		current = clock();
 		video::SColor bg = device->isWindowActive() ? video::SColor(0) : video::SColor(0xff101010);
 		device->getVideoDriver()->beginScene(true, true, bg);
-		device->getSceneManager()->onAnimate();
+		device->getSceneManager()->onAnimate(current);
+		receiver->env->update(current);
 		device->getSceneManager()->drawAll();
 		device->getVideoDriver()->endScene();
 	}

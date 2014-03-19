@@ -128,6 +128,7 @@ namespace xihad { namespace particle
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getAABB),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getMesh),
 			luaT_mnamedfunc(IParticleSystemLoaderEnv, getNode),
+			luaT_mnamedfunc(IParticleSystemLoaderEnv, deferMessage),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleSystemLoaderEnv>::create(L, env);
 	}
@@ -228,15 +229,15 @@ namespace xihad { namespace particle
 	luaT_static void setBlend(SMaterial& mat, const char* fsrc, const char* fdst, const char* bops)
 	{
 		static const char* sBlendFactors[] = {
-			"0", "1", "dst_color", "1 - dst_color", "src_color", "1 - src_color",
-			"src_alpha", "1 - src_alpha", "dst_alpha", "1 - dst_alpha", 0
+			"0", "1", "dst.rgb", "1-dst.rgb", "src.rgb", "1-src.rgb",
+			"src.alpha", "1-src.alpha", "dst.alpha", "1-dst.alpha", 0
 		};
 		static const char* sBlendOperation[] = {
 			"none", "add", "substract", "rev_substract", "min", "max", 0
 		};
 		
-		int src = StringUtil::select(fsrc, sBlendFactors);
-		int dst = StringUtil::select(fdst, sBlendFactors);
+		int src = StringUtil::select(fsrc, sBlendFactors, " \t\n");
+		int dst = StringUtil::select(fdst, sBlendFactors, " \t\n");
 		if (src != -1 && dst != -1)
 			mat.MaterialTypeParam = pack_textureBlendFunc((E_BLEND_FACTOR) src, (E_BLEND_FACTOR) dst);
 		else if (src == -1)
