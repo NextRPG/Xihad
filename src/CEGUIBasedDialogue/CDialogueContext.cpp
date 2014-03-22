@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CDialogueContext.h"
 #include <CEGUI\Window.h>
 #include <Dialogue\ITextContent.hpp>

@@ -1,8 +1,8 @@
+#include <algorithm>
 #include "CPlainTextContent.h"
 #include "CDialogueContext.h"
 #include <CEGUI\TextUtils.h>
 #include <CEGUI\FontManager.h>
-#include <xutility>
 #include <assert.h>
 #include <iostream>
 

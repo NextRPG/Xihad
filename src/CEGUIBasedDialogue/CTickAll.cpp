@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CTickAll.h"
 #include <Dialogue\IDialogue.hpp>
 

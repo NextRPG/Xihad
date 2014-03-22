@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CTickByWord.h"
 #include <Dialogue\IDialogue.hpp>
 #include <Dialogue\ITextElement.hpp>

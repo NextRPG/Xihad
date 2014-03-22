@@ -60,9 +60,9 @@ namespace xihad { namespace ngn
 	private:
 		WindowRenderer* getRenderer();
 
-		float fireFrameBegin();
+		double fireFrameBegin();
 
-		void fireFrameEnd(float bgnTime);
+		void fireFrameEnd(double bgnTime);
 		
 	private:
 		struct impl;
