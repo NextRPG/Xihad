@@ -38,7 +38,7 @@ end
 
 -- Everytime after you invoke setText, the label's width will be adjusted.
 label:adjustToHeight(1.5)
-label:setColor(200, 200, 100)
+label:setColor(Color.new(Color.red))
 njname:concatTranslate(math3d.vector(0, -1, 0))
 
 local cameraObject = g_scene:createObject(c"camera")

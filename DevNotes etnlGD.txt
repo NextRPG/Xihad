@@ -85,6 +85,9 @@ ________________
 + 引入 SFixedPointColor 来解决 SColorf 带来的时间、空间开销
 + ParticleSystemSceneNode 内存释放
 
+### 3.20
++ 研究了 b3d 格式以及 3DMAX 导出插件
+
 ### TODO
 + 场景切换
 + 测试 MRT
