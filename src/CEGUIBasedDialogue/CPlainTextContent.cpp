@@ -2,16 +2,26 @@
 #include "CDialogueContext.h"
 #include <CEGUI\TextUtils.h>
 #include <CEGUI\FontManager.h>
-#include <xutility>
 #include <assert.h>
 #include <iostream>
+#include <windows.h>
+#include <stringapiset.h>
+#include <xutility>
+#undef min
 
 using namespace CEGUI;
 
 namespace xihad { namespace dialogue
 {
-	CEGUI::String CPlainTextContent::WORD_FOLLOW_SYMBOL
-		((CEGUI::utf8*)	"¬∑~ÔºÅ@#Ôø•%‚Ä¶&*ÔºàÔºâ‚Äî+{}|Ôºö‚Äù„Ää„ÄãÔºü-=„Äê„Äë„ÄÅÔºõ‚ÄòÔºå„ÄÇ„ÄÅ ");
+	CEGUI::String CPlainTextContent::WORD_FOLLOW_SYMBOL(getWordFollowSymbol());
+
+	CEGUI::String CPlainTextContent::getWordFollowSymbol()
+	{
+		std::wstring orgin = L"°§~£°@#£§%°≠&*£®£©°™+{}|£∫°±°∂°∑£ø-=°æ°ø°¢£ª°Æ£¨°£°¢";
+		char buff[128] = ""; 
+		WideCharToMultiByte(CP_UTF8, 0, orgin.c_str(), orgin.size(), buff, sizeof(buff), 0, 0); 
+		return (utf8*) buff;
+	}
 
 	CPlainTextContent::CPlainTextContent(const Font& font, const CEGUI::String& text )
 		: mFont(&font), mText(text)
@@ -111,7 +121,7 @@ namespace xihad { namespace dialogue
 	CPlainTextContent::~CPlainTextContent()
 	{
 #ifdef _DEBUG
-		std:: cout << "CPlainTextContent deleted." << std::endl;
+		std:: cout << "CPlainTextContent deleted." << mText << std::endl;
 #endif // _DEBUG
 	}
 

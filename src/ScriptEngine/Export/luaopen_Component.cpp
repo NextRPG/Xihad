@@ -1,4 +1,3 @@
-#include "luaopen_Component.h"
 #include <luaT/luaT.h>
 #include "Engine/Component.h"
 

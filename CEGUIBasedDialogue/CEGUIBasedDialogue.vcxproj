@@ -12,19 +12,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CEGUIBasedDialogue\CDialogueContext.cpp" />
+    <ClCompile Include="..\src\CEGUIBasedDialogue\Conversation.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CPlainTextContent.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CPlainTextElement.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CTickAll.cpp" />
     <ClCompile Include="..\src\CEGUIBasedDialogue\CTickByLetter.cpp" />
-    <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueParser.cpp" />
+    <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CEGUIBasedDialogue\CDialogueContext.h" />
+    <ClInclude Include="..\src\CEGUIBasedDialogue\Conversation.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextContent.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextElement.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CTickAll.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\CTickByLetter.h" />
-    <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueParser.h" />
+    <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueSelector.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\ITypedContent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -60,7 +62,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../include;../src;../src/GameWorld;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUG_DIALOG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

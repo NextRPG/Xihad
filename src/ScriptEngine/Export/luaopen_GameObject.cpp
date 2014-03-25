@@ -1,11 +1,9 @@
-#include "luaopen_GameObject.h"
-#include "luaopen_CompositeUpdateHandler.h"
-#include "Engine\GameObject.h"
+#include <Engine\GameObject.h>
+#include <Engine\Component.h>
+#include <Engine\LuaProperties.h>
 #include <luaT\luaT.h>
-#include "ScriptEngine\PushComponentVisitor.h"
-#include "Engine\Component.h"
-#include "Engine\LuaProperties.h"
-#include "luaopen_string.h"
+#include "..\PushComponentVisitor.h"
+
 
 using namespace luaT;
 using namespace xihad::ngn;

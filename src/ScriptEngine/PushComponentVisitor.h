@@ -1,16 +1,25 @@
 #pragma once
 #include "Engine\BaseVisitor.h"
-#include "WorldRender3D\MeshComponent.h"
-#include "WorldRender3D\LightComponent.h"
-#include "WorldRender3D\CameraComponent.h"
-#include "WorldRender3D\BillboardComponent.h"
+// #include "WorldRender3D\MeshComponent.h"
+// #include "WorldRender3D\LightComponent.h"
+// #include "WorldRender3D\CameraComponent.h"
+// #include "WorldRender3D\BillboardComponent.h"
 //#include "WorldRender3D\AnimatedMeshComponent.h"
 
 namespace xihad
 {
 	namespace render3d
 	{
+		class MeshComponent;
+		class LightComponent;
+		class CameraComponent;
+		class BillboardComponent;
 		class AnimatedMeshComponent;
+	}
+
+	namespace audio
+	{
+		class AudioComponent;
 	}
 }
 
@@ -24,21 +33,24 @@ namespace xihad { namespace script
 		public ngn::Visitor<render3d::AnimatedMeshComponent>,
 		public ngn::Visitor<render3d::LightComponent>,
 		public ngn::Visitor<render3d::CameraComponent>,
-		public ngn::Visitor<render3d::BillboardComponent>
+		public ngn::Visitor<render3d::BillboardComponent>,
+		public ngn::Visitor<audio::AudioComponent>
 	{
 	public:
 		explicit PushComponentVisitor(lua_State* L) : L(L)
 		{
 		}
 
-		virtual void visit( render3d::AnimatedMeshComponent& c);
-		virtual void visit( render3d::MeshComponent& c);
-		virtual void visit( render3d::LightComponent& c);
-		virtual void visit( render3d::CameraComponent& c);
-		virtual void visit( render3d::BillboardComponent& c);
-		virtual void visit( script::LuaComponent& c);
+		virtual void visit(audio::AudioComponent&);
 
-		virtual bool handleUnkownVisitable(ngn::BaseVisitable& c);
+		virtual void visit(render3d::AnimatedMeshComponent&);
+		virtual void visit(render3d::MeshComponent&);
+		virtual void visit(render3d::LightComponent&);
+		virtual void visit(render3d::CameraComponent&);
+		virtual void visit(render3d::BillboardComponent&);
+		virtual void visit(script::LuaComponent&);
+
+		virtual bool handleUnkownVisitable(ngn::BaseVisitable&);
 
 	private:
 		template <typename T>

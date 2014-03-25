@@ -1,0 +1,22 @@
+<Imageset autoScaled="false" imagefile="dialog.png" name="Dialog" nativeHorzRes="800" nativeVertRes="600" version="2">
+    <Image height="32" name="dialogLT" width="32" xPos="0" yPos="50" />
+    <Image height="16" name="dialogL" width="32" xPos="0" yPos="98" />
+    <Image height="32" name="dialogLB" width="32" xPos="0" yPos="152" />
+    <Image height="32" name="dialogRT" width="32" xPos="43" yPos="50" />
+    <Image height="16" name="dialogR" width="32" xPos="43" yPos="98" />
+    <Image height="32" name="dialogRB" width="32" xPos="43" yPos="152" />
+    <Image height="32" name="dialogT" width="11" xPos="32" yPos="50" />
+    <Image height="32" name="dialogB" width="11" xPos="32" yPos="152" />
+    <Image height="16" name="dialogM" width="11" xPos="32" yPos="98" />
+    <Image height="14" name="dialog_nameLT" width="14" xPos="2" yPos="0" />
+    <Image height="14" name="dialog_nameRT" width="14" xPos="34" yPos="0" />
+    <Image height="14" name="dialog_nameT" width="2" xPos="23" yPos="0" />
+    <Image height="14" name="dialog_nameRB" width="14" xPos="34" yPos="27" />
+    <Image height="14" name="dialog_nameLB" width="14" xPos="2" yPos="27" />
+    <Image height="2" name="dialog_nameL" width="14" xPos="2" yPos="18" />
+    <Image height="14" name="dialog_nameB" width="2" xPos="23" yPos="27" />
+    <Image height="2" name="dialog_nameR" width="14" xPos="34" yPos="18" />
+    <Image height="2" name="dialog_nameM" width="2" xPos="23" yPos="18" />
+    <Image height="22" name="dialog_next_hover" width="22" xPos="53" yPos="0" />
+    <Image height="22" name="dialog_next_normal" width="22" xPos="53" yPos="26" />
+</Imageset>

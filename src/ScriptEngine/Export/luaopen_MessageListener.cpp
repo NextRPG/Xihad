@@ -1,6 +1,5 @@
-#include "luaopen_MessageListener.h"
-#include "LuaT\luaT.h"
-#include "Message\MessageListener.h"
+#include <LuaT\luaT.h>
+#include <Engine\Message\MessageListener.h>
 
 using namespace luaT;
 using namespace xihad::ngn;

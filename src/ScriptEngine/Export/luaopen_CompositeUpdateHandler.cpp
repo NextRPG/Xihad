@@ -1,7 +1,6 @@
-#include "luaopen_CompositeUpdateHandler.h"
 #include <luaT/luaT.h>
-#include "Engine/CompositeUpdateHandler.h"
-#include "ScriptEngine/LuaUtil.h"
+#include <Engine/CompositeUpdateHandler.h>
+#include "../LuaUtil.h"
 #include "../LuaManagedUpdateHandler.h"
 
 using namespace luaT;

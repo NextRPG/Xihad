@@ -3,6 +3,7 @@
 #include <Lua\lua.hpp>
 #include <iostream>
 #include "luaT\stack_memo.h"
+#include "ScriptEngine\LuaComponentSystem.h"
 
 using namespace std;
 namespace xihad
@@ -11,8 +12,14 @@ namespace xihad
 	GameScene* createScene( const char* scriptName )
 	{
 		GameScene* scene = new GameScene;
-		scene->requireSystem("Lua");
-		lua_State* L = scene->getMainThread();
+		auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
+		
+		if (!scene->requireSystem("Render"))
+		{
+			cerr << "Error to load Render system" << endl;
+		}
+
+		lua_State* L = lcs->getLuaState();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))
 		{
 			cerr << "SCRIPT ERR: " << lua_tostring(L, -1) << endl;

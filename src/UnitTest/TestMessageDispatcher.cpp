@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "GameWorld\Message\MessageDispatcher.h"
-#include "GameWorld\Message\MessageTag.h"
-#include "GameWorld\Message\MessageParam.h"
-#include "GameWorld\Message\MessageListener.h"
+#include "Engine\Message\MessageDispatcher.h"
+#include "Engine\Message\MessageTag.h"
+#include "Engine\Message\MessageParam.h"
+#include "Engine\Message\MessageListener.h"
 #include "Lua\lua.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

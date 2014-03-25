@@ -7,17 +7,10 @@
     <ClCompile Include="..\src\ScriptEngine\LuaUtil.cpp" />
     <ClCompile Include="..\src\ScriptEngine\LuaEventReceiver.cpp" />
     <ClCompile Include="..\src\ScriptEngine\PushComponentVisitor.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\LuaAnimationCallback.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_all.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_string.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp">
@@ -26,19 +19,10 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.cpp">
       <Filter>Export</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp">
       <Filter>Export</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_renderSystem.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Geometry.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\LuaManagedUpdateHandler.cpp" />
@@ -58,8 +42,12 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp">
       <Filter>Export</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameEngine.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameEngine.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />
@@ -69,59 +57,11 @@
     <ClInclude Include="..\src\ScriptEngine\LuaEventReceiver.h" />
     <ClInclude Include="..\src\ScriptEngine\PushComponentVisitor.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaScriptMacro.h" />
-    <ClInclude Include="..\src\ScriptEngine\LuaAnimationCallback.h" />
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_all.h">
       <Filter>Export</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_string.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Component.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_render3dComponents.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameScene.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameObject.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_macro.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_2ndIteration.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_renderSystem.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_FileSystem.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_Geometry.h">
-      <Filter>Export</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\LuaManagedUpdateHandler.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageListener.h">
-      <Filter>Export</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ScriptEngine\LuaMessageListener.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.h">
-      <Filter>Export</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.h" />
-    <ClInclude Include="..\src\ScriptEngine\Export\luaopen_GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Export">

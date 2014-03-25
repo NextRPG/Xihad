@@ -97,6 +97,7 @@ namespace xihad { namespace dialogue
 
 	void CDialogueAlignmenter::reset()
 	{
+		mPrevWidth = 0;
 		mCurrentLineHeight = 0;
 		mRelativeOffsetToPrev = ngn::position2di();
 		mOffset = ngn::position2di();
@@ -110,6 +111,8 @@ namespace xihad { namespace dialogue
 			mDialogueHead = buff;
 		}
 		assert(mDialogueHead == nullptr);
+
+		setKerningNewLine(mKerningNewLine);
 	}
 
 	void CDialogueAlignmenter::setKerningNewLine( ngn::dimension2di knl )

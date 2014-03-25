@@ -15,6 +15,7 @@ namespace xihad { namespace dialogue
 	private:
 		static CEGUI::String WORD_FOLLOW_SYMBOL;
 	
+		static CEGUI::String getWordFollowSymbol();
 	public:
 		explicit CPlainTextContent(const CEGUI::Font& font, const CEGUI::String& text);
 		

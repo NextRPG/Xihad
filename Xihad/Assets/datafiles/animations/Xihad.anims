@@ -37,6 +37,37 @@
 		<Subscription event="MouseLeavesArea" action="Start" />
 	</AnimationDefinition>
 
+	<AnimationDefinition name="JumpIn" duration="0.35" replayMode="once">
+            <Affector property="Size" interpolator="USize" applicationMethod="absolute">
+                <KeyFrame position="0.0" value="{{0, 0}, {0, 0}}" />
+            	<KeyFrame position="0.3" value="{{0.99, 0}, {0.33, 0}}" progression="quadratic accelerating"/>
+            	<KeyFrame position="0.35" value="{{0.9, 0}, {0.3, 0}}" progression="quadratic decelerating"/>
+            </Affector>
+
+            <Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+                <KeyFrame position="0.0" value="{{0.5, 0}, {0.83, 0}}" />
+            	<KeyFrame position="0.3" value="{{0.005, 0}, {0.665, 0}}" progression="quadratic accelerating"/>
+            	<KeyFrame position="0.35" value="{{0.05, 0}, {0.68, 0}}" progression="quadratic decelerating"/>
+            </Affector>
+            	
+            <Subscription event="OpenSelf" action="Start" />
+        </AnimationDefinition>
+        
+        <AnimationDefinition name="JumpOut" duration="0.35" replayMode="once">
+        	<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+                <KeyFrame position="0.0" value="{{0.9, 0}, {0.3, 0}}" />
+            	<KeyFrame position="0.05" value="{{0.99, 0}, {0.33, 0}}" progression="quadratic accelerating"/>
+            	<KeyFrame position="0.35" value="{{0, 0}, {0, 0}}" progression="quadratic decelerating"/>
+            </Affector>
+
+            <Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+                <KeyFrame position="0.0" value="{{0.05, 0}, {0.68, 0}}" />
+            	<KeyFrame position="0.05" value="{{0.005, 0}, {0.665, 0}}" progression="quadratic accelerating"/>
+            	<KeyFrame position="0.35" value="{{0.5, 0}, {0.83, 0}}" progression="quadratic decelerating"/>
+            </Affector>
+
+            <Subscription event="CloseSelf" action="Start" />
+        </AnimationDefinition>	
 
 </Animations>
 

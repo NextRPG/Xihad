@@ -1,4 +1,3 @@
-#include "luaopen_UpdateHandler.h"
 #include <luaT/luaT.h>
 #include "Engine/UpdateHandler.h"
 #include <typeinfo>

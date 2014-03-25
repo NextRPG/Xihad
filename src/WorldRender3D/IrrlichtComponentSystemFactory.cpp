@@ -1,8 +1,11 @@
 #include "IrrlichtComponentSystemFactory.h"
-#include "IrrlichtComponentSystem.h"
-#include "Engine/GameScene.h"
 #include <irrlicht/IrrlichtDevice.h>
 #include <irrlicht/ISceneManager.h>
+#include <ScriptEngine/LuaComponentSystem.h>
+
+#include "IrrlichtComponentSystem.h"
+#include "Engine/GameScene.h"
+#include "ExportLua/luaopen_All.h"
 
 using namespace xihad::ngn;
 using namespace irr;
@@ -34,7 +37,7 @@ namespace xihad { namespace render3d
 		return mDevice.get();
 	}
 
-	ngn::ComponentSystem* IrrlichtComponentSystemFactory::createMainSystem( ngn::GameScene* scene )
+	ngn::ComponentSystem* IrrlichtComponentSystemFactory::createMainSystem(ngn::GameScene* scene)
 	{
 		scene::ISceneManager* irrScene = mDevice->getSceneManager();
 
@@ -46,6 +49,12 @@ namespace xihad { namespace render3d
 		newScene->setAmbientLight(video::SColorf(ambient, ambient, ambient));
 		newScene->setShadowColor(video::SColor(60,0,0,0));
 		
+		if (scene->hasSystem("Lua"))
+		{
+			auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
+			luaopen_All(mDevice.get(), newScene.get(), lcs->getLuaState());
+		}
+
 		return new IrrlichtComponentSystem(mDevice.get(), newScene.get(), *this, mCachedClips);
 	}
 

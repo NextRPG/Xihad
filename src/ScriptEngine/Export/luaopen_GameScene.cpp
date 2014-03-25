@@ -1,10 +1,8 @@
-#include "luaopen_GameScene.h"
-#include "luaopen_CompositeUpdateHandler.h"
 #include <luaT/luaT.h>
-#include "CppBase/IteratorPair.h"
-#include "Engine/GameScene.h"
-#include "Engine/UserEventReceiverStack.h"
-#include "ScriptEngine/LuaEventReceiver.h"
+#include <CppBase/IteratorPair.h>
+#include <Engine/GameScene.h>
+#include <Engine/UserEventReceiverStack.h>
+#include "../LuaEventReceiver.h"
 
 using namespace luaT;
 using namespace xihad;

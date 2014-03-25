@@ -1,6 +1,6 @@
-#include "luaT/luaT.h"
-#include "Engine/GameScene.h"
-#include "Message/MessageTag.h"
+#include <luaT/luaT.h>
+#include <Engine/GameScene.h>
+#include <Engine/Message/MessageTag.h>
 #include "../LuaMessageListener.h"
 
 using namespace luaT;

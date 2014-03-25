@@ -1,0 +1,4 @@
+<Imageset autoScaled="false" imagefile="character.png" name="Character" nativeHorzRes="800" nativeVertRes="600" version="2">
+    <Image height="429" name="aaaa_happy" width="400" xPos="0" yPos="1" />
+    <Image height="429" name="bbbb_sad" width="400" xPos="400" yPos="1" />
+</Imageset>

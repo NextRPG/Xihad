@@ -65,8 +65,8 @@ namespace xihad { namespace audio
 		static NullSound& getSingleton() { return sSingleton; }
 
 	private:	// not accessable
-		NullSound();
-		virtual ~NullSound();
+		NullSound() {}
+		virtual ~NullSound() {}
 
 	private:
 		static NullSound sSingleton;

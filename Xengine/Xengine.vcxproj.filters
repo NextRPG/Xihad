@@ -30,121 +30,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\GameWorld\Message\MessageDispatcher.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\MessageListener.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\SourceFilter.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\TagTree.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CppBase\XiAssert.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\GameEngine.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CppBase\StdMap.h">
       <Filter>CppBase</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\TreeNode.h">
-      <Filter>Broadcast</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CppBase\StringUtil.h">
       <Filter>CppBase</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CppBase\xassert.h">
-      <Filter>CppBase</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Component.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentFactory.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystem.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemFactory.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\GameObject.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\GameScene.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\BaseComponentSystem.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Transform.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\SColor.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\quaternion.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\matrix.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\vector3d.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Timeline.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\dimension2d.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\MapProperties.h">
-      <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\NullProperpties.h">
-      <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Properties.h">
-      <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Property.h">
-      <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\LuaProperties.h">
-      <Filter>Core\Property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitor.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\BaseVisitable.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\TagListener.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\GameObjectDepends.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\GameWorld.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\Process.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\CompositeUpdateHandler.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\ComponentSystemRegistry.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\irr_ptr.h">
       <Filter>CppBase</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CppBase\IteratorPair.h">
@@ -153,170 +48,272 @@
     <ClInclude Include="..\src\CppBase\BitOperation.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\UserEvent.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiver.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\MessageTag.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\MessageParam.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Message\IMessageDispatcher.h">
-      <Filter>Broadcast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\RootGameObject.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\position2d.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CppBase\CLineBreak.hpp">
       <Filter>CppBase</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CppBase\CStringSplitter.hpp">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\UpdateHandler.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritancePath.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\InheritanceTree.h">
-      <Filter>Component\Inheritence</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\TimeConversion.h" />
-    <ClInclude Include="..\src\GameWorld\Engine\FPSCounter.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\FrameObserver.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\IrrlichtWindow.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\NativeWindow.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\UserEventReceiverStack.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WindowTitleUpdater.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WindowRenderer.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventTransmitter.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\FrameRateAdjuster.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\EngineConfig.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CppBase\ReferenceCounted.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WindowEventSeizer.h">
+    <ClInclude Include="..\src\Engine\TimeConversion.h" />
+    <ClInclude Include="..\src\Engine\BaseComponentSystem.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\EngineConfig.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\WorldObserver.h">
+    <ClInclude Include="..\src\Engine\FPSCounter.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\GameWorld\Engine\TimelineObserver.h">
+    <ClInclude Include="..\src\Engine\FrameObserver.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\FrameRateAdjuster.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameEngine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\BaseVisitable.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\BaseVisitor.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\ComponentFactory.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\ComponentSystem.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\ComponentSystemFactory.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\ComponentSystemRegistry.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\dimension2d.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameObject.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameObjectDepends.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameScene.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\CompositeUpdateHandler.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\GameWorld.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\IMessageDispatcher.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\MessageDispatcher.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\MessageListener.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\MessageParam.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\MessageTag.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\position2d.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Process.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Properties.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Property.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\quaternion.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\LuaProperties.h">
+      <Filter>Core\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\MapProperties.h">
+      <Filter>Core\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\WindowEventSeizer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\WindowEventTransmitter.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\WindowRenderer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\WindowTitleUpdater.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\WorldObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\UserEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\UserEventReceiver.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\UserEventReceiverStack.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\IrrlichtWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\InheritancePath.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\InheritanceTree.h">
+      <Filter>Component\Inheritence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\MultiComponentSystemFactory.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\irr_ptr.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\matrix.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\NativeWindow.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\NullProperpties.h">
+      <Filter>Core\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\TagTree.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\TagListener.h">
+      <Filter>Broadcast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Timeline.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\TimelineObserver.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Transform.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\vector3d.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\UpdateHandler.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\SColor.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\RootGameObject.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Engine\Message\TreeNode.h">
+      <Filter>Broadcast</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\GameWorld\Engine\GameEngine.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp">
       <Filter>CppBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\Component.cpp">
+    <ClCompile Include="..\src\Engine\BaseComponentSystem.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\GameObject.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\GameScene.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\BaseComponentSystem.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\Transform.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\MultiComponentSystemFactory.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\MapProperties.cpp">
-      <Filter>Core\Property</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\NullProperpties.cpp">
-      <Filter>Core\Property</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\LuaProperties.cpp">
-      <Filter>Core\Property</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\GameWorld.cpp">
+    <ClCompile Include="..\src\Engine\FPSCounter.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\Process.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\CompositeUpdateHandler.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\ComponentSystemRegistry.cpp">
+    <ClCompile Include="..\src\Engine\FrameRateAdjuster.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\UserEvent.cpp">
-      <Filter>Event</Filter>
+    <ClCompile Include="..\src\Engine\GameEngine.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Message\MessageTag.cpp">
+    <ClCompile Include="..\src\Engine\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\ComponentSystemRegistry.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\GameObject.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\GameScene.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\CompositeUpdateHandler.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\GameWorld.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Message\MessageParam.cpp">
       <Filter>Broadcast</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Message\MessageParam.cpp">
+    <ClCompile Include="..\src\Engine\Message\MessageTag.cpp">
       <Filter>Broadcast</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\UpdateHandler.cpp">
-      <Filter>Entity</Filter>
+    <ClCompile Include="..\src\Engine\Process.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritancePath.cpp">
-      <Filter>Component\Inheritence</Filter>
+    <ClCompile Include="..\src\Engine\LuaProperties.cpp">
+      <Filter>Core\Property</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\InheritanceTree.cpp">
-      <Filter>Component\Inheritence</Filter>
+    <ClCompile Include="..\src\Engine\MapProperties.cpp">
+      <Filter>Core\Property</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\FPSCounter.cpp">
+    <ClCompile Include="..\src\Engine\WindowEventSeizer.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\IrrlichtWindow.cpp">
+    <ClCompile Include="..\src\Engine\WindowEventTransmitter.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\UserEventReceiverStack.cpp">
+    <ClCompile Include="..\src\Engine\WindowTitleUpdater.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\UserEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\WindowTitleUpdater.cpp">
+    <ClCompile Include="..\src\Engine\UserEventReceiverStack.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\IrrlichtWindow.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventTransmitter.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="..\src\Engine\InheritancePath.cpp">
+      <Filter>Component\Inheritence</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\FrameRateAdjuster.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="..\src\Engine\InheritanceTree.cpp">
+      <Filter>Component\Inheritence</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameWorld\Engine\WindowEventSeizer.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="..\src\Engine\MultiComponentSystemFactory.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\NullProperpties.cpp">
+      <Filter>Core\Property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\Transform.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\UpdateHandler.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

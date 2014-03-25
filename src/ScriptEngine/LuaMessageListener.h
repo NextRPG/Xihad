@@ -1,5 +1,5 @@
 #pragma once
-#include "Message\MessageListener.h"
+#include <Engine\Message\MessageListener.h>
 #include "luaT\lua_ref.h"
 
 namespace xihad { namespace script

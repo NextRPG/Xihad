@@ -1,17 +1,26 @@
 #include "AudioComponentSystemFactory.h"
 #include "AudioComponentSystem.h"
+#include <Engine/GameScene.h>
+#include <ScriptEngine/LuaComponentSystem.h>
 
 namespace xihad { namespace audio 
 {
+	int luaopen_AudioComponents(lua_State* L);
 
-
+	using namespace ngn;
 	AudioComponentSystemFactory::AudioComponentSystemFactory() :
 		MultiComponentSystemFactory("Audio")
 	{
 	}
 
-	ngn::ComponentSystem* AudioComponentSystemFactory::createMainSystem( ngn::GameScene* scene )
+	ComponentSystem* AudioComponentSystemFactory::createMainSystem(GameScene* scene)
 	{
+		if (scene->hasSystem("Lua"))
+		{
+			auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
+			luaopen_AudioComponents(lcs->getLuaState());
+		}
+
 		return new AudioComponentSystem(*this);
 	}
 

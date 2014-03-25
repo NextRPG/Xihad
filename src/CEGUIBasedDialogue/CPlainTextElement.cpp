@@ -43,6 +43,8 @@ namespace xihad { namespace dialogue
 
 	CPlainTextElement::~CPlainTextElement()
 	{
+		Window* parent = mContainer->getParent();
+		parent->removeChild(mContainer);
 #ifdef _DEBUG
 		std:: cout << "CPlainTextElement deleted." << std::endl;
 #endif // _DEBUG

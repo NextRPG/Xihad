@@ -1,7 +1,7 @@
 #include "Geometry.h"
 #include "irrlicht\IGeometryCreator.h"
 
-namespace xihad { namespace ngn
+namespace xihad { namespace render3d
 {
 
 	const Geometry::Creator* Geometry::creator()

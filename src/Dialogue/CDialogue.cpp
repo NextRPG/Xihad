@@ -123,8 +123,12 @@ namespace xihad { namespace dialogue
 
 	IDialogue::SDialogueVisibility CDialogue::endVisibility() const 
 	{
-		return SDialogueVisibility(mTextElements.end(), 
-			mTextElements.back()->getContent()->endIndex());
+		if (!mTextElements.empty())
+		{
+			return SDialogueVisibility(mTextElements.end(), 
+				mTextElements.back()->getContent()->endIndex());
+		}
+		return SDialogueVisibility(mTextElements.end());
 	}
 
 }}

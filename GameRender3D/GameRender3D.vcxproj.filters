@@ -34,6 +34,15 @@
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h">
       <Filter>AnimationClip</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.h">
+      <Filter>ExportLua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\luaopen_All.h">
+      <Filter>ExportLua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h">
+      <Filter>ExportLua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -63,6 +72,27 @@
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp">
       <Filter>AnimationClip</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Geometry.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SceneCollisionManager.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Cursor.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_RenderSystem.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">
@@ -70,6 +100,9 @@
     </Filter>
     <Filter Include="AnimationClip">
       <UniqueIdentifier>{2f768c6a-7676-4417-a74d-e87b1e6e4763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExportLua">
+      <UniqueIdentifier>{c82f7bc0-6fd9-410e-9f35-2c7854eb917d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

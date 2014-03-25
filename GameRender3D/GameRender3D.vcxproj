@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -74,6 +74,9 @@
     <ClInclude Include="..\src\WorldRender3D\BillboardComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\CameraComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h" />
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.h" />
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h" />
+    <ClInclude Include="..\src\WorldRender3D\ExportLua\luaopen_All.h" />
     <ClInclude Include="..\src\WorldRender3D\Geometry.h" />
     <ClInclude Include="..\src\WorldRender3D\LightComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\MeshComponent.h" />
@@ -87,6 +90,13 @@
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp" />
     <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SceneCollisionManager.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Cursor.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Geometry.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_RenderSystem.cpp" />
     <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp" />

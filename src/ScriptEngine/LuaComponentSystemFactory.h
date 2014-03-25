@@ -8,6 +8,7 @@ namespace xihad { namespace ngn
 	class GameScene;
 }}
 
+struct lua_State;
 namespace xihad { namespace script
 {
 	class LuaComponentSystemFactory : public ngn::ComponentSystemFactory
@@ -18,7 +19,7 @@ namespace xihad { namespace script
 		virtual ngn::ComponentSystem* create(ngn::GameScene* scene, const std::string& systemName) ;
 
 	protected:
-		void initScriptEnv(ngn::GameScene*);
+		void initScriptEnv(ngn::GameScene*, lua_State*);
 
 	private:
 		ngn::GameEngine* mEngine;

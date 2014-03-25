@@ -5,7 +5,7 @@ namespace irr { namespace scene
 	class IGeometryCreator;
 }}
 
-namespace xihad { namespace ngn
+namespace xihad { namespace render3d
 {
 	class Geometry
 	{

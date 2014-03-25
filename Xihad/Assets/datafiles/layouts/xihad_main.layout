@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<GUILayout version="4">
+<Window name="root" type="DefaultWindow">
+	<Property name="MousePassThroughEnabled" value="true" />
+	<Window name="AttackDamageLabel" type="DefaultWindow">
+		<Property name="Size" value="{{0, 80}, {0,37}" />
+		<Property name="Disabled" value="true" />
+		<Property name="Alpha" value="0.0"/>
+		<Window name="Sign" type="Generic/Image">
+			<Property name="Position" value="{{0, 0}, {0, 0}}" />  
+			<Property name="Size" value="{{0.25,0},{1,0}}" />
+			<Property name="Image" value="RedNumber/-" />            
+		</Window>
+		<Window name="One" type="Generic/Image">
+			<Property name="Position" value="{{0.25, 0}, {0, 0}}" />
+			<Property name="Size" value="{{0.25,0},{1,0}}" />
+			<Property name="Image" value="" />            
+		</Window>
+		<Window name="Two" type="Generic/Image">
+			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />     
+			<Property name="Size" value="{{0.25,0},{1,0}}" />
+			<Property name="Image" value="" />            
+		</Window>
+		<Window name="Three" type="Generic/Image">
+			<Property name="Position" value="{{0.75, 0}, {0, 0}}" />
+			<Property name="Size" value="{{0.25,0},{1,0}}" />
+			<Property name="Image" value="" />            
+		</Window>
+	</Window>
+	<Window name="CommandWindow" type="Xihad/PopupMenu">
+		<Property name="AutoCloseNestedPopups" value="true" />
+		<Property name="FadeInTime" value="0.2" />
+		<Property name="FadeOutTime" value="0.2" />
+		<Window name="Skill" type="Xihad/MenuItem">
+			<Property name="Text" value="技能" />
+			
+			<Window name="List" type="Xihad/PopupMenu">
+			</Window>	
+		</Window>
+		<Window name="Prop" type="Xihad/MenuItem">
+			<Property name="Text" value="道具" />
+			
+			<Window name="List" type="Xihad/PopupMenu">
+			</Window>	
+		</Window>
+		<Window name="Stay" type="Xihad/MenuItem">
+			<Property name="Text" value="待机" />
+		</Window>
+	</Window>
+
+	<Window name="CharacterAttributeWindow" type="Xihad/Frame">
+		<Property name="Size" value="{{0, 250}, {0, 125}}" />
+		<Property name="Alpha" value="0.0" />
+		<Window name="Icon" type="Generic/Image">
+			<Property name="Position" value="{{0.05, 0}, {0.1, 0}}" />
+			<Property name="Size" value="{{0.4, 0},{0.8, 0}}" />
+			<Property name="Image" value="RedNumber/9" />
+		</Window>
+		<Window name="NameLabel" type="Generic/Label">
+			<Property name="Text" value="名字：" />
+			<Property name="Position" value="{{0.5, 0}, {0.1, 0}}" />
+			<Property name="NormalTextColour" value="FFFFFFFF" />
+		</Window>
+	</Window>
+	<Window name="LeftDialog" type="DefaultWindow">
+		<Property name="Size" value="{{0, 500}, {0, 500}}" />
+		<Property name="Position" value="{{0, 32}, {0, 100}}" />
+		<Window name="ImageArea" type="Xihad/Image">
+			<Property name="Size" value="{{1, 0}, {1, 0}}" />
+		</Window>
+		<Window name="TextArea" type="Xihad/Dialog">
+			<Property name="Size" value="{{0.9, 0}, {0.3, 0}}" />
+			<Property name="Position" value="{{0.05, 0}, {0.68, 0}}" />
+		</Window>
+	</Window>
+
+	<Window name="RightDialog" type="DefaultWindow">
+		<Property name="Size" value="{{0, 500}, {0, 500}}" />
+		<Property name="Position" value="{{0, 492}, {0, 100}}" />
+		<Window name="ImageArea" type="Xihad/Image">
+			<Property name="Size" value="{{1, 0}, {1, 0}}" />
+			<Property name="HorzFormatting" value="RightAligned"/>
+		</Window>
+		<Window name="TextArea" type="Xihad/Dialog">
+			<Property name="Size" value="{{0.9, 0}, {0.3, 0}}" />
+			<Property name="Position" value="{{0.05, 0}, {0.68, 0}}" />
+			<Property name="NameCardRightAligned" value="true"/>
+		</Window>
+	</Window>
+</Window>
+</GUILayout>

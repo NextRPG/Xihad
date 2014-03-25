@@ -3,45 +3,422 @@
 	
 	<!--
 	*****************************************************************
-		Xihad/Dialog
+		Xihad/Container
+	*****************************************************************
+	-->
+	 <WidgetLook name="Xihad/Container">
+		<PropertyDefinition name="VertImageFormat" redrawOnWrite="true" initialValue="Tiled" type="VerticalImageFormatting" />
+		<PropertyDefinition name="HorzImageFormat" redrawOnWrite="true" initialValue="Tiled" type="HorizontalImageFormatting" />
+		<PropertyDefinition name="Image" redrawOnWrite="true" initialValue="" type="Image" />
+		<PropertyDefinition name="TextColor" redrawOnWrite="true" initialValue="FF412502" type="Colour" />
+		<PropertyDefinition name="VertTextFormat" redrawOnWrite="true" initialValue="BottomAligned" type="VerticalTextFormatting" />
+		<PropertyDefinition name="HorzTextFormat" redrawOnWrite="true" initialValue="LeftAligned" type="HorizontalTextFormatting" />
+		<ImagerySection name="background">
+			<ImageryComponent>
+				<Area>
+					<Dim type="LeftEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="TopEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="RightEdge">
+						<UnifiedDim scale="1" type="RightEdge"/>
+					</Dim>
+					<Dim type="BottomEdge">
+						<UnifiedDim scale="1" type="BottomEdge"/>
+					</Dim>
+				</Area>
+				<ImageProperty name="Image"/>
+				<VertFormatProperty name="VertImageFormat"/>
+				<HorzFormatProperty name="HorzImageFormat"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="text">
+			<TextComponent>
+				<Area>
+					<Dim type="LeftEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="TopEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="RightEdge">
+						<UnifiedDim scale="1" type="RightEdge"/>
+					</Dim>
+					<Dim type="BottomEdge">
+						<UnifiedDim scale="1" type="BottomEdge"/>
+					</Dim>
+				</Area>
+
+				<VertFormatProperty name="VertTextFormat"/>
+				<HorzFormatProperty name="HorzTextFormat"/>
+			</TextComponent>
+		</ImagerySection>
+		
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="background"/>
+				<Section section="text">
+					<ColourProperty name="TextColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="background"/>
+				<Section section="text">
+					<ColourProperty name="TextColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+		
+	
+	<!--
+	*****************************************************************
+		Xihad/DialogNameCard
 	*****************************************************************
 	-->
 	
-	<!--
-	<WidgetLook name="Xihad/Dialog">
-		<PropertyDefinition redrawOnWrite="true" initialValue="FFFFFFFF" type="Colour" name="NormalTextColour"/>
-		<PropertyDefinition redrawOnWrite="true" initialValue="FFDDDDDD" type="Colour" name="DisabledTextColour"/>
-		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="VerticalTextFormatting" name="VertFormatting"/>
-		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="HorizontalTextFormatting" name="HorzFormatting"/>
-		
-		<ImagerySection name="Background">
+	<WidgetLook name="Xihad/DialogNameCard">
+		<PropertyDefinition name="VertLabelFormatting" initialValue="CentreAligned" redrawOnWrite="true" type="VerticalTextFormatting"/>
+		<PropertyDefinition name="HorzLabelFormatting" initialValue="CentreAligned" redrawOnWrite="true" type="HorizontalTextFormatting"/>
+		<ImagerySection name="leftAlignedLabel">
+			<TextComponent>
+				<Area>
+					<Dim type="LeftEdge"><ImageDim name="Dialog/dialog_nameL" dimension="Width"/></Dim>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="Width" ><FontDim type="HorzExtent"/></Dim>
+					<Dim type="Height"><FontDim type="LineSpacing" padding="8" /></Dim>
+				</Area>
+				<VertFormatProperty name="VertLabelFormatting" />
+				<HorzFormatProperty name="HorzLabelFormatting" />
+			</TextComponent>
+		</ImagerySection>
+		<ImagerySection name="leftAlignedFrame">
 			<FrameComponent>
-				<Image component="TopLeftCorner" name="XihadImages/DialogLT"/>
-				<Image component="TopRightCorner" name="XihadImages/DialogRT"/>
-				<Image component="BottomLeftCorner" name="XihadImages/DialogLB"/>
-				<Image component="BottomRightCorner" name="XihadImages/DialogRB"/>
-				<Image component="LeftEdge" name="XihadImages/DialogL"/>
-				<Image component="RightEdge" name="XihadImages/DialogR"/>
-				<Image component="TopEdge" name="XihadImages/DialogT"/>
-				<Image component="BottomEdge" name="XihadImages/DialogB"/>
-				<Image component="Background" name="XihadImages/DialogM"/>
+				<Area>
+					<Dim type="LeftEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="Width">
+						<OperatorDim op="Add">
+							<FontDim type="HorzExtent"/>
+							<OperatorDim op="Add">
+								<ImageDim name="Dialog/dialog_nameL" dimension="Width"/>
+								<ImageDim name="Dialog/dialog_nameR" dimension="Width"/>
+							</OperatorDim>	
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height"><FontDim type="LineSpacing" padding="8" /></Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="Dialog/dialog_nameLT"/>
+				<Image component="TopRightCorner" name="Dialog/dialog_nameRT"/>
+				<Image component="BottomLeftCorner" name="Dialog/dialog_nameLB"/>
+				<Image component="BottomRightCorner" name="Dialog/dialog_nameRB"/>
+				<Image component="LeftEdge" name="Dialog/dialog_nameL"/>
+				<Image component="RightEdge" name="Dialog/dialog_nameR"/>
+				<Image component="TopEdge" name="Dialog/dialog_nameT"/>
+				<Image component="BottomEdge" name="Dialog/dialog_nameB"/>
+				<Image component="Background" name="Dialog/dialog_nameM"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="rightAlignedLabel">
+			<TextComponent>
+				<Area>
+					<Dim type="LeftEdge">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="RightEdge"/>
+								<OperatorDim op="Add">
+									<FontDim type="HorzExtent"/>
+									<ImageDim name="Dialog/dialog_nameR" dimension="Width"/>
+								</OperatorDim>  
+						</OperatorDim>
+					</Dim>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="Width" ><FontDim type="HorzExtent"/></Dim>
+					<Dim type="Height"><FontDim type="LineSpacing" padding="8" /></Dim>
+				</Area>
+				<VertFormatProperty name="VertLabelFormatting" />
+				<HorzFormatProperty name="HorzLabelFormatting" />
+			</TextComponent>
+		</ImagerySection>
+		<ImagerySection name="rightAlignedFrame">
+			<FrameComponent>
+				<Area>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="LeftEdge">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="RightEdge"/>
+							<OperatorDim op="Add">
+								<FontDim type="HorzExtent"/>
+								<OperatorDim op="Add">
+									<ImageDim name="Dialog/dialog_nameL" dimension="Width"/>
+									<ImageDim name="Dialog/dialog_nameR" dimension="Width"/>
+								</OperatorDim>  
+							</OperatorDim>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Width">
+						<OperatorDim op="Add">
+							<FontDim type="HorzExtent"/>
+							<OperatorDim op="Add">
+								<ImageDim name="Dialog/dialog_nameL" dimension="Width"/>
+								<ImageDim name="Dialog/dialog_nameR" dimension="Width"/>
+							</OperatorDim>  
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height"><FontDim type="LineSpacing" padding="8" /></Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="Dialog/dialog_nameLT"/>
+				<Image component="TopRightCorner" name="Dialog/dialog_nameRT"/>
+				<Image component="BottomLeftCorner" name="Dialog/dialog_nameLB"/>
+				<Image component="BottomRightCorner" name="Dialog/dialog_nameRB"/>
+				<Image component="LeftEdge" name="Dialog/dialog_nameL"/>
+				<Image component="RightEdge" name="Dialog/dialog_nameR"/>
+				<Image component="TopEdge" name="Dialog/dialog_nameT"/>
+				<Image component="BottomEdge" name="Dialog/dialog_nameB"/>
+				<Image component="Background" name="Dialog/dialog_nameM"/>
 			</FrameComponent>
 		</ImagerySection>
 		<StateImagery name="Enabled">
 			<Layer>
-				<Section section="Background">
+				<Section section="leftAlignedFrame" />
+				<Section section="leftAlignedLabel" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="rightAlignedFrame" />
+				<Section section="rightAlignedLabel" />
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+	<!--
+	*****************************************************************
+		Xihad/Dialog
+	*****************************************************************
+	-->
+		
+	<WidgetLook name="Xihad/Dialog">
+		<PropertyLinkDefinition name="CharacterName" widget="__auto_name_card__" targetProperty="Text" initialValue="？？？" type="String"/>
+		<PropertyLinkDefinition name="NameCardRightAligned" widget="__auto_name_card__" targetProperty="Disabled" initialValue="false" type="bool"/>
+		<Property name="AlwaysOnTop" value="true"/>
+		<ImagerySection name="background">
+			<FrameComponent>
+				<Area>
+					<Dim type="TopEdge" ><AbsoluteDim value="10"/></Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="Dialog/dialogLT"/>
+				<Image component="TopRightCorner" name="Dialog/dialogRT"/>
+				<Image component="BottomLeftCorner" name="Dialog/dialogLB"/>
+				<Image component="BottomRightCorner" name="Dialog/dialogRB"/>
+				<Image component="LeftEdge" name="Dialog/dialogL"/>
+				<Image component="RightEdge" name="Dialog/dialogR"/>
+				<Image component="TopEdge" name="Dialog/dialogT"/>
+				<Image component="BottomEdge" name="Dialog/dialogB"/>
+				<Image component="Background" name="Dialog/dialogM"/>
+			</FrameComponent>
+		</ImagerySection>
+		<Child type="Xihad/DialogNameCard" nameSuffix="__auto_name_card__">
+			<Area>
+				<Dim type="LeftEdge"><AbsoluteDim value="40"/></Dim>
+				<Dim type="RightEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge"/>
+						<AbsoluteDim value="40"/>
+					</OperatorDim>
+				</Dim>
+			</Area>
+		</Child> 
+		<Child type="Xihad/Container" nameSuffix="__auto_container__">
+			<Area>
+				<Dim type="LeftEdge"><ImageDim name="Dialog/dialogL" dimension="Width"/></Dim>
+				<Dim type="RightEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Width"/>
+						<ImageDim name="Dialog/dialogR" dimension="Width"/>
+					</OperatorDim>
+				</Dim>
+				<Dim type="TopEdge">
+					<OperatorDim op="Add">
+						<ImageDim name="Dialog/dialogT" dimension="Height"/>
+						<AbsoluteDim value="10"/>
+					</OperatorDim>
+				</Dim>
+				<Dim type="BottomEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Height"/>
+						<ImageDim name="Dialog/dialogB" dimension="Height"/>
+					</OperatorDim>
+				</Dim>
+			</Area>
+			<Property name="Image" value="Dialog/dialog_next_normal"/>
+		</Child>
+		<Child type="Xihad/ImageButton" nameSuffix="__auto_next__">
+			<Area>
+				<Dim type="LeftEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge"/>
+						<OperatorDim op="Add">
+							<ImageDim name="Dialog/dialogRB" dimension="Width"/>
+							<ImageDim name="Dialog/dialog_next_normal" dimension="Width"/>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="TopEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="BottomEdge"/>
+						<OperatorDim op="Add">
+							<ImageDim name="Dialog/dialogRB" dimension="Height"/>
+							<ImageDim name="Dialog/dialog_next_normal" dimension="Height"/>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="Width">
+					<ImageDim name="Dialog/dialog_next_normal" dimension="Width"/>
+				</Dim>
+				<Dim type="Height">
+					<ImageDim name="Dialog/dialog_next_normal" dimension="Height"/>
+				</Dim>
+			</Area>
+			<Property name="NormalImage" value="Dialog/dialog_next_normal"/>
+			<Property name="HoverImage" value="Dialog/dialog_next_hover"/>
+			<Property name="PushedImage" value="Dialog/dialog_next_normal"/>
+			<Property name="AlwaysOnTop" value="true"/>
+		</Child>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="background">
 				</Section>	
 			</Layer>
 		</StateImagery>
 		<StateImagery name="Disabled">
 			<Layer>
-				<Section section="Background">
+				<Section section="background">
+				</Section>
+			</Layer>
+		</StateImagery>	
+	</WidgetLook>
+	
+	<!--
+	*****************************************************************
+		Xihad/Image
+	*****************************************************************
+	-->
+	<WidgetLook name="Xihad/Image">
+		<PropertyDefinition redrawOnWrite="true" initialValue="FFFFFFFF" type="ColourRect" name="EnableColor"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="2D2D2D2D" type="ColourRect" name="DisableColor"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="BottomAligned" type="VerticalFormatting" name="VertFormatting"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="LeftAligned" type="HorizontalFormatting" name="HorzFormatting"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="Image"/>
+		<ImagerySection name="imageSection">
+			<ImageryComponent>
+				<Area>
+					<Dim type="LeftEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="TopEdge">
+						<AbsoluteDim value="0"/>
+					</Dim>
+					<Dim type="RightEdge">
+						<UnifiedDim scale="1.0" type="RightEdge"/>
+					</Dim>
+					<Dim type="BottomEdge">
+						<UnifiedDim scale="1.0" type="BottomEdge"/>
+					</Dim>
+				</Area>
+				<ImageProperty name="Image"/>
+				<VertFormatProperty name="VertFormatting"/>
+				<HorzFormatProperty name="HorzFormatting"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="imageSection">
+					<ColourProperty name="EnableColor"/>
 				</Section>
 			</Layer>
 		</StateImagery>
-		
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="imageSection">
+					<ColourPropery name="DisableColor"/>
+				</Section>
+			</Layer>
+		</StateImagery>
 	</WidgetLook>
+
+	<!--
+	*****************************************************************
+		Xihad/ImageButton
+	*****************************************************************
 	-->
+	<WidgetLook name="Xihad/ImageButton">
+		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="NormalImage"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="HoverImage"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="PushedImage"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="DisabledImage"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="Stretched" type="VerticalFormatting" name="VertImageFormatting"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="Stretched" type="HorizontalFormatting" name="HorzImageFormatting"/>
+		<Property name="Size" value="{{0, 96}, {0, 32}}" />
+		<ImagerySection name="normal">
+			<ImageryComponent>
+				<ImageProperty name="NormalImage"/>
+				<VertFormatProperty name="VertImageFormatting"/>
+				<HorzFormatProperty name="HorzImageFormatting"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="hover">
+			<ImageryComponent>
+				<ImageProperty name="HoverImage"/>
+				<VertFormatProperty name="VertImageFormatting"/>
+				<HorzFormatProperty name="HorzImageFormatting"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="pushed">
+			<ImageryComponent>
+				<ImageProperty name="PushedImage"/>
+				<VertFormatProperty name="VertImageFormatting"/>
+				<HorzFormatProperty name="HorzImageFormatting"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="disabled">
+			<ImageryComponent>
+				<ImageProperty name="DisabledImage"/>
+				<VertFormatProperty name="VertImageFormatting"/>
+				<HorzFormatProperty name="HorzImageFormatting"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<StateImagery name="Normal">
+			<Layer>
+				<Section section="normal"/>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Hover">
+			<Layer>
+				<Section section="hover"/>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Pushed">
+			<Layer>
+				<Section section="pushed"/>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="PushedOff">
+			<Layer>
+				<Section section="hover"/>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="disabled"/>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
 
 	<!--
 	*****************************************************************
@@ -76,16 +453,6 @@
 		</StateImagery>
 	</WidgetLook>
 	
-
-	<!--
-	*****************************************************************
-		Xihad/DialogSubtitle
-	*****************************************************************
-	-->
-	<WidgetLook name="Xihad/DialogSubtitle">
-			
-	</WidgetLook>
-
 	<!--
 	*****************************************************************
 		Xihad/PopupMenu
@@ -161,7 +528,7 @@
 
 	<!--
 	*****************************************************************
-		Xihad/
+		Xihad/MenuItem
 	*****************************************************************
 	-->
 	<WidgetLook name="Xihad/MenuItem">

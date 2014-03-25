@@ -1,6 +1,5 @@
-#include "luaopen_GameEngine.h"
-#include "Engine/GameEngine.h"
-#include "luaT/luaT.h"
+#include <Engine/GameEngine.h>
+#include <luaT/luaT.h>
 
 using namespace luaT;
 using namespace xihad::ngn;

@@ -1,5 +1,5 @@
 #pragma once
-#include <Dialogue\CBaseTickMethod.hpp>
+#include <Dialogue\ITickMethod.hpp>
 
 namespace xihad { namespace dialogue
 {
