@@ -1133,14 +1133,14 @@ namespace scene
 		If you no longer need the selector, you should call ITriangleSelector::drop().
 		See IReferenceCounted::drop() for more information. */
 		virtual ITriangleSelector* createOctreeTriangleSelector(IMesh* mesh,
-			ISceneNode* node, s32 minimalPolysPerNode=32) = 0;
+			ISceneNode* node, s32 minimalPolysPerNode=32, f32 looseK = 1.3f) = 0;
 
 		//! //! Creates a Triangle Selector, optimized by an octree.
 		/** \deprecated Use createOctreeTriangleSelector instead. This method may be removed by Irrlicht 1.9. */
 		_IRR_DEPRECATED_ ITriangleSelector* createOctTreeTriangleSelector(IMesh* mesh,
-			ISceneNode* node, s32 minimalPolysPerNode=32)
+			ISceneNode* node, s32 minimalPolysPerNode=32, f32 looseK = 1.3f)
 		{
-			return createOctreeTriangleSelector(mesh, node, minimalPolysPerNode);
+			return createOctreeTriangleSelector(mesh, node, minimalPolysPerNode, looseK);
 		}
 
 		//! Creates a meta triangle selector.
