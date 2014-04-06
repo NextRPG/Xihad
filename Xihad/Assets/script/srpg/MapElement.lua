@@ -1,0 +1,7 @@
+-- @interface MapElement
+-- 	MapElement:canPass(character)
+--	MapElement:canStay(character)
+--	MapElement:canCast(character, castable)
+--	MapElement:getActionPointCost(character)
+-- 	MapElement:cohabitWith(newMapElement)
+-- 	MapElement:getTile()
