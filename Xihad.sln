@@ -28,6 +28,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioEngine", "AudioEngine\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScriptEngine", "ScriptEngine\ScriptEngine.vcxproj", "{2A0C6990-6D8E-4508-A6D1-8093F2797328}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArtIn", "ArtIn\ArtIn.vcxproj", "{3C6C463A-B40B-441A-A411-71D82811326C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -66,6 +68,10 @@ Global
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Debug|Win32.Build.0 = Debug|Win32
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Release|Win32.ActiveCfg = Release|Win32
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Release|Win32.Build.0 = Release|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Debug|Win32.Build.0 = Debug|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Release|Win32.ActiveCfg = Release|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

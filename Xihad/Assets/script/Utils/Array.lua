@@ -24,6 +24,14 @@ function Array.findLast(t, v, last)
 	end
 end
 
+function Array.getFront(t)
+	return t[1]
+end
+
+function Array.getBack(t)
+	return t[#t]
+end
+
 function Array.pushBack(t, v)
 	table.insert(t, v)
 end
