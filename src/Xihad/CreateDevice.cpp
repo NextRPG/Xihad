@@ -24,7 +24,7 @@ IrrlichtDevice* createDefaultDevice()
 	param.WindowSize = core::dimension2du(1024, 600);
 
 	param.Stencilbuffer = true;
-	param.Vsync = false;
+	param.Vsync = true;
 	param.AntiAlias = video::EAAM_QUALITY;
 	return irr::createDeviceEx(param);
 }

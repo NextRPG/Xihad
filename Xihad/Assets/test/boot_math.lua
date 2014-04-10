@@ -1,3 +1,4 @@
+package.cpath = '../Release/?.dll;'
  local m3d = require "math3d"
 
 --[[

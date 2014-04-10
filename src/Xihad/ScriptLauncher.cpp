@@ -31,10 +31,10 @@ int launchScript(int argc, const char** argv)
 	{
 		// Usually, frame rate adjuster should be the last frame observer.
 		// So, give it a big order
-		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
-		engine->addFrameObserver(*adj, 1000000);
-		engine->addFrameObserver(*adj, 10);	// change order, no duplicate instance
-		adj->drop();
+// 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
+// 		engine->addFrameObserver(*adj, 1000000);
+// 		engine->addFrameObserver(*adj, 10);	// change order, no duplicate instance
+// 		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;
 		engine->addFrameObserver(*titleUpdater);

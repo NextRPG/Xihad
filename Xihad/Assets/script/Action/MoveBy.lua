@@ -10,8 +10,6 @@ local MoveBy = {
 	enabled = false
 }
 
-package.path = package.path .. ";../?.lua"
-
 function MoveBy.new( o )
 	
 	o = o or {}	

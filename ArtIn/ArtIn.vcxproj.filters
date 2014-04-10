@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Target">
+      <UniqueIdentifier>{fff583ed-49d9-4973-9ee3-830b2aad8c1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{1b8dfa51-00eb-4c5b-a9d7-df6c6ead8072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graph">
+      <UniqueIdentifier>{6b2e9cef-4a5f-45c1-8231-ebca76eebe94}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ArtIn\MaxCostTarget.h">
+      <Filter>Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\RoutingTarget.h">
+      <Filter>Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\SinglePointTarget.h">
+      <Filter>Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\RoutingSource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\SinglePointSource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\ChessboardGraph.h">
+      <Filter>Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\WeightedGraph.h">
+      <Filter>Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ArtIn\AStarRouter.h" />
+    <ClInclude Include="..\src\ArtIn\Vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ArtIn\SinglePointTarget.cpp">
+      <Filter>Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ArtIn\ChessboardGraph.cpp">
+      <Filter>Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ArtIn\Export.cpp" />
+  </ItemGroup>
+</Project>

@@ -1,4 +1,4 @@
-require 'Array'
+local Array = require 'Array'
 Heap = {}
 Heap.__index = Heap
 

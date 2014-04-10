@@ -82,7 +82,7 @@ local selectSkill = nil
 local targetRange = nil
 function SkillManager:onSelectSkill( key )
 	local character = currentCharacter:findComponent(c"Character")
-	selectSkill = g_scene:findObject(sname(key)):findComponent(c"Skill")
+	selectSkill = self:getSkill(key)
 	-- targetRange = selectSkill:getAvailableTargets(character.tile, character:getEnemyManager())
 	targetRange = selectSkill:getTargetRange(character.tile)
 	Chessboard:pushArea(targetRange, "RED")

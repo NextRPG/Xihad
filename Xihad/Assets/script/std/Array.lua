@@ -1,4 +1,4 @@
-Array = {
+local Array = {
 	sort = table.sort,
 	insert = table.insert,
 }
@@ -110,3 +110,4 @@ if select('#', ...) == 0 then
 	assert(Array.bsearch({}, 1) == -1)
 end
 
+return Array
