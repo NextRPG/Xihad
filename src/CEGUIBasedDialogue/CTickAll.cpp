@@ -8,13 +8,6 @@ namespace xihad { namespace dialogue
 
 	}
 
-	CTickAll::~CTickAll()
-	{
-#ifdef _DEBUG
-		std:: cout << "CTickAll deleted." << std::endl;
-#endif // _DEBUG
-	}
-
 	void CTickAll::tick( float delta )
 	{
 		auto end = mTarget.endVisibility();

@@ -9,9 +9,9 @@ namespace xihad { namespace dialogue
 	public:
 		explicit CTickAll(IDialogue& target);
 
-		virtual ~CTickAll();
+		virtual ~CTickAll() {}
 
-		virtual void setTickSpeed( float speed ) override { }
+		virtual void setTickSpeed( float speed ) override {}
 
 		virtual float getTickSpeed() const override
 		{

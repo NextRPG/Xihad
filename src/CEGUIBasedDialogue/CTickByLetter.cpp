@@ -44,11 +44,4 @@ namespace xihad { namespace dialogue
 		return true;
 	}
 
-	CTickByLetter::~CTickByLetter()
-	{
-#ifdef _DEBUG
-		std:: cout << "CTickByWord deleted." << std::endl;
-#endif // _DEBUG
-	}
-
 }}

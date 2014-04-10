@@ -16,10 +16,7 @@ namespace xihad { namespace dialogue
 
 	void CPlainTextElement::resizeToContent()
 	{
-		Sizef parentSize = mContainer->getParentPixelSize();
-		float wScale = CoordConverter::asRelative(UDim(0, mContent->getWidth(0)), parentSize.d_width);
-		float yScale = CoordConverter::asRelative(UDim(0, mContent->getHeight()), parentSize.d_height);
-		mContainer->setSize(USize(UDim(wScale, 0), UDim(yScale, 0)));
+		mContainer->setSize(USize(UDim(0, mContent->getWidth(0)), UDim(0, mContent->getHeight())));
 	}
 
 	void CPlainTextElement::setVisible( unsigned bgnIndex, unsigned endIndex )
@@ -30,10 +27,7 @@ namespace xihad { namespace dialogue
 
 	void CPlainTextElement::setOffset( ngn::position2di pos )
 	{
-		Sizef parentSize = mContainer->getParentPixelSize();
-		float xScale = CoordConverter::asRelative(UDim(0, (float) pos.X), parentSize.d_width);
-		float yScale = CoordConverter::asRelative(UDim(0, (float) pos.Y), parentSize.d_height);
-		mContainer->setPosition(UVector2(UDim(xScale, 0), UDim(yScale, 0)));
+		mContainer->setPosition(UVector2(UDim(0, (float) pos.X), UDim(0, (float) pos.Y)));
 	}
 
 	const ITextContent* CPlainTextElement::getContent() const
@@ -45,9 +39,9 @@ namespace xihad { namespace dialogue
 	{
 		Window* parent = mContainer->getParent();
 		parent->removeChild(mContainer);
-#ifdef _DEBUG
+#ifdef DEBUG_DIALOG
 		std:: cout << "CPlainTextElement deleted." << std::endl;
-#endif // _DEBUG
+#endif // DEBUG_DIALOG
 	}
 
 }}

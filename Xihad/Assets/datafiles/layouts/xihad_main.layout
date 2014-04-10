@@ -48,7 +48,7 @@
 		</Window>
 	</Window>
 
-	<Window name="CharacterAttributeWindow" type="Xihad/Frame">
+	<!-- <Window name="CharacterAttributeWindow" type="Xihad/Frame">
 		<Property name="Size" value="{{0, 250}, {0, 125}}" />
 		<Property name="Alpha" value="0.0" />
 		<Window name="Icon" type="Generic/Image">
@@ -62,9 +62,11 @@
 			<Property name="NormalTextColour" value="FFFFFFFF" />
 		</Window>
 	</Window>
+ -->
 	<Window name="LeftDialog" type="DefaultWindow">
 		<Property name="Size" value="{{0, 500}, {0, 500}}" />
 		<Property name="Position" value="{{0, 32}, {0, 100}}" />
+		<Property name="Visible" value="false" />
 		<Window name="ImageArea" type="Xihad/Image">
 			<Property name="Size" value="{{1, 0}, {1, 0}}" />
 		</Window>
@@ -77,6 +79,7 @@
 	<Window name="RightDialog" type="DefaultWindow">
 		<Property name="Size" value="{{0, 500}, {0, 500}}" />
 		<Property name="Position" value="{{0, 492}, {0, 100}}" />
+		<Property name="Visible" value="false" />
 		<Window name="ImageArea" type="Xihad/Image">
 			<Property name="Size" value="{{1, 0}, {1, 0}}" />
 			<Property name="HorzFormatting" value="RightAligned"/>

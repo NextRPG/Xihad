@@ -1,5 +1,6 @@
 #pragma once
 #include <Dialogue\ITickMethod.hpp>
+#include <Engine\irr_ptr.h>
 
 namespace xihad { namespace dialogue
 {
@@ -7,23 +8,20 @@ namespace xihad { namespace dialogue
 	class CDelayedTick : public ITickMethod
 	{
 	public:
-		explicit CDelayedTick(IDialogue& target, ITickMethod& tickMethod, float delayedSeconds);
-		virtual ~CDelayedTick();
+		CDelayedTick(IDialogue& target, ITickMethod* tickMethod, float delayedSeconds);
+
+		virtual ~CDelayedTick() {}
 
 		virtual void setTickSpeed( float speed ) override;
 
-		virtual float getTickSpeed() const
-		{
-
-		}
+		virtual float getTickSpeed() const;
 
 		virtual void tick( float delta );
 
-	protected:
-
 	private:
 		IDialogue& mTarget;
-		ITickMethod& mTickMethod;
+		irr_ptr<ITickMethod> mTickMethod;
+		float delayed;
 	};
 }}
 

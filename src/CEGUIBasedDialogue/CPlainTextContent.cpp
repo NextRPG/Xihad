@@ -120,9 +120,9 @@ namespace xihad { namespace dialogue
 
 	CPlainTextContent::~CPlainTextContent()
 	{
-#ifdef _DEBUG
+#ifdef DEBUG_DIALOG
 		std:: cout << "CPlainTextContent deleted." << mText << std::endl;
-#endif // _DEBUG
+#endif // DEBUG_DIALOG
 	}
 
 }}

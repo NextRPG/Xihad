@@ -20,83 +20,44 @@
 #include "CEGUI/Window.h"
 #include "CEGUIBasedDialogue/Conversation.h"
 #include "CEGUI/WindowManager.h"
+#include "CEGUIBasedDialogue/ConversationController.h"
 
 using namespace irr;
 using namespace scene;
 using namespace xihad;
 using namespace ngn;
 using namespace dialogue;
-class ControllerForTest : public UserEventReceiver
-{ 
-public:
-	ControllerForTest(GameScene& scene) : scene(scene)
-	{
-		CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
-		conversation = new Conversation(
-			context.getRootWindow()->getChild("LeftDialog/TextArea/__auto_container__")->getPixelSize().d_width);
-		conversation->setSpeaker("aaaa", "happy");
-		conversation->setSpeaker("bbbb", "sad");
-		conversation->speak("aaaa", (CEGUI::utf8*)
-			"1jskskdjfjlag;lsja;ljkdf"
-			"sad");
 
-		conversation->speak("bbbb", (CEGUI::utf8*)
-			"2jskskdjfjlag;lsja;ljkdf"
-			"");
+Conversation* createConversation()
+{
+	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+	auto& coder = CEGUI::System::getStringTranscoder();
+	Conversation* conversation = new Conversation((int)
+		context.getRootWindow()->getChild("LeftDialog/TextArea/__auto_container__")->getPixelSize().d_width);
+	conversation->setSpeaker("aaaa", "happy");
+	conversation->setSpeaker("bbbb", "sad");
+	conversation->speak("aaaa", 
+		coder.stringFromStdWString(L"1ÎÒÃÇ¸æËßÊÀ½çµ±ÎïÌåÍ£Ö¹ÒÆ¶¯Ê±ÔÊÐíÎïÌåÐÝÃß¡£Ò»¸öÐÝÃßÖÐµÄÎïÌå²»ÐèÒªÈÎºÎÄ£Äâ"),
+		"sad");
 
-		conversation->speak("aaaa", (CEGUI::utf8*)
-			"3jskskdjfjlag;lsja;ljkdf"
-			"");
+	conversation->speak("bbbb",
+		coder.stringFromStdWString(L"2ÎÒÃÇ¸æËßÊÀ½çµ±ÎïÌåÍ£Ö¹ÒÆ¶¯Ê±ÔÊÐíÎïÌåÐÝÃß¡£Ò»¸öÐÝÃßÖÐµÄÎïÌå²»ÐèÒªÈÎºÎÄ£Äâ"),
+		"");
 
-// 		conversation->speak("aaaa", (CEGUI::utf8*)
-// 			"ã€‚æ˜¯çš„ï¼Œä½ å¯ä»¥ä½¿é‡åŠ›æœå‘ä¾§é¢ï¼ˆæˆ–è€…ä½ åªå¥½è½¬åŠ¨ä½ çš„æ˜¾ç¤ºå™¨ï¼‰ã€‚ "
-// 			"å¹¶ä¸”ï¼Œæˆ‘ä»¬å‘Šè¯‰ä¸–ç•Œå½“ç‰©ä½“åœæ­¢ç§»åŠ¨æ—¶å…è®¸ç‰©ä½“ä¼‘çœ ã€‚ä¸€ä¸ªä¼‘çœ ä¸­çš„ç‰©ä½“ä¸éœ€è¦ä»»ä½•æ¨¡æ‹Ÿ ",
-// 			"");
-// 		conversation->speak("bbbb", (CEGUI::utf8*)
-// 			"ã€‚æ˜¯çš„ï¼Œä½ å¯ä»¥ä½¿é‡åŠ›æœå‘ä¾§é¢ï¼ˆæˆ–è€…ä½ åªå¥½è½¬åŠ¨ä½ çš„æ˜¾ç¤ºå™¨ï¼‰ã€‚ "
-// 			"å¹¶ä¸”ï¼Œæˆ‘ä»¬å‘Šè¯‰ä¸–ç•Œå½“ç‰©ä½“åœæ­¢ç§»åŠ¨æ—¶å…è®¸ç‰©ä½“ä¼‘çœ ã€‚ä¸€ä¸ªä¼‘çœ ä¸­çš„ç‰©ä½“ä¸éœ€è¦ä»»ä½•æ¨¡æ‹Ÿ ",
-// 			"");
+	conversation->speak("aaaa",
+		coder.stringFromStdWString(L"3ÎÒÃÇ¸æËßÊÀ½çµ±ÎïÌåÍ£Ö¹ÒÆ¶¯Ê±ÔÊÐíÎïÌåÐÝÃß¡£Ò»¸öÐÝÃßÖÐµÄÎïÌå²»ÐèÒªÈÎºÎÄ£Äâ"),
+		"");
 
-		scene.appendChildHandler(conversation);
-	}
+	conversation->speak("aaaa", 
+		coder.stringFromStdWString(L"4ÎÒÃÇ¸æËßÊÀ½çµ±ÎïÌåÍ£Ö¹ÒÆ¶¯Ê±ÔÊÐíÎïÌåÐÝÃß¡£Ò»¸öÐÝÃßÖÐµÄÎïÌå²»ÐèÒªÈÎºÎÄ£Äâ"),
+		"");
 
-	virtual ~ControllerForTest() 
-	{
-		scene.destroyChildHandler(conversation);
-	}
+	conversation->speak("bbbb", 
+		coder.stringFromStdWString(L"5ÎÒÃÇ¸æËßÊÀ½çµ±ÎïÌåÍ£Ö¹ÒÆ¶¯Ê±ÔÊÐíÎïÌåÐÝÃß¡£Ò»¸öÐÝÃßÖÐµÄÎïÌå²»ÐèÒªÈÎºÎÄ£Äâ"),
+		"");
 
-	virtual int onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
-	{
-		int handled = 0;
-		if (event.Key == KEY_RETURN && event.PressedDown)
-		{
-			
-			conversation->skipAnimation();
-		}
-		if (event.Key == KEY_SPACE && event.PressedDown)
-		{
-			conversation->speedUp();
-		}
-		else if (event.Key == KEY_SPACE && !event.PressedDown)
-		{
-			conversation->slowDown();
-		}
-		else
-		{
-			handled = 1;
-		}
-		return handled;
-	}
-
-	virtual int onMouseEvent( const MouseEvent& event, int argFromPreviousReceiver )
-	{
-		return 1;
-	}
-
-private:
-	Conversation* conversation;
-	GameScene& scene;
-};
+	return conversation;
+}
 
 int cegui_test(int argc, const char** argv)
 {
@@ -110,10 +71,10 @@ int cegui_test(int argc, const char** argv)
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
-		ControllerForTest* receiver = new ControllerForTest(*scene);
-		scene->getControllerStack().pushReceiver(receiver);
-		receiver->drop();
-
+		//Conversation* conversation = createConversation();
+		//ConversationController* controller = new ConversationController(*scene, conversation);
+		//conversation->drop();
+		//controller->registerToScene();
 		///////////////////////////////////////
 
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);

@@ -27,7 +27,7 @@ namespace xihad { namespace dialogue
 		bool startFromLeft /*= true*/ )
 		: mWidthLimit(widthLimit), 
 		mLineSpacing(lineSpacing), mParagrahPadding(paragrahPadding), 
-		selector(startFromLeft), currentDialog(nullptr)
+		selector(startFromLeft), currentSubtitle(nullptr)
 	{
 		
 	}
@@ -78,10 +78,8 @@ namespace xihad { namespace dialogue
 	void Conversation::speakPiece(const SpeakPiece& piece)
 	{
 		Window* dialogPane = selector.nextDialog(piece.name, piece.image);
-		
-		// AnimationManager& animMgr = AnimationManager::getSingleton();
 		Window* container = DialogueSelector::getTextContainer(dialogPane);
-		currentDialog = generateDialogue(*container, piece.content);
+		currentSubtitle = generateDialogue(*container, piece.content);
 	}
 
 	IDialogue* Conversation::generateDialogue(Window& container, const CEGUI::String& text)
@@ -110,47 +108,31 @@ namespace xihad { namespace dialogue
 
 	void Conversation::speedUp()
 	{
-		if (currentDialog)
-			currentDialog->getTickMethod()->setTickSpeed(6);
+		if (currentSubtitle)
+			currentSubtitle->getTickMethod()->setTickSpeed(6);
 	}
 
 	void Conversation::slowDown()
 	{
-		if (currentDialog)
-			currentDialog->getTickMethod()->setTickSpeed(1);
+		if (currentSubtitle)
+			currentSubtitle->getTickMethod()->setTickSpeed(1);
 	}
 
-	void Conversation::skipAnimation()
+	void Conversation::skipSubtitleAnimation()
 	{
-		if (!currentDialog || currentDialog->getVisibility() == currentDialog->endVisibility())
+		if (!isSubtitlePlaying())
 			return;
 
-		ITickMethod* all = new CTickAll(*currentDialog);
-		currentDialog->setTickMethod(all);
+		ITickMethod* all = new CTickAll(*currentSubtitle);
+		currentSubtitle->setTickMethod(all);
 		all->drop();
 	}
 
-	void Conversation::onStart()
+	void Conversation::update(float lastElapsed)
 	{
-		// set nextbutton click handler
-		GUIContext& context = System::getSingleton().getDefaultGUIContext();
-		Window* root = context.getRootWindow();
-		Window* dialogs[] = { root->getChild("LeftDialog"), root->getChild("RightDialog") };
-		for (size_t i = 0; i < sizeof(dialogs)/sizeof(dialogs[0]); i++)
-		{
-			Window* nextButton = DialogueSelector::getNextButton(dialogs[i]);
-			nextButton->removeAllEvents();
-			nextButton->subscribeEvent(PushButton::EventClicked, &Conversation::nextSpeakPiece, this);
-		}
-		
-		nextSpeakPiece(EventArgs());
-	}
-
-	void Conversation::onUpdate( const ngn::Timeline& timeline)
-	{
-		if (!currentDialog) return;
+		if (!currentSubtitle) return;
 	
-		if (currentDialog->getVisibility() == currentDialog->endVisibility())
+		if (!isSubtitlePlaying())
 		{
 			Window* dialogPane = selector.currentDialog();
 			Window* nextButton = DialogueSelector::getNextButton(dialogPane);
@@ -158,34 +140,48 @@ namespace xihad { namespace dialogue
 			return;							// reach end, and no need to update dialogue. 
 		}
 
-		if (currentDialog) 
-			currentDialog->onUpdate(timeline.getLastTimeChange());
+		if (currentSubtitle) 
+			currentSubtitle->onUpdate(lastElapsed);
 	}
 
-	void Conversation::onStop()
+	bool Conversation::nextSpeakPiece()
 	{
+		if (isSubtitlePlaying())
+			return false;
 
-	}
-
-	bool Conversation::nextSpeakPiece(const EventArgs& args)
-	{
-		if (currentDialog) 
-		{
-			delete currentDialog;
-			currentDialog = nullptr;
-		}
-
+		delete currentSubtitle;				// delete nullptr is safe.
+		currentSubtitle = nullptr;
 		if (!mPieces.empty()) 
 		{
 			auto& piece = mPieces.front();
 			speakPiece(*piece.get());
 			mPieces.pop();
+			return true;
 		}
-		else
-		{
-			// close
-		}
-		return true;
+
+		return false;
+	}
+
+	bool Conversation::isSubtitlePlaying()
+	{
+		return currentSubtitle ? 
+			!(currentSubtitle->getVisibility() == currentSubtitle->endVisibility()):
+			false;
+	}
+
+	bool Conversation::isFinished()
+	{
+		return mPieces.empty() && !currentSubtitle;
+	}
+
+	void Conversation::start()
+	{
+		nextSpeakPiece();
+	}
+
+	void Conversation::stop()
+	{
+		selector.close();
 	}
 
 }}

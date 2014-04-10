@@ -9,7 +9,7 @@ namespace xihad { namespace dialogue
 	public:
 		explicit CTickByLetter(IDialogue& target, float standardCycle, float initSpeed = 1.0f);
 
-		virtual ~CTickByLetter();
+		virtual ~CTickByLetter() {}
 
 	protected:
 		virtual bool onTick() override;

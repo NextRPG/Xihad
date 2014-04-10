@@ -1,6 +1,6 @@
 package.cpath = package.cpath ..";../Debug/?.dll" --.."../Debug/?.dll"
 require "cegui"
-local uiHandle = require("assets.test.GUIHandle")
+local controller = require("assets.test.GUIController")
 
 cursor:setVisible(false)
 local guiUpdater = createCEGUIUpdateHandler(engine:getWindow())
@@ -10,12 +10,12 @@ scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
 		if e.key == "P" then
-			uiHandle:subscribeEvent("CommandSelected", function (args)
+			controller:subscribeEvent("CommandSelected", function (args)
 				print("!!!")
 			end)
 		elseif e.key == "J" then
 
-			uiHandle:showWindow("CommandWindow", 
+			controller:showWindow("CommandWindow", 
 			{ 
 
 				["技能"] = { shortcut = "A", list = { ["技能1"] = true , ["技能2"] = false } }, 
@@ -24,10 +24,10 @@ scene:pushController({
 			})
 
 		elseif e.key == "Q" then
-			uiHandle:hideWindow("CommandWindow")
+			controller:hideWindow("CommandWindow")
 		elseif e.key == "I" then
 			damageNumber = damageNumber or 0
-			uiHandle:showWindow("AttackDamage", { damage = damageNumber})
+			controller:showWindow("AttackDamage", { damage = damageNumber})
 			damageNumber = (damageNumber + 5)%1000	
 		else
 			handled = 1
@@ -58,23 +58,30 @@ context:setRootWindow(root)
 context:setDefaultFont(CEGUI.FontManager:getSingleton():get("simhei-14"))
 context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
+
+-- animation
 local animMgr = CEGUI.AnimationManager:getSingleton()
 animMgr:loadAnimationsFromXML("Xihad.anims")
 
-local textFadeIn = animMgr:instantiateAnimation(animMgr:getAnimation("TextFadeIn"))
-textFadeIn:setTargetWindow(root:getChild("AttackDamageLabel"))
-local frameLighter = animMgr:instantiateAnimation(animMgr:getAnimation("FrameLighter"))
-frameLighter:setTargetWindow(root:getChild("CharacterAttributeWindow"))
-local frameDarker = animMgr:instantiateAnimation(animMgr:getAnimation("FrameDarker"))
-frameDarker:setTargetWindow(root:getChild("CharacterAttributeWindow"))
+local animations = 	{ 
+						TextFadeIn = { "AttackDamageLabel"},
+						
+						FrameLighter = { "CharacterAttributeWindow" },
+						FrameDarker = { "CharacterAttributeWindow" },
 
+						Magnify = { "LeftDialog/TextArea", "RightDialog/TextArea" },
+						Shrink = { "LeftDialog/TextArea", "RightDialog/TextArea" },
+						
+						PortraitLighter = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
+						PortraitDarker = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
 
--- dialog open and close anim
-local leftDialogText = root:getChild("LeftDialog"):getChild("TextArea")
-local rightDialogText = root:getChild("RightDialog"):getChild("TextArea")
-local jumpin = animMgr:getAnimation("JumpIn")
-local jumpout = animMgr:getAnimation("JumpOut")
-animMgr:instantiateAnimation(jumpin):setTargetWindow(leftDialogText)
-animMgr:instantiateAnimation(jumpin):setTargetWindow(rightDialogText)
-animMgr:instantiateAnimation(jumpout):setTargetWindow(leftDialogText)
-animMgr:instantiateAnimation(jumpout):setTargetWindow(rightDialogText)
+						DialogueClose = { "LeftDialog", "RightDialog" },
+					}
+
+for animName, targetList in pairs(animations) do
+	local anim = animMgr:getAnimation(animName)
+	for _, name in ipairs(targetList) do
+		local targetWindow = root:getChild(name)
+		animMgr:instantiateAnimation(anim):setTargetWindow(targetWindow)
+	end
+end

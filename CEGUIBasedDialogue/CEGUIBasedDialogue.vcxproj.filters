@@ -36,6 +36,12 @@
     <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueSelector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\ConversationController.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\CDelayedTick.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextContent.h">
@@ -60,6 +66,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueSelector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\ConversationController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\CDelayedTick.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

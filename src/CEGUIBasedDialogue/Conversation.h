@@ -1,10 +1,9 @@
 #pragma once
 #include <CEGUI\String.h>
 #include <Engine\dimension2d.h>
-#include <Engine\UpdateHandler.h>
-#include <Engine\Timeline.h>
 #include <Engine\irr_ptr.h>
 #include <irrlicht\IReferenceCounted.h>
+
 #include <map>
 #include <queue>
 
@@ -13,7 +12,6 @@
 namespace CEGUI
 {
 	class Window;
-	class EventArgs;
 }
 
 namespace xihad { namespace dialogue
@@ -21,7 +19,7 @@ namespace xihad { namespace dialogue
 	using CEGUI::String;
 	class IDialogue;
 	class IDialogueBuilder;
-	class Conversation : public ngn::UpdateHandler
+	class Conversation : public irr::IReferenceCounted
 	{
 	public:
 		Conversation(
@@ -39,18 +37,28 @@ namespace xihad { namespace dialogue
 
 		void speak(const String& name, const String& content);
 
+		void start();
+
+		void update(float lastElapsed);
+		
 		void speedUp();
 
 		void slowDown();
 
-		void skipAnimation();
+		void skipSubtitleAnimation();
 
-	protected:
-		virtual void onStart();
+		void stop();
+		/**
+		 * start next words.
+		 * 
+		 * @return true if succeed, false if current sutitle is playing 
+		 */
+		bool nextSpeakPiece();
 
-		virtual void onUpdate( const ngn::Timeline& timeline);
-
-		virtual void onStop();
+		/**
+		 * @return true if all words is finished.
+		 */
+		bool isFinished();
 
 	private:
 		struct SpeakPiece : public irr::IReferenceCounted
@@ -71,7 +79,10 @@ namespace xihad { namespace dialogue
 		
 		void speakPiece(const SpeakPiece& piece);
 
-		bool nextSpeakPiece(const CEGUI::EventArgs& event);
+		/**
+		 * @return return false if currentSubtitle is null or reach end
+		 */
+		bool isSubtitlePlaying();
 
 		String getFullImageName(const String& name, const String& emotion);
 
@@ -83,7 +94,7 @@ namespace xihad { namespace dialogue
 		int mLineSpacing;
 		ngn::dimension2di mParagrahPadding;
 		
-		IDialogue* currentDialog;
+		IDialogue* currentSubtitle;
 
 		std::queue<irr_ptr<SpeakPiece>> mPieces;
 	};
