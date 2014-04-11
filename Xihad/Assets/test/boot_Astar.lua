@@ -12,7 +12,6 @@ local target = Astar.newSinglePointTarget(5, 5)
 local reversePath = {}
 local cost = Astar.route(source, target, graph, reversePath)
 
-
 print('cost', cost)
 print('reversePath:')
 for i=1,#reversePath, 2 do

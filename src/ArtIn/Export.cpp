@@ -171,8 +171,8 @@ static int luaopen_Astar_impl(lua_State* L)
 
 	luaT_defRegsBgn(maxCost)
 		luaT_lnamedfunc(traversePoints),
-		luaT_defRegsEnd
-		MetatableFactory<MaxCostTarget, RoutingTargetT>::create(L, maxCost);
+	luaT_defRegsEnd
+	MetatableFactory<MaxCostTarget, RoutingTargetT>::create(L, maxCost);
 
 	luaT_defRegsBgn(astar)
 		luaT_lnnamefunc(luaT_constructor(LuaChessboardGraph(unsigned, unsigned, LuaRef)), newChessboard),
@@ -181,7 +181,7 @@ static int luaopen_Astar_impl(lua_State* L)
 		luaT_lnnamefunc(luaT_constructor(MultiPointsSource(LuaRef)), newMultiPointsSource),
 		luaT_cnamedfunc(newSinglePointSource),
 		luaT_lnamedfunc(route),
-		luaT_defRegsEnd
+	luaT_defRegsEnd
 	luaL_register(L, "Astar", astar);
 	return 1;
 }

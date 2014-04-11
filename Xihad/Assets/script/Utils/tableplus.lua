@@ -49,3 +49,16 @@ function table.merge( t1, t2 )
 	end
 	return t3
 end
+
+function table.readonly(t)
+	local proxy = {}
+	local mt = {
+		__index = t,
+		__newindex = function (t, k, v)
+			error("attemp to update a readonly table")
+		end
+	}
+	
+	setmetatable(proxy, mt)
+	return proxy
+end

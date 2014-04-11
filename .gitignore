@@ -16,12 +16,13 @@
 /*/Release/
 /ipch/
 /docs/Reference/html
-/Xihad/math3d.*
 *sublime*
 
 CEGUIIrrlichtRenderer*.dll
 CEGUI.dll
 UnitTest.dll
+math3d.dll
+ArtIn.dll
 
 /Debug/*.lib
 /Release/*.lib
