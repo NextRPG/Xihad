@@ -15,7 +15,7 @@ namespace xihad { namespace dialogue
 
 		virtual ~DialogueParser();
 
-		void initialise();
+		void initialise(CEGUI::Window& dialog);
 
 		IDialogue* generateDialogue();
 

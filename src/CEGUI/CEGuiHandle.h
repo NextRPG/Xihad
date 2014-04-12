@@ -28,12 +28,12 @@ namespace irr
 
 namespace xihad { namespace cegui
 {
-	class CeguiHandle
+	class CEGUIHandle
 	{
 	public:
-		CeguiHandle();
+		CEGUIHandle();
 
-		virtual ~CeguiHandle();
+		virtual ~CEGUIHandle();
 
 		void initialise(irr::IrrlichtDevice* devece, lua_State* L);
 

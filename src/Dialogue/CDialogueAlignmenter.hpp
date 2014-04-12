@@ -54,12 +54,8 @@ namespace xihad { namespace dialogue
 			return mKerningHeight;
 		}
 		
-		void setKerningNewLine(ngn::dimension2di knl)
-		{
-			mKerningNewLine = knl;
-			checkKNL();
-		}
-
+		void setKerningNewLine(ngn::dimension2di knl);
+		
 		ngn::dimension2di getKerningNewLine() const 
 		{
 			return mKerningNewLine;
@@ -80,13 +76,14 @@ namespace xihad { namespace dialogue
 				mKerningNewLine.Width = std::min((unsigned) mKerningNewLine.Width, mWidthLimit);
 		}
 
-		void wrapLine()
+		void wrapLine(bool newParagraph = false)
 		{
+			ngn::dimension2di knl = newParagraph ? mKerningNewLine : ngn::dimension2di();
 			mRelativeOffsetToPrev = ngn::position2di(
-				-mOffset.X+mPrevWidth, mCurrentLineHeight);
+				knl.Width-mOffset.X+mPrevWidth, mCurrentLineHeight+mKerningHeight+knl.Height);
 
-			mOffset.X = 0;
-			mOffset.Y += mCurrentLineHeight;
+			mOffset.X = knl.Width;
+			mOffset.Y += mCurrentLineHeight+mKerningHeight+knl.Height;
 			mCurrentLineHeight = 0;
 			mCurrentLineHead = nullptr;
 		}
@@ -95,7 +92,6 @@ namespace xihad { namespace dialogue
 		{
 			mCurrentLineHeight = std::max(mCurrentLineHeight, height);
 			mOffset.X += horizontalDistance;
-
 			mPrevWidth = horizontalDistance;
 		}
 

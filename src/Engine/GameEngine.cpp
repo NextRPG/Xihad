@@ -14,6 +14,7 @@
 #include "WindowEventSeizer.h"
 #include "CppBase\StdMap.h"
 #include "BiAssociateMap.h"
+#include "System.h"
 
 using namespace std;
 namespace xihad { namespace ngn
@@ -75,7 +76,7 @@ namespace xihad { namespace ngn
 
 		while (isRunning())
 		{
-			float frameBgnTime = fireFrameBegin();
+			double frameBgnTime = fireFrameBegin();
 
 			getRenderer()->clearBuffer(true, true, SColor(255, 100, 100, 140));
 			getWorld()->update(mImpl->frameTime);
@@ -129,19 +130,19 @@ namespace xihad { namespace ngn
 		mImpl->observers.remove(&observer);
 	}
 
-	float GameEngine::fireFrameBegin()
+	double GameEngine::fireFrameBegin()
 	{
-		float now = clockToSeconds(clock());
+		double now = System::getCurrentTime();
 		for (auto observerPair : mImpl->observers.pairs())
-			observerPair.second->onFrameBegin(this, now);
+			observerPair.second->onFrameBegin(this, (float) now);
 
 		return now;
 	}
 
-	void GameEngine::fireFrameEnd( float bgnTime )
+	void GameEngine::fireFrameEnd( double bgnTime )
 	{
-		float now = clockToSeconds(clock());
-		float delta = now - bgnTime;
+		double now = System::getCurrentTime();
+		float delta = (float) (now - bgnTime);
 
 #ifdef _DEBUG
 		int priority = 0x80000000;	// min integer
@@ -152,7 +153,7 @@ namespace xihad { namespace ngn
 			assert(priority <= observerPair.first);
 			priority = observerPair.first;
 #endif
-			observerPair.second->onFrameEnd(this, now, delta);
+			observerPair.second->onFrameEnd(this, (float) now, delta);
 		}
 	}
 

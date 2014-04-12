@@ -3,6 +3,7 @@
 #include "Process.h"
 #include <iostream>
 #include "TimeConversion.h"
+#include "System.h"
 
 namespace xihad { namespace ngn
 {
@@ -20,10 +21,10 @@ namespace xihad { namespace ngn
 
 	void FrameRateAdjuster::onFrameEnd( GameEngine* source, float nowSecs, float delta )
 	{
-		if (bgnSecs + delta - nowSecs > 0.000001f)
+		if (bgnSecs + delta - nowSecs > 0.1f)
 			std::cout << "FrameRateAdjuster find not-matching delta" << std::endl;
 
-		delta = clockToSeconds(clock()) - bgnSecs;
+		delta = (float) (System::getCurrentTime() - bgnSecs);
 		if (delta < minInterval)
 		{
 			Process::sleep(minInterval-delta);

@@ -6,9 +6,9 @@
 namespace xihad { namespace cegui
 {
 
-	CEGUIUpdateHandler::CEGUIUpdateHandler( CeguiHandle* handle ) :
+	CEGUIUpdateHandler::CEGUIUpdateHandler( CEGUIHandle* handle ) :
 		ceguiHandle(handle), 
-		eventReceiver(new CeguiEventReceiver(*handle->getEventPusher()), false)
+		eventReceiver(new CEGUIEventReceiver(*handle->getEventPusher()), false)
 	{
 	}
 

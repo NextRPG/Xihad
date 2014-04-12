@@ -8,26 +8,26 @@ namespace CEGUI
 
 namespace xihad { namespace cegui
 {
-	class CeguiEventReceiver : public ngn::UserEventReceiver
+	class CEGUIEventReceiver : public ngn::UserEventReceiver
 	{
 	public:
-		explicit CeguiEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher);
+		explicit CEGUIEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher);
 
-		virtual ~CeguiEventReceiver();
+		virtual ~CEGUIEventReceiver();
 
 		virtual int onKeyEvent( const ngn::KeyEvent& event, int argFromPreviousReceiver );
 
 		virtual int onMouseEvent( const ngn::MouseEvent& event, int argFromPreviousReceiver );
 
 	private:
-		CeguiEventReceiver(const CeguiEventReceiver&);
-		CeguiEventReceiver& operator=(const CeguiEventReceiver&);
+		CEGUIEventReceiver(const CEGUIEventReceiver&);
+		CEGUIEventReceiver& operator=(const CEGUIEventReceiver&);
 
-		bool CeguiEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool ctrl, bool shift);
+		bool CEGUIEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool ctrl, bool shift);
 
-		bool CeguiEventReceiver::OnKeyUp(irr::EKEY_CODE key, wchar_t wch, bool ctrl, bool shift);
+		bool CEGUIEventReceiver::OnKeyUp(irr::EKEY_CODE key, wchar_t wch, bool ctrl, bool shift);
 
-		bool CeguiEventReceiver::OnMouse(irr::s32 x, irr::s32 y, irr::f32 w, irr::EMOUSE_INPUT_EVENT e);
+		bool CEGUIEventReceiver::OnMouse(irr::s32 x, irr::s32 y, irr::f32 w, irr::EMOUSE_INPUT_EVENT e);
 
 	private:
 		const CEGUI::IrrlichtEventPusher& d_eventPusher;

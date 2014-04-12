@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
+#include <algorithm>
 #include "GeometryBuffer.h"
 #include "CEGUI/RenderEffect.h"
 #include "Texture.h"

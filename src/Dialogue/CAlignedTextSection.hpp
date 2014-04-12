@@ -34,11 +34,10 @@ namespace xihad { namespace dialogue
 			return mNextSection;
 		}
 
-		void link(CAlignedTextSection* next, ngn::position2di nextRelativeToThis)
+		void link(CAlignedTextSection* next)
 		{
 			assert(!mNextSection);
 			mNextSection = next;
-			next->setOffset(nextRelativeToThis);
 		}
 
 		CAlignedTextSection* split(unsigned index);

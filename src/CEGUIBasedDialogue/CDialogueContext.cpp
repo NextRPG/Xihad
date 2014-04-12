@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CDialogueContext.h"
 #include <CEGUI\Window.h>
 #include <Dialogue\ITextContent.hpp>
@@ -21,13 +22,12 @@ namespace xihad { namespace dialogue
 		if (element == nullptr) 
 			return nullptr;
 
+		Window* container = mBaseWindow->createChild(mBaseWindow->getType());
 		auto& type = element->getType();
 		if (type == "PlainText")
 		{
 			auto plainText = dynamic_cast<CPlainTextContent*>(content);
 			assert(plainText);
-
-			Window* container = mBaseWindow->createChild("Generic/Label");
 			return new CPlainTextElement(container, plainText);
 		}
 		// else if (type == "Image")
@@ -39,6 +39,6 @@ namespace xihad { namespace dialogue
 	{
 #ifdef _DEBUG
 		std:: cout << "CDialogContext deleted." << std::endl;
-#endif // _DEBUG
+#endif 
 	}
 }}

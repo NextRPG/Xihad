@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Xihad\CreateDevice.cpp" />
+    <ClCompile Include="..\src\Xihad\GUITest.cpp" />
     <ClCompile Include="..\src\Xihad\RenderTargetTest.cpp" />
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp" />
     <ClCompile Include="..\src\Xihad\IrrlichtTest.cpp" />

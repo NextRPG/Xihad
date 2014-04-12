@@ -650,7 +650,7 @@
             <Property name="NormalImage" value="TaharezLook/NewCloseButtonNormal" />
             <Property name="HoverImage" value="TaharezLook/NewCloseButtonHover" />
             <Property name="PushedImage" value="TaharezLook/NewCloseButtonPressed" />
-            <Property name="NonClient" value="true" />
+            <Property name="NonClient" value="True" />
         </Child>
         <ImagerySection name="withtitle_frame">
             <FrameComponent>

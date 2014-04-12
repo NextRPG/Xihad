@@ -1,4 +1,4 @@
-#include "CeguiEventReceiver.h"
+#include "CEGUIEventReceiver.h"
 #include <CEGUI\System.h>
 #include <CEGUI\GUIContext.h>
 #include "CEGUIIrrlichtRenderer\EventPusher.h"
@@ -7,19 +7,19 @@ using namespace xihad::ngn;
 
 namespace xihad { namespace cegui
 {
-	CeguiEventReceiver::CeguiEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher)
+	CEGUIEventReceiver::CEGUIEventReceiver(const CEGUI::IrrlichtEventPusher& eventPusher)
 		: d_eventPusher(eventPusher)
 	{
 
 	}
 
-	CeguiEventReceiver::~CeguiEventReceiver()
+	CEGUIEventReceiver::~CEGUIEventReceiver()
 	{
 
 	}
 
 	//----------------------------------------------------------------------------//
-	bool CeguiEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool /*ctrl*/, bool /*shift*/)
+	bool CEGUIEventReceiver::OnKeyDown(irr::EKEY_CODE key, wchar_t wch, bool /*ctrl*/, bool /*shift*/)
 	{
 		bool handled = false;
 		CEGUI::Key::Scan ceguiKey = d_eventPusher.getKeyCode(key);
@@ -31,7 +31,7 @@ namespace xihad { namespace cegui
 		return handled;
 	}
 
-	bool CeguiEventReceiver::OnKeyUp(irr::EKEY_CODE key, wchar_t /*wch*/, bool /*ctrl*/, bool /*shift*/)
+	bool CEGUIEventReceiver::OnKeyUp(irr::EKEY_CODE key, wchar_t /*wch*/, bool /*ctrl*/, bool /*shift*/)
 	{
 		bool handled = false;
 		CEGUI::Key::Scan ceguiKey = d_eventPusher.getKeyCode(key);
@@ -42,7 +42,7 @@ namespace xihad { namespace cegui
 		return handled;
 	}
 
-	bool CeguiEventReceiver::OnMouse(irr::s32 x, irr::s32 y, irr::f32 w, irr::EMOUSE_INPUT_EVENT e)
+	bool CEGUIEventReceiver::OnMouse(irr::s32 x, irr::s32 y, irr::f32 w, irr::EMOUSE_INPUT_EVENT e)
 	{
 		using namespace irr;
 		bool handled = false;
@@ -93,7 +93,7 @@ namespace xihad { namespace cegui
 
 	}
 
-	int CeguiEventReceiver::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
+	int CEGUIEventReceiver::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
 	{
 		if(event.PressedDown)
 			return OnKeyDown(event.Key, event.Char, event.Control, event.Shift) ? 0 : 1;
@@ -101,7 +101,7 @@ namespace xihad { namespace cegui
 			return OnKeyUp(event.Key, event.Char, event.Control, event.Shift) ? 0 : 1;
 	}
 
-	int CeguiEventReceiver::onMouseEvent( const MouseEvent& event, int argFromPreviousReceiver )
+	int CEGUIEventReceiver::onMouseEvent( const MouseEvent& event, int argFromPreviousReceiver )
 	{
 		return OnMouse(event.X, event.Y, event.Wheel, event.Event) ? 0 : 1;
 	}

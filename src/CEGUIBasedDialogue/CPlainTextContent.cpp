@@ -1,17 +1,23 @@
+#include <algorithm>
 #include "CPlainTextContent.h"
 #include "CDialogueContext.h"
 #include <CEGUI\TextUtils.h>
 #include <CEGUI\FontManager.h>
-#include <xutility>
 #include <assert.h>
 #include <iostream>
+#include <xutility>
+#undef min
 
 using namespace CEGUI;
 
 namespace xihad { namespace dialogue
 {
-	CEGUI::String CPlainTextContent::WORD_FOLLOW_SYMBOL
-		((CEGUI::utf8*)	"¬∑~ÔºÅ@#Ôø•%‚Ä¶&*ÔºàÔºâ‚Äî+{}|Ôºö‚Äù„Ää„ÄãÔºü-=„Äê„Äë„ÄÅÔºõ‚ÄòÔºå„ÄÇ„ÄÅ ");
+	CEGUI::String CPlainTextContent::getWordFollowSymbol()
+	{
+		static const String WORD_FOLLOW_SYMBOL = System::getStringTranscoder()
+			.stringFromStdWString(L"°§~£°@#£§%°≠&*£®£©°™+{}|£∫°±°∂°∑£ø-=°æ°ø°¢£ª°Æ£¨°£°¢");		
+		return WORD_FOLLOW_SYMBOL;
+	}
 
 	CPlainTextContent::CPlainTextContent(const Font& font, const CEGUI::String& text )
 		: mFont(&font), mText(text)
@@ -33,16 +39,18 @@ namespace xihad { namespace dialogue
 		// bgnIndex = bgnIndex;
 		if (endIndex) 
 		{
-			CEGUI::String::size_type pos = mText.find_first_not_of(WORD_FOLLOW_SYMBOL, bgnIndex + 1);
+			CEGUI::String::size_type pos = 
+				mText.find_first_not_of(getWordFollowSymbol(), bgnIndex + 1);
 			*endIndex = pos == CEGUI::String::npos ? mText.length() : pos;
 		}
 	}
 
 	ITextContent* CPlainTextContent::split( unsigned index )
 	{
+		if (index < 1 || index > mText.length()) return nullptr;
+
 		String tail = mText.substr(index);
 		mText = mText.substr(0, index);
-
 		return new CPlainTextContent(*mFont, tail);
 	}
 
@@ -109,9 +117,8 @@ namespace xihad { namespace dialogue
 
 	CPlainTextContent::~CPlainTextContent()
 	{
-#ifdef _DEBUG
-		std:: cout << "CPlainTextContent(" << mText << ") deleted." << std::endl;
-#endif // _DEBUG
+#ifdef DEBUG_DIALOG
+		std:: cout << "CPlainTextContent deleted." << mText << std::endl;
+#endif // DEBUG_DIALOG
 	}
-
 }}

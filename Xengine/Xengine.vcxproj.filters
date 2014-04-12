@@ -57,7 +57,6 @@
     <ClInclude Include="..\src\CppBase\ReferenceCounted.h">
       <Filter>CppBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Engine\TimeConversion.h" />
     <ClInclude Include="..\src\Engine\BaseComponentSystem.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -247,6 +246,9 @@
     <ClInclude Include="..\src\Engine\GameObjectVisitor.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Engine\System.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CppBase\StringUtil.cpp">
@@ -336,9 +338,14 @@
     <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CppBase\StringConventer.cpp" />
     <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp">
       <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Engine\System.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CppBase\StringConventer.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

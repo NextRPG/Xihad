@@ -1,6 +1,5 @@
 local ControlledMove = { ydir = 0, dontMove = true, speed = 10 }
 ControlledMove.__index = ControlledMove
-local uiHandle = require("GUIHandle")
 
 function ControlledMove.new( moveParam, object )
 	local o = {}
@@ -100,28 +99,6 @@ function ControlledMove:acquire()
 			return 1
 		end
 		
-		-- -- Test cegui
-		-- if e.key == "P" then
-		-- 	uiHandle:subscribeEvent("CommandSelected", function (args)
-		-- 		print("!!!")
-		-- 	end)
-		-- elseif e.key == "J" then
-		-- 	uiHandle:showWindow("CommandWindow", 
-		-- 	{ 
-		-- 		["技能"] = { shortcut = "A", list = { ["技能1"] = true , ["技能2"] = false } }, 
-		-- 		["道具"] = { list = { ["道具1"] = true} }, 
-		-- 		["待机"] = { disabled = true } 
-		-- 	})
-			
-
-		-- elseif e.key == "Q" then
-		-- 	uiHandle:hideWindow("CommandWindow")
-		-- elseif e.key == "I" then
-		-- 	damageNumber = damageNumber or 0
-		-- 	uiHandle:showWindow("AttackDamage", { damage = damageNumber})
-		-- 	damageNumber = (damageNumber + 5)%1000	
-		-- end
-		--
 		self:updateMotion()
 		return 0
 	end 

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "EventPusher.h"
 #include <CEGUI/CEGUI.h>
 

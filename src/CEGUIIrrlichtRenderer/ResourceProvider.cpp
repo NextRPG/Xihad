@@ -27,6 +27,7 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *   OTHER DEALINGS IN THE SOFTWARE.
  ***************************************************************************/
+#include <algorithm>
 #include "ResourceProvider.h"
 #include "CEGUI/Exceptions.h"
 #include <irrlicht/IReadFile.h>

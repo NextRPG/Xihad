@@ -11,15 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\CEGUI\CeguiEventReceiver.cpp" />
-    <ClCompile Include="..\src\CEGUI\CEGuiHandle.cpp" />
+    <ClCompile Include="..\src\CEGUI\CEGUIEventReceiver.cpp" />
+    <ClCompile Include="..\src\CEGUI\CEGUIHandle.cpp" />
     <ClCompile Include="..\src\CEGUI\CEGUIUpdataHandler.cpp" />
+    <ClCompile Include="..\src\CEGUI\createCEGUI.cpp" />
     <ClCompile Include="..\src\CEGUI\luaopen_cegui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CEGUI\CeguiEventReceiver.h" />
-    <ClInclude Include="..\src\CEGUI\CEGuiHandle.h" />
+    <ClInclude Include="..\src\CEGUI\CEGUIEventReceiver.h" />
+    <ClInclude Include="..\src\CEGUI\CEGUIHandle.h" />
+    <ClInclude Include="..\src\CEGUI\CEGUIHandlerDef.h" />
     <ClInclude Include="..\src\CEGUI\CEGUIUpdataHandler.h" />
+    <ClInclude Include="..\src\CEGUI\createCEGUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BC1E7282-6533-465E-BBC9-74651473ED72}</ProjectGuid>
@@ -56,6 +59,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CEGUI_EXPORTS;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -2,13 +2,20 @@
 <GUIScheme version="5" name="Xihad">
 	<Imageset filename="red_number.imageset" />
 	<Imageset filename="DarkMenu.imageset" />
+	<Imageset filename="xihad_ui.imageset" />
+	<Imageset filename="character.imageset" />
 	<Font filename="simhei-14.font" />
-	<Font filename="summer-16.font" />
-	<LookNFeel filename="Xihad.looknfeel" />
+	<Font filename="summer-14.font" />
+	<Font filename="fangzheng-14.font" />
+	<Font filename="fangzheng2-14.font" />
+	<LookNFeel filename="Xihad.looknfeel" />	
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 
+	<FalagardMapping windowType="Xihad/Image" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Image" />
+	<FalagardMapping windowType="Xihad/DialogNameCard" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/DialogNameCard" />
+	<FalagardMapping windowType="Xihad/ImageButton" targetType="CEGUI/PushButton"  renderer="Core/Button"       lookNFeel="Xihad/ImageButton" />
+	<FalagardMapping windowType="Xihad/Container" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Container" />
 	<FalagardMapping windowType="Xihad/Dialog" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Dialog" />
-	<FalagardMapping windowType="Xihad/Frame" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Frame" />
 	<FalagardMapping windowType="Xihad/PopupMenu" targetType="CEGUI/PopupMenu" renderer="Core/PopupMenu" lookNFeel="Xihad/PopupMenu" />
 	<FalagardMapping windowType="Xihad/MenuItem" targetType="CEGUI/MenuItem" renderer="Core/MenuItem" lookNFeel="Xihad/MenuItem" />
 </GUIScheme>

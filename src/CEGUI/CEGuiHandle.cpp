@@ -19,7 +19,7 @@
 
 namespace xihad { namespace cegui
 {
-	CeguiHandle::CeguiHandle() :
+	CEGUIHandle::CEGUIHandle() :
 		d_device(0),
 		d_lastDisplaySize(0, 0),
 		d_renderer(0),
@@ -29,11 +29,11 @@ namespace xihad { namespace cegui
 	{
 	}
 
-	CeguiHandle::~CeguiHandle()
+	CEGUIHandle::~CEGUIHandle()
 	{
 	}
 
-	void CeguiHandle::initialise(irr::IrrlichtDevice* devece, lua_State* L)
+	void CEGUIHandle::initialise(irr::IrrlichtDevice* devece, lua_State* L)
 	{
 		using namespace irr;
 
@@ -61,7 +61,7 @@ namespace xihad { namespace cegui
 	}
 
 
-	void CeguiHandle::cleanup()
+	void CEGUIHandle::cleanup()
 	{
 		CEGUI::System::getSingleton().setScriptingModule(nullptr);
 		CEGUI::System::destroy();
@@ -75,7 +75,7 @@ namespace xihad { namespace cegui
 		d_device = 0;
 	}
 
-	void CeguiHandle::renderFrame()
+	void CEGUIHandle::renderFrame()
 	{
 		CEGUI::System& gui_system(CEGUI::System::getSingleton());
 
@@ -88,7 +88,7 @@ namespace xihad { namespace cegui
 		CEGUI::WindowManager::getSingleton().cleanDeadPool();
 	}
 
-	void CeguiHandle::update(float delta)
+	void CEGUIHandle::update(float delta)
 	{
 		void checkWindowResize();
 
@@ -99,7 +99,7 @@ namespace xihad { namespace cegui
 		gui_system.getDefaultGUIContext().injectTimePulse(delta);
 	}
 
-	void CeguiHandle::checkWindowResize()
+	void CEGUIHandle::checkWindowResize()
 	{
 		irr::core::dimension2d<irr::u32> cur_size = d_device->getVideoDriver()->getScreenSize();
 
@@ -112,7 +112,7 @@ namespace xihad { namespace cegui
 		}
 	}
 
-	void CeguiHandle::initialiseResourceGroupDirectories()
+	void CEGUIHandle::initialiseResourceGroupDirectories()
 	{
 		// initialise the required dirs for the DefaultResourceProvider
 		CEGUI::DefaultResourceProvider* rp =
@@ -140,7 +140,7 @@ namespace xihad { namespace cegui
 		rp->setResourceGroupDirectory("animations", resourcePath); 
 	}
 
-	void CeguiHandle::initialiseDefaultResourceGroups()
+	void CEGUIHandle::initialiseDefaultResourceGroups()
 	{
 		// set the default resource groups to be used
 		CEGUI::ImageManager::setImagesetDefaultResourceGroup("imagesets");
@@ -158,14 +158,14 @@ namespace xihad { namespace cegui
 	}
 
 	#define CEGUI_SAMPLE_DATAPATH "assets/datafiles"
-	const char* CeguiHandle::getDataPathPrefix() const
+	const char* CEGUIHandle::getDataPathPrefix() const
 	{
 		static char dataPathPrefix[PATH_MAX];
 		strcpy_s(dataPathPrefix, CEGUI_SAMPLE_DATAPATH);
 		return dataPathPrefix;
 	}
 
-	const CEGUI::IrrlichtEventPusher* CeguiHandle::getEventPusher()
+	const CEGUI::IrrlichtEventPusher* CEGUIHandle::getEventPusher()
 	{
 		CEGUI::IrrlichtRenderer* renderer = static_cast<CEGUI::IrrlichtRenderer*>(d_renderer);
 		return renderer == nullptr ? nullptr : renderer->getEventPusher();

@@ -19,6 +19,7 @@
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Xihad\GUITest.cpp" />
     <ClCompile Include="..\src\Xihad\RenderTargetTest.cpp">
       <Filter>Main</Filter>
     </ClCompile>

@@ -24,20 +24,26 @@
     <ClCompile Include="..\src\CEGUIBasedDialogue\CPlainTextElement.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CEGUIBasedDialogue\CTickByWord.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CEGUIBasedDialogue\CTickAll.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueParser.cpp">
+    <ClCompile Include="..\src\CEGUIBasedDialogue\CTickByLetter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\Conversation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\DialogueSelector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\ConversationController.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CEGUIBasedDialogue\CDelayedTick.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueParser.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextContent.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -47,13 +53,25 @@
     <ClInclude Include="..\src\CEGUIBasedDialogue\CPlainTextElement.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CEGUIBasedDialogue\CTickByWord.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CEGUIBasedDialogue\CTickAll.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CEGUIBasedDialogue\ITypedContent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\CTickByLetter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\Conversation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\DialogueSelector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\ConversationController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CEGUIBasedDialogue\CDelayedTick.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
