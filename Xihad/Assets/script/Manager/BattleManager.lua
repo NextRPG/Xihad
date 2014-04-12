@@ -115,10 +115,10 @@ function BattleManager:addShowTile(  )
 		end)
 	stateMachine:addTransition("showTile", "showSkill",
 		function ( object, etype )
-			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object:findComponent(c"Tile"))
+			return etype == "lClicked" and object and object:hasTag(c"Tile") and PathFinder:hasTile(object:findComponent(c"MapTile"):getLocation())
 		end,
 		function ( object )
-			self.manager:onSelectTile(object:findComponent(c"Tile"))
+			self.manager:onSelectTile(object:findComponent(c"MapTile"))
 			SkillManager:onShowSkills(self.manager.currentCharacter)
 		end)
 	stateMachine:addTransition("showTile", "showCharacter", 
@@ -200,7 +200,7 @@ function BattleManager:addShowTargetRange(  )
 			return etype == "lClicked" and object and object:hasTag(c"Tile")
 		end,
 		function ( object )
-			SkillManager:onCastSkill(object:findComponent(c"Tile"))
+			SkillManager:onCastSkill(object:findComponent(c"MapTile"))
 		end)
 	stateMachine:addTransition("showTargetRange", "showSkill", 
 		function ( object, etype )

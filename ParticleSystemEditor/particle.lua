@@ -3,7 +3,7 @@ require "math3d"
 local function createIniter(f)
 	local bi = f:initer("Basic")
 	-- bi:setColor(0xff1040f0, 0xff808090)
-	bi:setColor(0x00000000, 0xff00ffff)
+	bi:setColor(Color.new(0x00000000), Color.new(0xff00ffff))
 	bi:setLifeTime(2, 2)
 	bi:setWidth(0.4, 0.6)
 	bi:setHeight(0.4, 0.6)
@@ -20,7 +20,7 @@ return function(pnode, f, env)
 ----------------------------------------------
 -- locate pnode
 	local tar = env:getNode("@target")
-	env:setPosition(pnode, env:getPosition(tar) + env:getAABB(tar):center())
+	pnode:setPosition(env:getPosition(tar) + env:getAABB(tar):center())
 	pnode:setParticlesAreGlobal(false)
 
 ----------------------------------------------
@@ -45,12 +45,12 @@ return function(pnode, f, env)
 ---------------------------------------------- 
 -- * affector
 	local a = f:affector("FadeOut")
-	a:setTargetColor(0x00000000)
+	a:setTargetColor(Color.new(0x00000000))
 	a:setColorMask("rgb")
 	pnode:addAffector(a, 0, 0.45)
 	
 	local a = f:affector("FadeOut")
-	a:setTargetColor(0xffff0000)
+	a:setTargetColor(Color.new(0xffff0000))
 	a:setColorMask("rgb")
 	pnode:addAffector(a, 0.5, 0.8)
 	

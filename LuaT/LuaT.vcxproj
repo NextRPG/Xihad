@@ -85,6 +85,7 @@
     <ClInclude Include="..\src\luaT\same_type.h" />
     <ClInclude Include="..\src\luaT\stack_memo.h" />
     <ClInclude Include="..\src\luaT\stack_ops.h" />
+    <ClInclude Include="..\src\luaT\state.h" />
     <ClInclude Include="..\src\luaT\table_ops.h" />
     <ClInclude Include="..\src\luaT\tuple.h" />
     <ClInclude Include="..\src\luaT\type_checker.h" />
@@ -100,6 +101,7 @@
     <ClCompile Include="..\src\luaT\new_userdata.cpp" />
     <ClCompile Include="..\src\luaT\package.cpp" />
     <ClCompile Include="..\src\luaT\reserved.cpp" />
+    <ClCompile Include="..\src\luaT\state.cpp" />
     <ClCompile Include="..\src\luaT\userdata_checker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

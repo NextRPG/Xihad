@@ -3,9 +3,6 @@ RotateBy = {
 	leftTime = 0,
 	enabled = false
 }
--- package.loaded[ "RotateBy" ] = RotateBy
-
-package.path = package.path .. ";../?.lua"
 
 function RotateBy.new( o )
 	o = o or {}

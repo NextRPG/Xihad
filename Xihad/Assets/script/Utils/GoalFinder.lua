@@ -24,7 +24,6 @@ end
 local fakeMaxAP = 100000
 local directions = Consts.directions
 function GoalFinder:Astar( start, goal, maxAP, predicate )
-
 	assert(start) assert(goal)
 	-- print(type(self.data[hash{x = 6, y = 2}]))
 	-- self:cleanUp()
@@ -52,7 +51,7 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 
 			repeat 
 			local tile = Chessboard:tileAt(currentPoint)
-			local APcost = tile:getAPCost()
+			local APcost = tile:getActionPointCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
 
@@ -77,6 +76,7 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 			until true
 		end
 	end
+	
 	return false
 end
 

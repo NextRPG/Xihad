@@ -1,5 +1,6 @@
 #include "lua_ref.h"
 #include "xassert.h"
+#include "state.h"
 
  namespace luaT
  {
@@ -69,6 +70,11 @@
 		lua_pop(L, 2);
 
 		return equal==1;
+	 }
+
+	 lua_State* LuaRef::getMainState() const
+	 {
+		 return toMainState(L);
 	 }
 
  }

@@ -4,7 +4,7 @@
 -- @autor wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
-
+local Location = require 'Location'
 local TerrainDatabase = require "TerrainDatabase"
 
 ---
@@ -17,31 +17,29 @@ local Chessboard = {
 
 -- 按地形重新设置颜色
 local function resetColor( tileObject )
-	local tile = tileObject:findComponent(c"Tile")
+	-- TODO
+	local tile = tileObject:findComponent(c"MapTile")
 	local fcomp = tileObject:findComponent(c"Mesh")
 	
 	for i = 1, fcomp:getMaterialCount() do
 		local fmat = fcomp:getMaterial(i-1)	-- CAUTION!!!
 		fmat:setColorMaterial('none')
-		if tile.terrain.id == 1 then
-			-- light green
-			fmat:setDiffuseColor(Color.new(0xffb2d235))
-		elseif tile.terrain.id == 2 then
-			-- BLUE
-			-- fmat:setDiffuseColor(Color.new(0xff102b6a))
-			fmat:setDiffuseColor(Color.new(0xff121a2a))
-		elseif tile.terrain.id == 3 then
-			-- deep green 
-			fmat:setDiffuseColor(Color.new(0xff225a1f))
-		end
+		-- if tile.terrain.id == 1 then
+		-- 	-- light green
+		-- 	fmat:setDiffuseColor(Color.new(0xffb2d235))
+		-- elseif tile.terrain.id == 2 then
+		-- 	-- BLUE
+		-- 	-- fmat:setDiffuseColor(Color.new(0xff102b6a))
+		-- 	fmat:setDiffuseColor(Color.new(0xff121a2a))
+		-- elseif tile.terrain.id == 3 then
+		-- 	-- deep green 
+		-- 	fmat:setDiffuseColor(Color.new(0xff225a1f))
+		-- end
 	end
 end
 
-local function tname( tile )
-	if (tile == nil) then
-		print(debug.traceback())
-	end
-	return tile.x .. " " .. tile.y
+local function tname( location )
+	return location.x .. " " .. location.y
 end
 
 -- public
@@ -55,7 +53,7 @@ function Chessboard:createTile( tile )
 	local fcomp = tileObject:appendComponent(c"Mesh")
 	fcomp:setMesh(g_meshManager:getMesh("@chessboardCube"))
 	fcomp:createSelector(c"stupid") 
-	tileObject:appendComponent(c"Tile", tile)
+	tileObject:appendComponent(c"MapTile", Location.new(tile.x, tile.y))
 	resetColor(tileObject)
 
 	local location = getPixelLocation(tile)
@@ -90,7 +88,7 @@ end
 -- @tab location
 -- @treturn Object tileObject
 function Chessboard:tileAt( location )
-	return g_scene:findObject(c(tname(location))):findComponent(c"Tile")
+	return g_scene:findObject(c(tname(location))):findComponent(c"MapTile")
 end
 
 function Chessboard:highlightAt( location )

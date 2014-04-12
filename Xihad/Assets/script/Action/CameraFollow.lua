@@ -6,7 +6,6 @@
 -- @copyright NextRPG
 
 local CameraFollow = {
-
 }
 
 function CameraFollow.new( o )

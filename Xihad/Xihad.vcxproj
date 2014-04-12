@@ -66,7 +66,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs;../Debug;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ParticleSystemLoader.lib;irrKlang.lib;AudioEngine.lib;CEGUIBasedDialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ParticleSystemLoader.lib;irrKlang.lib;AudioEngine.lib;CEGUIBasedDialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;Lua51.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,7 +83,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>../libs;../Release;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ParticleSystemLoader.lib;irrklang.lib;AudioEngine.lib;irrlicht.lib;CEGUIIrrlichtRenderer.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0.lib;CEGUILuaScriptModule-0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ParticleSystemLoader.lib;irrklang.lib;AudioEngine.lib;irrlicht.lib;CEGUIIrrlichtRenderer.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;Lua51.lib;CEGUIBase-0.lib;CEGUILuaScriptModule-0.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

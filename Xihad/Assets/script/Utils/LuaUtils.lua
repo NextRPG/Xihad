@@ -57,7 +57,7 @@ function hex2Color( str )
 end
 
 function hash( tile )
-	assert(tile.x)
+	if not tile.y then print(debug.traceback()) end
 	return tile.x .. " " .. tile.y
 end
 

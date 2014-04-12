@@ -3,7 +3,7 @@ require "math3d"
 local function createIniter(f, env)
 	local bi = f:initer("Basic")
 	-- bi:setColor(0xff1040f0, 0xff808090)
-	bi:setColor(0x00008000, 0xff00ff00)
+	bi:setColor(Color.new(0x00008000), Color.new(0xff00ff00))
 	bi:setLifeTime(0.3)
 	
 	local ai = f:initer("AnimatedMesh")
@@ -42,7 +42,7 @@ return function(pnode, f, env)
 ---------------------------------------------- 
 -- * affector
 	local a = f:affector("FadeOut")
-	a:setTargetColor(0x20202020)
+	a:setTargetColor(Color.new(0x20202020))
 	a:setColorMask("rgb")
 	pnode:addAffector(a)
 	

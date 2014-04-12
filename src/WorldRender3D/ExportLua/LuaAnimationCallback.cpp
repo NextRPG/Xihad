@@ -18,12 +18,13 @@ namespace xihad { namespace render3d
 	{
 		XIHAD_MLD_NEW_OBJECT;
 
-		lua_State* L = mCallable.getState();
-		luaT::StackMemo memo(L);
-
 		mCallable.pushSelf();
 		if (!LuaUtil::iscallable(mCallable.getState(), -1))
-			std::cout << "WARNING: AnimationEndCallback should be callable" << std::endl;
+		{
+			luaT::stackDump(mCallable.getState(), std::cerr);
+			std::cerr << "WARNING: AnimationEndCallback should be callable" << std::endl;
+		}
+		lua_pop(mCallable.getState(), 1);
 	}
 
 	LuaAnimationCallback::~LuaAnimationCallback() 
@@ -34,8 +35,8 @@ namespace xihad { namespace render3d
 	void LuaAnimationCallback::OnAnimationEnd( 
 		irr::scene::IAnimatedMeshSceneNode* node )
 	{
-		lua_State* L = mCallable.getState();
-		mCallable.pushSelf();
+		lua_State* L = mCallable.getMainState();
+		mCallable.pushOnto(L);
 		RenderComponent* rc = RenderComponent::getComponentFromNode(node);
 		auto ac = boost::polymorphic_downcast<AnimatedMeshComponent*> (rc);
 		luaT::push<decltype(ac)>(L, ac);

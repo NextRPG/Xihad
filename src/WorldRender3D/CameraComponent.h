@@ -54,6 +54,8 @@ namespace xihad { namespace render3d
 
 		core::vector3df getLookDirection() const;
 
+		void setLookDirection(const core::vector3df&);
+
 		void setProjectionMatrix(const ngn::Matrix& projection, bool isOrthogonal=false);
 
 		//! Gets the current projection matrix of the camera.

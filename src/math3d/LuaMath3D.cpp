@@ -4,7 +4,6 @@
 #include "luaopen_util.h"
 #include "irrlicht/vector3d.h"
 #include "irrlicht/quaternion.h"
-#include <iostream>
 
 using namespace irr::core;
 using namespace luaT;
@@ -133,6 +132,7 @@ namespace xihad { namespace script
 		{ "lerp",		mathLerp },			
 		{ "intersects", mathIntersects },	// -> bool
 		{ "intersects", mathIntersection },	// -> vector[2] or vector
+		{ 0, 0 },
 	};
 
 	extern int luaopen_vector(lua_State* L);

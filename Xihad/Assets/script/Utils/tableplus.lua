@@ -11,6 +11,7 @@ function table.copy( t )
 end
 
 function table.equal( t1, t2 )
+	if not t2 then print(debug.traceback()) end
 	for k,v in pairs(t1) do
 		if type(v) == "table" and type(t2[k]) =="table" then
 			if table.equal(v, t2[k]) == false then
@@ -48,4 +49,17 @@ function table.merge( t1, t2 )
 		t3[k] = v
 	end
 	return t3
+end
+
+function table.readonly(t)
+	local proxy = {}
+	local mt = {
+		__index = t,
+		__newindex = function (t, k, v)
+			error("attemp to update a readonly table")
+		end
+	}
+	
+	setmetatable(proxy, mt)
+	return proxy
 end

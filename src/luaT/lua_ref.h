@@ -49,6 +49,9 @@ namespace luaT
 		{
 			return L;
 		}
+
+		lua_State* getMainState() const;
+
 	private:
 		LuaRef(lua_State* L, int ref);
 

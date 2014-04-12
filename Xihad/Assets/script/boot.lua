@@ -1,5 +1,5 @@
 --- 
--- è´Ÿè´£æ¸¸æˆä¸­Managerçš„åˆå§‹åŒ–ï¼Œåˆå§‹åŒ–é¡ºåºå¾ˆé‡è¦
+-- ¸ºÔğÓÎÏ·ÖĞManagerµÄ³õÊ¼»¯£¬³õÊ¼»¯Ë³ĞòºÜÖØÒª
 -- @module boot
 -- @autor wangxuanyi
 -- @license MIT
@@ -16,7 +16,9 @@ package.path = package.path
 .. ";Assets/Script/Component/?.lua"
 .. ";Assets/Script/IO/?.lua"
 .. ";Assets/Script/Manager/?.lua"
-.. ";Assets/Script/Lib/?.lua"
+.. ";Assets/Script/Ease/?.lua"
+.. ";Assets/Script/route/?.lua"
+.. ";Assets/Script/MapElement/?.lua"
 
 global = g_scene:createObject(c("global"))
 
@@ -30,7 +32,7 @@ g_meshManager:takeMesh("@colorCube", colorMesh)
 local cubeMesh = g_geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
 g_meshManager:takeMesh("@chessboardCube", cubeMesh)
 -- g_meshManager:takeMesh(id, mesh) 
--- ç­‰ä»·äº
+-- µÈ¼ÛÓÚ
 -- g_meshManager:addMesh(id, mesh); 	mesh:drop()
 
 
@@ -47,9 +49,8 @@ require "SkillDatabase"
 require "StrategyDatabase"
 
 -- load save files
-local CUR_DIR = debug.getinfo(1).source:gsub("^@", ""):gsub("[^\\\/]*$", ""):gsub("[^\\\/]$", "%1\\")
-local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
-local heros = dofile(CUR_DIR .. "\\Save\\Save1.hero")
+local battle = dofile("Assets/level/level_01.battle")
+local heros = dofile("User/sav/Save1.hero")
 
 
 -- init battle related manager
@@ -67,3 +68,5 @@ LightManager:init()
 local gameController = require("InputController")
 g_scene:pushController(gameController) 
 gameController:drop()
+
+-- g_world:setTimeScale(0.5)

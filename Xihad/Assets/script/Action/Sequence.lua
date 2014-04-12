@@ -24,7 +24,6 @@ function Sequence:runActions( actions, callback )
 end
 
 function Sequence:runMoveActions( actions, callback )
-
 	local newActions = {}
 
 	local rx, ry, rz = self.object:getRotation():xyz()
@@ -33,18 +32,17 @@ function Sequence:runMoveActions( actions, callback )
 		local rotate = {destination = {y = calRotation( ry, ty )},
 		 interval = 0.25, actionType = "RotateBy"}
 		 ry = ty
-		newActions[#newActions + 1] = rotate 
+		table.insert(newActions, rotate)
 		-- start.callback = function ( ) move:runAction(actions[index]) end
 	end
 
 	for i,action in ipairs(actions) do
 		rotateBeforeMove(i)
 		action.actionType = "MoveBy"
-		newActions[#newActions + 1] = action
+		table.insert(newActions, action)
 	end
 
 	self:runActions(newActions, callback)
-
 end
 
 return Sequence

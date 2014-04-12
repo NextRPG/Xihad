@@ -23,10 +23,6 @@ function MapElement:canStay( charater )
 	return true
 end
 
-function MapElement:getActionPointIncr( charater )
-	return true
-end
-
 function MapElement:getActionPointCost(  )
 	return 0
 end

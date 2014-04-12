@@ -5,7 +5,6 @@
 -- @license MIT
 -- @copyright NextRPG
 require "stringplus"
-local Set = require "Set"
 
 local Publisher = {
 	subscribers = {}

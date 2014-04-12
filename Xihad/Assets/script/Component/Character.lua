@@ -33,7 +33,7 @@ local Character = {
 	name = "",
 	skills = {},
 	skillTimes = {},
-	effects = Set.new{},
+	effects = Set.new(),
 	equipments = {}, -- Consts.parts
 	properties = {},
 	states = {TURNOVER = false},

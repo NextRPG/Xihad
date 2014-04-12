@@ -27,6 +27,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioEngine", "AudioEngine\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScriptEngine", "ScriptEngine\ScriptEngine.vcxproj", "{2A0C6990-6D8E-4508-A6D1-8093F2797328}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArtIn", "ArtIn\ArtIn.vcxproj", "{3C6C463A-B40B-441A-A411-71D82811326C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaT", "LuaT\LuaT.vcxproj", "{C358F438-442B-4119-BF1C-5E3C28817D1E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaMath3D", "LuaMath3D\LuaMath3D.vcxproj", "{7AF47FD9-4F8E-42D6-81EB-5CE29C82B790}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -61,6 +67,18 @@ Global
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Debug|Win32.Build.0 = Debug|Win32
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Release|Win32.ActiveCfg = Release|Win32
 		{2A0C6990-6D8E-4508-A6D1-8093F2797328}.Release|Win32.Build.0 = Release|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Debug|Win32.Build.0 = Debug|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Release|Win32.ActiveCfg = Release|Win32
+		{3C6C463A-B40B-441A-A411-71D82811326C}.Release|Win32.Build.0 = Release|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Debug|Win32.Build.0 = Debug|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Release|Win32.ActiveCfg = Release|Win32
+		{C358F438-442B-4119-BF1C-5E3C28817D1E}.Release|Win32.Build.0 = Release|Win32
+		{7AF47FD9-4F8E-42D6-81EB-5CE29C82B790}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7AF47FD9-4F8E-42D6-81EB-5CE29C82B790}.Debug|Win32.Build.0 = Debug|Win32
+		{7AF47FD9-4F8E-42D6-81EB-5CE29C82B790}.Release|Win32.ActiveCfg = Release|Win32
+		{7AF47FD9-4F8E-42D6-81EB-5CE29C82B790}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

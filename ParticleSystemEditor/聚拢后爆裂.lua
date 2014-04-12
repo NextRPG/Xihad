@@ -20,7 +20,7 @@ return function(pnode, f, env)
 ----------------------------------------------
 -- locate pnode
 	local tar = env:getNode("@target")
-	env:setPosition(pnode, env:getPosition(tar) + env:getAABB(tar):center())
+	pnode:setPosition(env:getPosition(tar) + env:getAABB(tar):center())
 	pnode:setParticlesAreGlobal(false)
 
 ----------------------------------------------

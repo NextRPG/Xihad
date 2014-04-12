@@ -56,7 +56,7 @@ function PathFinder:getReachableTiles( character )
 		for k,v in pairs(directions) do
 
 			local tile = Chessboard:tileAt(currentPoint)
-			local APcost = tile:getAPCost()
+			local APcost = tile:getActionPointCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
 			if inbound(point) and Chessboard:tileAt(point):canPass()
@@ -76,7 +76,7 @@ end
 -- @treturn {string, ...} path 
 function PathFinder:constructPath( tile )
 	local path = {}	
-	local tile = self.data[hash(tile)]
+	local tile = self.data[hash(tile:getLocation())]
 	while tile ~= self.start do
 		path[#path + 1] = tile.direction
 		tile = tile.prev
