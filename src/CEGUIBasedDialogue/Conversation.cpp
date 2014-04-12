@@ -29,35 +29,18 @@ namespace xihad { namespace dialogue
 		mLineSpacing(lineSpacing), mParagrahPadding(paragrahPadding), 
 		selector(startFromLeft), currentSubtitle(nullptr)
 	{
-		
-	}
 
-	void Conversation::setSpeaker( const String& name, const String& defaultEmotion )
-	{
-		mSpeakers.insert(std::pair<const String&, const String&>(name, defaultEmotion));
 	}
 
 	void Conversation::speak( const String& name, const String& content )
 	{
-		auto found = mSpeakers.find(name);
-		if (found == mSpeakers.end()) 
-			return;
-
-		speak_impl(name, content, getFullImageName(name, found->second));
+		static const String NULL_IMAGE = "";
+		speak_impl(name, content, NULL_IMAGE);
 	}
 
-	void Conversation::speak( const String& name, const String& content, const String& emotion )
+	void Conversation::speak( const String& name, const String& content, const String& image )
 	{
-		auto found = mSpeakers.find(name);
-		if (found == mSpeakers.end()) 
-			return;
-		
-		ImageManager& imgMgr = ImageManager::getSingleton();
-		String imageName = getFullImageName(name, emotion);
-		if (!imgMgr.isDefined(imageName)) 
-			imageName = getFullImageName(name, found->second);
-
-		speak_impl(name, content, imageName);
+		speak_impl(name, content, image);
 	}
 
 	void Conversation::speak_impl( const String& name, const String& content, const String& image )
@@ -68,12 +51,6 @@ namespace xihad { namespace dialogue
 
 		// TODO ²ð·Öpiece
 	}
-
-	CEGUI::String Conversation::getFullImageName( const String& name, const String& emotion )
-	{
-		static const String PREFIX = "Character/";
-		return PREFIX + name + "_" + emotion;
- 	}
 
 	void Conversation::speakPiece(const SpeakPiece& piece)
 	{
@@ -88,7 +65,7 @@ namespace xihad { namespace dialogue
 		ITextContent* content = new CPlainTextContent(*font, text);
 		CDialogueContext* factory = new CDialogueContext(container);
 		CDialogueAlignmenter* alignmenter = new CDialogueAlignmenter(mWidthLimit);
-		
+
 		alignmenter->setKerningHeight(mLineSpacing);
 		alignmenter->setKerningNewLine(mParagrahPadding);
 		CAlignedDialogueBuilder dialogBuilder(factory, alignmenter);
@@ -131,7 +108,7 @@ namespace xihad { namespace dialogue
 	void Conversation::update(float lastElapsed)
 	{
 		if (!currentSubtitle) return;
-	
+
 		if (!isSubtitlePlaying())
 		{
 			Window* dialogPane = selector.currentDialog();
@@ -140,8 +117,7 @@ namespace xihad { namespace dialogue
 			return;							// reach end, and no need to update dialogue. 
 		}
 
-		if (currentSubtitle) 
-			currentSubtitle->onUpdate(lastElapsed);
+		currentSubtitle->onUpdate(lastElapsed);
 	}
 
 	bool Conversation::nextSpeakPiece()
@@ -166,7 +142,7 @@ namespace xihad { namespace dialogue
 	{
 		return currentSubtitle ? 
 			!(currentSubtitle->getVisibility() == currentSubtitle->endVisibility()):
-			false;
+		false;
 	}
 
 	bool Conversation::isFinished()

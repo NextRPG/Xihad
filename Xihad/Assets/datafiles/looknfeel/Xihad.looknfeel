@@ -687,7 +687,7 @@
 				<KeyFrame position="0.4" value="0" progression="quadratic accelerating"/>
 			</Affector>
 
-			<Subscription event="Click" action="Start"/>
+			<Subscription event="Clicked" action="Start"/>
 		</AnimationDefinition>		
 	</WidgetLook>
 

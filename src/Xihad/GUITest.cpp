@@ -34,15 +34,13 @@ Conversation* createConversation()
 	auto& coder = CEGUI::System::getStringTranscoder();
 	Conversation* conversation = new Conversation((int)
 		context.getRootWindow()->getChild("LeftDialog/TextArea/__auto_container__")->getPixelSize().d_width);
-	conversation->setSpeaker("aaaa", "happy");
-	conversation->setSpeaker("bbbb", "sad");
 	conversation->speak("aaaa", 
 		coder.stringFromStdWString(L"1我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"sad");
+		"Character/aaaa_happy");
 
 	conversation->speak("bbbb",
 		coder.stringFromStdWString(L"2我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"");
+		"Character/bbbb_sad");
 
 	conversation->speak("aaaa",
 		coder.stringFromStdWString(L"3我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
@@ -71,10 +69,10 @@ int cegui_test(int argc, const char** argv)
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
-		//Conversation* conversation = createConversation();
-		//ConversationController* controller = new ConversationController(*scene, conversation);
-		//conversation->drop();
-		//controller->registerToScene();
+// 		Conversation* conversation = createConversation();
+// 		ConversationController* controller = new ConversationController(*scene, conversation);
+// 		conversation->drop();
+// 		controller->registerToScene();
 		///////////////////////////////////////
 
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);

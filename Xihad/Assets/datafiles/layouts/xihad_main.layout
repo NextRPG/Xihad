@@ -31,6 +31,7 @@
 		<Property name="AutoCloseNestedPopups" value="true" />
 		<Property name="FadeInTime" value="0.2" />
 		<Property name="FadeOutTime" value="0.2" />
+		<!-- <Property name="AutoCloseNestedPopups" value="true"/> -->
 		<Window name="Skill" type="Xihad/MenuItem">
 			<Property name="Text" value="技能" />
 			
@@ -47,22 +48,7 @@
 			<Property name="Text" value="待机" />
 		</Window>
 	</Window>
-
-	<!-- <Window name="CharacterAttributeWindow" type="Xihad/Frame">
-		<Property name="Size" value="{{0, 250}, {0, 125}}" />
-		<Property name="Alpha" value="0.0" />
-		<Window name="Icon" type="Generic/Image">
-			<Property name="Position" value="{{0.05, 0}, {0.1, 0}}" />
-			<Property name="Size" value="{{0.4, 0},{0.8, 0}}" />
-			<Property name="Image" value="RedNumber/9" />
-		</Window>
-		<Window name="NameLabel" type="Generic/Label">
-			<Property name="Text" value="名字：" />
-			<Property name="Position" value="{{0.5, 0}, {0.1, 0}}" />
-			<Property name="NormalTextColour" value="FFFFFFFF" />
-		</Window>
-	</Window>
- -->
+	
 	<Window name="LeftDialog" type="DefaultWindow">
 		<Property name="Size" value="{{0, 500}, {0, 500}}" />
 		<Property name="Position" value="{{0, 32}, {0, 100}}" />

@@ -4,8 +4,6 @@
 #include <CEGUI\FontManager.h>
 #include <assert.h>
 #include <iostream>
-#include <windows.h>
-#include <stringapiset.h>
 #include <xutility>
 #undef min
 
@@ -13,14 +11,11 @@ using namespace CEGUI;
 
 namespace xihad { namespace dialogue
 {
-	CEGUI::String CPlainTextContent::WORD_FOLLOW_SYMBOL(getWordFollowSymbol());
-
 	CEGUI::String CPlainTextContent::getWordFollowSymbol()
 	{
-		std::wstring orgin = L"¡¤~£¡@#£¤%¡­&*£¨£©¡ª+{}|£º¡±¡¶¡·£¿-=¡¾¡¿¡¢£»¡®£¬¡£¡¢";
-		char buff[128] = ""; 
-		WideCharToMultiByte(CP_UTF8, 0, orgin.c_str(), orgin.size(), buff, sizeof(buff), 0, 0); 
-		return (utf8*) buff;
+		static const String WORD_FOLLOW_SYMBOL = System::getStringTranscoder()
+			.stringFromStdWString(L"¡¤~£¡@#£¤%¡­&*£¨£©¡ª+{}|£º¡±¡¶¡·£¿-=¡¾¡¿¡¢£»¡®£¬¡£¡¢");		
+		return WORD_FOLLOW_SYMBOL;
 	}
 
 	CPlainTextContent::CPlainTextContent(const Font& font, const CEGUI::String& text )
@@ -43,7 +38,8 @@ namespace xihad { namespace dialogue
 		// bgnIndex = bgnIndex;
 		if (endIndex) 
 		{
-			CEGUI::String::size_type pos = mText.find_first_not_of(WORD_FOLLOW_SYMBOL, bgnIndex + 1);
+			CEGUI::String::size_type pos = 
+				mText.find_first_not_of(getWordFollowSymbol(), bgnIndex + 1);
 			*endIndex = pos == CEGUI::String::npos ? mText.length() : pos;
 		}
 	}
@@ -124,5 +120,4 @@ namespace xihad { namespace dialogue
 		std:: cout << "CPlainTextContent deleted." << mText << std::endl;
 #endif // DEBUG_DIALOG
 	}
-
 }}

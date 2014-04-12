@@ -1,3 +1,5 @@
+require("Assets.test.GlobalSubscriberSlot")
+
 local function findWindow(name, parentWindow)
 	parentWindow = parentWindow or CEGUI.System:getSingleton():getDefaultGUIContext():getRootWindow()
 	return parentWindow:getChild(name)
@@ -19,10 +21,11 @@ end
 
 local function addMenuItems(popupMenu, list)
 	for k,v in pairs(list) do
-		local item = CEGUI.WindowManager:getSingleton():createWindow("Xihad/MenuItem")
+		local item = CEGUI.toMenuItem(CEGUI.WindowManager:getSingleton():createWindow("Xihad/MenuItem"))
 		item:setText(k)
 		if not v then item:setDisabled(true) end
-		popupMenu:addItem(CEGUI.toMenuItem(item))
+		popupMenu:addItem(item)
+		item:subscribeEvent("Clicked", CommandSelected__.SubscriberSlot)
 	end
 end
 
@@ -48,7 +51,7 @@ local function showCommandWindow(args)
 		if option then
 			if option.disabled then item:setDisabled(true) end
 			if option.list then addMenuItems(popupList, option.list) end
-			-- TOTO shortcut
+			-- TODO shortcut
 		end
 	end
 	
@@ -83,13 +86,10 @@ end
 
 --------------------- Exposed Interface ---------------------
 
-local GUIHandle = {
+local GUIController = {
 	ShowWindowImpl = { 
 		CommandWindow = showCommandWindow,
 		AttackDamage = showAttackDamageLabel,
-		ForTest = function (args)
-			findWindow("Test"):setText(args)
-		end
 	},
 	HideWindowImpl = {
 		CommandWindow = function ()
@@ -99,24 +99,11 @@ local GUIHandle = {
 	}
 }
 
-function GUIHandle:subscribeEvent(eventName, callback)
-	local subscribeEventImpl = function (window, eventName, functorName)
-		if not window:isEventPresent(eventName) then
-			window:subscribeEvent(eventName, functorName)
-		end
-	end
-	
+function GUIController:subscribeEvent(eventName, callback)
 	if eventName == "CommandSelected" then
-		local commandWindow = findWindow("CommandWindow")
-		CommandSelected__ = function  (args)
-			local selected = commandWindow:getFirstSelectedItem()
-			if not selected:isDisabled() then
-				callback()
-			end
-		end
-		subscribeEventImpl(commandWindow, "ListSelectionAccepted", "CommandSelected__")
+		local set = CommandSelected__.CallbackSet
+		set[#set + 1] = callback
 	end
-
 end
 
 --[[------------------------------------------------------------------------------
@@ -133,16 +120,16 @@ end
 		- args : { damage = 20, position = { x = 300, y = 200 } }
 --]]-------------------------------------------------------------------------------
 
-function GUIHandle:showWindow(name, args)
+function GUIController:showWindow(name, args)
 	local showWindowImpl = self.ShowWindowImpl[name]
 	return showWindowImpl(args)
 end
 
-function GUIHandle:hideWindow(name)
+function GUIController:hideWindow(name)
 	local hideWindowImpl = self.HideWindowImpl[name]
 	if hideWindowImpl then hideWindowImpl() end
 end
 
 --------------------- EventHandler --------------------------
 
-return GUIHandle
+return GUIController

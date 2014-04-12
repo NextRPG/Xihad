@@ -30,10 +30,7 @@ namespace xihad { namespace dialogue
 		
 		virtual ~Conversation() {}
 
-		 //	Speaker must be set before speak.
-		void setSpeaker(const String& name, const String& defaultEmotion);
-
-		void speak(const String& name, const String& content, const String& emotion);
+		void speak(const String& name, const String& content, const String& image);
 
 		void speak(const String& name, const String& content);
 
@@ -84,10 +81,7 @@ namespace xihad { namespace dialogue
 		 */
 		bool isSubtitlePlaying();
 
-		String getFullImageName(const String& name, const String& emotion);
-
 	private:
-		std::map<String, String> mSpeakers;
 		DialogueSelector selector;
 
 		int mWidthLimit;
