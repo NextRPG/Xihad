@@ -34,6 +34,7 @@ end
 -- @... 传入任意长参数...
 function Actor:run( scheduler )
 	cothread = coroutine.create(function ( scheduler )
+		-- error('co error')
 		local object    = self.object
 		local strategy  = self.strategy
 		local manager   = self.manager			
@@ -43,23 +44,23 @@ function Actor:run( scheduler )
 		manager.currentCharacter = object
 
 		CameraManager:move2Character(object)
-
+		
 		local point, finder = strategy:judgeTile()
 		finder = finder or require("GoalFinder")
 		-- runAsync
 		if not math.p_same(point, character.tile) then 
 			manager:onSelectTile(Chessboard:tileAt(point), finder)
 		end
-
+		
 		local selectSkill, target = strategy:judgeSkill() -- component
 		if selectSkill ~= 0 then
 			SkillManager:onCastSkill( target, selectSkill, character)
 		end
-
+		
 		runCallback(coroutine.resume(scheduler)) 
-
 		scheduler = coroutine.yield()
 	end)
+	
 	runCallback(coroutine.resume( cothread, scheduler ))
 end
 

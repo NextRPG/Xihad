@@ -9,19 +9,19 @@ function MapElement.new()
 	return o
 end
 
-function MapElement:canPass( charater )
+function MapElement:canPass( character )
 	return true
 end
 
-function MapElement:canStay( charater )
+function MapElement:canStay( character )
 	return true
 end
 
-function MapElement:permitCasting( charater, skill )
+function MapElement:permitCasting( character, skill )
 	return false
 end
 
-function MapElement:getActionPointCost( charater )
+function MapElement:getActionPointCost( character )
 	return 0
 end
 

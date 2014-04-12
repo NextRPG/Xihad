@@ -7,9 +7,10 @@
 
 local PathFinder = require "PathFinder"
 local Chessboard = require "Chessboard"
+local SkillManager = require "SkillManager"
 local CameraManager = require "CameraManager"
-local SkillManager = require("SkillManager")
-
+local CharacterMovement = require 'CharacterMovement'
+local AsConditionFactory = require 'AsConditionFactory'
 ---
 -- 记录当前team信息的容器
 -- @string team 标识manager的队伍信息
@@ -139,17 +140,19 @@ function CharacterManager:onSelectTile( tile, finder )
 	-- TODO：优化路径
 	local actions = {}
 	for i,v in ipairs(path) do
-		actions[#actions + 1] = {destination = directions[v], interval = 0.2}
+		table.insert(actions, {destination = directions[v], interval = 0.2})
 	end
 	actions = optimizePath(actions)
 
 	local follow = CameraManager.camera:findComponent(c"CameraFollow")
 	follow:start(self.currentCharacter)
-	runAsyncFunc(sequence.runMoveActions, sequence, actions)
+	
+	local action = CharacterMovement.moveToTarget(self.currentCharacter, actions)
+	AsConditionFactory.waitAction(action) -- wait until action finish
 	follow:stop()
 
 	local character = self.currentCharacter:findComponent(c"Character")
-	character:changeState("tile", tile)
+	character:changeState("tile", tile:getLocation())
 end
 
 function CharacterManager:back2ShowCharacter(  )

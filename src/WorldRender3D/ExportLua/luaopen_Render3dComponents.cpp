@@ -22,6 +22,9 @@ namespace xihad { namespace render3d
 
 	inline static IAnimationEndCallBack* createEndCallback(lua_State* L, int idx)
 	{
+		if (lua_isnil(L, idx))
+			return 0;
+
 		LuaRef lcallback = LuaRef::fromIndex(L, idx);
 		return new LuaAnimationCallback(lcallback);
 	}
@@ -82,6 +85,7 @@ namespace xihad { namespace render3d
 		auto animComp = checkarg<AnimatedMeshComponent*>(L, 1);
 		IAnimationEndCallBack* callback = createEndCallback(L, 2);
 		animComp->setAnimationEndCallback(callback);
+		if (callback) callback->drop();
 		return 0;
 	}
 
@@ -276,6 +280,7 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(CameraComponent, setTargetFixed),
 			luaT_mnamedfunc(CameraComponent, isTargetFixed),
 			luaT_mnamedfunc(CameraComponent, getLookDirection),
+			luaT_mnamedfunc(CameraComponent, setLookDirection),
 			luaT_mnamedfunc(CameraComponent, setActive),
 			luaT_mnamedfunc(CameraComponent, isActive),
 			luaT_mnamedfunc(CameraComponent, setTarget),

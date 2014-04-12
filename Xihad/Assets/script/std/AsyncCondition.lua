@@ -1,4 +1,4 @@
-local functional = require "functional"
+local functional = require "std.functional"
 
 ---
 -- AsyncCondition 负责与其他协程通信，来检测是否需要继续执行当前协程
@@ -37,7 +37,16 @@ end
 
 function ascondition:wait()
 	local running = assert(coroutine.running())
-	local pending = functional.bind1(coroutine.resume, running)
+	local pending = function (...)
+		local t = { coroutine.resume(running, ...) }
+		if t [1] == false then
+			io.stderr:write("<AsyncCondition> coroutine resume failed\r\n\t", t[2], '\n')
+			io.stderr:flush()
+		else
+			table.remove(t, 1)
+			return unpack(t)
+		end
+	end -- functional.bind1(coroutine.resume, running)
 
 	local yielding = self:hook(pending)
 	local result

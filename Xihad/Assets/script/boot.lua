@@ -17,6 +17,8 @@ package.path = package.path
 .. ";Assets/Script/IO/?.lua"
 .. ";Assets/Script/Manager/?.lua"
 .. ";Assets/Script/Ease/?.lua"
+.. ";Assets/Script/route/?.lua"
+.. ";Assets/Script/MapElement/?.lua"
 
 global = g_scene:createObject(c("global"))
 
@@ -66,3 +68,5 @@ LightManager:init()
 local gameController = require("InputController")
 g_scene:pushController(gameController) 
 gameController:drop()
+
+-- g_world:setTimeScale(0.5)

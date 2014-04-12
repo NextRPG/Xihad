@@ -26,6 +26,7 @@
     <ClInclude Include="..\src\luaT\stack_memo.h" />
     <ClInclude Include="..\src\luaT\xassert.h" />
     <ClInclude Include="..\src\luaT\config.h" />
+    <ClInclude Include="..\src\luaT\state.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\luaT\lua_ref.cpp" />
@@ -36,5 +37,6 @@
     <ClCompile Include="..\src\luaT\reserved.cpp" />
     <ClCompile Include="..\src\luaT\userdata_checker.cpp" />
     <ClCompile Include="..\src\luaT\metatable_data.cpp" />
+    <ClCompile Include="..\src\luaT\state.cpp" />
   </ItemGroup>
 </Project>

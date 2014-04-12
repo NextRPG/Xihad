@@ -203,4 +203,16 @@ namespace xihad { namespace render3d
 		return getTarget() - getNode()->getPosition();
 	}
 
+	void CameraComponent::setLookDirection( const vector3df& lookdir )
+	{
+		if (fixedTarget)
+		{
+			setTarget(getNode()->getPosition() + lookdir);
+		}
+		else
+		{
+			this->lookDir = lookdir;
+		}
+	}
+
 }}

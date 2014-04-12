@@ -9,15 +9,15 @@ local MoveBy = {
 	leftTime = 0,
 	enabled = false
 }
+MoveBy.__index = MoveBy
 
 function MoveBy.new( o )
-	
 	o = o or {}	
-	setmetatable(o, {__index = MoveBy})
+	setmetatable(o, MoveBy)
 	return o
 end
 
-function playAnimation( object, name )
+local function playAnimation( object, name )
 	local animate = object:findComponent(c"AnimatedMesh")
 	if animate ~= nil then
 		animate:playAnimation(c(name))
@@ -51,18 +51,18 @@ function MoveBy:runActionByInterval( action, callback )
 	return true
 end
 
-function MoveBy:runActionByDelta( action, callback )
-	if self.enabled then return false end
+-- function MoveBy:runActionByDelta( action, callback )
+-- 	if self.enabled then return false end
 
-	self.source = self.object:getTranslate()
-	self.destination = action.destination
-	self.callback = callback or function ( ) end
-	self.delta = self.destination - self.source
-	self.leftDelta = self.delta
+-- 	self.source = self.object:getTranslate()
+-- 	self.destination = action.destination
+-- 	self.callback = callback or function ( ) end
+-- 	self.delta = self.destination - self.source
+-- 	self.leftDelta = self.delta
 
-	self.enabled = true
-	return true
-end
+-- 	self.enabled = true
+-- 	return true
+-- end
 
 function MoveBy:onUpdate(  )
 	if not self.enabled then return false end

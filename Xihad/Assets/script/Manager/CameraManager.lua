@@ -50,7 +50,7 @@ function CameraManager:onMouseEvent( e )
 	self:adjustHeight(e.wheelDelta)
 end
 
--- local backAction = {}
+local backAction = {}
 function CameraManager:onKeyUp( e )
 -- 	local camera = self.camera
 -- 	local move = camera:findComponent(c"CameraMoveBy")
@@ -60,7 +60,7 @@ function CameraManager:onKeyUp( e )
 
 -- 	local HeroManager = require "HeroManager"
 -- 	if e.key == "UP" then
--- 		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+-- 		backAction = {destination = self.camera:getTranslate(), destTarget = ccom:getTarget()}
 -- 		move:moveToCharacter(HeroManager.currentCharacter, function (  )
 -- 			rotate:start(math3d.vector(0, 1, 0))
 -- 		end)
@@ -95,8 +95,8 @@ function CameraManager:move2vector( vector )
 	local camera = self.camera
 	local move = camera:findComponent(c"CameraMoveBy")
 	local action = {}
-	action.destination2 = vector
-	action.destination = action.destination2 + self.shift
+	action.destTarget = vector
+	action.destination = action.destTarget + self.shift
 	self.state = "low"
 	runAsyncFunc(move.runActionByDelta, move, action)
 end
@@ -110,12 +110,12 @@ function CameraManager:move2Battle( characterObject, tile )
 	local move = camera:findComponent(c"CameraMoveBy")
 	local ccom = camera:findComponent(c"Camera")
 	local action = {}
-	action.destination2 = (characterObject:getTranslate() + point2vector(tile)) * 0.5 + math3d.vector(0, 20 ,0)
+	action.destTarget = (characterObject:getTranslate() + point2vector(tile)) * 0.5 + math3d.vector(0, 20 ,0)
 	local x1, y1 = (point2vector(tile) - characterObject:getTranslate()):xyz()
 	local x2 = math.sqrt(900 / (1 + (x1 * x1) / (y1 * y1)))
 	local y2 = math.sqrt(900 - x2 * x2)
-	action.destination = action.destination2 + math3d.vector( - x2, 10, - y2)
-	backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+	action.destination = action.destTarget + math3d.vector( - x2, 10, - y2)
+	backAction = {destination = self.camera:getTranslate(), destTarget = ccom:getTarget()}
 	runAsyncFunc(move.runAction, move, action)
 end
 

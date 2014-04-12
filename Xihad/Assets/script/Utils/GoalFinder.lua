@@ -51,7 +51,7 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 
 			repeat 
 			local tile = Chessboard:tileAt(currentPoint)
-			local APcost = tile:getAPCost()
+			local APcost = tile:getActionPointCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
 
 

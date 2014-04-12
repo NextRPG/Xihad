@@ -11,6 +11,7 @@ function table.copy( t )
 end
 
 function table.equal( t1, t2 )
+	if not t2 then print(debug.traceback()) end
 	for k,v in pairs(t1) do
 		if type(v) == "table" and type(t2[k]) =="table" then
 			if table.equal(v, t2[k]) == false then

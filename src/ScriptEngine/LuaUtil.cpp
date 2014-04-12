@@ -40,16 +40,16 @@ namespace xihad { namespace script
 	{
 		if (!callSelf(table, funcName, optional))
 		{
-			outputErrorMessage(table.getState());
-			lua_pop(table.getState(), 1);
+			outputErrorMessage(table.getMainState());
+			lua_pop(table.getMainState(), 1);
 		}
 	}
 
 	bool LuaUtil::callSelf( luaT::LuaRef& table, const char* funcName, bool optional /*= true*/ )
 	{
-		lua_State* L = table.getState();
+		lua_State* L = table.getMainState();
 
-		table.pushSelf();
+		table.pushOnto(L);
 		lua_getfield(L, -1, funcName);
 		lua_remove(L, -2);	// pop table
 
@@ -60,7 +60,7 @@ namespace xihad { namespace script
 			return true;
 		}
 
-		table.pushSelf();	// self call argument
+		table.pushOnto(L);	// self call argument
 		return lua_pcall(L, 1, 0, 0) == 0;
 	}
 

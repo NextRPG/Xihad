@@ -9,6 +9,9 @@
 local Chessboard = require "Chessboard"
 local SkillDatabase = require "SkillDatabase"
 local CameraManager = require "CameraManager"
+local ObjectAction  = require 'ObjectAction'
+local ActionAdapter = require 'ActionAdapter'
+local AsConditionFactory = require 'AsConditionFactory'
 
 ---
 -- 
@@ -119,30 +122,34 @@ end
 -- selectSkill可以传入
 -- @tparam Object tileObject
 function SkillManager:onCastSkill( tile, skill, character )
-
 	skill = skill or selectSkill
 	local characterObject = (character == nil) and currentCharacter or character.object
 
 	Chessboard:clearAll()
 	skillRange = nil
 	local character = characterObject:findComponent(c"Character")
-	local anim = characterObject:findComponent(c"AnimatedMesh")
-	local rotateBy = characterObject:findComponent(c"RotateBy")
-	local rx, ry, rz = characterObject:getRotation():xyz()
-	local ty = getLogicAngle(math.p_sub(tile, character.tile))
+	local ty = getLogicAngle(math.p_sub(tile:getLocation(), character.tile))
 
-	runAsyncFunc(rotateBy.runAction, rotateBy, {destination = {y = calRotation( ry, ty )}, interval = 0.2})
+	local action = ObjectAction.rotateY(characterObject, nil, ty, 0.2)
+	local updater= ActionAdapter.new(action)
+	characterObject:appendUpdateHandler(updater)
+	AsConditionFactory.waitAction(action)
 	
-	CameraManager:move2Battle(characterObject, tile)
+	-- TODO
+	-- CameraManager:move2Battle(characterObject, tile:getLocation())
 	if skill.animation then
-		runAsyncFunc(anim.playAnimation, anim, c(skill.animation))
+		local anim = characterObject:findComponent(c"AnimatedMesh")
+		anim:playAnimation(c(skill.animation), false)
+		AsConditionFactory.waitAnimation(anim)
 		anim:playAnimation(c"idle 1")
 	end
+	
 	if targetRange == nil or table.contains(targetRange, tile) then
-		skill:trigger(character, tile)
+		skill:trigger(character, tile:getLocation())
 	end
 	
-	CameraManager:back2Normal()
+	-- TODO
+	-- CameraManager:back2Normal()
 	character.states.TURNOVER = true
 end
 
