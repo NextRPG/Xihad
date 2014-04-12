@@ -18,11 +18,21 @@ package.path = package.path
 .. ";Assets/Script/Manager/?.lua"
 .. ";Assets/Script/Lib/?.lua"
 
-global = scene:createObject(c("global"))
+global = g_scene:createObject(c("global"))
 
 require "Consts"
 require "LuaUtils"
 require "math3d"
+
+g_scene:requireSystem(c"Render")	-- load Irrlicht render component system
+local colorMesh = g_geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
+g_meshManager:takeMesh("@colorCube", colorMesh)
+local cubeMesh = g_geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
+g_meshManager:takeMesh("@chessboardCube", cubeMesh)
+-- g_meshManager:takeMesh(id, mesh) 
+-- 等价于
+-- g_meshManager:addMesh(id, mesh); 	mesh:drop()
+
 
 local Chessboard = require "Chessboard"
 local HeroManager = require "HeroManager"
@@ -42,7 +52,6 @@ local battle = dofile(CUR_DIR .. "\\Save\\level_01.battle")
 local heros = dofile(CUR_DIR .. "\\Save\\Save1.hero")
 
 
-
 -- init battle related manager
 Chessboard:init(battle.chessboard)
 HeroManager:init(battle.heros, heros)
@@ -55,6 +64,6 @@ CameraManager:init()
 LightManager:init()
 
 -- init Controller
-scene:pushController(require("InputController"))
-
-cursor:setVisible(true)
+local gameController = require("InputController")
+g_scene:pushController(gameController) 
+gameController:drop()

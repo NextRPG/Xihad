@@ -1,17 +1,26 @@
 #include "GameObject.h"
-#include <unordered_set>
+#include <bitset>
 #include <unordered_map>
-#include <iostream>
 #include <boost/cast.hpp>
 #include "Component.h"
 #include "Transform.h"
 #include "ComponentSystemRegistry.h"
 #include "CppBase/StdMap.h"
 #include "ComponentFactory.h"
-#include "TagListener.h"
+#include "TagManager.h"
 #include "GameObjectDepends.h"
 #include "CppBase/xassert.h"
 #include "GameScene.h"
+#include "MemoryLeakDetector.h"
+#include <iostream>
+#include "GameObjectVisitor.h"
+
+
+template <typename T>
+inline static void clearBits(T* bits, T mask)
+{
+	*bits &= ~mask;
+}
 
 using namespace std;
 using namespace boost;
@@ -19,6 +28,10 @@ using namespace irr;
 using namespace core;
 namespace xihad { namespace ngn
 {
+	using std::string;
+	typedef GameObjectDepends::TagManagerT MyTagManager;
+
+	enum { MaxTagCount = MyTagManager::MaxTagCount };
 	enum 
 	{
 		TRANSLATE_DIRTY = 1,
@@ -28,33 +41,80 @@ namespace xihad { namespace ngn
 		PARENT_DIRTY = 8,
 	};
 
-	using std::string;
+	enum
+	{
+		IDENTITY_PARENT = 1,
+	};
+
 	struct GameObject::impl
 	{
 		GameObjectDepends* depends;
 		Identifier objectID;
+		bitset<MaxTagCount> tags;
 
 		GameObject* parent;
 		CompositeUpdateHandler* childrenList;	// managed by GameObject
 
-		mutable int transfromDirtyBits;
-		mutable Matrix rotateMatrix;
+		mutable short hints;
+		mutable short transfromHints;
 		mutable Matrix localMatrix;
 		mutable Matrix worldMatrix;
+		mutable Transform worldTransform;
+		Transform localTransform;
+#ifdef XIHAD_CACHE_ROTATE_MATRIX
+		mutable Matrix rotateMatrix;
+#endif
 
-		unordered_set<GameObject::Tag> tags;
 		unordered_map<string, Component*> components;
 
 		impl(GameObjectDepends* pDepends, IdArgType id) :
-			depends(pDepends), objectID(id), parent(nullptr), 
-			childrenList(new CompositeUpdateHandler),
-			transfromDirtyBits(LOCAL_DIRTY|PARENT_DIRTY)
+			depends(pDepends), objectID(id), parent(nullptr), childrenList(0), 
+			hints(IDENTITY_PARENT), transfromHints(LOCAL_DIRTY|PARENT_DIRTY)
 		{
 		}
 
-		inline TagListener* listener() 
+		bool identityParent() const
 		{
-			return depends->listener;
+			return hints & IDENTITY_PARENT;
+		}
+
+		void setParent(GameObject* newParent)
+		{
+			parent = newParent;
+
+			// update hints
+			if (newParent == scene()->getRootObject() || newParent == nullptr)
+				hints |= IDENTITY_PARENT;
+			else
+				clearBits(&hints,(short) IDENTITY_PARENT);
+		}
+
+		CompositeUpdateHandler* notNullChildrenList(GameObject* self)
+		{
+			if (!childrenList)
+			{
+				childrenList = new CompositeUpdateHandler;
+				if (self->isUpdating())
+					childrenList->start();
+			}
+
+			return childrenList;
+		}
+
+		bool hasChildHandler() const
+		{
+			return childrenList && childrenList->hasChildHandler();
+		}
+
+		inline MyTagManager* tagListener() 
+		{
+			return depends->tagManager;
+		}
+
+#define ADD_IF_TAG_NOT_EXSITS true
+		unsigned getTagIndex(const GameObject::Tag& tag, bool add = false)
+		{
+			return depends->tagManager->unprojectTag(tag, add);
 		}
 
 		inline ComponentFactory* factory()
@@ -76,10 +136,12 @@ namespace xihad { namespace ngn
 	GameObject::GameObject( GameObjectDepends* depends, IdArgType id )
 	{
 		xassert(depends);
-		xassert(depends->listener);
+		xassert(depends->tagManager);
 		xassert(depends->factory);
 
 		mImpl.reset(new impl(depends, id));
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	/************************************************************************/
@@ -89,6 +151,8 @@ namespace xihad { namespace ngn
 	GameObject::~GameObject()
 	{
 		getScene()->onObjectDestroyed(this);
+
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	GameScene* GameObject::getScene() const
@@ -162,29 +226,41 @@ namespace xihad { namespace ngn
 
 	bool GameObject::hasTag( TagArgType tag ) const
 	{
-		return mImpl->tags.find(tag) != mImpl->tags.end();
+		unsigned tidx = mImpl->getTagIndex(tag);
+		if (tidx == MyTagManager::InvalidIndex)
+			return false;
+		else 
+			return mImpl->tags.test(tidx);
 	}
 
 	void GameObject::addTag( TagArgType tag )
 	{
-		if (mImpl->tags.insert(tag).second) // insert success
-			mImpl->listener()->onTagAdded(this, tag);
+		unsigned tidx = mImpl->getTagIndex(tag, ADD_IF_TAG_NOT_EXSITS);
+		if (!mImpl->tags.test(tidx))
+		{
+			mImpl->tags.set(tidx);
+			mImpl->tagListener()->onTagAdded(this, tidx);
+		}
 	}
 
 	void GameObject::removeTag( TagArgType tag )
 	{
-		if (mImpl->tags.erase(tag))
-			mImpl->listener()->onTagRemoved(this, tag);
+		unsigned tidx = mImpl->getTagIndex(tag);
+		if (tidx != MyTagManager::InvalidIndex && mImpl->tags.test(tidx))
+		{
+			mImpl->tags.reset(tidx);
+			mImpl->tagListener()->onTagRemoved(this, tidx);
+		}
 	}
 
 	void GameObject::clearTags()
 	{
-		for (auto it = mImpl->tags.begin(); it != mImpl->tags.end(); )
-		{
-			string tag = *it;
-			it = mImpl->tags.erase(it);
-			mImpl->listener()->onTagRemoved(this, tag);
-		}
+		for (unsigned idx = 0; idx < MyTagManager::MaxTagCount; ++idx)
+			if (mImpl->tags.test(idx))
+			{
+				mImpl->tags.reset(idx);
+				mImpl->tagListener()->onTagRemoved(this, idx);
+			}
 	}
 
 	GameObject::IdArgType GameObject::getID() const
@@ -194,17 +270,17 @@ namespace xihad { namespace ngn
 
 	void GameObject::updateChildrenWorldMatrix()
 	{
-		if (mImpl->transfromDirtyBits ||	// already updated?
-			mImpl->childrenList->getChildHandlerCount() == 0)  // no child?	
+		if (mImpl->transfromHints || !mImpl->hasChildHandler())
 			return;
 
+		xassert(mImpl->childrenList);
 		CompositeUpdateHandler::iterator it = mImpl->childrenList->childHandlerBegin();
 		while (it != mImpl->childrenList->childHandlerEnd())
 		{
 			if (GameObject* go = polymorphic_downcast<GameObject*>(*it))
 			{
-				go->mImpl->transfromDirtyBits |= PARENT_DIRTY;
 				go->updateChildrenWorldMatrix();
+				go->mImpl->transfromHints |= PARENT_DIRTY;
 			}
 			else
 			{
@@ -218,79 +294,95 @@ namespace xihad { namespace ngn
 
 	void GameObject::resetScale( const vector3df& scale )
 	{
-		const vector3df& mScale = mTransform.getScale();
+		const vector3df& mScale = mImpl->localTransform.getScale();
 		if (mScale != scale)
 		{
-			mTransform.resetScale(scale);
+			mImpl->localTransform.resetScale(scale);
 			updateChildrenWorldMatrix();
-			mImpl->transfromDirtyBits |= SCALE_DIRTY;
+			mImpl->transfromHints |= SCALE_DIRTY;
 		}
 	}
 
 	void GameObject::resetRotate( const vector3df& rotate )
 	{
-		mTransform.resetRotate(rotate);
+		mImpl->localTransform.resetRotate(rotate);
 		updateChildrenWorldMatrix();
-		mImpl->transfromDirtyBits |= ROTATE_DIRTY;		
+		mImpl->transfromHints |= ROTATE_DIRTY;		
 	}
 
 	void GameObject::resetTranslate( const vector3df& trans )
 	{
-		mTransform.resetTranslate(trans);
+		mImpl->localTransform.resetTranslate(trans);
 		updateChildrenWorldMatrix();
-		mImpl->transfromDirtyBits |= TRANSLATE_DIRTY;
+		mImpl->transfromHints |= TRANSLATE_DIRTY;
 	}
 
-	inline static void clearBits(int* bits, int mask)
+	void GameObject::updateWorldMatrix() const
 	{
-		*bits &= ~mask;
+		auto& base = mImpl->parent->getWorldTransformMatrix();
+
+		// update local matrix
+		mImpl->worldMatrix.setbyproduct(base, getLocalTransformMatrix());
+		mImpl->transfromHints = 0;
 	}
 
 	const Matrix& GameObject::getWorldTransformMatrix() const
 	{
-		if (identityParent())
+		if (mImpl->identityParent())
 		{
 			const Matrix& ret = getLocalTransformMatrix();
-			mImpl->transfromDirtyBits = 0;
+			mImpl->transfromHints = 0;
 			return ret;
 		}
 
-		if (mImpl->transfromDirtyBits)
-		{
-			auto& base = mImpl->parent->getWorldTransformMatrix();
-
-			// update local matrix
-			mImpl->worldMatrix = base * getLocalTransformMatrix();
-			mImpl->transfromDirtyBits = 0;
-		}
+		if (mImpl->transfromHints)
+			updateWorldMatrix();
 
 		return mImpl->worldMatrix;
 	}
 
+	const Transform& GameObject::getWorldTransform() const
+	{
+		if (mImpl->identityParent())
+			return mImpl->localTransform;
+
+		if (mImpl->transfromHints)
+		{
+			updateWorldMatrix();
+			mImpl->worldTransform.resetTranslate(mImpl->worldMatrix.getTranslation());
+			mImpl->worldTransform.resetScale(mImpl->worldMatrix.getScale());
+
+			if (mImpl->transfromHints & (PARENT_DIRTY|ROTATE_DIRTY))
+				mImpl->worldTransform.setFromMatrix(mImpl->worldMatrix);
+		}
+
+		return mImpl->worldTransform;
+	}
+
 	const Matrix& GameObject::getLocalTransformMatrix() const
 	{
-		if (mImpl->transfromDirtyBits & LOCAL_DIRTY)
+		if (mImpl->transfromHints & LOCAL_DIRTY)
 		{
-			if (mImpl->transfromDirtyBits & ROTATE_DIRTY)
-			{
+#ifdef XIHAD_CACHE_ROTATE_MATRIX
+			if (mImpl->transfromHints & ROTATE_DIRTY)
 				mImpl->rotateMatrix.setRotationDegrees(getRotation());
-			}
 
 			mImpl->localMatrix = mImpl->rotateMatrix;
-			mImpl->localMatrix.setTranslation(getTranslate());
+#else
+			mImpl->localMatrix.setRotationDegrees(getRotation());
+#endif
 
-			vector3df vscale = getScale();
+			mImpl->localMatrix.setTranslation(getTranslate());
+			vector3df vscale = mImpl->localTransform.getScale();
 			float mScale[] = { vscale.X, vscale.Y, vscale.Z };
-			for (int idx = 0, first = 0; 
-				 first < 12; 
-				 first += 4, ++idx)
+			for (int idx = 0, first = 0; first < 12; first += 4, ++idx)
 			{
 				mImpl->localMatrix[first+0] *= mScale[idx];
 				mImpl->localMatrix[first+1] *= mScale[idx];
 				mImpl->localMatrix[first+2] *= mScale[idx];
 			}
 
-			clearBits(&mImpl->transfromDirtyBits, LOCAL_DIRTY);
+			clearBits(&mImpl->transfromHints, (short)LOCAL_DIRTY);
 		}
 
 		return mImpl->localMatrix;
@@ -298,8 +390,7 @@ namespace xihad { namespace ngn
 
 	bool GameObject::identityParent() const
 	{
-		return  mImpl->parent == nullptr || 
-				mImpl->parent == mImpl->scene()->getRootObject();
+		return mImpl->identityParent();
 	}
 
 	void GameObject::setParent( GameObject* newParent )
@@ -308,20 +399,21 @@ namespace xihad { namespace ngn
 		if (oldParent == newParent) 
 			return;
 
-		mImpl->parent = newParent;
+		mImpl->setParent(newParent);
 
 		// unlink
 		if (oldParent != nullptr)
 		{
 			CompositeUpdateHandler* list = oldParent->mImpl->childrenList;
+			xassert(list);
 			list->eraseChildHandler(list->findChildHandler(this));
 		}
 
 		// link
 		if (newParent != nullptr)
-			newParent->mImpl->childrenList->appendChildHandler(this);
+			newParent->mImpl->notNullChildrenList(this)->appendChildHandler(this);
 
-		mImpl->transfromDirtyBits |= PARENT_DIRTY;
+		mImpl->transfromHints |= PARENT_DIRTY;
 	}
 
 	GameObject* GameObject::getParent() const
@@ -329,59 +421,71 @@ namespace xihad { namespace ngn
 		return mImpl->parent;
 	}
 
-	GameObject::child_iterator GameObject::firstChild() const
+	void GameObject::visitChildren( GameObjectVisitor& visitor )
 	{
-		auto it = mImpl->childrenList->childHandlerBegin();
-		return *reinterpret_cast<child_iterator*>(&it);
-	}
-
-	GameObject::child_iterator GameObject::lastChild() const
-	{
-		auto it = mImpl->childrenList->childHandlerEnd();
-		return *reinterpret_cast<child_iterator*>(&it);
+		if (mImpl->hasChildHandler())
+		{
+			auto it = mImpl->childrenList->childHandlerBegin();
+			while (it != mImpl->childrenList->childHandlerEnd())
+			{
+				GameObject* go = static_cast<GameObject*>(*it);
+				visitor.onVisitObject(*go);
+				++it;
+			}
+		}
 	}
 
 	void GameObject::onStart()
 	{
 		// Let self start first. Order is reserved
 		CompositeUpdateHandler::onStart();
-		mImpl->childrenList->start();
+
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->start();
 	}
 
 	void GameObject::onUpdate( const Timeline& tm )
 	{
 		// Order is reserved
 		CompositeUpdateHandler::onUpdate(tm);
-		mImpl->childrenList->update(tm);
+
+		// There are at least half game objects having no child, therefore we can benefit from the test
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->update(tm);
 	}
 
 	void GameObject::onStop()
 	{
 		// Order is reserved
-		mImpl->childrenList->stop();
+		if (mImpl->hasChildHandler())
+			mImpl->childrenList->stop();
+
 		CompositeUpdateHandler::onStop();
 	}
 
 	void GameObject::onDestroy()
 	{
 		// Order is reserved
-		mImpl->childrenList->destroy();
+		if (mImpl->hasChildHandler() && !mImpl->childrenList->destroy())
+			cerr << "GameObject children list destroy failed" << endl;
+
+		mImpl->childrenList = 0;
 		CompositeUpdateHandler::onDestroy();
 	}
 
 	vector3df GameObject::getScale() const
 	{
-		return mTransform.getScale();
+		return mImpl->localTransform.getScale();
 	}
 
 	vector3df GameObject::getRotation() const
 	{
-		return mTransform.getRotation();
+		return mImpl->localTransform.getRotation();
 	}
 
 	vector3df GameObject::getTranslate() const
 	{
-		return mTransform.getTranslation();
+		return mImpl->localTransform.getTranslation();
 	}
 
 }}

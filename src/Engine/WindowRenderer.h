@@ -7,7 +7,9 @@ namespace xihad { namespace ngn
 	class WindowRenderer : public virtual ReferenceCounted
 	{
 	public:
-		virtual ~WindowRenderer() {}
+		WindowRenderer() { XIHAD_MLD_NEW_OBJECT; }
+
+		virtual ~WindowRenderer() { XIHAD_MLD_DEL_OBJECT; }
 
 		virtual void clearBuffer(bool backbuffer, bool zbuffer, const SColor& color) = 0;
 

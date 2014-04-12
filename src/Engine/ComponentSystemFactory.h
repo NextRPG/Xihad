@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "MemoryLeakDetector.h"
 
 namespace xihad { namespace ngn
 {
@@ -20,7 +21,9 @@ namespace xihad { namespace ngn
 	class ComponentSystemFactory
 	{
 	public:
-		virtual ~ComponentSystemFactory() {}
+		ComponentSystemFactory() { XIHAD_MLD_NEW_OBJECT; }
+
+		virtual ~ComponentSystemFactory() { XIHAD_MLD_DEL_OBJECT; }
 
 		/// 创建或重用组件系统
 		/**

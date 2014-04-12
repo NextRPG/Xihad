@@ -15,7 +15,7 @@ function HeroManager:init(points, heros)
 end
 
 function HeroManager:roundStart(  )
-	local object = scene:getObjectWithTag("Hero")
+	local object = g_scene:getObjectWithTag("Hero")
 	if object then
 		CameraManager:move2Character(object)
 		self:roundStart_aux(  )

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CPlainTextContent.h"
 #include "CDialogueContext.h"
 #include <CEGUI\TextUtils.h>

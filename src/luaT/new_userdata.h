@@ -8,8 +8,18 @@ namespace luaT {
 
 	struct UserdataAllocator
 	{
-		static void* allocate(lua_State* L, size_t size, const char* mtName);
+		template<typename T>
+		static void makeInstance(lua_State* L, int idx, T* ptr)
+		{
+			idx = normalIndex(L, idx);
+			lua_pushlightuserdata(L, ptr);
+			lua_setfield(L, idx, ReservedKeyword::__UDKEY);
+			Metatable::bind<T>(L, idx);
+		}
+
 		static void allocate_for_ptr(lua_State* L, void* ptr, const char* mtName);
+
+		static void* allocate(lua_State* L, size_t size, const char* mtName);
 	};
 
 	/************************************************************************/
@@ -21,7 +31,7 @@ namespace luaT {
 		// value.
 		static void exec(lua_State* L, typename TypeTraits<T>::ParameterType ptr)
 		{
-			void* mem = UserdataAllocator::allocate(L, sizeof(T), MetatableData<T>::name);
+			void* mem = UserdataAllocator::allocate(L, sizeof(T), MetatableData<T>::name());
 			new (mem) T(ptr);	// copy constructor.
 		}
 	};
@@ -34,7 +44,7 @@ namespace luaT {
 		// pointer.
 		static void exec(lua_State* L, typename TypeTraits<T>::ParameterType ptr)
 		{
-			UserdataAllocator::allocate_for_ptr(L, ptr, MD::name);
+			UserdataAllocator::allocate_for_ptr(L, ptr, MD::name());
 		}
 	};
 

@@ -3,8 +3,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-luaT_defMetaData(xihad::script::LuaComponent, false);
-
 namespace xihad { namespace script
 {
 	int luaopen_LuaComponent( lua_State* L )

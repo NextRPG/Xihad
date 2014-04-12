@@ -8,16 +8,6 @@ namespace xihad { namespace ngn
 	class WindowRenderer;
 	class FrameObserver;
 
-	/// 游戏引擎启动器
-	/**
-	 * TODO: 
-	 *	1. 处理I/O事件，处理窗口事件
-	 *	2. 初始化文件系统
-	 *	3. 初始化场景，场景组件系统，添加游戏对象
-	 *	
-	 *	@author etnlGD
-	 *	@date 2013年12月14日 21:25:06
-	 */
 	class GameEngine
 	{
 	public:
@@ -35,7 +25,17 @@ namespace xihad { namespace ngn
 
 		NativeWindow* getWindow();
 
-		virtual void addFrameObserver(FrameObserver& observer);
+		/// add frame observer with specified order
+		/**
+		 * You can set the observer's order explicitly.
+		 * The larger the order is, the later the observer will be notified.
+		 * 
+		 * Notice: 
+		 * 1. Multiple observers can share a same order, notify order between them are not specified
+		 * 2. If add a observer which has already been added, then the latter one order will be effective.
+		 *	  You can depend on this to dynamically change a observer's order.
+		 */
+		virtual void addFrameObserver(FrameObserver& observer, int order = 0);
 
 		virtual void removeFrameObserver(FrameObserver& observer);
 
@@ -60,9 +60,9 @@ namespace xihad { namespace ngn
 	private:
 		WindowRenderer* getRenderer();
 
-		float fireFrameBegin();
+		double fireFrameBegin();
 
-		void fireFrameEnd(float bgnTime);
+		void fireFrameEnd(double bgnTime);
 		
 	private:
 		struct impl;

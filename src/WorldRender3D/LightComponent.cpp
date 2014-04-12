@@ -1,28 +1,40 @@
 #include "LightComponent.h"
-#include "irrlicht/ILightSceneNode.h"
+#include <irrlicht/ILightSceneNode.h>
+#include <irrlicht/ISceneManager.h>
+#include <Engine/Properties.h>
 
 namespace xihad { namespace render3d
 {
+	using namespace ngn;
+	using namespace core;
+	using std::string;
 
-	LightComponent::LightComponent( std::string const& name, 
-		ngn::GameObject& host, irr::scene::ILightSceneNode* node ) :
+	LightComponent::LightComponent(string const& name, GameObject& host, ILightSceneNode* node ) :
 		RenderComponent(name, host, node)
 	{
-		node->getLightData().SpecularColor = irr::video::SColorf();
+		node->getLightData().SpecularColor = video::SColorf();
 		node->getLightData().Radius = 1000.f;
 	}
 
-	void LightComponent::setLightData( const irr::video::SLight& light )
+	LightComponent* LightComponent::create( 
+		const string& compName, GameObject& obj, const Properties& param, 
+		ISceneManager* smgr )
+	{
+		ILightSceneNode* lightNode = smgr->addLightSceneNode();
+		return new LightComponent(compName, obj, lightNode);
+	}
+
+	void LightComponent::setLightData( const video::SLight& light )
 	{
 		getNode()->setLightData(light);
 	}
 
-	irr::video::SLight const& LightComponent::getLightData() const
+	video::SLight const& LightComponent::getLightData() const
 	{
 		return getNode()->getLightData();
 	}
 
-	irr::video::SLight& LightComponent::getLightData()
+	video::SLight& LightComponent::getLightData()
 	{
 		return getNode()->getLightData();
 	}
@@ -37,12 +49,12 @@ namespace xihad { namespace render3d
 		return getNode()->getRadius();
 	}
 
-	void LightComponent::setLightType( irr::video::E_LIGHT_TYPE type )
+	void LightComponent::setLightType( video::E_LIGHT_TYPE type )
 	{
 		getNode()->setLightType(type);
 	}
 
-	irr::video::E_LIGHT_TYPE LightComponent::getLightType() const
+	video::E_LIGHT_TYPE LightComponent::getLightType() const
 	{
 		return getNode()->getLightType();
 	}
@@ -57,9 +69,9 @@ namespace xihad { namespace render3d
 		return getNode()->getCastShadow();
 	}
 
-	irr::scene::ILightSceneNode * LightComponent::getNode() const
+	ILightSceneNode * LightComponent::getNode() const
 	{
-		return (irr::scene::ILightSceneNode *) RenderComponent::getNode();
+		return (ILightSceneNode *) RenderComponent::getNode();
 	}
 }}
 

@@ -10,8 +10,6 @@ using namespace irr;
 using namespace core;
 using namespace scene;
 
-luaT_defMetaData(IGeometryCreator, false);
-
 static int createCube(lua_State* L)
 {
 	IGeometryCreator* creator = checkarg<IGeometryCreator*>(L, 1);

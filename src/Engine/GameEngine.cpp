@@ -1,8 +1,9 @@
 #include "GameEngine.h"
 
 // use in member field
-#include <set>
-#include "irr_ptr.h"
+#include <map>
+#include <unordered_map>
+#include "xptr.h"
 #include "GameWorld.h"
 #include "NativeWindow.h"
 #include "FrameObserver.h"
@@ -11,20 +12,32 @@
 #include "WindowRenderer.h"
 #include "TimeConversion.h"
 #include "WindowEventSeizer.h"
+#include "CppBase\StdMap.h"
+#include "BiAssociateMap.h"
+#include "System.h"
 
-using namespace irr;
 using namespace std;
 namespace xihad { namespace ngn
 {
+	struct hash_observer
+	{
+		size_t operator()(const xptr<FrameObserver>& key) const
+		{
+			return (size_t) (key.get());
+		}
+	};
+
+	typedef multimap<int, xptr<FrameObserver> > OrderedObservers;
+	typedef unordered_map<xptr<FrameObserver>, OrderedObservers::iterator, hash_observer> ObserverIndex;
+	typedef BiAssociateMap<int, xptr<FrameObserver>, OrderedObservers, ObserverIndex> AssociateObserver;
 	struct GameEngine::impl
 	{
 		float frameTime;
 		GameEngine::LoopStatus status;
 
 		boost::scoped_ptr<GameWorld> gameWorld;
-		irr_ptr<NativeWindow> window;
-
-		set<irr_ptr<FrameObserver>> frameObservers;
+		xptr<NativeWindow> window;
+		AssociateObserver observers;
 	};
 
 	GameEngine::GameEngine(NativeWindow& wnd, GameWorld* world, float defaultFrameTime) :
@@ -36,12 +49,15 @@ namespace xihad { namespace ngn
 		mImpl->window = &wnd;
 		
 		// Auto seize window event into current scene
-		irr_ptr<WindowEventSeizer> wndObsv(new WindowEventSeizer(wnd), false);
+		xptr<WindowEventSeizer> wndObsv(new WindowEventSeizer(wnd), false);
 		mImpl->gameWorld->addWorldObserver(*wndObsv);
+
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	GameEngine::~GameEngine()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	void GameEngine::setFrameTime( float dt )
@@ -51,15 +67,16 @@ namespace xihad { namespace ngn
 
 	bool GameEngine::launch()
 	{
-		// Avoid reentrant
-		if (isRunning()) return false;
+		// Avoid reentrant and restart
+		if (isRunning() || mImpl->status == STOPPED) 
+			return false;
 
 		getWorld()->start();	// All updaters should be start before running.
 		mImpl->status = RUNNING;
 
 		while (isRunning())
 		{
-			float frameBgnTime = fireFrameBegin();
+			double frameBgnTime = fireFrameBegin();
 
 			getRenderer()->clearBuffer(true, true, SColor(255, 100, 100, 140));
 			getWorld()->update(mImpl->frameTime);
@@ -81,12 +98,11 @@ namespace xihad { namespace ngn
 
 	bool GameEngine::stop()
 	{
-		if (mImpl->status == RUNNING)
-		{
-			mImpl->status = STOPPED;
-		}
+		if (mImpl->status == INITIALIZED)
+			mImpl->window->close();
 
-		return mImpl->status == STOPPED;
+		mImpl->status = STOPPED;
+		return true;
 	}
 
 	GameWorld* GameEngine::getWorld()
@@ -104,32 +120,41 @@ namespace xihad { namespace ngn
 		return mImpl->window->getRenderer();
 	}
 
-	void GameEngine::addFrameObserver( FrameObserver& observer )
+	void GameEngine::addFrameObserver( FrameObserver& observer, int order )
 	{
-		mImpl->frameObservers.insert(&observer);
+		mImpl->observers.add(order, &observer);
 	}
 
 	void GameEngine::removeFrameObserver( FrameObserver& observer )
 	{
-		mImpl->frameObservers.erase(&observer);
+		mImpl->observers.remove(&observer);
 	}
 
-	float GameEngine::fireFrameBegin()
+	double GameEngine::fireFrameBegin()
 	{
-		float now = clockToSeconds(clock());
-		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
-			observer->onFrameBegin(this, now);
+		double now = System::getCurrentTime();
+		for (auto observerPair : mImpl->observers.pairs())
+			observerPair.second->onFrameBegin(this, (float) now);
 
 		return now;
 	}
 
-	void GameEngine::fireFrameEnd( float bgnTime )
+	void GameEngine::fireFrameEnd( double bgnTime )
 	{
-		float now = clockToSeconds(clock());
-		float delta = now - bgnTime;
+		double now = System::getCurrentTime();
+		float delta = (float) (now - bgnTime);
 
-		for (irr_ptr<FrameObserver> observer : mImpl->frameObservers)
-			observer->onFrameEnd(this, now, delta);
+#ifdef _DEBUG
+		int priority = 0x80000000;	// min integer
+#endif
+		for (auto& observerPair : mImpl->observers.pairs())
+		{
+#ifdef _DEBUG
+			assert(priority <= observerPair.first);
+			priority = observerPair.first;
+#endif
+			observerPair.second->onFrameEnd(this, (float) now, delta);
+		}
 	}
 
 }}

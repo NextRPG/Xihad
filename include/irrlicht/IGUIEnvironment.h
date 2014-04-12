@@ -59,6 +59,7 @@ class IGUIToolBar;
 class IGUIButton;
 class IGUIWindow;
 class IGUIElementFactory;
+class IGUIFontBuilder;
 
 //! GUI Environment. Used as factory and manager of all other GUI elements.
 /** \par This element can create the following events of type EGUI_EVENT_TYPE (which are passed on to focused sub-elements):
@@ -172,6 +173,8 @@ public:
 	virtual IGUIImageList* createImageList( video::ITexture* texture,
 					core::dimension2d<s32> imageSize,
 					bool useAlphaChannel ) = 0;
+
+	virtual IGUIFontBuilder* createFontBuilder(const io::path& fontPath) = 0;
 
 	//! Returns pointer to the font with the specified filename.
 	/** Loads the font if it was not loaded before.

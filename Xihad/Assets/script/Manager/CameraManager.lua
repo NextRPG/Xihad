@@ -10,7 +10,7 @@ local CameraManager = {
 }
 
 function CameraManager:createCamera( name )
-	local camera = scene:createObject(c(name))
+	local camera = g_scene:createObject(c(name))
 	camera:appendComponent(c"Camera")
 	camera:appendComponent(c"ForeverMoveBy")
 	camera:appendComponent(c"CameraMoveBy")
@@ -50,31 +50,31 @@ function CameraManager:onMouseEvent( e )
 	self:adjustHeight(e.wheelDelta)
 end
 
-local backAction = {}
+-- local backAction = {}
 function CameraManager:onKeyUp( e )
-	local camera = self.camera
-	local move = camera:findComponent(c"CameraMoveBy")
-	local ccom = camera:findComponent(c"Camera")
-	local rotate = camera:findComponent(c"CameraRotate")
+-- 	local camera = self.camera
+-- 	local move = camera:findComponent(c"CameraMoveBy")
+-- 	local ccom = camera:findComponent(c"Camera")
+-- 	local rotate = camera:findComponent(c"CameraRotate")
 
 
-	local HeroManager = require "HeroManager"
-	if e.key == "UP" then
-		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
-		move:moveToCharacter(HeroManager.currentCharacter, function (  )
-			rotate:start(math3d.vector(0, 1, 0))
-		end)
-	elseif e.key == "DOWN" then
-		rotate:stop()
-		move:runAction(backAction)
-	-- elseif e.key == "Z" then
-	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
-	-- elseif e.key == "X" then
-	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
-	-- elseif e.key == "C" then
-	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
-	end
-	-- print(ccom:getUpVector():xyz())
+-- 	local HeroManager = require "HeroManager"
+-- 	if e.key == "UP" then
+-- 		backAction = {destination = self.camera:getTranslate(), destination2 = ccom:getTarget()}
+-- 		move:moveToCharacter(HeroManager.currentCharacter, function (  )
+-- 			rotate:start(math3d.vector(0, 1, 0))
+-- 		end)
+-- 	elseif e.key == "DOWN" then
+-- 		rotate:stop()
+-- 		move:runAction(backAction)
+-- 	-- elseif e.key == "Z" then
+-- 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(1, 0, 0))
+-- 	-- elseif e.key == "X" then
+-- 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 1, 0))
+-- 	-- elseif e.key == "C" then
+-- 	-- 	ccom:setUpVector(ccom:getUpVector() + math3d.vector(0, 0, 1))
+-- 	end
+-- 	-- print(ccom:getUpVector():xyz())
 end
 
 function CameraManager:adjustHeight( wheelDelta )

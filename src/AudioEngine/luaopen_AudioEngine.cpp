@@ -3,17 +3,15 @@
 #include "CppBase/StringUtil.h"
 #include "AudioStopListener.h"
 #include "AudioComponentSystem.h"
+#include "LuaGlobalVariable.h"
 
 using namespace luaT;
-
-luaT_defMetaData(xihad::audio::AudioComponent, false);
-// luaT_defMetaData(xihad::audio::AudioStopListener, false);
-luaT_defMetaData(xihad::audio::AudioComponentSystem, false);
 namespace xihad { namespace audio 
 {
+	using namespace irrklang;
 	using namespace ngn;
 	
-	static irrklang::E_STREAM_MODE popStreamMode(lua_State* L, int idx)
+	static E_STREAM_MODE popStreamMode(lua_State* L, int idx)
 	{
 		if (lua_gettop(L) >= idx)
 		{
@@ -21,32 +19,31 @@ namespace xihad { namespace audio
 			luaT_variable(L, idx, const char*, mode);
 			int midx = StringUtil::select(mode, modes);
 			if (midx != -1)
-				return (irrklang::E_STREAM_MODE) midx;
+				return (E_STREAM_MODE) midx;
 			else 
 				luaL_argerror(L, idx, "Error stream mode");
 		}
 		
-		return irrklang::ESM_AUTO_DETECT;
+		return ESM_AUTO_DETECT;
 	}
 	
-	// TODO
-	static int playMusic(lua_State* L)
+	static int play2D(lua_State* L)
 	{
 		luaT_variable(L, 1, AudioComponent*, comp);
 		luaT_variable(L, 2, const char*, fname);
 		auto mode = popStreamMode(L, 3);
 		
-		comp->playMusic(fname, mode);
+		comp->play2D(fname, mode);
 		return 0;
 	}
 
-	static int playSound(lua_State* L)
+	static int play3D(lua_State* L)
 	{
 		luaT_variable(L, 1, AudioComponent*, comp);
 		luaT_variable(L, 2, const char*, fname);
 		auto mode = popStreamMode(L, 3);
 		
-		comp->playSound(fname, mode);
+		comp->play3D(fname, mode);
 		return 0;
 	}
 
@@ -68,7 +65,7 @@ namespace xihad { namespace audio
 // 	}
 
 
-	int luaopen_AudioComponents(lua_State* L)
+	int luaopen_AudioComponents(lua_State* L, AudioComponentSystem* acs)
 	{
 		luaT_defRegsBgn(audio)
 			luaT_mnamedfunc(AudioComponent, setPaused),
@@ -90,8 +87,8 @@ namespace xihad { namespace audio
 			luaT_mnamedfunc(AudioComponent, getPlayLength),
 			luaT_mnamedfunc(AudioComponent, setPlaybackSpeed),
 			luaT_mnamedfunc(AudioComponent, getPlaybackSpeed),
-			luaT_lnamedfunc(playMusic),
-			luaT_lnamedfunc(playSound),
+			luaT_lnamedfunc(play2D),
+			luaT_lnamedfunc(play3D),
 			
 			// TODO 
 			// AudioListener
@@ -102,14 +99,18 @@ namespace xihad { namespace audio
 			luaT_mnamedfunc(AudioComponentSystem, stopAllAudios),
 			luaT_mnamedfunc(AudioComponentSystem, setAllAudiosPaused),
 			luaT_mnamedfunc(AudioComponentSystem, setListenerPosition),
-			luaT_mnamedfunc(AudioComponentSystem, setSoundVolume),
-			luaT_mnamedfunc(AudioComponentSystem, getSoundVolume),
-			luaT_mnamedfunc(AudioComponentSystem, setDefault3DSoundMinDistance),
-			luaT_mnamedfunc(AudioComponentSystem, getDefault3DSoundMinDistance),
-			luaT_mnamedfunc(AudioComponentSystem, setDefault3DSoundMaxDistance),
-			luaT_mnamedfunc(AudioComponentSystem, getDefault3DSoundMaxDistance),
+			luaT_mnamedfunc(AudioComponentSystem, setVolume),
+			luaT_mnamedfunc(AudioComponentSystem, getVolume),
+			luaT_mnamedfunc(AudioComponentSystem, setDefault3DAudioMinDistance),
+			luaT_mnamedfunc(AudioComponentSystem, getDefault3DAudioMinDistance),
+			luaT_mnamedfunc(AudioComponentSystem, setDefault3DAudioMaxDistance),
+			luaT_mnamedfunc(AudioComponentSystem, getDefault3DAudioMaxDistance),
 		luaT_defRegsEnd
 		MetatableFactory<AudioComponentSystem>::create(L, system, 0);
+
+
+		lua_getglobal(L, "_G");
+		setField(L, -1, LUAT_G_AUDIO_SYSTEM, acs);
 
 		return 0;
 	}

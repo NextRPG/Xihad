@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine\BaseVisitor.h"
+// #include "WorldRender3D\ParticleSystemComponent.h"
 // #include "WorldRender3D\MeshComponent.h"
 // #include "WorldRender3D\LightComponent.h"
 // #include "WorldRender3D\CameraComponent.h"
@@ -14,7 +15,9 @@ namespace xihad
 		class LightComponent;
 		class CameraComponent;
 		class BillboardComponent;
+		class TextComponent;
 		class AnimatedMeshComponent;
+		class ParticleSystemComponent;
 	}
 
 	namespace audio
@@ -34,6 +37,8 @@ namespace xihad { namespace script
 		public ngn::Visitor<render3d::LightComponent>,
 		public ngn::Visitor<render3d::CameraComponent>,
 		public ngn::Visitor<render3d::BillboardComponent>,
+		public ngn::Visitor<render3d::TextComponent>,
+		public ngn::Visitor<render3d::ParticleSystemComponent>,
 		public ngn::Visitor<audio::AudioComponent>
 	{
 	public:
@@ -48,6 +53,9 @@ namespace xihad { namespace script
 		virtual void visit(render3d::LightComponent&);
 		virtual void visit(render3d::CameraComponent&);
 		virtual void visit(render3d::BillboardComponent&);
+		virtual void visit(render3d::TextComponent&);
+		virtual void visit(render3d::ParticleSystemComponent&);
+
 		virtual void visit(script::LuaComponent&);
 
 		virtual bool handleUnkownVisitable(ngn::BaseVisitable&);

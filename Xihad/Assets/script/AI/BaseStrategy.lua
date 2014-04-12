@@ -18,7 +18,7 @@ function BaseStrategy:judgePerson(  )
 	local actor = self.object:findComponent(c"Character")
 	local names, distances, HPs = {}, {}, {}
 
-	for object in scene:objectsWithTag("Hero") do
+	for object in g_scene:objectsWithTag("Hero") do
 		repeat
 			local enemy = object:findComponent(c"Character")
 			local costAP = GoalFinder:getCostAP(actor.tile ,enemy.tile, actor:getProperty("maxAP"))
@@ -42,7 +42,7 @@ end
 function BaseStrategy:judgeTile(  )
 	local actor = self.object:findComponent(c"Character")
 	local name = self:judgePerson(  )
-	local enemy = scene:findObject(c(name)):findComponent(c"Character")
+	local enemy = g_scene:findObject(c(name)):findComponent(c"Character")
 	local tile = GoalFinder:getTargetTile( actor.tile, enemy.tile, actor:getProperty("maxAP"))
 	
 	return tile

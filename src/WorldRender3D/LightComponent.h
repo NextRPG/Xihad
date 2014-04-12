@@ -1,18 +1,15 @@
 #pragma once
 #include "RenderComponent.h"
 
-namespace irr { 
-namespace video
+namespace irr { namespace video
 {
 	struct SLight;
 	enum E_LIGHT_TYPE;
-}
+}}
 
-namespace scene
-{
+namespace irr { namespace scene {
 	class ILightSceneNode;
-}
-}
+}}
 
 namespace xihad { namespace render3d
 {
@@ -21,29 +18,32 @@ namespace xihad { namespace render3d
 	public:
 		DEFINE_VISITABLE
 
-		LightComponent(std::string const& name, ngn::GameObject& host, 
-					   irr::scene::ILightSceneNode* node);
+		LightComponent(std::string const& name, ngn::GameObject& host, ILightSceneNode* node);
 
-		void setLightData(const irr::video::SLight& light);
+		static LightComponent* create(
+			const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param, 
+			ISceneManager* smgr);
 
-		irr::video::SLight const& getLightData() const;
+		void setLightData(const video::SLight& light);
 
-		irr::video::SLight& getLightData();
+		video::SLight const& getLightData() const;
+
+		video::SLight& getLightData();
 
 		void setRadius(float radius);
 
 		float getRadius() const;
 
-		void setLightType(irr::video::E_LIGHT_TYPE type);
+		void setLightType(video::E_LIGHT_TYPE type);
 
-		irr::video::E_LIGHT_TYPE getLightType() const;
+		video::E_LIGHT_TYPE getLightType() const;
 
 		void enableCastShadow(bool shadow = true);
 
 		bool getCastShadow() const;
 
 	protected:
-		irr::scene::ILightSceneNode * getNode() const;
+		ILightSceneNode * getNode() const;
 	};
 }}
 

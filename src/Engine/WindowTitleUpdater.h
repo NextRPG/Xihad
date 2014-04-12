@@ -1,7 +1,7 @@
 #pragma once
 #include "FrameObserver.h"
 #include <string>
-#include "irr_ptr.h"
+#include "xptr.h"
 
 namespace xihad { namespace ngn
 {
@@ -27,7 +27,7 @@ namespace xihad { namespace ngn
 
 	private:
 		std::wstring appName;
-		irr_ptr<FPSCounter> fpsCounter;
+		xptr<FPSCounter> fpsCounter;
 		bool showFPS;
 	};
 }}

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CPlainTextElement.h"
 #include "CPlainTextContent.h"
 

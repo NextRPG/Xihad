@@ -1,63 +1,75 @@
 #include "AudioComponent.h"
 #include <irrKlang/ik_ISoundEngine.h>
+#include <Engine/GameObject.h>
+#include <Engine/Process.h>
+
 #include "AudioStopListener.h"
 #include "NullSound.h"
-#include "Engine/GameObject.h"
 #include <iostream>
 
 using namespace std;
-using namespace xihad::ngn;
-using namespace irrklang;
 namespace xihad { namespace audio 
 {
-	AudioComponent::AudioComponent(const std::string& name, ngn::GameObject& host, ISoundEngine* audiceDevice) :
-		Component(name, host), audioEngine(audiceDevice), 
+	using namespace ngn;
+
+	AudioComponent::AudioComponent(const string& name, GameObject& host, ISoundEngine* audiceDevice) :
+		Component(name, host), audioEngine(audiceDevice), is3DAudio(false),
 		audio(&NullSound::getSingleton())
 	{
 		audioEngine->grab();
+		XIHAD_MLD_NEW_OBJECT;
 	}
 
 	AudioComponent::~AudioComponent()
 	{
 		audioEngine->drop();
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	void AudioComponent::onStart()
 	{
+		if (isPaused())
+			setPaused(false);
 	}
 
-	void AudioComponent::onUpdate( const ngn::Timeline& time )
+	void AudioComponent::onUpdate( const Timeline& time )
 	{
-		// TODO Update position according to hostObject()
 		// TODO Reset playback speed according to game world's time scale
+		if (is3DAudio && !isPaused())
+		{
+			const Matrix& wmat = getHostObject()->getWorldTransformMatrix();
+			audio->setPosition(wmat.getTranslation());
+		}
 	}
 
 	void AudioComponent::onStop()
 	{
-		audio->stop();
-
-		if (audio != &NullSound::getSingleton())
-			setSound(0);
-		else
-			cerr << "Sound stop failed" << endl;
+		setSound(0, false);
 	}
 
-	void AudioComponent::playMusic(const char* filename, E_STREAM_MODE mode)
+	bool AudioComponent::shouldPauseWhenStart() const
 	{
-		setSound(audioEngine->play2D(filename, false, false, true, mode, true));
-		audio->setSoundStopEventReceiver(this);
+		return !getHostObject()->isUpdating();
 	}
 
-	void AudioComponent::playSound( const char* filename, E_STREAM_MODE mode )
+	void AudioComponent::play2D(const char* filename, E_STREAM_MODE mode)
+	{
+		bool paused = shouldPauseWhenStart();
+		ISound* sound = audioEngine->play2D(filename, true, paused, true, mode);
+		setSound(sound, false);
+	}
+
+	void AudioComponent::play3D( const char* filename, E_STREAM_MODE mode )
 	{
 		vector3df pos = getHostObject()->getWorldTransformMatrix().getTranslation();
 		vec3df ikpos(pos.X, pos.Y, pos.Z);
 		
-		setSound(audioEngine->play3D(filename, ikpos, true, false, true, mode, false));
-		audio->setSoundStopEventReceiver(this);
+		bool paused = shouldPauseWhenStart();
+		ISound* sound = audioEngine->play3D(filename, ikpos, false, paused, true, mode);
+		setSound(sound, true);
 	}
 
-	void AudioComponent::OnSoundStopped( irrklang::ISound* sound, E_STOP_EVENT_CAUSE reason, void* userData )
+	void AudioComponent::OnSoundStopped(ISound* sound, E_STOP_EVENT_CAUSE reason, void*)
 	{
 		if (this->audio != sound)
 		{
@@ -65,31 +77,74 @@ namespace xihad { namespace audio
 			return;
 		}
 
-		for (auto listener : listeners)
-			listener->onSoundStopped(this, reason);
+		for (auto listener = listeners.begin(); listener != listeners.end(); /**/)
+		{
+			bool continueListening = (*listener)->onAudioStopped(this, reason);
 
-		setSound(0);
+			if (!continueListening)
+				listener = listeners.erase(listener);
+			else 
+				++listener;
+		}
+
+		assert(!isNull(audio));
+		{
+			audio->setSoundStopEventReceiver(0);
+			audio->drop();
+			changeSound(&NullSound::getSingleton(), false);
+		}
+		assert(isNull(audio));
+		// assert(There isn't any ISound keeping this pointer as its StopEventReceiver);
+	}
+
+	void AudioComponent::setSound( ISound* newSound, bool is3d )
+	{
+		if (this->audio == newSound)
+			return;
+
+		newSound = newSound ? newSound : &NullSound::getSingleton();
+
+		bool wasPaused = newSound->getIsPaused();
+
+		newSound->setIsPaused(true);
+		setSound_(newSound, is3d);
+
+		assert(isNull(audio) || !newSound->isFinished());
+		newSound->setIsPaused(wasPaused);
+	}
+
+	void AudioComponent::setSound_( ISound* newSound, bool is3d )
+	{
+		assert(newSound->getIsPaused());
+		assert(newSound);
+
+		assert(audio && "Audio must be ISound or NullSound");
+		{	// Stop audio and wait until audio was dropped
+			audio->stop();
+
+			while (!isNull(audio))
+				Process::sleep(0);
+		}
+		assert(isNull(audio));
+		assert(!is3DAudio);
+		// Process::sleep(1); // Test extreme case for concurrent issues
+
+		// Avoid to listen a finished sound
+		if (!newSound->isFinished())
+		{
+			changeSound(newSound, is3d);
+			audio->setSoundStopEventReceiver(this);
+		}
 	}
 
 	void AudioComponent::addAudioStopListener( AudioStopListener& listener )
 	{
-		listeners.insert(&listener);
+		listeners.push_back(&listener);
 	}
 
 	void AudioComponent::removeAudioStopListener( AudioStopListener& listener )
 	{
-		listeners.erase(&listener);
-	}
-
-	void AudioComponent::setSound( irrklang::ISound* newSound )
-	{
-		assert(audio != 0);
-
-		if (audio != newSound)
-		{
-			audio->drop();
-			audio = newSound ? newSound : &NullSound::getSingleton();
-		}
+		listeners.remove(&listener);
 	}
 
 //////////////////////////
@@ -188,6 +243,11 @@ namespace xihad { namespace audio
 	unsigned AudioComponent::getPlayLength()
 	{
 		return audio->getPlayLength();
+	}
+
+	bool AudioComponent::isNull( ISound* sound )
+	{
+		return sound == &NullSound::getSingleton() || !sound;
 	}
 
 }}

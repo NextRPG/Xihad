@@ -45,8 +45,8 @@ function AIManager:init( AIs )
 end
 
 function AIManager:runActors(  )
-	for characterObject in scene:objectsWithTag(self.team) do
-		if not scene:hasObjectWithTag("Hero") then break end
+	for characterObject in g_scene:objectsWithTag(self.team) do
+		if not g_scene:hasObjectWithTag("Hero") then break end
 		local actor = characterObject:findComponent(c"Actor")
 		local character = characterObject:findComponent(c"Character")
 		if not character.states.TURNOVER then
@@ -63,7 +63,7 @@ function AIManager:getFarthestAI( center )
 		list[name] = math.p_distance(center, tile)
 	end
 	local name = findMax(list)
-	return scene:findObject(c(name)):findComponent(c"Character").tile
+	return g_scene:findObject(c(name)):findComponent(c"Character").tile
 end
 
 return AIManager

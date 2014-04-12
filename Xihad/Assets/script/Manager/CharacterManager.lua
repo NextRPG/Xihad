@@ -33,7 +33,7 @@ function CharacterManager:createCharacter( character, i, j )
 	assert(character.name)
 	character.model = "ninja"
 	character.team = self.team
-	local characterObject = scene:createObject(c(character.name))
+	local characterObject = g_scene:createObject(c(character.name))
 
 	characterObject:appendComponent(c"Character", character)
 	local tile = {y = i, x = j}
@@ -83,7 +83,7 @@ end
 
 function CharacterManager:getCharacters(  )
 	local characters = {}
-	for characterObject in scene:objectsWithTag(self.team) do
+	for characterObject in g_scene:objectsWithTag(self.team) do
 		characters[#characters + 1] = characterObject:findComponent(c"Character")
 	end
 	return characters
@@ -166,7 +166,7 @@ end
 function CharacterManager:roundStart(  )
 	self.currentCharacter = nil
 	-- handle message that round on Character has started
-	for characterObject in scene:objectsWithTag(self.team) do
+	for characterObject in g_scene:objectsWithTag(self.team) do
 		local character = characterObject:findComponent(c"Character")
 		character.states.TURNOVER = false
 	end
@@ -185,7 +185,7 @@ end
 
 
 function CharacterManager:checkRoundOver(  )
-	for characterObject in scene:objectsWithTag(self.team) do
+	for characterObject in g_scene:objectsWithTag(self.team) do
 		if self:checkAvailable(characterObject) then
 			return false
 		end

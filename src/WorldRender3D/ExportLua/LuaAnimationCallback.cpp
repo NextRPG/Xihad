@@ -1,12 +1,13 @@
 #include "LuaAnimationCallback.h"
+#include <Engine/MemoryLeakDetector.h>
 #include <ScriptEngine/LuaUtil.h>
-#include <luaT\stack_memo.h>
-#include <LuaT\stack_ops.h>
-#include <boost\cast.hpp>
+#include <luaT/stack_memo.h>
+#include <LuaT/stack_ops.h>
+#include <boost/cast.hpp>
 #include <iostream>
 
-#include "..\RenderComponent.h"
-#include "..\AnimatedMeshComponent.h"
+#include "../RenderComponent.h"
+#include "../AnimatedMeshComponent.h"
 
 namespace xihad { namespace render3d
 {
@@ -15,12 +16,19 @@ namespace xihad { namespace render3d
 	LuaAnimationCallback::LuaAnimationCallback( const luaT::LuaRef& ref ) :
 		mCallable(ref)
 	{
+		XIHAD_MLD_NEW_OBJECT;
+
 		lua_State* L = mCallable.getState();
 		luaT::StackMemo memo(L);
 
 		mCallable.pushSelf();
 		if (!LuaUtil::iscallable(mCallable.getState(), -1))
 			std::cout << "WARNING: AnimationEndCallback should be callable" << std::endl;
+	}
+
+	LuaAnimationCallback::~LuaAnimationCallback() 
+	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	void LuaAnimationCallback::OnAnimationEnd( 

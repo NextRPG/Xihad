@@ -1,185 +1,94 @@
 #include "IrrlichtComponentSystem.h"
-#include "CppBase\xassert.h"
-#include <string>
+#include <map>							// |
+#include <unordered_map>				// |
+#include <Engine\BiAssociateMap.h>		// |
+#include "CameraRenderTarget.h"			// +----> includes for CameraRenderer
+// #include <Engine\irr_ptr.h>
 #include <irrlicht\ISceneManager.h>
+#include "TextureManager.h"
+#include "MeshManager.h"
 #include <irrlicht\IrrlichtDevice.h>
-#include <irrlicht\ICameraSceneNode.h>
-#include "Engine\Timeline.h"
-#include "MeshComponent.h"
-#include "LightComponent.h"
-#include "CameraComponent.h"
-#include "Engine\Properties.h"
-#include "boost\variant\get.hpp"
-#include "CppBase\StdMap.h"
-#include "Engine\irr_ptr.h"
-#include "AnimatedMeshComponent.h"
-#include "Engine\dimension2d.h"
-#include "BillboardComponent.h"
-#include <boost\property_tree\json_parser.hpp>
-#include "ParticleSystemComponent.h"
-#include <unordered_map>
-#include <luaT\luaT.h>
+#include <Particle\CParticleSystemScriptFactory.h>
+/* All above headers used in field */
 
-using namespace xihad::ngn;
-using namespace irr;
-using namespace scene;
-using namespace video;
+/* All below headers used in implemention */
+#include <CppBase\xassert.h>
+#include <Engine\Timeline.h>
+#include "MeshComponent.h"				// |
+#include "LightComponent.h"				// |
+#include "CameraComponent.h"			// |
+#include "AnimatedMeshComponent.h"		// |
+#include "BillboardComponent.h"			// |
+#include "ParticleSystemComponent.h"	// |
+#include "TextComponent.h"				// +-----> includes for all Components
+
 using namespace std;
 using namespace boost;
 namespace xihad { namespace render3d
 {
-	struct IrrlichtComponentSystemImpl
-	{
-		irr_ptr<IrrlichtDevice> device;
-		irr_ptr<IVideoDriver> driver;
-		irr_ptr<ISceneManager> smgr;
-		AnimationClipsCache* clipCaches;
+	using namespace particle;
+	using namespace video;
+	using namespace ngn;
 
-		list<RenderComponent*> renderComponents;
-		unordered_map<string, luaT::LuaRef> particleSystemCreator;
+	typedef std::multimap<CameraRenderTarget, CameraComponent*> RenderTarget2Cam;
+	typedef std::unordered_map<CameraComponent*, RenderTarget2Cam::iterator> Cam2RenderTarget;
+	typedef BiAssociateMap<CameraRenderTarget, CameraComponent*, RenderTarget2Cam, Cam2RenderTarget> CameraRenderer;
+	struct IrrlichtComponentSystem::impl
+	{
+		irr_ptr<ISceneManager> smgr;
+		irr_ptr<IParticleSystemScriptFactory> particleFactory;
+		AnimationClipsCache* clipsCache;
+		boost::scoped_ptr<TextureManager> texManager;
+		boost::scoped_ptr<MeshManager> meshManager;
+		video::SColor bgColor;
+
+		CameraRenderer cameraRenderers;
 	};
 
 	IrrlichtComponentSystem::IrrlichtComponentSystem( 
 		IrrlichtDevice* device, ISceneManager* scene, 
-		const InheritanceTree& tree, AnimationClipsCache& gCache) :
-	BaseComponentSystem(tree), mImpl(new IrrlichtComponentSystemImpl)
+		const InheritanceTree& tree, AnimationClipsCache* gCache) :
+	BaseComponentSystem(tree), mImpl(new impl)
 	{
 		xassert(device);
 		xassert(scene);
 
-		mImpl->device = device;
-		mImpl->driver = device->getVideoDriver();
 		mImpl->smgr = scene;
-		mImpl->clipCaches = &gCache;
+		mImpl->clipsCache = gCache;
+		mImpl->bgColor = video::SColor(255, 100, 100, 200);
+
+		mImpl->texManager.reset(new TextureManager(*device->getVideoDriver()));
+		mImpl->meshManager.reset(new MeshManager(*scene));
+
+		auto irrPSF = mImpl->smgr->getParticleSystemFactory();
+		auto fptr = CParticleSystemScriptFactory::createDefault(irrPSF);
+		mImpl->particleFactory.reset(fptr);
+		fptr->drop();
 	}
 
-	IrrlichtComponentSystem::~IrrlichtComponentSystem()
-	{
-	}
+	IrrlichtComponentSystem::~IrrlichtComponentSystem() {}
 
-	Component* IrrlichtComponentSystem::create( const string& compName, 
-		GameObject& obj, const Properties& param )
+	Component* IrrlichtComponentSystem::create(const string& compName, GameObject& obj, const Properties& param )
 	{
-		irr_ptr<ISceneManager> smgr = mImpl->smgr;
+		ISceneManager* smgr = mImpl->smgr.get();
+
 		RenderComponent* ret = nullptr;
-
 		if (compName == "Mesh")
-		{
-			IMesh* mesh = nullptr;
-			if (const char* path = param.getString("mesh"))
-				mesh = smgr->getMesh(path);
-
-			vector3df zero(0, 0, 0), one(1, 1, 1);
-			IMeshSceneNode* meshNode = 
-				smgr->addMeshSceneNode(mesh, 0, -1, zero, zero, one, true);
-
-			ret = new MeshComponent(compName, obj, meshNode);
-		}
-		else if (compName == "Light")
-		{
-			ILightSceneNode* lightNode = smgr->addLightSceneNode();
-			ret = new LightComponent(compName, obj, lightNode);
-		}
-		else if (compName == "Camera")
-		{
-			irr_ptr<ICameraSceneNode> prevActiveCamera = smgr->getActiveCamera();
-
-			// can't add fps/maya camera
-			ICameraSceneNode* cameraNode = smgr->addCameraSceneNode();
-
-			if (param.getBool("active", true) == false)
-				smgr->setActiveCamera(prevActiveCamera.get());
-
-			ret = new CameraComponent(compName, obj, cameraNode);
-		}
+			ret = MeshComponent::create(compName, obj, param, smgr, mImpl->meshManager.get());
 		else if (compName == "AnimatedMesh")
-		{
-			IAnimatedMesh* mesh = nullptr;
-			if (const char* path = param.getString("mesh"))
-				mesh = smgr->getMesh(path);
-
-			if (mesh)
-			{
-				for (u32 i = 0; i < mesh->getMeshBufferCount(); i++)
-				{
-					mesh->getMeshBuffer(i)->setHardwareMappingHint(EHM_STREAM, EBT_INDEX);
-					mesh->getMeshBuffer(i)->setHardwareMappingHint(EHM_STREAM, EBT_VERTEX);
-				}
-			}
-
-			AnimationClips clips;
-			if (const char* path = param.getString("clips"))
-			{
-				string path_s = path;
-				if (auto got = StdMap::findValuePtr(*mImpl->clipCaches, path_s))
-				{
-					clips = *got;
-				}
-				else
-				{
-					property_tree::ptree treeData;
-
-					try
-					{
-						read_json(path_s, treeData);
-						clips = AnimationClips::loadFromPtree(treeData);
-					}
-					catch (property_tree::json_parser_error& error)
-					{
-						cerr << error.what() << endl;
-					}
-
-					// even if the clip data is error, insert it.
-					// so we don't need to read the stupid data again
-					StdMap::insert(*mImpl->clipCaches, path_s, clips);
-				}
-			}
-
-			vector3df zero, one(1, 1, 1);
-			IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(
-				mesh, 0, -1, zero, zero, one, true);
-
-			auto amc = new AnimatedMeshComponent(compName, obj, node);
-			amc->createClips(clips);
-			ret = amc;
-		}
-		else if (compName == "SkyDome")
-		{
-			ITexture* tex = nullptr;
-			if (const char* path = param.getString("texture"))
-				tex = mImpl->driver->getTexture(path);
-
-			if (!tex) return nullptr;
-
-			int horiRes = param.getInt("horiRes", 16);
-			int vertRes = param.getInt("vertRes", 8);
-			float texPercent = param.getFloat("texPercent", 0.9f);
-			float spherePercent = param.getFloat("spherePercent", 2.f);
-			float radius = param.getFloat("radius", 1000.f);
-
-			ISceneNode* node = smgr->addSkyDomeSceneNode(tex, horiRes, vertRes, 
-				texPercent, spherePercent, radius);
-
-			ret = new RenderComponent(compName, obj, node);
-		}
+			ret = AnimatedMeshComponent::create(compName, obj, param, smgr, mImpl->clipsCache, mImpl->meshManager.get());
 		else if (compName == "Billboard")
-		{
-			IBillboardSceneNode* node = smgr->addBillboardSceneNode();
-			ret = new BillboardComponent(compName, obj, node);
-		}
+			ret = BillboardComponent::create(compName, obj, param, smgr);
 		else if (compName == "ParticleSystem")
-		{
-// 			if (const char* path = param.getString("path"))
-// 			{
-// 				luaT::LuaRef func;
-// 				if (auto got = StdMap::findValuePtr(mImpl->particleSystemCreator, string(path)))
-// 					func = *got;
-// 				else 
-// 				{
-// 					luaL_dofile(L, path);
-// 				}
-// 			}
-		}
+			ret = ParticleSystemComponent::create(compName, obj, param, smgr);
+		else if (compName == "Light")
+			ret = LightComponent::create(compName, obj, param, smgr);
+		else if (compName == "Camera")
+			ret = CameraComponent::create(compName, obj, param, smgr, this);
+		else if (compName == "SkyDome")
+			ret = RenderComponent::createSkyDomeComponent(compName, obj, param, smgr, mImpl->texManager.get());
+		else if (compName == "Text")
+			ret = TextComponent::create(compName, obj, param, smgr);
 
 		return ret;
 	}
@@ -191,13 +100,14 @@ namespace xihad { namespace render3d
 	static void syncSceneNode(ISceneNode* node)
 	{
 		auto iter = node->getChildren().begin();
-		while (iter != node->getChildren().end())
+		auto stop = node->getChildren().end();
+		while (iter != stop)
 		{
 			RenderComponent* component = RenderComponent::getComponentFromNode(*iter);
 			if (component)
 				component->syncWithObject();
 
-			syncSceneNode(*iter);
+			// syncSceneNode(*iter);
 			++iter;
 		}
 	}
@@ -206,16 +116,85 @@ namespace xihad { namespace render3d
 	{
 		syncSceneNode(mImpl->smgr->getRootSceneNode());
 		mImpl->smgr->onAnimate((s32) (tl.getElapsedSeconds()*1000));
-		mImpl->smgr->drawAll();
+
+		video::IVideoDriver* driver = mImpl->smgr->getVideoDriver();
+
+		int target = -1;
+		CameraRenderTarget::RenderTexture* texture = 0; 
+		for (auto& kv : mImpl->cameraRenderers.pairs())
+		{
+			CameraComponent* camera = kv.second;
+
+			if (!camera->isActive()) continue;
+
+			const CameraRenderTarget& rt = kv.first;
+			if (rt.getType() != target && rt.getType() != ERT_RENDER_TEXTURE)
+			{
+				if (rt.getType() == ERT_MULTI_RENDER_TEXTURES)
+				{
+					cerr << "Multi render textures are not supported yet" << endl;
+					continue;
+				}
+
+				target = kv.first.getType();
+				
+				if (!driver->setRenderTarget(target, true, true, mImpl->bgColor))
+					cerr << "RenderTarget set failed" << endl;
+			}
+			else if (rt.getRenderTexture() != 0 && rt.getRenderTexture() != texture)
+			{
+				target = ERT_RENDER_TEXTURE;
+				texture = rt.getRenderTexture();
+
+				if (!driver->setRenderTarget(texture))
+					cerr << "RenderTexture set failed" << endl;
+			}
+			assert(target != -1);
+
+			core::recti viewport = camera->getAbsoluteViewport(driver->getCurrentRenderTargetSize());
+			driver->setViewPort(viewport);
+			mImpl->smgr->setActiveCamera(camera->getNode());
+			mImpl->smgr->drawAll();
+		}
+
+		// TODO Add interface to integrate other rendering module with MRT.
+		// Now we have to switch back to frame buffer to let gui or other modules draw on window default.
+		driver->setRenderTarget(video::ERT_FRAME_BUFFER, false, false);
 	}
 
 	void IrrlichtComponentSystem::onStop()
 	{
+		mImpl->smgr.reset(0);
 	}
 
-	irr::scene::ISceneManager* IrrlichtComponentSystem::getSceneManager()
+	IParticleSystemScriptFactory* IrrlichtComponentSystem::getParticleFactory()
+	{
+		return mImpl->particleFactory.get();
+	}
+
+	ISceneManager* IrrlichtComponentSystem::getSceneManager()
 	{
 		return mImpl->smgr.get();
+	}
+
+	TextureManager* IrrlichtComponentSystem::getTextureManager()
+	{
+		return mImpl->texManager.get();
+	}
+
+	MeshManager* IrrlichtComponentSystem::getMeshManager()
+	{
+		return mImpl->meshManager.get();
+	}
+
+	void IrrlichtComponentSystem::addCamera( const CameraRenderTarget& rt, CameraComponent * camcom )
+	{
+		mImpl->cameraRenderers.add(rt, camcom);
+	}
+
+	void IrrlichtComponentSystem::removeCamera( CameraComponent* camcom)
+	{
+		mImpl->cameraRenderers.remove(camcom);
 	}
 
 }}

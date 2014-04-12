@@ -1,5 +1,6 @@
 #include "UpdateHandler.h"
 #include "CppBase/xassert.h"
+#include "MemoryLeakDetector.h"
 #include <iostream>
 
 namespace xihad { namespace ngn
@@ -16,7 +17,7 @@ namespace xihad { namespace ngn
 		return (statusBits & pendingBit) != 0;
 	}
 
-	UpdateHandler::UpdateHandler() : mStatus(BORN) { }
+	UpdateHandler::UpdateHandler() : mStatus(BORN) { XIHAD_MLD_NEW_OBJECT; }
 
 	bool UpdateHandler::start()
 	{
@@ -108,6 +109,8 @@ namespace xihad { namespace ngn
 
 	UpdateHandler::~UpdateHandler()
 	{
+		XIHAD_MLD_DEL_OBJECT;
+
 		xassert(status() == DESTROYING && 
 			"Never delete UpdateHandler directly, invoke UpdateHandler::stop() instead");
 	}
@@ -123,6 +126,11 @@ namespace xihad { namespace ngn
 
 	void UpdateHandler::onDestroy()
 	{
+	}
+
+	bool UpdateHandler::isUpdating() const
+	{
+		return STARTING<status() && status()<DEAD;
 	}
 
 }}

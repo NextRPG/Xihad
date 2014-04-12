@@ -7,6 +7,7 @@ namespace xihad { namespace ngn
 	FPSCounter::FPSCounter( float fpsUpdateTime ) :
 		lastFPSValue(0.f), recentFPSRecordBegin(0.f), recentFPSCount(0u)
 	{
+		setDebugName("FPSCounter");
 		setFPSUpdateTime(fpsUpdateTime);
 	}
 

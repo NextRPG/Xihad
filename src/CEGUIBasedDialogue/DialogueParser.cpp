@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "DialogueParser.h"
 #include <CEGUI\SchemeManager.h>
 #include <CEGUI\WindowManager.h>

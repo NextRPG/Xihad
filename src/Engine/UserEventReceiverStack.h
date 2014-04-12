@@ -1,7 +1,7 @@
 #pragma once
 #include "UserEventReceiver.h"
 #include <list>
-#include "irr_ptr.h"
+#include "xptr.h"
 
 namespace xihad { namespace ngn
 {
@@ -9,6 +9,8 @@ namespace xihad { namespace ngn
 	{
 	public:
 		UserEventReceiverStack(bool frontOnly = false);
+
+		virtual ~UserEventReceiverStack();
 
 		//! push a receiver that will have the highest priority to handle event onto stack
 		/**
@@ -34,7 +36,7 @@ namespace xihad { namespace ngn
 		virtual int onMouseEvent(const MouseEvent& event, int argFromPreviousReceiver);
 
 	private:
-		std::list<irr_ptr<UserEventReceiver> > receivers;
+		std::list<xptr<UserEventReceiver> > receivers;
 		bool receiveFrontEventOnly;
 	};
 }}

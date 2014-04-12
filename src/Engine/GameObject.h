@@ -12,9 +12,9 @@
 namespace xihad { namespace ngn
 {
 	struct GameObjectDepends;
+	class GameObjectVisitor;
 	class GameScene;
 	class Component;
-	class Transform;
 	/// 游戏中拥有位置信息的物体
 	/** 
 	 * 每个游戏对象可以有任意多个组件，游戏中的一切物体都可以是游戏对象，比如：英雄、敌人、
@@ -161,11 +161,7 @@ namespace xihad { namespace ngn
 		/// 取得父节点
 		virtual GameObject* getParent() const;
 
-		/// 指向第一个子节点的迭代器
-		virtual child_iterator firstChild() const;
-
-		/// 指向最后一个子节点后面的迭代器，你不能对这个迭代器解引用
-		virtual child_iterator lastChild() const;
+		virtual void visitChildren(GameObjectVisitor& visitor);
 
 		/// 在当前变换上级联缩放
 		void concatScale(const vector3df& concat)
@@ -232,6 +228,8 @@ namespace xihad { namespace ngn
 		 */
 		virtual const Matrix& getWorldTransformMatrix() const;
 
+		virtual const Transform& getWorldTransform() const;
+
 	protected:
 		virtual void onStart();
 
@@ -245,10 +243,10 @@ namespace xihad { namespace ngn
 
 	private:
 		void updateChildrenWorldMatrix();
+		void updateWorldMatrix() const;
 
 	private:
 		struct impl;
-		Transform mTransform;
 		boost::scoped_ptr<impl> mImpl;
 	};
 }}

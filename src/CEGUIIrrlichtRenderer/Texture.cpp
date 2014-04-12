@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
+#include <algorithm>
 #include "Texture.h"
 #include "CEGUI/System.h"
 #include "CEGUI/Exceptions.h"

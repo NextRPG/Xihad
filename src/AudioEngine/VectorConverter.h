@@ -4,9 +4,11 @@
 
 namespace xihad { namespace audio
 {
-	irrklang::vec3df to_irrklang_vector3d(const ngn::vector3df& vec)
+	using namespace irrklang;
+
+	vec3df to_irrklang_vector3d(const ngn::vector3df& vec)
 	{
-		return reinterpret_cast<const irrklang::vec3df&>(vec);
+		return reinterpret_cast<const vec3df&>(vec);
 	}
 }}
 

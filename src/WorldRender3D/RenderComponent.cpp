@@ -1,24 +1,24 @@
 #include "RenderComponent.h"
-#include "irrlicht/ISceneNode.h"
-#include "irrlicht/ISceneManager.h"
-#include "irrlicht/IVideoDriver.h"
-#include "Engine/GameObject.h"
-#include "Engine/Transform.h"
-#include "CppBase/BitOperation.h"
-#include "boost/cast.hpp"
+#include <irrlicht/ISceneNode.h>
+#include <irrlicht/ISceneManager.h>
+#include <irrlicht/IVideoDriver.h>
+#include <Engine/GameObject.h>
+#include <Engine/Transform.h>
+#include <CppBase/BitOperation.h>
+#include <boost/cast.hpp>
+#include "TextureManager.h"
 
-using namespace irr;
-using namespace scene;
-using namespace core;
-using namespace video;
 using namespace boost;
 namespace xihad { namespace render3d
 {
+	using namespace core;
+	using namespace video;
 	using namespace ngn;
+
 	using ::std::string;
 
 	// fwd
-	static void setUserdata2Node(irr::scene::ISceneNode* node, void* ud);
+	static void setUserdata2Node(ISceneNode* node, RenderComponent* ud);
 
 	RenderComponent::RenderComponent(const string& name, GameObject& host, ISceneNode* node ) :
 		Component(name, host), mNode(node), mVisibility(1)
@@ -33,42 +33,60 @@ namespace xihad { namespace render3d
 
 	RenderComponent::~RenderComponent()
 	{
-		setUserdata2Node(mNode.get(), nullptr);
+		setUserdata2Node(mNode.get(), 0);
 		xassert(RenderComponent::getComponentFromNode(mNode.get()) == nullptr);
 	}
+
+
+	RenderComponent* RenderComponent::createSkyDomeComponent(
+		const std::string& name, ngn::GameObject& host, const ngn::Properties& param, 
+		ISceneManager* smgr, TextureManager* texManager )
+	{
+		ITexture* tex = nullptr;
+		if (const char* path = param.getString("texture"))
+			tex = texManager->getTexture(path);
+
+		if (!tex) return nullptr;
+
+		int horiRes = param.getInt("horiRes", 16);
+		int vertRes = param.getInt("vertRes", 8);
+		float texPercent = param.getFloat("texPercent", 0.9f);
+		float spherePercent = param.getFloat("spherePercent", 2.f);
+		float radius = param.getFloat("radius", 1000.f);
+
+		ISceneNode* node = smgr->addSkyDomeSceneNode(tex, horiRes, vertRes, 
+			texPercent, spherePercent, radius);
+
+		return new RenderComponent(name, host, node);
+	}
+
 
 	const RenderComponent::AABB& RenderComponent::getBoundingBox() const
 	{
 		return mNode->getBoundingBox();
 	}
 
-	const RenderComponent::AABB RenderComponent::getTransformedBoundingBox() const
+	const RenderComponent::AABB RenderComponent::getTransformedAABB() const
 	{
 		return mNode->getTransformedBoundingBox();
 	}
 
-	RenderComponent::Material& RenderComponent::getMaterial( irr::u32 num )
+	RenderComponent::Material& RenderComponent::getMaterial( u32 num )
 	{
 		return mNode->getMaterial(num);
 	}
 
-	irr::u32 RenderComponent::getMaterialCount() const
+	u32 RenderComponent::getMaterialCount() const
 	{
 		return mNode->getMaterialCount();
 	}
 
-	void RenderComponent::setMaterialFlag( irr::video::E_MATERIAL_FLAG flag, bool newValue )
+	void RenderComponent::setMaterialFlag( video::E_MATERIAL_FLAG flag, bool newValue )
 	{
 		mNode->setMaterialFlag(flag, newValue);
 	}
 
-	void RenderComponent::setMaterialTexture( irr::u32 textureLayer, const irr::c8* texName )
-	{
-		ITexture* tex = mNode->getSceneManager()->getVideoDriver()->findTexture(texName);
-		setMaterialTexture(textureLayer, tex);
-	}
-
-	void RenderComponent::setMaterialTexture( irr::u32 textureLayer, Texture* texture )
+	void RenderComponent::setMaterialTexture( u32 textureLayer, Texture* texture )
 	{
 		mNode->setMaterialTexture(textureLayer, texture);
 	}
@@ -88,7 +106,7 @@ namespace xihad { namespace render3d
 		return sel != nullptr;
 	}
 
-	void RenderComponent::removeTriangleSelector()
+	void RenderComponent::removeSelector()
 	{
 		getNode()->setTriangleSelector(nullptr);
 	}
@@ -120,34 +138,8 @@ namespace xihad { namespace render3d
 
 	void RenderComponent::syncWithObject()
 	{
-		static string BASE_NAME = "Render";
-
-		GameObject* obj = getHostObject();
-
-		bool trulyVisible, localVisible;
-		trulyVisible = localVisible = isVisible();
-
-		// visibility is determined by parent's render component
-		GameObject* parent;
-		if ((parent = obj->getParent()) && localVisible)
-		{
-			const string& mName = getComponentName();
-			Component* comp = parent->findComponent(BASE_NAME);
-
-			RenderComponent* rc;
-			trulyVisible = !(rc = polymorphic_downcast<RenderComponent*> (comp)) ||
-				(rc->isTrulyVisible());
-		}
-
-		BitOperation::set(mVisibility, 2, trulyVisible);
-		mNode->setVisible(trulyVisible);
-
-		// sync transform
-		// TODO: try to set AbsoluteMatrix directly
-		const Matrix& worldTransform = obj->getWorldTransformMatrix();
-		mNode->setPosition(worldTransform.getTranslation());
-		mNode->setRotation(worldTransform.getRotationDegrees());
-		mNode->setScale(worldTransform.getScale());
+		mNode->setVisible(isVisible());
+		mNode->setRelativeTransformation(getHostObject()->getWorldTransformMatrix());
 	}
 
 	void RenderComponent::onStart()
@@ -157,13 +149,24 @@ namespace xihad { namespace render3d
 
 	void RenderComponent::onUpdate( const ngn::Timeline& )
 	{
-		
+			
 	}
 
 	void RenderComponent::onStop()
 	{
 		mNode->setParent(nullptr);
 	}
+
+	bool RenderComponent::isCulled() const
+	{
+		return getNode()->getSceneManager()->isCulled(getNode());
+	}
+
+	ITriangleSelector* RenderComponent::getTriangleSelector() const
+	{
+		return getNode()->getTriangleSelector();
+	}
+
 
 	enum 
 	{
@@ -172,32 +175,19 @@ namespace xihad { namespace render3d
 		DATA_LENGTH  = sizeof(RenderComponent*),
 		NAME_LENGTH  = DATA_LENGTH + MAGIC_LENGTH,
 	};
-	RenderComponent* RenderComponent::getComponentFromNode( const irr::scene::ISceneNode* node )
+
+	union RenderComponentIntrusiveData
 	{
-		const char* namedPtr = node->getName();
-		int magicNumber;
-		void* ptr;
-		memcpy(&magicNumber, namedPtr, MAGIC_LENGTH);
-		if (magicNumber != MAGIC_NUMBER)
-			return nullptr;
-		else
+		struct Data
 		{
-			memcpy(&ptr, namedPtr+MAGIC_LENGTH, DATA_LENGTH);
-			return static_cast<RenderComponent*> (ptr);
-		}
-	}
+			int magicNumber;
+			RenderComponent* ptr;
+		} rcdata;
 
-	bool RenderComponent::isCulled() const
-	{
-		return getNode()->getSceneManager()->isCulled(getNode());
-	}
+		char name[NAME_LENGTH];
+	};
 
-	irr::scene::ITriangleSelector* RenderComponent::getTriangleSelector() const
-	{
-		return getNode()->getTriangleSelector();
-	}
-
-	static void setUserdata2Node( irr::scene::ISceneNode* node, void* userdata )
+	static void setUserdata2Node( ISceneNode* node, RenderComponent* userdata )
 	{
 		if (userdata == nullptr)
 		{
@@ -205,15 +195,24 @@ namespace xihad { namespace render3d
 		}
 		else
 		{
-			char renderptr2name[NAME_LENGTH+1];
-			int magicNumber = MAGIC_NUMBER;
-			memcpy(renderptr2name, &magicNumber, MAGIC_LENGTH);
-			memcpy(renderptr2name+MAGIC_LENGTH, &userdata, DATA_LENGTH);
-			renderptr2name[NAME_LENGTH] = '\0';
-
-			stringc codedName(renderptr2name, NAME_LENGTH);
+			RenderComponentIntrusiveData intrsive;
+			intrsive.rcdata.magicNumber = MAGIC_NUMBER;
+			intrsive.rcdata.ptr = userdata;
+			stringc codedName(intrsive.name, NAME_LENGTH);
 			node->setName(codedName);
 		}
+	}
+
+	RenderComponent* RenderComponent::getComponentFromNode( const ISceneNode* node )
+	{
+		char* namedPtr = const_cast<char*>(node->getName());
+		RenderComponentIntrusiveData* intrusive = 
+			reinterpret_cast<RenderComponentIntrusiveData*>(namedPtr);
+
+		if (intrusive->rcdata.magicNumber == MAGIC_NUMBER)
+			return intrusive->rcdata.ptr;
+
+		return 0;
 	}
 
 }}

@@ -7,9 +7,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(GameObject, false);
-
 namespace xihad { namespace script
 {
 	static int objectAppendComponent(lua_State* L)
@@ -50,33 +47,6 @@ namespace xihad { namespace script
 		return 1;
 	}
 
-	static int pushVec3(lua_State* L, const vector3df& r)
-	{
-		push<float>(L, r.X);
-		push<float>(L, r.Y);
-		push<float>(L, r.Z);
-
-		return 3;
-	}
-
-	static int object_getRotation(lua_State* L)
-	{
-		GameObject* go = checkarg<GameObject*>(L, 1);
-		return pushVec3(L, go->getRotation());
-	}
-
-	static int object_getTranslate(lua_State* L)
-	{
-		GameObject* go = checkarg<GameObject*>(L, 1);
-		return pushVec3(L, go->getTranslate());
-	}
-
-	static int object_getScale(lua_State* L)
-	{
-		GameObject* go = checkarg<GameObject*>(L, 1);
-		return pushVec3(L, go->getScale());
-	}
-
 	static int object_getID(lua_State* L)
 	{
 		GameObject* go = checkarg<GameObject*>(L, 1);
@@ -87,9 +57,10 @@ namespace xihad { namespace script
 	int luaopen_GameObject(lua_State* L)
 	{
 		luaT_defRegsBgn(goRegs)
-			{ "appendComponent", objectAppendComponent },
-			{ "searchComponent", objectFindComponent },
-			{ "findComponent",	 objectFindComponent },
+			luaT_lnnamefunc(objectAppendComponent, appendComponent),
+			luaT_lnnamefunc(objectFindComponent, searchComponent),
+			luaT_lnnamefunc(objectFindComponent, findComponent),
+			luaT_lnnamefunc(object_getID, getID),
 			luaT_mnamedfunc(GameObject, setParent),
 			luaT_mnamedfunc(GameObject, getParent),
 			luaT_mnamedfunc(GameObject, removeComponent),
@@ -111,7 +82,6 @@ namespace xihad { namespace script
 			luaT_mnnamefunc(GameObject, getTranslate, getTranslation),
 			luaT_mnamedfunc(GameObject, getRotation),
 			luaT_mnnamefunc(GameObject, getRotation, getRotate),
-			{ "getID",			object_getID },
 		luaT_defRegsEnd
 		MetatableFactory<GameObject, CompositeUpdateHandler>::create(L, goRegs, 0);
 

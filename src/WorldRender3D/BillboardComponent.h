@@ -15,8 +15,12 @@ namespace xihad { namespace render3d
 	public:
 		DEFINE_VISITABLE
 
-		BillboardComponent(	const std::string& name, ngn::GameObject& host, 
-							irr::scene::IBillboardSceneNode* node );	
+		BillboardComponent(const std::string& name, ngn::GameObject& host, IBillboardSceneNode* node );	
+
+
+		static BillboardComponent* create(
+			const std::string& name, ngn::GameObject& host, const ngn::Properties& params,
+			ISceneManager* smgr);
 
 		void setSize(const ngn::dimension2df& size);
 		
@@ -24,16 +28,14 @@ namespace xihad { namespace render3d
 		
 		void getSize(float& height, float& bottomEdgeWidth, float& topEdgeWidth) const;
 
-		void setColor(const irr::video::SColor& overallColor);
+		void setColor(const video::SColor& overallColor);
 		
-		void setColor(const irr::video::SColor& topColor,
-			const irr::video::SColor& bottomColor);
+		void setColor(const video::SColor& topColor, const video::SColor& bottomColor);
 		
-		void getColor(irr::video::SColor& topColor,
-			irr::video::SColor& bottomColor) const;
+		void getColor(video::SColor& topColor, video::SColor& bottomColor) const;
 
 	private:
-		irr::scene::IBillboardSceneNode* getNode() const;
+		IBillboardSceneNode* getNode() const;
 		
 	};
 }}

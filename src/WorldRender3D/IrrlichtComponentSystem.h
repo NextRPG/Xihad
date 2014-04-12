@@ -1,43 +1,71 @@
 #pragma once
 #include "Engine\BaseComponentSystem.h"
 #include <boost\scoped_ptr.hpp>
-#include "AnimationClipsCache.h"
 
 struct lua_State;
+
 namespace irr
 {
 	class IrrlichtDevice;
 	namespace scene
 	{
 		class ISceneManager;
+		class IMesh;
 	}
 }
 
+namespace xihad { namespace particle
+{
+	class IParticleSystemScriptFactory;
+}}
+
 namespace xihad { namespace render3d
 {
-	struct IrrlichtComponentSystemImpl;
+	using namespace irr;
+
+	class MeshManager;
+	class TextureManager;
+	class CameraRenderTarget;
+	class CameraComponent;
+	class AnimationClipsCache;
 	class IrrlichtComponentSystem : public ngn::BaseComponentSystem
 	{
 	public:
 		IrrlichtComponentSystem(
-			irr::IrrlichtDevice* device, irr::scene::ISceneManager* scene,
-			const ngn::InheritanceTree& tree, AnimationClipsCache& gCache);
+			IrrlichtDevice* device, scene::ISceneManager* scene,
+			const ngn::InheritanceTree& tree, AnimationClipsCache* gCache);
 
 		virtual ~IrrlichtComponentSystem();
 
-		virtual ngn::Component* create(const std::string& compName, 
-			ngn::GameObject& obj, const ngn::Properties& param = ngn::NullProperties()) override;
+		virtual ngn::Component* create(
+			const std::string& compName, 
+			ngn::GameObject& obj, 
+			const ngn::Properties& param = ngn::NullProperties()) override;
 
+		particle::IParticleSystemScriptFactory* getParticleFactory();
+
+		scene::ISceneManager* getSceneManager();
+
+		TextureManager* getTextureManager();
+
+		MeshManager* getMeshManager();
+
+		void setShadowColor();
+
+		void setAmbientColor();
+
+		void addCamera(const CameraRenderTarget& rt, CameraComponent *);
+
+		void removeCamera(CameraComponent*);
+
+	protected:
 		virtual void onStart() override;
-
 		virtual void onUpdate( const ngn::Timeline& ) override;
-
 		virtual void onStop() override;
 
-		irr::scene::ISceneManager* getSceneManager();
-
 	private:
-		boost::scoped_ptr<IrrlichtComponentSystemImpl> mImpl;
+		struct impl;
+		boost::scoped_ptr<impl> mImpl;
 	};
 }}
 

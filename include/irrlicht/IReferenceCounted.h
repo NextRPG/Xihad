@@ -6,6 +6,7 @@
 #define __I_IREFERENCE_COUNTED_H_INCLUDED__
 
 #include "irrTypes.h"
+#include "CMemoryLeakDetector.h"
 
 namespace irr
 {
@@ -43,14 +44,23 @@ namespace irr
 	public:
 
 		//! Constructor.
-		IReferenceCounted()
-			: DebugName(0), ReferenceCounter(1)
+		IReferenceCounted() : ReferenceCounter(1)
+#ifdef _DEBUG
+			, DebugName(0)
+#endif
 		{
+			IRR_MLD_NEW_OBJECT;
 		}
 
 		//! Destructor.
 		virtual ~IReferenceCounted()
 		{
+#ifdef _DEBUG
+			if (!getDebugName())
+				IRR_MLD_DEL_OBJECT;
+			else 
+				IRR_MLD_DEL_NAMED_OBJECT;
+#endif
 		}
 
 		//! Grabs the object. Increments the reference counter by one.
@@ -135,6 +145,12 @@ namespace irr
 			return ReferenceCounter;
 		}
 
+	private:
+		//! The reference counter. Mutable to do reference counting on const objects.
+		mutable s32 ReferenceCounter;
+
+#ifdef _DEBUG
+	public:		
 		//! Returns the debug name of the object.
 		/** The Debugname may only be set and changed by the object
 		itself. This method should only be used in Debug mode.
@@ -152,16 +168,29 @@ namespace irr
 		\param newName: New debug name to set. */
 		void setDebugName(const c8* newName)
 		{
+			if (DebugName || !newName) return;
+
 			DebugName = newName;
+
+			IRR_MLD_NEW_NAMED_OBJECT;
 		}
 
 	private:
 
 		//! The debug name.
 		const c8* DebugName;
+#else
+	public:
+		const c8* getDebugName() const
+		{
+			return "RELEASE_VERSION_DONT_HAVE_DEBUG_NAME";
+		}
 
-		//! The reference counter. Mutable to do reference counting on const objects.
-		mutable s32 ReferenceCounter;
+	protected:
+		void setDebugName(const c8*)
+		{
+		}
+#endif
 	};
 
 } // end namespace irr

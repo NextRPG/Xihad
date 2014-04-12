@@ -25,15 +25,11 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp">
       <Filter>Export</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ScriptEngine\LuaManagedUpdateHandler.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageListener.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\LuaMessageListener.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_MessageDispatcher.cpp">
-      <Filter>Export</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp">
       <Filter>Export</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp">
@@ -48,6 +44,10 @@
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp">
       <Filter>Export</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ScriptEngine\LuaUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameWorld.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ScriptEngine\LuaComponent.h" />
@@ -60,8 +60,8 @@
     <ClInclude Include="..\src\ScriptEngine\Export\luaopen_all.h">
       <Filter>Export</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ScriptEngine\LuaManagedUpdateHandler.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaMessageListener.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaUpdateHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Export">

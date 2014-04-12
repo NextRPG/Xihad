@@ -19,16 +19,21 @@ local Chessboard = {
 local function resetColor( tileObject )
 	local tile = tileObject:findComponent(c"Tile")
 	local fcomp = tileObject:findComponent(c"Mesh")
-	if tile.terrain.id == 1 then
-		-- light green
-		fcomp:setColor(hex2Color("b2d235"))
-	elseif tile.terrain.id == 2 then
-		-- BLUE
-		-- fcomp:setColor(hex2Color("102b6a"))
-		fcomp:setColor(hex2Color("121a2a"))
-	elseif tile.terrain.id == 3 then
-		-- deep green 
-		fcomp:setColor(hex2Color("225a1f"))
+	
+	for i = 1, fcomp:getMaterialCount() do
+		local fmat = fcomp:getMaterial(i-1)	-- CAUTION!!!
+		fmat:setColorMaterial('none')
+		if tile.terrain.id == 1 then
+			-- light green
+			fmat:setDiffuseColor(Color.new(0xffb2d235))
+		elseif tile.terrain.id == 2 then
+			-- BLUE
+			-- fmat:setDiffuseColor(Color.new(0xff102b6a))
+			fmat:setDiffuseColor(Color.new(0xff121a2a))
+		elseif tile.terrain.id == 3 then
+			-- deep green 
+			fmat:setDiffuseColor(Color.new(0xff225a1f))
+		end
 	end
 end
 
@@ -46,10 +51,9 @@ end
 -- @tparam Tile tile
 -- @treturn Object tileObject
 function Chessboard:createTile( tile )
-	local cubeMesh = geometry:createCube(Consts.TILE_WIDTH, 5, Consts.TILE_HEIGHT)
-	local tileObject = scene:createObject(c(tname(tile)))
-	fcomp = tileObject:appendComponent(c"Mesh")
-	fcomp:setMesh(cubeMesh)
+	local tileObject = g_scene:createObject(c(tname(tile)))
+	local fcomp = tileObject:appendComponent(c"Mesh")
+	fcomp:setMesh(g_meshManager:getMesh("@chessboardCube"))
 	fcomp:createSelector(c"stupid") 
 	tileObject:appendComponent(c"Tile", tile)
 	resetColor(tileObject)
@@ -59,7 +63,7 @@ function Chessboard:createTile( tile )
 
 	tileObject:addTag(c"Tile")
 
-	local highlightObject = scene:createObject(c("highlight" .. tname(tile)))
+	local highlightObject = g_scene:createObject(c("highlight" .. tname(tile)))
 	highlightObject:appendComponent(c"Highlight")
 	highlightObject:resetTranslate(tileObject:getTranslate() + math3d.vector(0, 2.5, 0))
 	highlightObject:addTag(c"Highlight")
@@ -86,11 +90,11 @@ end
 -- @tab location
 -- @treturn Object tileObject
 function Chessboard:tileAt( location )
-	return scene:findObject(c(tname(location))):findComponent(c"Tile")
+	return g_scene:findObject(c(tname(location))):findComponent(c"Tile")
 end
 
 function Chessboard:highlightAt( location )
-	return scene:findObject(c("highlight" .. tname(location))):findComponent(c"Highlight")
+	return g_scene:findObject(c("highlight" .. tname(location))):findComponent(c"Highlight")
 end
 
 --- 
@@ -129,7 +133,7 @@ function Chessboard:pushArea(points, color)
 end
 
 function Chessboard:clearAll(  )
-	for highlightObject in scene:objectsWithTag("Highlight") do
+	for highlightObject in g_scene:objectsWithTag("Highlight") do
 		highlightObject:findComponent(c"Highlight"):clear()
 	end
 end

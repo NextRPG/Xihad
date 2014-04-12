@@ -14,6 +14,8 @@ namespace xihad { namespace script
 		const string& rttiName, GameObject& host, LuaRef& luaObject ) :
 		Component(rttiName, host), mLuaObjectRef(luaObject)
 	{
+		XIHAD_MLD_NEW_OBJECT;
+
 		lua_State* L = mLuaObjectRef.getState();
 		StackMemo memo(L);
 
@@ -45,6 +47,7 @@ namespace xihad { namespace script
 
 	LuaComponent::~LuaComponent()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 }}

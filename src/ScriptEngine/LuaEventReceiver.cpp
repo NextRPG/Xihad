@@ -1,10 +1,10 @@
 #include "LuaEventReceiver.h"
+#include <luaT/stack_memo.h>
+#include <LuaT/table_ops.h>
+#include <luaT/new_userdata.h>
+#include <Engine/UserEvent.h>
 #include <iostream>
-#include "luaT\stack_memo.h"
 #include "LuaUtil.h"
-#include "LuaT\table_ops.h"
-#include "Engine\UserEvent.h"
-#include <iostream>
 
 using namespace xihad::ngn;
 using namespace luaT;
@@ -14,9 +14,17 @@ namespace xihad { namespace script
 	LuaEventReceiver::LuaEventReceiver( const luaT::LuaRef& object ) :
 		lobject(object)
 	{
+		setDebugName("LuaEventReceiver");
+		XIHAD_MLD_NEW_OBJECT;
+
 		StackMemo memo(lobject.getState());
 		lobject.pushSelf();
-		luaL_checktype(lobject.getState(), -1, LUA_TTABLE);
+		UserdataAllocator::makeInstance<UserEventReceiver>(lobject.getState(), -1, this);
+	}
+
+	LuaEventReceiver::~LuaEventReceiver()
+	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	static void pushParam(lua_State* L, const MouseEvent& e)

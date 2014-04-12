@@ -1,9 +1,10 @@
 #pragma once
 #include "CompositeUpdateHandler.h"
-#include <list>
+#include <boost/scoped_ptr.hpp>
+#include <set>
 #include "GameObject.h"
-#include "Message\IMessageDispatcher.h"
-#include "Message\MessageListener.h"
+#include "Message/IMessageDispatcher.h"
+#include "Message/MessageListener.h"
 
 struct lua_State;
 namespace xihad { namespace ngn
@@ -27,7 +28,7 @@ namespace xihad { namespace ngn
 
 	public:
 		typedef IMessageDispatcher<GameObject, GameScene, MessageListener> Dispatcher;
-		typedef std::list<GameObject*> ObjectGroup;
+		typedef std::set<GameObject*> ObjectGroup;
 
 	public:
 		explicit GameScene();
@@ -87,6 +88,8 @@ namespace xihad { namespace ngn
 		virtual UserEventReceiverStack& getControllerStack();
 
 	protected:	// Avoid delete
+		virtual void onDestroy();
+
 		virtual ~GameScene();
 
 	private:
@@ -95,7 +98,7 @@ namespace xihad { namespace ngn
 
 	private:
 		struct impl;
-		impl* mImpl;
+		boost::scoped_ptr<impl> mImpl;
 	};
 }}
 

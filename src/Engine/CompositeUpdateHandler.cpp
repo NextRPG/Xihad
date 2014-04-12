@@ -1,13 +1,19 @@
 #include "CompositeUpdateHandler.h"
 #include <algorithm>
 #include "CppBase\XiAssert.h"
+#include "MemoryLeakDetector.h"
 
 using namespace std;
 namespace xihad { namespace ngn
 {
+	CompositeUpdateHandler::CompositeUpdateHandler()
+	{
+		XIHAD_MLD_NEW_OBJECT;
+	}
 
 	CompositeUpdateHandler::~CompositeUpdateHandler()
 	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	bool CompositeUpdateHandler::appendChildHandler( UpdateHandler* handler )
@@ -16,8 +22,7 @@ namespace xihad { namespace ngn
 
 		xassert(!containsChildHandler(handler));
 		mChildHandlerList.push_back(handler);
-		if (STARTING<UpdateHandler::status() && UpdateHandler::status()<DEAD)
-			handler->start();
+		if (isUpdating()) handler->start();
 
 		return true;
 	}
@@ -30,10 +35,10 @@ namespace xihad { namespace ngn
 
 	void CompositeUpdateHandler::onUpdate( const Timeline& tm )
 	{
-		UpdateHandler* curr = 0;
-		for(iterator iter = childHandlerBegin(); iter != childHandlerEnd();)
+		iterator endIter = childHandlerEnd();
+		for(iterator iter = childHandlerBegin(); iter != endIter;)
 		{
-			curr = *iter;
+			UpdateHandler* curr = *iter;
 
 			if (curr->status() == DEAD)
 			{
@@ -43,7 +48,7 @@ namespace xihad { namespace ngn
 			else 
 			{
 				curr->update(tm);
-				 ++iter;
+				++iter;
 			}
 		}
 	}
@@ -60,9 +65,18 @@ namespace xihad { namespace ngn
 		auto riter = mChildHandlerList.rbegin();
 		while (riter != mChildHandlerList.rend())
 		{
+#ifdef _DEBUG
+			size_t sizeBeforeDestroy = mChildHandlerList.size();
 			(*riter)->destroy();
+			xassert(sizeBeforeDestroy == mChildHandlerList.size() && 
+				"UpdateHandler's destroy() function shouldn't remove self from CompositeUpdateHandler's childrenList");
+#else
+			(*riter)->destroy();
+#endif
 			eraseChildHandler(--riter.base());
 		}
+
+		xassert(mChildHandlerList.empty());
 	}
 
 	bool CompositeUpdateHandler::destroyChildHandler( UpdateHandler* h )

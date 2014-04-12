@@ -40,14 +40,25 @@ namespace xihad { namespace script
 		genericVisit(c);
 	}
 
+	void PushComponentVisitor::visit( render3d::TextComponent& c)
+	{
+		genericVisit(c);
+	}
+
 	void PushComponentVisitor::visit( audio::AudioComponent& c )
 	{
 		genericVisit(c);
 	}
 
+	void PushComponentVisitor::visit( render3d::ParticleSystemComponent& c)
+	{
+		genericVisit(c);
+	}
+
+
 	bool PushComponentVisitor::handleUnkownVisitable( ngn::BaseVisitable& c )
 	{
-		std::cerr << "Visiting unknown component" << std::endl;
+		std::cerr << "PushComponentVisitor: Visiting unknown component" << std::endl;
 		return false;
 	}
 

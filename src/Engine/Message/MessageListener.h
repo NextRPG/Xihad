@@ -14,15 +14,4 @@ namespace xihad { namespace ngn
 		virtual ~MessageListener() {} 
 		virtual void receive(GameObject& source, const Parameter&) = 0;
 	};
-
-
-	inline void intrusive_ptr_add_ref(MessageListener* obj)
-	{
-		obj->grab();
-	}
-
-	inline void intrusive_ptr_release(MessageListener* obj)
-	{
-		obj->drop();
-	}
 }}

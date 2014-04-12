@@ -53,11 +53,11 @@ function CameraMoveBy:onUpdate(  )
 
 	local ccom = self.object:findComponent(c"Camera")
 
-	-- print("Time.change", Time.change)
+	-- print("g_time.change", g_time.change)
 	-- print("realTrans", self.object:getTranslate():xyz())
 	-- print("realTarget", ccom:getTarget():xyz())
 	-- print("destination2", self.destination2:xyz())
-	self.leftTime = self.leftTime - Time.change
+	self.leftTime = self.leftTime - g_time.change
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)
 		ccom:setTarget(self.destination2)

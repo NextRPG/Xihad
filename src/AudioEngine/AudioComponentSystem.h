@@ -38,13 +38,13 @@ namespace xihad { namespace audio
 		/** 
 		 * @param volume 0 (silent) to 1.0f (full volume) 
 		 */
-		virtual void setSoundVolume(float volume);
+		virtual void setVolume(float volume);
 
 		/// Returns master sound volume.
 		/**
 		 * A value between 0.0 and 1.0. Default is 1.0. Can be changed using setSoundVolume(). 
 		 */
-		virtual float getSoundVolume();
+		virtual float getVolume();
 
 		/// Sets the default minimal distance for 3D sounds.
 		/** 
@@ -57,7 +57,7 @@ namespace xihad { namespace audio
 		 * 
 		 * @param minDistance Default minimal distance for 3d sounds. The default value is 1.0f.
 		 */
-		virtual void setDefault3DSoundMinDistance(float minDistance);
+		virtual void setDefault3DAudioMinDistance(float minDistance);
 
 		/// Returns the default minimal distance for 3D sounds.
 		/** 
@@ -69,7 +69,7 @@ namespace xihad { namespace audio
 		 * 
 		 * @return Default minimal distance for 3d sounds. The default value is 1.0f. 
 		 */
-		virtual float getDefault3DSoundMinDistance();
+		virtual float getDefault3DAudioMinDistance();
 
 		/// Sets the default maximal distance for 3D sounds.
 		/** 
@@ -86,7 +86,7 @@ namespace xihad { namespace audio
 		 *
 		 * @param maxDistance Default maximal distance for 3d sounds. The default value is 1000000000.0f. 
 		 */
-		virtual void setDefault3DSoundMaxDistance(float maxDistance);
+		virtual void setDefault3DAudioMaxDistance(float maxDistance);
 
 		/// Returns the default maximal distance for 3D sounds.
 		/** 
@@ -102,7 +102,7 @@ namespace xihad { namespace audio
 		 *
 		 * @return Default maximal distance for 3d sounds. The default value is 1000000000.0f. 
 		 */
-		virtual float getDefault3DSoundMaxDistance();
+		virtual float getDefault3DAudioMaxDistance();
 
 	protected:
 		virtual ~AudioComponentSystem();

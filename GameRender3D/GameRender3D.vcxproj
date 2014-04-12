@@ -59,7 +59,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,39 +71,56 @@
     <ClInclude Include="..\src\WorldRender3D\AnimatedMeshComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClips.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipsCache.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsJsonLoader.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsLoader.h" />
     <ClInclude Include="..\src\WorldRender3D\BillboardComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\CameraComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\AnimationClipData.h" />
+    <ClInclude Include="..\src\WorldRender3D\CameraRenderTarget.h" />
+    <ClInclude Include="..\src\WorldRender3D\CBinaryFontReader.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h" />
     <ClInclude Include="..\src\WorldRender3D\ExportLua\luaopen_All.h" />
     <ClInclude Include="..\src\WorldRender3D\Geometry.h" />
     <ClInclude Include="..\src\WorldRender3D\LightComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\MeshComponent.h" />
+    <ClInclude Include="..\src\WorldRender3D\MeshManager.h" />
     <ClInclude Include="..\src\WorldRender3D\ParticleSystemComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\RenderComponent.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystem.h" />
     <ClInclude Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.h" />
+    <ClInclude Include="..\src\WorldRender3D\TextComponent.h" />
+    <ClInclude Include="..\src\WorldRender3D\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\AnimatedMeshComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\AnimationClips.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsCache.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsJsonLoader.cpp" />
     <ClCompile Include="..\src\WorldRender3D\BillboardComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\CameraComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CameraRenderTarget.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\LuaAnimationCallback.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Material.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Render3dComponents.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_resourceManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SceneCollisionManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Cursor.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_RenderSystem.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SColor.cpp" />
     <ClCompile Include="..\src\WorldRender3D\Geometry.cpp" />
     <ClCompile Include="..\src\WorldRender3D\LightComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\MeshComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\MeshManager.cpp" />
     <ClCompile Include="..\src\WorldRender3D\ParticleSystemComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\RenderComponent.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystemFactory.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\TextureManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

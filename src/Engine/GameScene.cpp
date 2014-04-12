@@ -1,12 +1,14 @@
 #include "GameScene.h"
 
 // use in member field
-#include <unordered_map>
-#include "TagListener.h"
+#include "xptr.h"
+#include <map>
+#include "TagManager.h"
 #include "RootGameObject.h"
-#include "GameObjectDepends.h"
 #include "ComponentSystem.h"
 #include "ComponentFactory.h"
+#include "GameObjectDepends.h"
+#include "GameObjectTagManager.h"
 #include "UserEventReceiverStack.h"
 #include "Message\MessageDispatcher.h"
 
@@ -20,85 +22,35 @@
 using namespace std;
 namespace xihad { namespace ngn
 {
-	const GameObject::Identifier GameScene::sRootObjectID = "__ROOT__";
+	const GameObject::Identifier GameScene::sRootObjectID = "root";
 
 	typedef GameObject::Identifier Identifier;
 	typedef GameObject::Tag Tag;
-	typedef unordered_map<Tag, std::list<GameObject*>> TaggedObjectsMap;
-	typedef unordered_map<Identifier, GameObject*> IdentifiedObjectsMap;
+	typedef std::map<Identifier, GameObject*> IdentifiedObjectsMap;
 	typedef unordered_map<std::string, ComponentSystem*> CompSystemMap;
-	struct GameScene::impl
+
+	struct GameScene::impl : public GameObjectDepends
 	{
-		// systemData can be RenderEngine, PhysicsEngine or AudioEngine;
-		int managedObjectId;
-		CompSystemMap compSystems;
-		GameObjectDepends depends;
+		// 1st child updater in GameScene
 		GameScene::Dispatcher* dispatcher;
 
+		// 2nd child updater in GameScene
+		CompositeUpdateHandler* systemUpdater;
+		CompSystemMap compSystems;
+
+		// 3rd child updater in GameScene
 		GameObject* rootObject;
 		IdentifiedObjectsMap sceneObjects;
-		TaggedObjectsMap taggedObjects;
+		GameObjectTagManager objectTagManager;
+		int managedObjectId;
 
-		CompositeUpdateHandler& systemUpdater;
-		CompositeUpdateHandler& normalUpdater;
+		UserEventReceiverStack* receiverStack;
 
-		irr_ptr<UserEventReceiverStack> receiverStack;
-
-		GameScene::impl() : 
-			managedObjectId(0), 
-			rootObject(new RootGameObject(&depends, GameScene::sRootObjectID)),
-			systemUpdater(*new CompositeUpdateHandler),
-			normalUpdater(*new CompositeUpdateHandler),
-			receiverStack(new UserEventReceiverStack)
-		{
-			sceneObjects[GameScene::sRootObjectID] = rootObject;
-		}
-
-		TagListener*& tagListener()
-		{
-			return depends.listener;
-		}
-
-		ComponentFactory*& factory()
-		{
-			return depends.factory;
-		}
+		GameScene::impl() : dispatcher(nullptr), 
+			systemUpdater(new CompositeUpdateHandler), 
+			rootObject(0), managedObjectId(0), 
+			receiverStack(new UserEventReceiverStack) { }
 	};
-
-	static TagListener* createTagListener(TaggedObjectsMap& taggedObjects)
-	{
-		class SceneTagListener : public virtual TagListener
-		{
-		public:
-			SceneTagListener(TaggedObjectsMap& objTagMap) : taggedObjects(objTagMap)
-			{
-			}
-
-			virtual void onTagAdded( GameObject* obj, const std::string& tag ) 
-			{
-				xassert(obj->hasTag(tag));
-				std::list<GameObject*>& objs = taggedObjects[tag];
-				objs.push_back(obj);
-			}
-
-			virtual void onTagRemoved( GameObject* obj, const std::string& tag ) 
-			{
-				xassert(!obj->hasTag(tag));
-				xassert(taggedObjects.find(tag) != taggedObjects.end());
-				std::list<GameObject*>& objs = taggedObjects.at(tag);
-				objs.remove(obj);
-				if (objs.size() == 0)
-				{
-					taggedObjects.erase(tag);
-				}
-			}
-
-		private:
-			TaggedObjectsMap& taggedObjects;
-		};
-
-		return new SceneTagListener(taggedObjects);
-	}
 
 	static ComponentFactory* createComponentFactory(GameScene* scene, CompSystemMap& compSystems)
 	{
@@ -140,22 +92,35 @@ namespace xihad { namespace ngn
 
 	GameScene::GameScene() : mImpl(new impl)
 	{
-		mImpl->tagListener() = createTagListener(mImpl->taggedObjects);
-		mImpl->factory() = createComponentFactory(this, mImpl->compSystems);
-		mImpl->depends.scene = this;
+		XIHAD_MLD_NEW_OBJECT;
 
+		mImpl->tagManager = &mImpl->objectTagManager;
+		mImpl->factory = createComponentFactory(this, mImpl->compSystems);
+		mImpl->scene = this;
+
+		// 1st
 		mImpl->dispatcher = new MessageDispatcher<GameObject, GameScene, MessageListener>(*this);
-		mImpl->systemUpdater.appendChildHandler(mImpl->dispatcher);
-		this->appendChildHandler(&mImpl->systemUpdater);
+		this->appendChildHandler(mImpl->dispatcher);
+
+		// 2nd
+		this->appendChildHandler(mImpl->systemUpdater);
+
+		// 3rd
+		mImpl->rootObject = new RootGameObject(mImpl.get(), sRootObjectID);
+		mImpl->sceneObjects[sRootObjectID] = mImpl->rootObject;
 		this->appendChildHandler(mImpl->rootObject);
+
+		// Ok, wait for the rest updater
 	}
 
 	GameScene::~GameScene()
 	{
-		delete mImpl->factory();
-		delete mImpl->tagListener();
+		// clear mImpl->depends
+		delete mImpl->factory;
+		mImpl->tagManager = 0;
+		mImpl->scene = 0;
 
-		delete mImpl;
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	GameObject* GameScene::getRootObject() const
@@ -182,15 +147,26 @@ namespace xihad { namespace ngn
 
 	GameObject* GameScene::createObject( GameObject::IdArgType id, GameObject* parent )
 	{
-		if (parent && parent->getScene() != this || 
-			StdMap::containsKey(mImpl->sceneObjects, id))
+		if (parent && parent->getScene() != this) 
+		{
+			cerr << "The specified parent object is not belonged to this scene" << endl;
 			return nullptr;
+		}
 
-		GameObject* obj = new GameObject(&mImpl->depends, id);
-		obj->setParent(parent ? parent : getRootObject());
+		IdentifiedObjectsMap::iterator pos = mImpl->sceneObjects.lower_bound(id);
 
-		++mImpl->managedObjectId;
-		mImpl->sceneObjects[id] = obj;
+		GameObject* obj = 0;
+		if (pos == mImpl->sceneObjects.end() || pos->first != id)
+		{
+			obj = new GameObject(mImpl.get(), id);
+			obj->setParent(parent ? parent : getRootObject());
+
+			++mImpl->managedObjectId;
+
+			pair<GameObject::IdArgType, GameObject*> mapValue(id, obj);
+			mImpl->sceneObjects.insert(pos, mapValue);
+		}
+		
 
 		return obj;
 	}
@@ -205,8 +181,8 @@ namespace xihad { namespace ngn
 			(sys = factory->create(this, systemName)))
 		{
 			mImpl->compSystems[systemName] = sys;
-			if (!mImpl->systemUpdater.containsChildHandler(sys))
-				mImpl->systemUpdater.appendChildHandler(sys);
+			if (!mImpl->systemUpdater->containsChildHandler(sys))
+				mImpl->systemUpdater->appendChildHandler(sys);
 		}
 
 		return sys;
@@ -224,12 +200,7 @@ namespace xihad { namespace ngn
 
 	const GameScene::ObjectGroup* GameScene::findObjectsByTag( const std::string& tag )
 	{
-		auto res = StdMap::findValuePtr(mImpl->taggedObjects, tag);
-
-		if (!res || res->empty())
-			return nullptr;
-		else 
-			return res;
+		return mImpl->objectTagManager.findObjectsByTag(tag);
 	}
 
 	void GameScene::onObjectDestroyed( GameObject* obj )
@@ -243,20 +214,33 @@ namespace xihad { namespace ngn
 		}
 
 		obj->clearTags();
-		XiAssert::areEqual(1U, mImpl->sceneObjects.erase(obj->getID()));
 
-		if (obj == mImpl->rootObject)
+		if (status() != DESTROYING)
 		{
-			eraseChildHandler(findChildHandler(mImpl->rootObject));
-			mImpl->rootObject = nullptr;
+			XiAssert::areEqual(1U, mImpl->sceneObjects.erase(obj->getID()));
+
+			if (obj == mImpl->rootObject)
+				cerr << "Destroy rootObject before scene's destroying" << endl;
+		}
+		else
+		{
+			xassert(mImpl->sceneObjects.empty());
 		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Event Process
 	UserEventReceiverStack& GameScene::getControllerStack()
 	{
 		return *mImpl->receiverStack;
+	}
+
+	void GameScene::onDestroy()
+	{
+		// Destroy everything that may use lua_State before CompositeUpdateHandler::onDestroy()
+		mImpl->receiverStack->drop();
+		mImpl->receiverStack = 0;
+		mImpl->objectTagManager.clear();
+		mImpl->sceneObjects.clear();
+		CompositeUpdateHandler::onDestroy();
 	}
 
 }}

@@ -13,10 +13,11 @@
   <ItemGroup>
     <ClCompile Include="..\src\Xihad\CreateDevice.cpp" />
     <ClCompile Include="..\src\Xihad\GUITest.cpp" />
+    <ClCompile Include="..\src\Xihad\RenderTargetTest.cpp" />
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp" />
     <ClCompile Include="..\src\Xihad\IrrlichtTest.cpp" />
     <ClCompile Include="..\src\Xihad\LoadSceneFile.cpp" />
-    <ClCompile Include="..\src\Xihad\Main.cpp" />
+    <ClCompile Include="..\src\Xihad\Xihad.cpp" />
     <ClCompile Include="..\src\Xihad\SceneCreator.cpp" />
     <ClCompile Include="..\src\Xihad\XihadInitializer.cpp" />
   </ItemGroup>
@@ -65,7 +66,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs;../Debug;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>irrKlang.lib;AudioEngine.lib;CEGUIBasedDialogue.lib;Dialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ParticleSystemLoader.lib;irrKlang.lib;AudioEngine.lib;CEGUIBasedDialogue.lib;Irrlicht.lib;CEGUIIrrlichtRenderer_d.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0_d.lib;CEGUILuaScriptModule-0_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,14 +76,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../src;../src/GameWorld;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>../libs;../Release;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>irrlicht.lib;CEGUIIrrlichtRenderer.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0.lib;CEGUILuaScriptModule-0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ParticleSystemLoader.lib;irrklang.lib;AudioEngine.lib;irrlicht.lib;CEGUIIrrlichtRenderer.lib;math3d.lib;ScriptEngine.lib;GameRender3D.lib;Xengine.lib;LuaT.lib;lua.lib;CEGUIBase-0.lib;CEGUILuaScriptModule-0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

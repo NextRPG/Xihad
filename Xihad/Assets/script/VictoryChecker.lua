@@ -10,7 +10,7 @@ local BattleManager = require "BattleManager"
 local VictoryChecker = {}
 
 function VictoryChecker:init(  )
-	local dispatcher = scene:getDispatcher()
+	local dispatcher = g_scene:getDispatcher()
 	dispatcher:addListener("AI.die", self)
 	dispatcher:addListener("Hero.die", self)
 	self:drop()
@@ -18,14 +18,14 @@ function VictoryChecker:init(  )
 end
 
 function VictoryChecker:onHeroDie( srcObject, param )
-	if not scene:hasObjectWithTag("Hero") then
+	if not g_scene:hasObjectWithTag("Hero") then
 		print("AI won")
 		BattleManager.stateMachine:stop()
 	end
 end
 
 function VictoryChecker:onAIDie( srcObject, param )
-	if not scene:hasObjectWithTag("AI") then
+	if not g_scene:hasObjectWithTag("AI") then
 		print("Hero won")
 		BattleManager.stateMachine:stop()
 	end

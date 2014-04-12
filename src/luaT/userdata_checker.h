@@ -1,6 +1,7 @@
 #pragma once
 #include "Lua/lua.hpp"
 #include "stack_ops.h"
+#include "config.h"
 
 namespace luaT
 {
@@ -16,7 +17,7 @@ namespace luaT
 			PTR ptr = UserdataTypeChecker<PTR, true>::get(L, idx);
 			if (ptr == nullptr)
  				luaL_typerror(L, idx, 
-					MetatableData<typename TypeTraits<T>::PointeeType>::name);
+					MetatableData<typename TypeTraits<T>::PointeeType>::name());
 
 			return *ptr;	// copy if not call by reference.
 		}
@@ -31,7 +32,10 @@ namespace luaT
 
 	struct PolyClassChecker
 	{
+#ifdef LUAT_OPTIMIZE_NON_POLYMORPHIC
 		static void* noShiftChecking(lua_State* L, int idx, void* ud, const char* mtName);
+#endif
+
 		static void* shiftOnChecking(lua_State* L, int idx, void* ud, const char* mtName);
 	};
 
@@ -44,12 +48,17 @@ namespace luaT
 		static void shiftUserdataOnChecking(lua_State* L, int idx, void** ud_ptr)
 		{
 			typedef typename TypeTraits<T>::PointeeType PType;
-			const char* mtName = MetatableData<PType>::name;
+			const char* mtName = MetatableData<PType>::name();
 
-			if (MetatableData<PType>::polymorphic)
+#ifdef LUAT_OPTIMIZE_NON_POLYMORPHIC
+			if (MetatableData<PType>::isPolymorphic())
 				*ud_ptr = PolyClassChecker::shiftOnChecking(L, idx, *ud_ptr, mtName);
 			else 
 				*ud_ptr = PolyClassChecker::noShiftChecking(L, idx, *ud_ptr, mtName);
+#else
+			*ud_ptr = PolyClassChecker::shiftOnChecking(L, idx, *ud_ptr, mtName);
+#endif
+
 		}
 
 		static T get(lua_State* L, int idx)

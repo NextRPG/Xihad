@@ -870,7 +870,7 @@ namespace scene
 		This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
 		virtual IBillboardTextSceneNode* addBillboardTextSceneNode( gui::IGUIFont* font, const wchar_t* text,
 			ISceneNode* parent = 0,
-			const core::dimension2d<f32>& size = core::dimension2d<f32>(10.0f, 10.0f),
+			const core::dimension2d<f32>& size = core::dimension2d<f32>(1.0f, 1.0f),
 			const core::vector3df& position = core::vector3df(0,0,0), s32 id=-1,
 			video::SColor colorTop = 0xFFFFFFFF, video::SColor colorBottom = 0xFFFFFFFF) = 0;
 

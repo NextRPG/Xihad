@@ -1,10 +1,10 @@
 #pragma once
 #include <irrKlang/ik_ISoundStopEventReceiver.h>
 #include <irrKlang/ik_EStreamModes.h>
-#include <set>
+#include <list>
 #include "Engine/Component.h"
 #include "Engine/vector3d.h"
-#include "Engine/irr_ptr.h"
+#include "Engine/xptr.h"
 
 namespace irrklang 
 {
@@ -15,6 +15,8 @@ namespace irrklang
 
 namespace xihad { namespace audio 
 {
+	using namespace irrklang;
+
 	enum SoundEffect
 	{
 		NoEffect, Chorus, Compressor, Distortion, 
@@ -23,12 +25,12 @@ namespace xihad { namespace audio
 	};
 
 	class AudioStopListener;
-	class AudioComponent : public ngn::Component, private irrklang::ISoundStopEventReceiver
+	class AudioComponent : public ngn::Component, private ISoundStopEventReceiver
 	{
 	public:
 		DEFINE_VISITABLE;
 
-		AudioComponent(const std::string& name, ngn::GameObject& host, irrklang::ISoundEngine* audiceDevice);
+		AudioComponent(const std::string& name, ngn::GameObject& host, ISoundEngine* audiceDevice);
 
 		//! returns if the sound is paused
 		virtual void setPaused( bool paused = true);
@@ -145,11 +147,9 @@ namespace xihad { namespace audio
 		a sound without actually needing to play it. */
 		virtual unsigned getPlayLength();
 
-		virtual void playMusic(const char* musicFilename, 
-			irrklang::E_STREAM_MODE mode = irrklang::ESM_AUTO_DETECT);
+		virtual void play2D(const char* filename, E_STREAM_MODE mode = ESM_AUTO_DETECT);
 		
-		virtual void playSound(const char* soundFileName, 
-			irrklang::E_STREAM_MODE mode = irrklang::ESM_AUTO_DETECT);
+		virtual void play3D(const char* filename, E_STREAM_MODE mode = ESM_AUTO_DETECT);
 
 		virtual void addAudioStopListener(AudioStopListener&);
 
@@ -162,16 +162,29 @@ namespace xihad { namespace audio
 		virtual void onUpdate( const ngn::Timeline& );
 		virtual void onStop();
 
-	private:
-		virtual void OnSoundStopped(irrklang::ISound* sound, 
-				irrklang::E_STOP_EVENT_CAUSE reason, void* userData);
-
-		void setSound(irrklang::ISound* newSound);
+		virtual bool shouldPauseWhenStart() const;
 
 	private:
-		irrklang::ISoundEngine* audioEngine;
-		irrklang::ISound* audio;
-		std::set<irr_ptr<AudioStopListener> > listeners;
+		virtual void OnSoundStopped(ISound* sound, E_STOP_EVENT_CAUSE reason, void*);
+
+		void setSound(ISound* newSound, bool is3d);
+
+		/// newSound != 0 && newSound is paused
+		void setSound_(ISound* newSound, bool is3d);
+
+		void changeSound(ISound* newSound, bool is3d)
+		{
+			is3DAudio = is3d;
+			audio = newSound;
+		}
+
+		bool isNull(ISound*);
+
+	private:
+		bool is3DAudio;
+		ISoundEngine* audioEngine;
+		ISound* audio;
+		std::list<xptr<AudioStopListener> > listeners;
 	};
 
 }}

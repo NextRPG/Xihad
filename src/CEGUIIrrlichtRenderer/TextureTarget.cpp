@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
+#include <algorithm>
 #include "TextureTarget.h"
 #include "Texture.h"
 #include "CEGUI/PropertyHelper.h"

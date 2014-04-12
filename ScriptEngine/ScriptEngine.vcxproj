@@ -57,7 +57,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -66,13 +66,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\LuaMath3D\math3d_metadata.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_Component.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_CompositeUpdateHandler.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_FileSystem.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameEngine.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameObject.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameScene.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\Export\luaopen_GameWorld.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_LuaComponent.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_NativeWindow.cpp" />
     <ClCompile Include="..\src\ScriptEngine\Export\luaopen_UpdateHandler.cpp" />
@@ -83,7 +83,7 @@
     <ClCompile Include="..\src\ScriptEngine\LuaComponentSystem.cpp" />
     <ClCompile Include="..\src\ScriptEngine\LuaComponentSystemFactory.cpp" />
     <ClCompile Include="..\src\ScriptEngine\LuaEventReceiver.cpp" />
-    <ClCompile Include="..\src\ScriptEngine\LuaManagedUpdateHandler.cpp" />
+    <ClCompile Include="..\src\ScriptEngine\LuaUpdateHandler.cpp" />
     <ClCompile Include="..\src\ScriptEngine\LuaMessageListener.cpp" />
     <ClCompile Include="..\src\ScriptEngine\LuaUtil.cpp" />
     <ClCompile Include="..\src\ScriptEngine\PushComponentVisitor.cpp" />
@@ -94,7 +94,7 @@
     <ClInclude Include="..\src\ScriptEngine\LuaComponentSystem.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaComponentSystemFactory.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaEventReceiver.h" />
-    <ClInclude Include="..\src\ScriptEngine\LuaManagedUpdateHandler.h" />
+    <ClInclude Include="..\src\ScriptEngine\LuaUpdateHandler.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaMessageListener.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaScriptMacro.h" />
     <ClInclude Include="..\src\ScriptEngine\LuaUtil.h" />

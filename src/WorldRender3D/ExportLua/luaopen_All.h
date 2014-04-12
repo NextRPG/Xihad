@@ -5,11 +5,6 @@ struct lua_State;
 namespace irr 
 {
 	class IrrlichtDevice;
-
-	namespace scene
-	{
-		class ISceneManager;
-	}
 }
 
 namespace xihad { namespace render3d
@@ -19,7 +14,11 @@ namespace xihad { namespace render3d
 	int luaopen_SceneCollisionManager(lua_State* L);
 	int luaopen_Geometry(lua_State* L);
 	int luaopen_RenderSystem(lua_State* L);
+	int luaopen_ResourceManager(lua_State* L);
+	int luaopen_Material(lua_State* L);
+	int luaopen_SColor(lua_State* L);
 
-	void luaopen_All(irr::IrrlichtDevice* dev, irr::scene::ISceneManager* smgr, lua_State* L);
+	class IrrlichtComponentSystem;
+	void luaopen_All(irr::IrrlichtDevice* dev, IrrlichtComponentSystem*, lua_State* L);
 }}
 

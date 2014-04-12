@@ -7,18 +7,16 @@ namespace xihad { namespace render3d
 {
 	int luaopen_RenderSystem(lua_State* L)
 	{
-		// vd fog
-		// vd texture management
-		// vd image r/w
-		// vd render target
-		// vd viewport
-		// vd primitive draw
-		// vd clipplane
-		// vd material mangement
+		/// SceneManager
+// 		// shadow color
+// 		// ambient color
+// 		// fog
+
+		/// VideoDriver
+		// render target
+		// viewport
 		luaT_defRegsBgn(rsRegs)
-			// smgr shadow color
-			// smgr ambient color
-			// luaT_mnamedfunc(ISceneManager, )
+
 		luaT_defRegsEnd
 
 		return 0;

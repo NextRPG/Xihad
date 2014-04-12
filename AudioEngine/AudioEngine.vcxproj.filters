@@ -16,10 +16,16 @@
     <ClInclude Include="..\src\AudioEngine\AudioStopListener.h" />
     <ClInclude Include="..\src\AudioEngine\NullSound.h" />
     <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
+    <ClInclude Include="..\src\AudioEngine\LuaGlobalVariable.h">
+      <Filter>ExportToLua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ExportToLua">
       <UniqueIdentifier>{57bfafe7-95aa-4110-a95d-94be561192c5}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ScriptEngine\ScriptEngine.vcxproj" />
   </ItemGroup>
 </Project>

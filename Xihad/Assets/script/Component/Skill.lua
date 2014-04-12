@@ -201,7 +201,7 @@ function Skill:trigger( hero, targetTile )
 			then
 
 				local objName = BaseEffect.makeName(self.effect2Target, character)
-				scene:createObjectWithComponent(
+				g_scene:createObjectWithComponent(
 					objName, self.effect2Target.name,
 					table.merge( self.effect2Target, {
 						target = character,
@@ -214,6 +214,7 @@ function Skill:trigger( hero, targetTile )
 			print(character.properties.currentHP)
 		end
 	end
+	
 	hero.skillTimes[self.id] = hero.skillTimes[self.id] - 1
 	print("attack end")
 end

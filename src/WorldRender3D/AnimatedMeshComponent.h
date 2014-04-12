@@ -15,14 +15,20 @@ namespace irr { namespace scene
 
 namespace xihad { namespace render3d
 {
+	class MeshManager;
 	class AnimationClips;
+	class AnimationClipsCache;
 	class AnimatedMeshComponent : public RenderComponent
 	{
 	public:
 		DEFINE_VISITABLE
 
 		AnimatedMeshComponent(std::string const& name, ngn::GameObject& host, 
-							  irr::scene::IAnimatedMeshSceneNode* node);
+							  IAnimatedMeshSceneNode* node);
+
+		static AnimatedMeshComponent* create(
+			const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param,
+			ISceneManager*, AnimationClipsCache*, MeshManager*);
 
 		void createClips(const AnimationClips& clips);
 		void createClip(const std::string& clipName, const AnimationClipData& data);
@@ -38,8 +44,8 @@ namespace xihad { namespace render3d
 		void setAnimationSpeed(float framesPerSecond);
 		float getAnimationSpeed() const;
 
-		irr::scene::IBoneSceneNode* getJointNode(const char* jointName);
-		irr::scene::IBoneSceneNode* getJointNode(int jointID);
+		IBoneSceneNode* getJointNode(const char* jointName);
+		IBoneSceneNode* getJointNode(int jointID);
 		int getJointCount() const;
 
 		//! Returns the currently displayed frame number.
@@ -63,25 +69,25 @@ namespace xihad { namespace render3d
 		/** Set this to 0 to disable the callback again.
 		Please note that this will only be called when in non looped
 		mode, see IAnimatedMeshSceneNode::setLoopMode(). */
-		void setAnimationEndCallback(irr::scene::IAnimationEndCallBack* callback=0);
+		void setAnimationEndCallback(IAnimationEndCallBack* callback=0);
 
 		//! Sets a new mesh
-		void setMesh(irr::scene::IAnimatedMesh* mesh);
+		void setMesh(IAnimatedMesh* mesh);
 
 		//! Returns the current mesh
-		irr::scene::IAnimatedMesh* getMesh();
+		IAnimatedMesh* getMesh();
 
 		virtual bool createTriangleSelector(SelectorInfo info = SelectorInfo());
 
-		irr::scene::IShadowVolumeSceneNode* addShadowVolume(
-			const irr::scene::IMesh* shadowMesh = nullptr, 
+		IShadowVolumeSceneNode* addShadowVolume(
+			const IMesh* shadowMesh = nullptr, 
 			bool zfail = true, float infinity = 1000.f);
 
 	protected:
 		virtual ~AnimatedMeshComponent();
 
 	private:
-		irr::scene::IAnimatedMeshSceneNode * getNode() const;
+		IAnimatedMeshSceneNode * getNode() const;
 
 	private:
 		std::unordered_map<std::string, AnimationClipData> mClips;

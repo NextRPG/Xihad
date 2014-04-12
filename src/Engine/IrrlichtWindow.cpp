@@ -64,11 +64,16 @@ namespace xihad { namespace ngn
 		renderer(createRenderer(dev.getVideoDriver()), false),
 		irrlichtEventReceiver(createReceiverAdapter(this))
 	{
+		setDebugName("IrrlichtWindow");
+		XIHAD_MLD_NEW_OBJECT;
+
 		dev.setEventReceiver(irrlichtEventReceiver);
 	}
 
 	IrrlichtWindow::~IrrlichtWindow()
 	{
+		XIHAD_MLD_DEL_OBJECT;
+
 		if (device->getEventReceiver() == irrlichtEventReceiver)
 			device->setEventReceiver(0);
 

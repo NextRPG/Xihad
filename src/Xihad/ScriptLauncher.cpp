@@ -29,8 +29,11 @@ int launchScript(int argc, const char** argv)
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
+		// Usually, frame rate adjuster should be the last frame observer.
+		// So, give it a big order
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
-		engine->addFrameObserver(*adj);
+		engine->addFrameObserver(*adj, 1000000);
+		engine->addFrameObserver(*adj, 10);	// change order, no duplicate instance
 		adj->drop();
 
 		WindowTitleUpdater* titleUpdater = new WindowTitleUpdater;
@@ -47,19 +50,21 @@ int launchScript(int argc, const char** argv)
 		titleUpdater->drop();
 
 		WindowEventTransmitter* eventTransmitter = new WindowEventTransmitter;
-		engine->addFrameObserver(*eventTransmitter);
+		engine->addFrameObserver(*eventTransmitter, -10);
 		eventTransmitter->drop();
 
 		engine->getWorld()->setScene(scene);
 		engine->launch();
-		delete engine;
 	}
-	
+	else 
+	{
+		engine->stop();
+	}
+
+	delete engine;
 	wnd->drop();
 	device->drop();
 	destroySystems();
-
-	system("pause");
 	return 0;
 
 }

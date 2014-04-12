@@ -41,7 +41,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
@@ -66,6 +66,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\luaT\config.h" />
     <ClInclude Include="..\src\luaT\cpp_adapter.h" />
     <ClInclude Include="..\src\luaT\cpp_adapter_func.h" />
     <ClInclude Include="..\src\luaT\cpp_adapter_sign.h" />

@@ -3,7 +3,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-luaT_defMetaData(GameEngine, false);
 namespace xihad { namespace script
 {
 	int luaopen_GameEngine(lua_State* L)

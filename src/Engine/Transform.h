@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/vector3d.h"
+#include "Engine/matrix.h"
 
 namespace xihad { namespace ngn
 {
@@ -7,8 +8,8 @@ namespace xihad { namespace ngn
 	/**
 	 * The order to various transform is fixeed as: 
 	 *	Scale -> Rotate -> Translate
-	 * <p>Therefore, result of translate then rotate is the same as rotate then
-	 * translate
+	 * Therefore, the result of rotate then translate is the same as the result of
+	 * translate then scale.
 	 * 
 	 * @author etnlGD
 	 * @date 2013年12月10日 11:00:22
@@ -33,6 +34,8 @@ namespace xihad { namespace ngn
 		 * 默认状态：scale=vec3(1), tranlation=vec3(0), rotation=vec3(0)
 		 */
 		Transform();
+
+		void setFromMatrix(const Matrix&);
 
 		/// 重置缩放
 		void resetScale(const vector3df& scale = vector3df(1,1,1))

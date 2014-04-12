@@ -3,8 +3,6 @@
 #include "luaT/stack_memo.h"
 
 using namespace luaT;
-luaT_defMetaData(std::string, false);
-
 namespace xihad { namespace script
 {
 	static int createStdString(lua_State* L)

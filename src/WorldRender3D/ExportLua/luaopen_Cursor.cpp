@@ -4,7 +4,6 @@
 
 using namespace irr::gui;
 using namespace luaT;
-luaT_defMetaData(ICursorControl, false);
 
 namespace xihad { namespace render3d
 {

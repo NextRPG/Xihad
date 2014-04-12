@@ -8,11 +8,11 @@
 local Stack = require "Stack"
 
 local Highlight = {
-	 BLUE = "102b6a",
-	 RED = "aa2116",
-	 PURPLE = "411445",
-	 WHITE = "fffffb",
-	 ALPHA = "ALPHA"
+	 BLUE 	= Color.new(0xff102b6a),
+	 RED 	= Color.new(0xffaa2116),
+	 PURPLE = Color.new(0xff411445),
+	 WHITE 	= Color.new(0xfffffffb),
+	 ALPHA 	= "ALPHA"
 }
 
 function Highlight.new( o )
@@ -37,10 +37,12 @@ function Highlight:changeColor(  )
 			self:change2Alpha()
 			return
 		elseif not self.object:findComponent(c"Mesh") then
-			local colorMesh = geometry:createCube(Consts.TILE_WIDTH - 1, 0.5, Consts.TILE_HEIGHT - 1)
-			self.object:appendComponent(c"Mesh"):setMesh(colorMesh)
+			local meshnode = self.object:appendComponent(c"Mesh")
+			meshnode:setMesh(g_meshManager:getMesh("@colorCube"))
 		end
-		self.object:findComponent(c"Mesh"):setColor(hex2Color(Stack:top()))
+		
+		local mat = self.object:findComponent(c"Mesh"):getMaterial(0)
+		mat:setDiffuseColor(Stack:top())
 	else
 		self:change2Alpha()
 	end

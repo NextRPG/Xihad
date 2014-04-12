@@ -86,13 +86,13 @@ function inherit( self, ... )
 	return self
 end
 
-function scene:createObjectWithComponent( name, component, param )
-	local object = scene:createObject(c(name))
+function g_scene:createObjectWithComponent( name, component, param )
+	local object = g_scene:createObject(c(name))
 	object:appendComponent(c(component), param)
 end
 
-function scene:createUniqueObjectWithComponent( component, param )
-	local object = scene:createUniqueObject(c(component))
+function g_scene:createUniqueObjectWithComponent( component, param )
+	local object = g_scene:createUniqueObject(c(component))
 	object:appendComponent(c(component), param)
 end
 
@@ -118,17 +118,17 @@ function serialize( o )
 	end
 end
 
-function scene:hasObjectWithTag( tag )
+function g_scene:hasObjectWithTag( tag )
 	local count = 0
-	for object in scene:objectsWithTag(tag) do
+	for object in g_scene:objectsWithTag(tag) do
 		count = count + 1
 	end
 	return count ~= 0
 end
 
-function scene:getObjectWithTag( tag )
+function g_scene:getObjectWithTag( tag )
 	local result
-	for object in scene:objectsWithTag(tag) do
+	for object in g_scene:objectsWithTag(tag) do
 		result = object
 		break
 	end

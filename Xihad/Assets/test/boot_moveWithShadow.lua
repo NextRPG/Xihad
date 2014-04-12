@@ -1,22 +1,27 @@
 require "math3d"
+package.path = package.path..";../Xihad/Assets/test/?.lua"
+g_scene:requireSystem(c'Render')
 
-local cubeMesh = geometry:createCube(15, 5, 30)
-local floor = scene:createObject(c"floor")
+local cubeMesh = g_geometry:createCube(15, 5, 30)
+local floor = g_scene:createObject(c"floor")
 local fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
-fcomp:setColor(255, 0, 0)
+fcomp:getMaterial(0):setColorMaterial('none')
+fcomp:getMaterial(0):setDiffuseColor(Color.new(Color.red))
 floor:concatTranslate(math3d.vector(0, -2.5, 0))
 
-floor = scene:createObject(c"floor2")
+floor = g_scene:createObject(c"floor2")
 fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
-fcomp:setColor(0, 255, 0)
+fcomp:getMaterial(0):setColorMaterial('none')
+fcomp:getMaterial(0):setDiffuseColor(Color.new(Color.green))
 floor:concatTranslate(math3d.vector(15, -2.5, 0))
 
-floor = scene:createObject(c"floor3")
+floor = g_scene:createObject(c"floor3")
 fcomp = floor:appendComponent(c"Mesh")
 fcomp:setMesh(cubeMesh)
-fcomp:setColor(0, 0, 255)
+fcomp:getMaterial(0):setColorMaterial('none')
+fcomp:getMaterial(0):setDiffuseColor(Color.new(Color.blue))
 floor:concatTranslate(math3d.vector(-15, -2.5, 0))
 
 local param = { 
@@ -29,7 +34,7 @@ local ninja = nil
 local anim = nil
 
 for i = 10, 1, -1 do
-	ninja = scene:createObject(c("ninja"..i))
+	ninja = g_scene:createObject(c("ninja"..i))
 	anim = ninja:appendComponent(c"AnimatedMesh", param)
 	anim:playAnimation(c"idle 1")
 	anim:setTransitionTime(0.1)
@@ -52,7 +57,7 @@ local moveParam = { speed = 20 }
 local move = ninja:appendComponent(c"ControlledMove", moveParam)
 move:acquire()
 
-local camera = scene:createObject(c"camera")
+local camera = g_scene:createObject(c"camera")
 local ccam = camera:appendComponent(c"Camera")
 -- euler = math3d.vector(0, -20, 0):horizontalAngle()
 -- camera:concatRotate(euler:xyz())
@@ -67,7 +72,7 @@ camera:appendUpdater({ onUpdate = function()
 end })
 
 
-local sun = scene:createObject(c"sun")
+local sun = g_scene:createObject(c"sun")
 lightComp = sun:appendComponent(c"Light")
 lightComp:castShadow(true)
 lightComp:setType "point"

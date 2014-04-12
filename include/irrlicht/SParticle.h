@@ -7,8 +7,8 @@
 
 #include "vector3d.h"
 #include "dimension2d.h"
-#include "SColor.h"
 #include "CRandomizer.h"
+#include "SFixedPointColor.h"
 
 namespace irr
 {
@@ -37,7 +37,7 @@ namespace scene
 		core::vector3df vector;
 
 		//! Current color of the particle
-		video::SColorf color;
+		video::SColor16 color;
 
 		//! Scale of the particle.
 		/** The current scale of the particle. */

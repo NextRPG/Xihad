@@ -57,7 +57,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../include;../src/GameWorld;../src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,8 +77,12 @@
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystem.h" />
     <ClInclude Include="..\src\AudioEngine\AudioComponentSystemFactory.h" />
     <ClInclude Include="..\src\AudioEngine\AudioStopListener.h" />
+    <ClInclude Include="..\src\AudioEngine\LuaGlobalVariable.h" />
     <ClInclude Include="..\src\AudioEngine\NullSound.h" />
     <ClInclude Include="..\src\AudioEngine\VectorConverter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ScriptEngine\ScriptEngine.vcxproj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

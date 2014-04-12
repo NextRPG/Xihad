@@ -43,6 +43,17 @@
     <ClInclude Include="..\src\WorldRender3D\ExportLua\LuaGlobalVariable.h">
       <Filter>ExportLua</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\TextureManager.h" />
+    <ClInclude Include="..\src\WorldRender3D\MeshManager.h" />
+    <ClInclude Include="..\src\WorldRender3D\CameraRenderTarget.h" />
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsJsonLoader.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\AnimationClipsLoader.h">
+      <Filter>AnimationClip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorldRender3D\TextComponent.h" />
+    <ClInclude Include="..\src\WorldRender3D\CBinaryFontReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\WorldRender3D\IrrlichtComponentSystem.cpp" />
@@ -93,6 +104,22 @@
     <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_All.cpp">
       <Filter>ExportLua</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\TextureManager.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\MeshManager.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_resourceManager.cpp">
+      <Filter>ExportLua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\CameraRenderTarget.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsCache.cpp">
+      <Filter>AnimationClip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\AnimationClipsJsonLoader.cpp">
+      <Filter>AnimationClip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorldRender3D\TextComponent.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\CBinaryFontReader.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_Material.cpp" />
+    <ClCompile Include="..\src\WorldRender3D\ExportLua\luaopen_SColor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Component">

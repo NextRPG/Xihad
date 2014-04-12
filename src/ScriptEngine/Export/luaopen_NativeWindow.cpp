@@ -3,9 +3,6 @@
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(NativeWindow, true);
-
 namespace xihad { namespace script
 {
 	int luaopen_NativeWindow( lua_State* L )

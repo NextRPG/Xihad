@@ -8,15 +8,20 @@ namespace irrklang
 
 namespace xihad { namespace audio
 {
-	typedef irrklang::E_STOP_EVENT_CAUSE E_STOP_EVENT_CAUSE;
+	using namespace irrklang;
 
 	class AudioComponent;
 	class AudioStopListener : public ReferenceCounted
 	{
 	public:
-		virtual ~AudioStopListener() {}
+		AudioStopListener() { XIHAD_MLD_NEW_OBJECT; }
 
-		virtual void onSoundStopped(AudioComponent* sound, E_STOP_EVENT_CAUSE reason) = 0;
+		virtual ~AudioStopListener() { XIHAD_MLD_DEL_OBJECT; }
+
+		/**
+		 * @return if this listener want to continue listening.
+		 */
+		virtual bool onAudioStopped(AudioComponent* sound, E_STOP_EVENT_CAUSE reason) = 0;
 	};
 }}
 

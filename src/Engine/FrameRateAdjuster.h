@@ -37,6 +37,7 @@ namespace xihad { namespace ngn
 	private:
 		float minInterval;
 		float debugThreshold;
+		float bgnSecs;
 	};
 }}
 

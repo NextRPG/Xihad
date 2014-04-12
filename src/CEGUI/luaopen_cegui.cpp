@@ -6,11 +6,6 @@
 using namespace xihad;
 using namespace ngn;
 using namespace cegui;
-
-luaT_defMetaData(NativeWindow, true);
-luaT_defMetaData(UpdateHandler, true);
-luaT_defMetaData(UserEventReceiver, true);
-luaT_defMetaData(CEGUIUpdateHandler, false);
 static int createGUI(lua_State* L)
 {
 	luaT_variable(L, 1, NativeWindow*, wnd);

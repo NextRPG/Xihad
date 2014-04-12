@@ -5,7 +5,7 @@
 
 namespace xihad { namespace audio 
 {
-	int luaopen_AudioComponents(lua_State* L);
+	int luaopen_AudioComponents(lua_State* L, AudioComponentSystem*);
 
 	using namespace ngn;
 	AudioComponentSystemFactory::AudioComponentSystemFactory() :
@@ -15,13 +15,14 @@ namespace xihad { namespace audio
 
 	ComponentSystem* AudioComponentSystemFactory::createMainSystem(GameScene* scene)
 	{
+		AudioComponentSystem* acs = new AudioComponentSystem(*this);
 		if (scene->hasSystem("Lua"))
 		{
 			auto lcs = static_cast<script::LuaComponentSystem*>(scene->requireSystem("Lua"));
-			luaopen_AudioComponents(lcs->getLuaState());
+			luaopen_AudioComponents(lcs->getLuaState(), acs);
 		}
 
-		return new AudioComponentSystem(*this);
+		return acs;
 	}
 
 }}

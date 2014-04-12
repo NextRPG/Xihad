@@ -69,7 +69,7 @@ end
 function MoveBy:onUpdate(  )
 	if not self.enabled then return false end
 
-	self.leftTime = self.leftTime - Time.change
+	self.leftTime = self.leftTime - g_time.change
 	if (self.leftTime <= 0) then
 		self.object:resetTranslate(self.destination)
 		self.enabled = false

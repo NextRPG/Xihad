@@ -1,13 +1,10 @@
 #include <luaT/luaT.h>
 #include <Engine/CompositeUpdateHandler.h>
 #include "../LuaUtil.h"
-#include "../LuaManagedUpdateHandler.h"
+#include "../LuaUpdateHandler.h"
 
 using namespace luaT;
 using namespace xihad::ngn;
-
-luaT_defMetaData(CompositeUpdateHandler, true);
-
 namespace xihad { namespace script
 {
 	static int appendUpdater(lua_State* L)
@@ -23,7 +20,7 @@ namespace xihad { namespace script
 		else if (lua_istable(L, 2))
 		{
 			// delegate it
-			updater = new LuaManagedUpdateHandler(LuaRef::fromIndex(L, 2));
+			updater = new LuaUpdateHandler(LuaRef::fromIndex(L, 2));
 		}
 		else
 		{

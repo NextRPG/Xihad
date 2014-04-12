@@ -26,28 +26,27 @@ function ControlledMove:onUpdate()
 	local rot = self.object:getRotation()
 	local x,y,z = rot:xyz()
 	y = y % 360
-	y = y>180 and y - 360 or (y <= -180 and y + 360 or y)
+	y = y>180 and y - 360 or (y <= -180 and y + 360 or y) -- (-180, 180]
 	
 	if self.ydir ~= y then
 		local target = self.ydir
 		local dy = 0
-		local max = Time.change * 720
+		local max = g_time.change * 720
+		
+		-- 旋转小角度
 		if target-y > 180  then target = target - 360 end
 		if target-y < -180 then target = target + 360 end
 
-		if target > y then
-			dy = self.ydir-y > max and  max or self.ydir-y
-		else
-			dy = y-self.ydir > max and -max or self.ydir-y
-		end
-
+		dy = target-y
+		dy = dy>max and max or (dy<-max and -max or dy)
+		
 		self.object:concatRotate(math3d.vector(0, dy, 0))
 	end
-
+	
 	if not self.dontMove then
 		local rad = self.ydir/180*math.pi
-		local dst = Time.change*self.speed
-		self.object:concatTranslate(math.sin(rad)*dst, 0, math.cos(rad)*dst)
+		local dst = g_time.change*self.speed
+		self.object:concatTranslate(math3d.vector(math.sin(rad)*dst, 0, math.cos(rad)*dst))
 	end
 end
 
@@ -67,7 +66,7 @@ function ControlledMove:acquire()
 
 		if self.status ~= "jump" and self.next ~= self.status then
 			self.status = self.next
-			anim:playAnimation(c(self.status))
+			if anim then anim:playAnimation(c(self.status)) end
 			self.next = nil
 		end
 	end
@@ -77,12 +76,14 @@ function ControlledMove:acquire()
 		if e.key == "SPACE" and self.status ~= "jump" then
 			self.status = "jump"
 			self.next = "idle 1"
-			anim:playAnimation(c"jump", function()
-				self.status = self.next
-				self.next = nil
-				anim:playAnimation(c(self.status))
-			end)
-			return true
+			if anim then
+				anim:playAnimation(c"jump", function()
+					self.status = self.next
+					self.next = nil
+					anim:playAnimation(c(self.status))
+				end)
+			end
+			return 0
 		end
 
 		if e.key == "UP" then
@@ -93,10 +94,13 @@ function ControlledMove:acquire()
 			self.direction.x = 1
 		elseif e.key == "DOWN" then
 			self.direction.z = -1
+		else
+			print("no handler") io.flush()
+			return 1
 		end
 		
 		self:updateMotion()
-		return true
+		return 0
 	end 
 
 	function controller:onKeyUp( e )
@@ -108,13 +112,16 @@ function ControlledMove:acquire()
 			self.direction.x = 0
 		elseif e.key == "DOWN" then
 			self.direction.z = 0
+		else
+			return 1
 		end
 
 		self:updateMotion()
-		return true
+		return 0
 	end
 
 	self.object:getScene():pushController(controller)
+	controller:drop()
 end
 
 return ControlledMove

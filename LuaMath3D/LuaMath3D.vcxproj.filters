@@ -18,48 +18,31 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="luaopen_util.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="..\src\math3d\LuaMath3D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LuaMath3D.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_aabb.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="luaopen_vector.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_line.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="luaopen_quaternion.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="luaopen_aabb.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_plane.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="luaopen_line.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_quaternion.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="luaopen_plane.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="luaopen_matrix.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="math3d_metadata.cpp">
+    <ClCompile Include="..\src\math3d\luaopen_vector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source.def">
-      <Filter>源文件</Filter>
-    </None>
+    <ClInclude Include="..\src\math3d\luaopen_util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
