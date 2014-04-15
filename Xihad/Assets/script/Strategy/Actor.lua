@@ -5,9 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 
-local PathFinder = require "PathFinder"
--- local BaseStrategy = require "BaseStrategy"
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
 local SkillManager = require "SkillManager"
 local CameraManager = require "CameraManager"
 
@@ -15,7 +13,6 @@ local CameraManager = require "CameraManager"
 -- @thread cothread
 -- @tparam Strategy strategy
 local Actor = {
-	
 }
 
 function Actor.new( o, object )
@@ -32,9 +29,8 @@ end
 ---
 -- cothread从上次中断的地方返回继续执行
 -- @... 传入任意长参数...
-function Actor:run( scheduler )
-	cothread = coroutine.create(function ( scheduler )
-		-- error('co error')
+function Actor:run()
+	cothread = coroutine.create(function ()
 		local object    = self.object
 		local strategy  = self.strategy
 		local manager   = self.manager			
@@ -43,13 +39,13 @@ function Actor:run( scheduler )
 
 		manager.currentCharacter = object
 
-		CameraManager:move2Character(object)
-		
+		CameraManager:back2Normal(object)
 		local point, finder = strategy:judgeTile()
-		finder = finder or require("GoalFinder")
 		-- runAsync
 		if not math.p_same(point, character.tile) then 
-			manager:onSelectTile(Chessboard:tileAt(point), finder)
+			local tile = Chessboard:tileAt(point)
+			local path = finder:constructPath(tile)
+			manager:onSelectTile(tile, path)
 		end
 		
 		local selectSkill, target = strategy:judgeSkill() -- component
@@ -57,11 +53,10 @@ function Actor:run( scheduler )
 			SkillManager:onCastSkill( target, selectSkill, character)
 		end
 		
-		runCallback(coroutine.resume(scheduler)) 
-		scheduler = coroutine.yield()
+		character:onRoundOver()
 	end)
 	
-	runCallback(coroutine.resume( cothread, scheduler ))
+	coroutine.resume(cothread)
 end
 
 

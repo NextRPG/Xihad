@@ -11,8 +11,11 @@ function span.new(origin, finish)
 	}
 	
 	setmetatable(o, span)
-	assert(o:interpolate(0))	-- check input data
 	return o
+end
+
+function span.newWithDelta(origin, delta)
+	return span.new(origin, origin+delta)
 end
 
 function span:interpolate(d)

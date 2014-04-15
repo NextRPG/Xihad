@@ -14,14 +14,17 @@ namespace xihad { namespace script
 		Dispatcher* dsptch = checkarg<Dispatcher*>(L, 1);
 		const char* tagString = checkarg<const char*>(L, 2);
 		Dispatcher::Parameter param(std::string(tagString), LuaRef::fromIndex(L, 3));
-		const std::string& objID = checkarg<std::string&>(L, 4);
+		
+		luaT_variable(L, 4, const std::string*, objID);
+		if (objID == 0)
+			objID = &GameScene::sRootObjectID;
 
-		if (lua_gettop(L) == 4)
-			dsptch->dispatch(param, objID);
+		if (lua_gettop(L) <= 4)
+			dsptch->dispatch(param, *objID);
 		else
 		{
 			double timeout = checkarg<double>(L, 5);
-			dsptch->dispatch(param, objID, timeout);
+			dsptch->dispatch(param, *objID, timeout);
 		}
 
 		return 0;

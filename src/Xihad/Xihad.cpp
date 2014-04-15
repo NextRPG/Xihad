@@ -13,6 +13,7 @@ int main(int argc, const char** argv)
 	// return loadIrrScene(argc, argv);
 	
 	// return irr_test(argc, argv);
-	return cegui_test(argc, argv);
+	// return cegui_test(argc, argv);
+	return launchScript(argc, argv);
 }
 

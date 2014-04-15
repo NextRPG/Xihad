@@ -10,7 +10,6 @@
 
 // use in function
 #include "WindowRenderer.h"
-#include "TimeConversion.h"
 #include "WindowEventSeizer.h"
 #include "CppBase\StdMap.h"
 #include "BiAssociateMap.h"

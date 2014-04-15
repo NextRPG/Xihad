@@ -33,13 +33,11 @@
 	+ 攻击影响范围
 		+ getNextAffectableTile(skillSource, map, targetTile, prevTile)
 	+ resolve 技能源、技能目标元素
-
 + 寻路模块
 	+ 地图块
 	+ 地图元素
 	+ 技能、道具释放范围
 	+ 技能、道具影响范围
-	
 + AI、战斗相关
 	+ 角色所处状态
 	+ 技能、道具效果

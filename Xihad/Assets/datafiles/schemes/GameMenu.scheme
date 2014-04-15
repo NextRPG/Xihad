@@ -6,5 +6,5 @@
     
     <FalagardMapping windowType="GameMenu/Editbox" targetType="CEGUI/Editbox" renderer="Core/Editbox" lookNFeel="GameMenu/Editbox" />
 	
-    </GUIScheme>
+</GUIScheme>
 

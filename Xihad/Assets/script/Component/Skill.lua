@@ -5,7 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
 local HeroManager = require "HeroManager"
 local AIManager = require "AIManager"
 local PathFinder = require "PathFinder"

@@ -36,7 +36,12 @@ function ascondition:release()
 end
 
 function ascondition:wait()
-	local running = assert(coroutine.running())
+	local running = coroutine.running()
+	if not running then
+		io.stderr:write('Attempt to wait from main thread\n')
+		error(debug.traceback())
+	end
+	
 	local pending = function (...)
 		local t = { coroutine.resume(running, ...) }
 		if t [1] == false then
@@ -90,9 +95,9 @@ if select('#', ...) == 0 then
 		
 		local dialog = { 
 			"Creates a new coroutine, with body f.", 
-			"f must be a Lua function. Returns a function that resumes the coroutine each time it is called.",
-			"Any arguments passed to the function behave as the extra arguments to resume.",
-			"Returns the same values returned by resume, except the first boolean. In case of error, propagates the error." 
+			"f must be a Lua function. Returns a function that resumes the coroutine each time it is called.", 
+			"Any arguments passed to the function behave as the extra arguments to resume.", 
+			"Returns the same values returned by resume, except the first boolean. In case of error, propagates the error.", 
 		}
 		
 		local current = 1

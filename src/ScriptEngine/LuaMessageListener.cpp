@@ -29,13 +29,13 @@ namespace xihad { namespace script
 
 	void LuaMessageListener::receive( GameObject& pSource, const Parameter& pEvent )
 	{
-		lua_State* L = mObject.getState();
+		lua_State* L = mObject.getMainState();
 		StackMemo memo(L);
 
-		mObject.pushSelf();
+		mObject.pushOnto(L);
 		luaT::getField(L, -1, "onMessage");
 
-		mObject.pushSelf();
+		mObject.pushOnto(L);
 		push<GameObject*>(L, &pSource);
 		pEvent.getLuaObject().pushOnto(L);
 		push<const char*>(L, pEvent.getTag().toString().c_str());

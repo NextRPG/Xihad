@@ -1,7 +1,7 @@
 require "math3d"
-require "mathplus"
-require "tableplus"
-require "stringplus"
+require "std.mathplus"
+require "std.tableplus"
+require "std.stringplus"
 require "coordinate"
 
 -- function
@@ -13,16 +13,16 @@ function runCallback( result, func, t )
 	if result ~= true then print(func) end
 end
 
-function runAsyncFunc( func, ... )
+-- function runAsyncFunc( func, ... )
 
-	local current = coroutine.running()
-	local t = {...}
-	table.insert(t, function (  )
-		runCallback(coroutine.resume(current))
-	end)
+-- 	local current = coroutine.running()
+-- 	local t = {...}
+-- 	table.insert(t, function (  )
+-- 		runCallback(coroutine.resume(current))
+-- 	end)
 	
-	coroutine.yield(func, t)
-end
+-- 	coroutine.yield(func, t)
+-- end
 
 function makeList( array, k, v )
 	local list = {}
@@ -57,7 +57,6 @@ function hex2Color( str )
 end
 
 function hash( tile )
-	if not tile.y then print(debug.traceback()) end
 	return tile.x .. " " .. tile.y
 end
 
@@ -118,6 +117,7 @@ function serialize( o )
 	end
 end
 
+-- TODO support from c level
 function g_scene:hasObjectWithTag( tag )
 	local count = 0
 	for object in g_scene:objectsWithTag(tag) do

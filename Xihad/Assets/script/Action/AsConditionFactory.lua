@@ -46,4 +46,21 @@ function cond.waitAnimation(animation, wait)
 	return waitOrReturn(o, wait)
 end
 
+function cond.waitMessage(message, wait)
+	local o = AsyncCondition.new()
+	local listenerWrapper = {}
+	
+	function o:hook(callback)
+		listenerWrapper.onMessage = callback
+		g_dispatcher:addListener(message, listenerWrapper)
+		listenerWrapper:drop()
+	end
+	
+	function o:release()
+		g_dispatcher:removeListener(message, listenerWrapper)
+	end
+	
+	return waitOrReturn(o, wait)
+end
+
 return cond

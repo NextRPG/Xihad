@@ -1,4 +1,4 @@
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
 local SkillManager = require "SkillManager"
 local StateMachine = require "StateMachine"
 local SkillManager = require "SkillManager"

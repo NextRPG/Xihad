@@ -1,4 +1,4 @@
-local Action = require 'Action.Action'
+local base = require 'Action.Action'
 
 local sequence = {
 	idle	 = 0,
@@ -6,10 +6,10 @@ local sequence = {
 	internal_actions = nil,
 }
 sequence.__index = sequence
-setmetatable(sequence, Action)
+setmetatable(sequence, base)
 
 function sequence.new(actions)
-	local o = Action.new()
+	local o = base.new()
 	o.internal_actions = actions
 	setmetatable(o, sequence)
 	return o

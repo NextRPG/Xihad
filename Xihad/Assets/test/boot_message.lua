@@ -24,9 +24,7 @@ function ListenerManager:onStart()
 		end
 	}
 	
-	local dispatcher = self.object:getg_scene():getDispatcher()
-	dispatcher:addListener("test.a", self.testListener)
-	
+	g_dispatcher:addListener("test.a", self.testListener)
 end
 
 function ListenerManager:onStop()

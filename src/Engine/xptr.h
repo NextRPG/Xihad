@@ -3,7 +3,7 @@
 
 #define xptr ::boost::intrusive_ptr
 
-namespace xihad 
+namespace xihad
 {
 	template <typename T>
 	void intrusive_ptr_add_ref(T* obj)

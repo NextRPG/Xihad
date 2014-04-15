@@ -6,6 +6,7 @@
 #define LUA_G_TIME_PAUSED	"paused"
 
 #define LUA_G_SCENE			"g_scene"
+#define LUA_G_DISPATCHER	"g_dispatcher"
 #define LUA_G_ENGINE		"g_engine"
 #define LUA_G_WORLD			"g_world"
 #define LUA_G_WINDOW		"g_window"

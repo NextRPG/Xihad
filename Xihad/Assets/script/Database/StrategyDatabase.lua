@@ -1,3 +1,4 @@
+-- TODO REMOVE
 --- 
 -- 存储各职业AI的职业属性，职业影响到了AI的进攻策略
 -- @module name

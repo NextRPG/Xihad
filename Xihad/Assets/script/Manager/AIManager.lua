@@ -7,7 +7,7 @@
 
 local CharacterManager = require "CharacterManager"
 local StrategyDatabase = require "StrategyDatabase"
-
+local AsConditionFactory = require 'AsConditionFactory'
 
 local AIManager = CharacterManager.new{team = "AI"}
 
@@ -45,13 +45,19 @@ function AIManager:init( AIs )
 end
 
 function AIManager:runActors(  )
+	if not g_scene:hasObjectWithTag("Hero") then 
+		return 
+	end
+	
 	for characterObject in g_scene:objectsWithTag(self.team) do
-		if not g_scene:hasObjectWithTag("Hero") then break end
 		local actor = characterObject:findComponent(c"Actor")
 		local character = characterObject:findComponent(c"Character")
+		assert(character.team == self.team)
+		
 		if not character.states.TURNOVER then
-			actor:run(coroutine.running())
-			coroutine.yield()
+			-- TODO 有点丑
+			actor:run()
+			AsConditionFactory.waitMessage('Character.RoundOver.'..self.team)
 			character.states.TURNOVER = true
 		end
 	end

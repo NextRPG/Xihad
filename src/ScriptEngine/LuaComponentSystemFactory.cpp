@@ -46,6 +46,7 @@ namespace xihad { namespace script
 
 			// _G.scene 
 			setField(L, -1, LUA_G_SCENE, scene);
+			setField(L, -1, LUA_G_DISPATCHER, scene->getDispatcher());
 
 			// _G.Time
 			lua_createtable(L, 0, 3);

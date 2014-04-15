@@ -1,6 +1,7 @@
 local ObjectAction = require 'ObjectAction'
 local ActionFactory= require 'ActionFactory'
 local ActionAdapter= require 'ActionAdapter'
+local SpanVariable = require 'SpanVariable'
 local movement = {}
 
 function movement.moveToTarget(object, moveDirections)
@@ -12,21 +13,21 @@ function movement.moveToTarget(object, moveDirections)
 		local finishY = getLogicAngle(action.destination)
 		local rotation = calRotation(currentY, finishY)
 		if rotation ~= 0 then
-			local finishY = currentY + rotation
-			local rotAction = ObjectAction.rotateY(object, currentY, finishY, 0.2)
+			local spanY = SpanVariable.newWithDelta(currentY, rotation)
+			local rotAction = ObjectAction.rotateY(object, spanY, 0.2)
 			table.insert(newActions, rotAction)
 			currentY = finishY
 		end
 		
-		local finishPos = originPos + 
-			math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, action.destination.y * Consts.TILE_HEIGHT)
-		local move = ObjectAction.move(object, originPos, finishPos, action.interval)
+		local delta = math3d.vector(action.destination.x * Consts.TILE_WIDTH, 0, action.destination.y * Consts.TILE_HEIGHT)
+		local spanTranslate = SpanVariable.newWithDelta(originPos, delta)
+		local move = ObjectAction.move(object, spanTranslate, action.interval)
 		table.insert(newActions, move)
-		originPos = finishPos
+		originPos = spanTranslate.finish
 	end
 	
 	local sequence = ActionFactory.sequence(newActions)
-	object:appendUpdateHandler(ActionAdapter.new(sequence))	-- update it
+	ActionAdapter.fit(object, sequence)
 	
 	return sequence
 end

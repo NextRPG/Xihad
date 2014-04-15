@@ -11,6 +11,7 @@ function factory.parallel(array)
 	return pal.new(array)
 end
 
+-- TODO
 function factory.loop(t, n)
 	local l = {}
 	local looped = 0
