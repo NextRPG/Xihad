@@ -1,4 +1,5 @@
 #pragma once
+#include <Engine/MemoryLeakDetector.h>
 
 namespace xihad 
 {
@@ -35,6 +36,18 @@ namespace xihad
 		IteratorPair(Container& container) :
 			curr(container.begin()), end(container.end())
 		{
+			XIHAD_MLD_NEW_OBJECT;
+		}
+
+		IteratorPair(const IteratorPair& other) :
+			curr(other.curr), end(other.end) 
+		{
+			XIHAD_MLD_NEW_OBJECT;
+		}
+
+		~IteratorPair() 
+		{
+			XIHAD_MLD_DEL_OBJECT;
 		}
 
 		/// Test whether the iterator is not the end

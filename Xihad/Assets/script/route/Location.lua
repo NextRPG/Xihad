@@ -37,8 +37,7 @@ Location.__le = function (a, b)
 end
 
 function Location.new(x, y)
-	local o = {}
-	setmetatable(o, Location)
+	local o = setmetatable({}, Location)
 	if type(x) == 'number' and type(y) == 'number' then
 		o.x = x
 		o.y = y

@@ -51,7 +51,7 @@ end
 function MapTile:getActionPointCost(character)
 	local accum = 0
 	for e,_ in pairs(self.elements) do
-		accum = accum + self.elements:getActionPointCost(character)
+		accum = accum + e:getActionPointCost(character)
 	end
 	
 	return algo.max(1, accum)

@@ -1,23 +1,32 @@
-local ChooseHeroState = {}
+local base = require 'Controller.PlayerControlState'
 
-function ChooseHeroState:onBack()
-	-- ignore
+local ChooseHeroState = setmetatable({}, base)
+ChooseHeroState.__index = ChooseHeroState
+
+function ChooseHeroState.new()
+	return setmetatable(base.new(), ChooseHeroState)
 end
 
 function ChooseHeroState:onVacancySelected(tileObject)
 	-- show tile info
+	self.ui:showInfo(tileObject)
 end
 
 function ChooseHeroState:onHeroSelected(heroObject)
-	self.manager:onSelectCharacter(object)
-	return 'next'
+	self.ui:showInfo(heroObject)
+	self.chessboard:showRange(heroObject)
+	self.camera:focus(heroObject)
+	
+	if heroObject:isActive() then
+		self.commandList:setSource(heroObject)
+		return 'next'
+	end
 end
 
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
-	self.manager:onSelectCharacter(object)
+	self.ui:showInfo(heroObject)
+	self.chessboard:showRange(enemyObject)
 end
 
-function ChooseHeroState:onUICommand(command)
-	-- ignore
-end
+return ChooseHeroState

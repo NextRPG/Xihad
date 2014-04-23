@@ -26,8 +26,8 @@ floor:concatTranslate(math3d.vector(-15, -2.5, 0))
 
 local param = { 
 	-- mesh = "Assets/model/man2_x/2.b3d"
-	mesh  = "Assets/model/ninja.b3d", 
-	clips = "Assets/model/ninja.clip" 
+	mesh  = "Assets/model/reimu/reimu.b3d", --ninja.b3d", 
+	clips = "Assets/model/reimu/reimu.clip", --ninja.clip" 
 }
 
 local ninja = nil
@@ -36,7 +36,7 @@ local anim = nil
 for i = 10, 1, -1 do
 	ninja = g_scene:createObject(c("ninja"..i))
 	anim = ninja:appendComponent(c"AnimatedMesh", param)
-	anim:playAnimation(c"idle 1")
+	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.1)
 	-- anim:setAnimationSpeed(0)
 	-- anim:addShadow(nil, "zfail")
@@ -61,16 +61,15 @@ local camera = g_scene:createObject(c"camera")
 local ccam = camera:appendComponent(c"Camera")
 -- euler = math3d.vector(0, -20, 0):horizontalAngle()
 -- camera:concatRotate(euler:xyz())
-camera:concatTranslate(math3d.vector(0, 30, -25))
+camera:concatTranslate(math3d.vector(0, 25, -20))
 
-ccam:setTarget(math3d.vector(0, 0, -15))
+ccam:setTarget(math3d.vector(0, 10, 0))
 ccam:setUpVector(math3d.vector(0, 1, 0))
-camera:appendUpdater({ onUpdate = function()
-	local dx = 0.1
-	camera:resetTranslate(camera:getTranslate() + math3d.vector(dx, 0,0))
-	ccam:setTarget(ccam:getTarget() + math3d.vector(dx,0,0))
-end })
-
+-- camera:appendUpdater({ onUpdate = function()
+-- 	local dx = 0.1
+-- 	camera:resetTranslate(camera:getTranslate() + math3d.vector(dx, 0,0))
+-- 	ccam:setTarget(ccam:getTarget() + math3d.vector(dx,0,0))
+-- end })
 
 local sun = g_scene:createObject(c"sun")
 lightComp = sun:appendComponent(c"Light")

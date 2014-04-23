@@ -14,6 +14,10 @@ int main(int argc, const char** argv)
 	
 	// return irr_test(argc, argv);
 	// return cegui_test(argc, argv);
-	return launchScript(argc, argv);
+	int ret = launchScript(argc, argv);
+	XIHAD_MLD_RELEASE_INSTANCE;
+	IRR_MLD_RELEASE_INSTANCE;
+
+	return ret;
 }
 

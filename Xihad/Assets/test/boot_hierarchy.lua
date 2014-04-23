@@ -7,14 +7,14 @@ local param = { mesh  = "Assets/model/ninja.b3d",  clips = "Assets/model/ninja.c
 local function addChildObject(parent, level)
 	local left = g_scene:createUniqueObject(c"ninja", parent)
 	local anim = left:appendComponent(c"AnimatedMesh", param)
-	anim:playAnimation(c"idle 1")
+	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.1)
 	left:concatTranslate(math3d.vector(-5, 5, 0))
 	left:appendComponent(c"ControlledMove")
 
 	local right = g_scene:createUniqueObject(c"ninja", parent)
 	local anim = right:appendComponent(c"AnimatedMesh", param)
-	anim:playAnimation(c"idle 1")
+	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.1)
 	right:concatTranslate(math3d.vector(5, 5, 0))
 	right:appendComponent(c"ControlledMove")
@@ -46,7 +46,7 @@ end
 
 local root = g_scene:createObject(c"ninja")
 local anim = root:appendComponent(c"AnimatedMesh", param)
-anim:playAnimation(c"idle 1")
+anim:playAnimation(c"idle")
 anim:setTransitionTime(0.1)
 root:concatRotate(math3d.vector(0, 180, 0))
 

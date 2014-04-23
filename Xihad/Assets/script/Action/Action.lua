@@ -4,9 +4,7 @@ local d = {
 d.__index = d
 
 function d.new()
-	local o = {}
-	setmetatable(o, d)
-	return o
+	return setmetatable({}, d)
 end
 
 function d:update(time)

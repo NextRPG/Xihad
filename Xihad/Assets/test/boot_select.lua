@@ -10,7 +10,7 @@ do
 	anim = ninja:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid")
 end
-anim:playAnimation(c"idle 1")
+anim:playAnimation(c"idle")
 anim:setTransitionTime(0.1)
 ninja:concatRotate(math3d.vector(0, 180, 0))
 

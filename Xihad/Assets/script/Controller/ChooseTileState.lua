@@ -1,33 +1,38 @@
-local ChooseTileState = {}
+local base = require 'Controller.PlayerControlState'
 
-function ChooseTileState:onBack()
-	-- back to ChooseHeroState
-	Chessboard:clearAll()
-	to(ChooseHeroState)
+local ChooseTileState = { }
+ChooseTileState.__index = ChooseTileState
+setmetatable(ChooseTileState, base)
+
+function ChooseTileState.new()
+	local obj = setmetatable(base.new(), ChooseTileState)
+	return obj
 end
 
-function ChooseTileState:onVacancySelected(tileObject)
+function ChooseTileState:onBack()
+	-- back to ChooseHeroState, clear marked range
+	self.ui:clear()
+	self.chessboard:clearRange()
+	return 'back'
+end
+
+function ChooseTileState:onTileSelected(tile)
 	-- show tile info
-	
-	if PathFinder:hasTile(object:findComponent(c"Tile")) then
-		self.manager:onSelectTile(object:findComponent(c"Tile"))
-		SkillManager:onShowSkills(self.manager.currentCharacter)
-	else
+	if tileObject:canStay(self.commandList:getSource()) then
+		self.chessboard:highlightTile(tileObject)
 		
+		local dest = tile:getLocation()
+		local src = self.commandList:getSource()
+		src:moveToLocation(dest)
+		return 'next'
+	else
+		self.ui:warning('not stayable')
 	end
 end
 
-function ChooseTileState:onHeroSelected(heroObject)
-	-- mark range 
-	-- change state
-	self.manager:onSelectCharacter(object)
+function ChooseTileState:onTileHoverd(tile)
+	self.ui:showInfo(tile)
+	self.chessboard:showAttackableRange(src, tile:getLocation())
 end
 
-function ChooseTileState:onEnemySelected(enemyObject)
-	-- mark range
-	self.manager:onSelectCharacter(object)
-end
-
-function ChooseTileState:onUICommand(command)
-	-- ignore
-end
+return ChooseTileState

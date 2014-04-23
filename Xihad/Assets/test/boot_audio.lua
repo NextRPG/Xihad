@@ -11,7 +11,7 @@ anim = ninja:appendComponent(c"AnimatedMesh", param)
 anim:getMaterial(0):setColorMaterial('none')
 anim:getMaterial(0):setDiffuseColor(Color.new(Color.black))
 
-anim:playAnimation(c"idle 1")
+anim:playAnimation(c"idle")
 anim:setTransitionTime(0.1)
 ninja:concatRotate(math3d.vector(0, 180, 0))
 

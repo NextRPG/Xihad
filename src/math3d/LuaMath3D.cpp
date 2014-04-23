@@ -46,7 +46,8 @@ namespace xihad { namespace script
 			{
 				float ratio = p1->getKnownIntersectionWithLine(l2->start, l2->end);
 				push<bool>(L, ratio>=0 && ratio < 1);
-				return 1;
+				push<float>(L, ratio);
+				return 2;
 			}
 		}
 		else if (luaT_variable(L, 1, aabbox3df*, b1))
@@ -131,7 +132,7 @@ namespace xihad { namespace script
 	static luaL_Reg m3d_libs[] = {
 		{ "lerp",		mathLerp },			
 		{ "intersects", mathIntersects },	// -> bool
-		{ "intersects", mathIntersection },	// -> vector[2] or vector
+		{ "intersection", mathIntersection },	// -> vector[2] or vector
 		{ 0, 0 },
 	};
 

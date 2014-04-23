@@ -54,17 +54,17 @@ function ControlledMove:acquire()
 	local anim = self.object:findComponent(c"AnimatedMesh")
 	local move = self
 	
-	local controller = { status = "idle 1", direction = { x = 0, z = 0 } }
+	local controller = { status = "idle", direction = { x = 0, z = 0 } }
 	function controller:updateMotion()
 		move:setTarget(self.direction)
 
 		if self.direction.x ~= 0 or self.direction.z ~= 0 then
 			self.next = "walk"
 		else
-			self.next = "idle 1"
+			self.next = "idle"
 		end
 
-		if self.status ~= "jump" and self.next ~= self.status then
+		if self.status ~= "magic1" and self.next ~= self.status then
 			self.status = self.next
 			if anim then anim:playAnimation(c(self.status)) end
 			self.next = nil
@@ -73,11 +73,12 @@ function ControlledMove:acquire()
 
 	function controller:onKeyDown(e)
 		-- if is jumping then do nothing
-		if e.key == "SPACE" and self.status ~= "jump" then
-			self.status = "jump"
-			self.next = "idle 1"
+		local magic = 'die'
+		if e.key == "SPACE" and self.status ~= magic then
+			self.status = magic
+			self.next = "idle"
 			if anim then
-				anim:playAnimation(c"jump", function()
+				anim:playAnimation(c(magic), function()
 					self.status = self.next
 					self.next = nil
 					anim:playAnimation(c(self.status))

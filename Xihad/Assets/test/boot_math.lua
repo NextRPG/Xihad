@@ -1,5 +1,9 @@
-package.cpath = '../Release/?.dll;'
- local m3d = require "math3d"
+if select(1, ...) == 'debug' then
+	package.cpath = '../../../Debug/?.dll;'
+else
+	package.cpath = '../../../Release/?.dll;'
+end
+local m3d = require "math3d"
 
 --[[
 VECTOR3D
@@ -118,7 +122,7 @@ assert(not aabb:fullContains(m3d.vector(0,0,0)))-- Test full contains point (no 
 assert(not aabb:fullContains(copy))				-- Test full contains box (no face)
 --assert(aabb:intersects(m3d.line(```)))		-- Test intersects line
 assert(aabb:intersects(copy))					-- Test intersects box
---assert(aabb:intersects(m3d.plane(```)))		-- Test intersects plane
+-- assert(aabb:intersects(m3d.plane()))		-- Test intersects plane
 
 local line = m3d.line(m3d.vector(0, 0, 0), m3d.vector(1, 1, 1)) -- 线段，开始点为 (0,0,0) 结束点为 (1, 1, 1)
 local copy = line:copy()
@@ -127,8 +131,11 @@ line:middle()	-- (end+start)/2
 line:length()	-- line:vector():length()
 line:length2()	-- line:vector():length2()
 line:closestP2P(m3d.vector(0, 1, 0))	-- 线段上离指定点最近的点
-line:start():set(1,2,3)		-- 修改线段的起点
-line:finish():set(2,3,4)	-- 修改线段的终点
+line:setStart(math3d.vector(0, 1, 0))		-- 修改线段的起点
+line:setFinish(math3d.vector(0, -1, 0))	-- 修改线段的终点
+local ground = math3d.plane(math3d.vector(0, 0, 0), math3d.vector(0, 1, 0))
+assert(math3d.intersects(ground, line))
+assert(math3d.intersection(ground, line) == math3d.vector())
 
 local point = m3d.vector(1, 2, 3)
 local normal = m3d.vector(1, 1, 1); normal:normalize();
@@ -145,4 +152,3 @@ assert(plane:relationToPoint(m3d.vector(0,1,2)) == "back")
 -- plane:set(```) 参数同构造函数的参数
 
 print("Test Complete")
-os.execute("pause")

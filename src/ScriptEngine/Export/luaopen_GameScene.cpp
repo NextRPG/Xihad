@@ -4,6 +4,9 @@
 #include <Engine/UserEventReceiverStack.h>
 #include "../LuaEventReceiver.h"
 
+// Don't remove this macro, or memory leak will occur
+#define ITERATOR_USE_USERDATA
+
 using namespace luaT;
 using namespace xihad;
 using namespace ngn;
@@ -14,20 +17,25 @@ namespace xihad { namespace script
 	// list, var
 	static int objectIterator(lua_State* L)
 	{
+#ifndef ITERATOR_USE_USERDATA
 		xassert(lua_islightuserdata(L, 1));
-		ObjectIterPair* iterPtr = 
-			static_cast<ObjectIterPair*> (lua_touserdata(L, 1));
+#else
+		xassert(lua_isuserdata(L, 1) || lua_islightuserdata(L, 1));
+#endif
+
+		auto iterPtr = static_cast<ObjectIterPair*> (lua_touserdata(L, 1));
 
 		if (iterPtr != nullptr && iterPtr->notEnd())
 		{
-			ObjectIterPair& iter = *iterPtr;
-			push<GameObject*>(L, *iter);
-			iter.next();
+			push<GameObject*>(L, *(*iterPtr));
+			iterPtr->next();
 		}
 		else
 		{
 			lua_pushnil(L);
+#ifndef ITERATOR_USE_USERDATA
 			delete iterPtr;
+#endif
 		}
 
 		return 1;
@@ -41,13 +49,30 @@ namespace xihad { namespace script
 		// Get list
 		auto objList = scene->findObjectsByTag(tag);
 
-		// Create Iterator Pair
-		void* iterData = nullptr;
-		if (objList)
-			iterData = new ObjectIterPair(*objList);
-
 		lua_pushcfunction(L, objectIterator);
-		lua_pushlightuserdata(L, iterData);
+
+		// Create Iterator Pair
+		if (objList) 
+		{
+#ifdef ITERATOR_USE_USERDATA
+			void* iterData = lua_newuserdata(L, sizeof(ObjectIterPair));
+
+	#ifdef XIHAD_MLD_NEW_OBJECT
+			// Enable __gc function when Auto-reference-counting enabled
+			Metatable::forType<ObjectIterPair>(L);
+			lua_setmetatable(L, -2);
+	#endif
+
+			new (iterData) ObjectIterPair(*objList);
+#else
+			lua_pushlightuserdata(L, new ObjectIterPair(*objList));
+#endif
+		}
+		else
+		{
+			lua_pushlightuserdata(L, 0);
+		}
+		
 		lua_pushnil(L);
 		return 3;
 	}
@@ -139,6 +164,10 @@ namespace xihad { namespace script
 			luaT_mnamedfunc(GameScene, getDispatcher),
 		luaT_defRegsEnd
 		MetatableFactory<GameScene, CompositeUpdateHandler>::create(L, sceneRegs, 0);
+
+#ifdef XIHAD_MLD_NEW_OBJECT
+		MetatableFactory<ObjectIterPair>::createNull(L);
+#endif
 
 		return 0;
 	}

@@ -1,26 +1,36 @@
-local ChooseCommandState = {}
+local base = require 'Controller.PlayerControlState'
+local ChooseCommandState = { }
+ChooseCommandState.__index = ChooseCommandState
+setmetatable(ChooseCommandState, base)
+
+function ChooseCommandState.new()
+	local obj = setmetatable(base.new(), ChooseCommandState)
+	return obj
+end
 
 function ChooseCommandState:onBack()
-	self.manager:back2ShowCharacter()
 	return 'back'
 end
 
-function ChooseCommandState:onVacancySelected(tileObject)
+function ChooseCommandState:onTouch(x, y)
 	-- ignore
 end
 
-function ChooseCommandState:onHeroSelected(heroObject)
-	-- ignore
-end
-
-function ChooseCommandState:onEnemySelected(enemyObject)
+function ChooseCommandState:onHover(x, y)
 	-- ignore
 end
 
 function ChooseCommandState:onUICommand(command)
 	if command == 'Standby' then
-		return 'fail'
+		local src = self.command:getSource()
+		src:deactivate()
+		return 'done'
 	else
-		SkillManager:onSelectSkill(key)
+		self.commandList:setCommand(command)
+		-- TODO
+		-- self.chessboard:markAttackableRange(src, loc, cmd)
+		return 'next'
 	end
 end
+
+return ChooseCommandState

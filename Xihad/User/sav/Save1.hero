@@ -1,62 +1,75 @@
-return {
- [1] =  {
- ["model"] = "ninja",
- ["properties"] =  {
- ["physicalDefense"] = 5,
- ["physicalAttack"] = 5,
- ["maxHP"] = 500,
- ["magicAttack"] = 5,
- ["maxAP"] = 3,
- ["magicDefense"] = 10,
-},
- ["career"] = "WARRIOR",
- ["getExp"] = 0,
- ["skills"] =  {
- [1] = 1,
- [3] = 3,
-},
- ["level"] = 1,
- ["currentExp"] = 0,
- ["name"] = 1,
-},
- [2] =  {
- ["model"] = "ninja",
- ["properties"] =  {
- ["physicalDefense"] = 5,
- ["physicalAttack"] = 5,
- ["maxHP"] = 500,
- ["magicAttack"] = 5,
- ["maxAP"] = 3,
- ["magicDefense"] = 10,
-},
- ["career"] = "WARRIOR",
- ["getExp"] = 0,
- ["skills"] =  {
- [1] = 1,
- [3] = 3,
-},
- ["level"] = 1,
- ["currentExp"] = 0,
- ["name"] = 2,
-},
- [3] =  {
- ["model"] = "ninja",
- ["properties"] =  {
- ["physicalDefense"] = 5,
- ["physicalAttack"] = 5,
- ["maxHP"] = 500,
- ["magicAttack"] = 5,
- ["maxAP"] = 3,
- ["magicDefense"] = 10,
-},
- ["career"] = "WARRIOR",
- ["getExp"] = 0,
- ["skills"] =  {
- [1] = 1,
- [3] = 3,
-},
- ["level"] = 1,
- ["currentExp"] = 0,
- ["name"] = 3,
-},
+return 
+{
+	A = 
+	{
+ 		model = "ninja",
+ 		properties =  
+ 		{
+ 			MHP = 500,
+ 			ATK = 5,
+ 			DFS = 5,
+ 			MTK = 5,
+ 			MDF = 10,
+ 			MAP = 3,
+		},
+ 		career = "WARRIOR",
+ 		getexP = 0,
+ 		skills = 
+ 		{
+ 			['skill1'] = 1, 
+ 			['skill2'] = 2,
+ 		},
+ 		level = 1,
+ 		currentexP = 0,
+ 		name = 1,
+	},
+	
+	
+ 	B = 
+ 	{
+ 		model = "ninja",
+ 		properties =  
+ 		{
+			DFS = 5,
+			ATK = 5,
+			MHP = 500,
+			MTK = 5,
+			MAP = 3,
+			MDF = 10,
+		},
+ 		career = "WARRIOR",
+ 		getexP = 0,
+ 		skills =  
+ 		{ 
+ 			['skill2'] = 4, 
+ 			['skill3'] = 3,
+ 		},
+		level = 1,
+		currentexP = 0,
+		name = 2,
+	},
+	
+	C = 
+	{
+		model = "ninja",
+		properties =  
+		{
+			DFS = 5,
+			ATK = 5,
+			MHP = 500,
+			MTK = 5,
+			MAP = 3,
+			MDF = 10,
+		},
+		career = "WARRIOR",
+		getexP = 0,
+		skills = 
+ 		{ 
+ 			['skill4'] = 4, 
+ 			['skill5'] = 5,
+ 		},
+		level = 1,
+		currentexP = 0,
+		name = 3,
+	},
 }

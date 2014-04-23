@@ -68,6 +68,10 @@ function Algo.count_if(t, f)
 	return count
 end
 
+function Algo.clamp(value, min, max)
+	return Algo.min(Algo.max(value, min), max)
+end
+
 function Algo.min(a, b)
 	return a<b and a or b
 end

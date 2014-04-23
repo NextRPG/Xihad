@@ -15,7 +15,7 @@ local param = { mesh  = "Assets/model/ninja.b3d", clips = "Assets/model/ninja.cl
 local ninja = g_scene:createObject(c"ninja")
 ninja:resetTranslation(math3d.vector(0, 0, -10))
 anim = ninja:appendComponent(c"AnimatedMesh", param)
-anim:playAnimation(c"idle 1")
+anim:playAnimation(c"idle")
 anim:setTransitionTime(0.1)
 ninja:concatRotate(math3d.vector(0, 180, 0))
 

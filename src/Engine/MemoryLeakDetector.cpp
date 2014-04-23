@@ -2,6 +2,7 @@
 
 #include "MemoryLeakDetector.h"
 #include <iostream>
+#include <assert.h>
 
 using namespace std;
 namespace xihad { namespace ngn
@@ -13,6 +14,7 @@ namespace xihad { namespace ngn
 
 	unsigned MemoryLeakDetector::onObjectDestroyed( const char* objClassId )
 	{
+		assert(this->objectCounts[objClassId] >= 1);
 		return --this->objectCounts[objClassId];
 	}
 

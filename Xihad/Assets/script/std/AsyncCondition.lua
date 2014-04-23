@@ -1,5 +1,3 @@
-local functional = require "std.functional"
-
 ---
 -- AsyncCondition 负责与其他协程通信，来检测是否需要继续执行当前协程
 local ascondition = {

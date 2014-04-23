@@ -90,6 +90,20 @@ function Array.bsearch(t, v, comp)
 	return -high
 end
 
+function Array.reverse(t)
+	local low, high = 1, #t
+	
+	local buf
+	while low < high do 
+		buf = t[low]
+		t[low] = t[high]
+		t[high] = buf
+		
+		low = low + 1
+		high = high - 1
+	end
+end
+
 if select('#', ...) == 0 then 
 	local arr = { 12, 87, 123, 53, 58, 992, 100 }
 	

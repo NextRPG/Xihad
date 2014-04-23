@@ -42,10 +42,9 @@ local function findHeap(t, v, root, isAncestor)
 end
 
 function Heap.new(comp)
-	o = {}
-	setmetatable(o, Heap)
-	o.isAncestor = comp
-	return o
+	return setmetatable({
+			isAncestor = comp
+		}, Heap)
 end
 
 Heap.MinHeap = Heap.new(function (a, b) return a<=b end)

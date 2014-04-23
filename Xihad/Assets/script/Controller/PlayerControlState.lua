@@ -1,64 +1,70 @@
-local PlayerState = {}
+local PlayerState = {
+	touchEventDispatcher = nil,
+	hoverEventDispatcher = nil,
+}
+PlayerState.__index = PlayerState
+
+function PlayerState.new()
+	local o = setmetatable({}, PlayerState)
+	
+	local touchListener = {}
+	Class.delegateClosure(touchListener, 'onWarrior', o, 'onWarriorSelected')
+	Class.delegateClosure(touchListener, 'onVacancy', o, 'onVacancySelected')
+	Class.delegateClosure(touchListener, 'onTile' ,   o, 'onTileSelected')
+	Class.delegateClosure(touchListener, 'onHero' ,   o, 'onHeroSelected')
+	Class.delegateClosure(touchListener, 'onEnemy',   o, 'onEnemySelected')
+	
+	local hoverListener = {}
+	Class.delegateClosure(hoverListener, 'onWarrior', o, 'onWarriorHovered')
+	Class.delegateClosure(hoverListener, 'onVacancy', o, 'onVacancyHovered')
+	Class.delegateClosure(hoverListener, 'onTile' ,   o, 'onTileHovered')
+	Class.delegateClosure(hoverListener, 'onHero' ,   o, 'onHeroHovered')
+	Class.delegateClosure(hoverListener, 'onEnemy',   o, 'onEnemyHovered')
+	
+	o.touchEventDispatcher = MouseEventDispatcher.new(touchListener),
+	o.hoverEventDispatcher = MouseEventDispatcher.new(hoverListener),
+	return o
+end
 
 function PlayerState:onBack()
 end
 
 function PlayerState:onTouch(x, y)
-	local obj = g_collision:detect(g_collision:getRayFromScreenCoord(x, y))
-	if obj then
-		return self:onObjectSelected(obj)
-	end
+	return self.touchEventDispatcher:dispatch(x, y)
+end
+
+Class.delegate(PlayerState, 'onWarriorSelected', 'touchEventDispatcher', 'onWarriorDefault')
+
+Class.delegate(PlayerState, 'onTileSelected', 'touchEventDispatcher', 'onTileDefault')
+
+function PlayerState:onVacancySelected(tileObject) 
+end
+
+function PlayerState:onHeroSelected(heroObject) 
+end
+
+function PlayerState:onEnemySelected(enemyObject) 
 end
 
 function PlayerState:onHover(x, y)
-	local obj = g_collision:detect(g_collision:getRayFromScreenCoord(x, y))
-	if obj then
-		return self:onObjectHovered(obj)
-	end
+	return self.hoverEventDispatcher:dispatch(x, y)
 end
 
-function PlayerState:onObjectSelected(object)
-	-- test if it is a tile or person
-	if object:hasTag(c'Tile') then
-		return self:onTileSelected(object)
-	elseif object:hasTag(c'Character')
-		return self:onPersonSelected(object)
-	else
-		print('Non-Tile and Non-Character object found')
-	end
+Class.delegate(PlayerState, 'onWarriorHovered', 'hoverEventDispatcher', 'onWarriorDefault')
+
+Class.delegate(PlayerState, 'onTileHovered', 'hoverEventDispatcher', 'onTileDefault')
+
+function PlayerState:onVacancyHovered(tileObject) 
 end
 
-function PlayerState:onObjectHovered(object)
-	
+function PlayerState:onHeroHovered(heroObject) 
 end
 
-function PlayerState:onTileSelected(tileObject)
-	-- if there is a person standing on the tile, then invoke onPersonSelected()
-	-- else invoke onVacancySelected()
+function PlayerState:onEnemyHovered(enemyObject) 
 end
 
-function PlayerState:onVacancySelected(tileObject)
-	
-end
-
-function PlayerState:onPersonSelected(personObject)
-	if personObject:hasTag(c'Hero') then
-		return self:onHeroSelected(personObject)
-	elseif personObject:hasTag(c'AI') then
-		return self:onEnemySelected(personObject)
-	else
-		print('Non-hero and Non-AI person found')
-	end
-end
-
-function PlayerState:onHeroSelected(heroObject)
-	-- Override only
-end
-
-function PlayerState:onEnemySelected(enemyObject)
-	-- Override only
-end
 
 function PlayerState:onUICommand(command)
-	-- Override only
 end
+
+return PlayerState

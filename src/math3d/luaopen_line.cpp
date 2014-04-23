@@ -39,8 +39,10 @@ namespace xihad { namespace script
 			luaT_mnnamefunc(line3df, getLengthSQ, length2),
 			luaT_mnnamefunc(line3df, getClosestPoint, closestP2P),
 			luaT_mnnamefunc(line3df, operator==, __eq),
-			luaT_mnamed_writeattr(line3df, start),
-			luaT_mnname_writeattr(line3df, end, finish),
+			luaT_mnname_readattr(line3df, start, start),
+			luaT_mnname_readattr(line3df, end,	 finish),
+			luaT_mnname_writeattr(line3df,start, setStart),
+			luaT_mnname_writeattr(line3df,end,   setFinish),
 	#ifdef LUAOPEN_LINE_INTERSECTS_SPHERE
 			luaT_cnnamefunc(lineInterWithSphere, intersectsSphere),
 	#endif

@@ -11,5 +11,7 @@ package.path = package.path
 .. ";Assets/Script/Manager/?.lua"
 .. ";Assets/Script/Ease/?.lua"
 .. ";Assets/Script/route/?.lua"
-.. ";Assets/Script/MapElement/?.lua"
+.. ";Assets/Script/Barrier/?.lua"
 .. ";Assets/Script/HighAction/?.lua"
+.. ";Assets/Script/MapElement/?.lua"
+.. ";Assets/Script/Warrior/?.lua"
