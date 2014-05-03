@@ -3,6 +3,9 @@ local robber =
 	career = '强盗',
 	model = 'ninja',
 	level = 1,
+	skills = {
+		['Fire'] = 10,
+	},
 	properties = {
 		MHP = 100,
 		ATK = 5,
@@ -17,7 +20,6 @@ local robberLocations =
 {
 	{ x = 7,  y = 7, prefab = 1, rotation = 180, },
 	{ x = 10, y = 9, prefab = 1, rotation = 180, },
-	{ x = 5,  y = 9, prefab = 1, rotation = 180, },
 	{ x = 5,  y = 9, prefab = 1, rotation = 180, },
 	{ x = 9,  y = 7, prefab = 1, rotation = 180, },
 	{ x = 4,  y = 7, prefab = 1, rotation = 180, },
@@ -67,7 +69,7 @@ local terrainData =
 local battle = {
 	prefabs = { robber },
 	teams 	= { Enemy = robberLocations, Hero = heroLocations },
-	chessboardWidth = 15,
+	chessboardWidth = 17,
 	terrain = terrainData,
 }
 

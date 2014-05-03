@@ -23,7 +23,8 @@ function ControlledMove:setTarget( ndir )
 end
 
 function ControlledMove:onUpdate()
-	local rot = self.object:getRotation()
+	local object = self:getHostObject()
+	local rot = object:getRotation()
 	local x,y,z = rot:xyz()
 	y = y % 360
 	y = y>180 and y - 360 or (y <= -180 and y + 360 or y) -- (-180, 180]
@@ -40,18 +41,18 @@ function ControlledMove:onUpdate()
 		dy = target-y
 		dy = dy>max and max or (dy<-max and -max or dy)
 		
-		self.object:concatRotate(math3d.vector(0, dy, 0))
+		object:concatRotate(math3d.vector(0, dy, 0))
 	end
 	
 	if not self.dontMove then
 		local rad = self.ydir/180*math.pi
 		local dst = g_time.change*self.speed
-		self.object:concatTranslate(math3d.vector(math.sin(rad)*dst, 0, math.cos(rad)*dst))
+		object:concatTranslate(math3d.vector(math.sin(rad)*dst, 0, math.cos(rad)*dst))
 	end
 end
 
 function ControlledMove:acquire()
-	local anim = self.object:findComponent(c"AnimatedMesh")
+	local anim = self:getHostObject():findComponent(c"AnimatedMesh")
 	local move = self
 	
 	local controller = { status = "idle", direction = { x = 0, z = 0 } }

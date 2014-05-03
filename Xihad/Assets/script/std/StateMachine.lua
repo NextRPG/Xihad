@@ -29,7 +29,10 @@ function sm:addStateListener(state, listener)
 	
 	if not self.listeners[state][listener] then
 		self.listeners[state][listener] = true
-		listener:onStateEnter(self.current, nil)
+		
+		if state == self.current then
+			listener:onStateEnter(self.current, nil)
+		end
 	end
 end
 

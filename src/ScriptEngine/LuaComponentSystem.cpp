@@ -90,10 +90,11 @@ namespace xihad { namespace script
 	{
 		if (LuaUtil::require(mImpl->L, compName.c_str()) != LuaUtil::REQUIRE_OK)
 			return false;
-		else if (mImpl->hierarchy.containsType(compName)) 
+		
+		if (mImpl->hierarchy.containsType(compName)) 
 			return true;
-		else
-			return initComponent(compName);
+		
+		return initComponent(compName);
 	}
 
 	bool LuaComponentSystem::initComponent( const std::string& compName )

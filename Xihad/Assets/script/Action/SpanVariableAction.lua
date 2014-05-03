@@ -1,4 +1,4 @@
-local base = require "TimedAction"
+local base = require "Action.TimedAction"
 
 local VarAction = {
 	spanVariable = nil,

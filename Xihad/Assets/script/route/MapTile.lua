@@ -2,56 +2,86 @@ local algo = require 'std.Algorithm'
 
 local MapTile = {
 	location = nil,	-- location of this tile
-	elements = nil,
+	barriers = nil,
+	indexed = nil,
 }
 MapTile.__index = MapTile
 
 function MapTile.new(location)
-	local tile = {}
-	setmetatable(tile, MapTile)
-	tile.location = location:copy()
-	tile.elements = {}
-	return tile
+	return setmetatable({
+			location = location:copy(),
+			barriers = {},
+			indexed = {},
+		}, MapTile)
 end
 
 function MapTile:getLocation()
-	return self.location
+	return self.location:copy()
 end
 
-function MapTile:onElementAdded(e)
-	if e:getTile() == self then
-		self.elements[e] = true
-	end
-end
-
-function MapTile:onElementRemoved(e)
+local no_indexed_data = {}
+function MapTile:onBarrierAdded(e, optKey)
 	if e:getTile() ~= self then
-		self.elements[e] = nil
+		error('Attempt to add illegal barrier to tile')
 	end
+	
+	local value
+	if optKey ~= nil then
+		if self.indexed[optKey] ~= nil then
+			error(string.format('Duplicated key %q at Loc[%d, %d]', optKey, self.location:xy()))
+		end
+		
+		self.indexed[optKey] = e
+		value = optKey
+	else
+		value = no_indexed_data
+	end
+	
+	assert(value ~= nil)
+	self.barriers[e] = value
 end
 
-function MapTile:permitCasting(character, skill)
-	return algo.any_of(self.elements, function(e, v)
-		return e:permitCasting(character, skill)
+function MapTile:onBarrierRemoved(e)
+	if e:getTile() ~= self then
+		error('Attempt to remove illegal barrier to tile')
+	end
+
+	local indexKey = self.barriers[e]
+	if indexKey ~= no_indexed_data then
+		assert(self.indexed[indexKey] == e)
+		self.indexed[indexKey] = nil
+	end
+	
+	self.barriers[e] = nil
+end
+
+function MapTile:findBarrierByKey(key)
+	return self.indexed[key]
+end
+
+function MapTile:permitCasting(warrior, skill)
+	return 	skill:isMultiTarget() or 
+			algo.any_of(self.barriers, function(e, v)
+				return e:permitCasting(warrior, skill)
+			end)
+end
+
+function MapTile:canPass(warrior)
+	return algo.all_of(self.barriers, function(e, v)
+		return e:canPass(warrior)
 	end)
 end
 
-function MapTile:canPass(character)
-	return algo.all_of(self.elements, function(e, v)
-		return e:canPass(character)
+function MapTile:canStay(warrior)
+	return algo.all_of(self.barriers, function(e, v)
+		return e:canStay(warrior)
 	end)
 end
 
-function MapTile:canStay(character)
-	return algo.all_of(self.elements, function(e, v)
-		return e:canStay(character)
-	end)
-end
-
-function MapTile:getActionPointCost(character)
+function MapTile:getActionPointCost(warrior)
 	local accum = 0
-	for e,_ in pairs(self.elements) do
-		accum = accum + e:getActionPointCost(character)
+	for e,_ in pairs(self.barriers) do
+		accum = accum + e:getActionPointCost(warrior)
 	end
 	
 	return algo.max(1, accum)

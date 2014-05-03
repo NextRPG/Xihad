@@ -1,8 +1,11 @@
+local Color = require 'Color'
+local Array = require 'std.Array'
 local Barrier = require 'Barrier'
 local TerrainDB  = require 'TerrainDatabase'
 
 local Terrain = {
 	type = nil,
+	colors = nil,
 }
 Terrain.__index = Terrain
 Terrain.__base = 'Barrier'
@@ -13,19 +16,29 @@ function Terrain.new(type, object)
 	setmetatable(o, Terrain)
 	assert(type and TerrainDB.passable[type])
 	o.type = type
+	o.colors = {}
 	
-	-- TODO DELETE
-	local Color = require 'Color'
+	-- TODO FIX
 	local mat = object:findComponent(c'Render'):getMaterial(0)
 	mat:setColorMaterial('none')
-	local colorTable = { Color.green, Color.blue, Color.red, }
-	mat:setDiffuseColor(Color.new(colorTable[type]))
+	mat:setBlend('src.alpha', '1-src.alpha', 'add')
+	mat:setMaterialType('trans_alphach')
+	mat:setZWriteEnable(false)
 	
 	return o
 end
 
-local function selectResult(field, type, character)
-	local dedicated = TerrainDB[field][type][character:getCareer()] 
+function Terrain:onStart()
+	local colorTable = { Color.green, Color.blue, Color.red }
+	self:pushColor(Color.new(colorTable[self.type]))
+end
+
+function Terrain.getOptUniqueKey()
+	return 'Terrain'
+end
+
+local function selectResult(field, type, warrior)
+	local dedicated = TerrainDB[field][type][warrior:getCareer()] 
 	
 	if dedicated ~= nil then
 		return dedicated
@@ -34,35 +47,56 @@ local function selectResult(field, type, character)
 	end
 end
 
-function Terrain:canPass( character )
-	return selectResult('passable', self.type, character)
+function Terrain:canPass( warrior )
+	return selectResult('passable', self.type, warrior)
 end
 
-function Terrain:canStay( character )
-	return selectResult('stayable', self.type, character)
+function Terrain:canStay( warrior )
+	return selectResult('stayable', self.type, warrior)
 end
 
-function Terrain:getActionPointCost( character )
-	return selectResult('apcost', self.type, character)
+function Terrain:getActionPointCost( warrior )
+	return selectResult('apcost', self.type, warrior)
 end
 
 function Terrain:setTile( tile ) 
 	if not self.tile then
 		Barrier.setTile(self, tile)
-		self.object:resetTranslate(tile:getCenterVector())
+		self:getHostObject():resetTranslate(tile:getCenterVector())
 	else
 		error("Attempt to change the MapTile of a Terrain")
 	end
 end
 
-function Terrain.highlight(terrianList, color)
-	for _, terrian in ipairs(locationList) do
-		local render = terrian.object:findComponent(c'Render')
-		for i = 0, render:getMaterialCount()-1 do
-			local mat = render:getMaterial(i)
-			mat:setDiffuseColor(color)
-		end
+function Terrain:_updateColor()
+	local color = Array.getBack(self.colors)
+	
+	local render = self:getHostObject():findComponent(c'Render')
+	for i = 0, render:getMaterialCount()-1 do
+		local mat = render:getMaterial(i)
+		mat:setDiffuseColor(color)
 	end
+end
+
+function Terrain:pushColor(color)
+	table.insert(self.colors, color)
+	self:_updateColor()
+	return #self.colors
+end
+
+function Terrain:removeColor(index)
+	local needUpdate = index == #self.colors
+	
+	self.colors[index] = nil
+	
+	if needUpdate then
+		self:_updateColor()
+	end
+end
+
+function Terrain:popColor()
+	Array.popBack(self.colors)
+	self:_updateColor()
 end
 
 return Terrain

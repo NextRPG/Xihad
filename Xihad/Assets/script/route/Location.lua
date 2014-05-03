@@ -4,36 +4,40 @@ local Location = {
 }
 Location.__index = Location
 
-Location.__sub = function (a, b)
-	local cpy = a:copy()
+function Location:__sub(b)
+	local cpy = self:copy()
 	cpy:sub(b)
 	return cpy
 end
 
-Location.__add = function (a, b)
-	local cpy = a:copy()
+function Location:__add(b)
+	local cpy = self:copy()
 	cpy:add(b)
 	return cpy
 end
 
-Location.__unm = function (a, b)
-	local cpy = a:copy()
+function Location:__unm(b)
+	local cpy = self:copy()
 	copy:inv()
 	return cpy
 end
 
-Location.__eq = function (a, b)
-	return a.x == b.x and a.y == b.y
+function Location:__eq(b)
+	return self.x == b.x and self.y == b.y
 end
 
-Location.__lt = function (a, b)
-	if a.x < b.x then return true end
-	if a.x > b.x then return false end
-	return a.y < b.y
+function Location:__lt(b)
+	if self.x < b.x then return true end
+	if self.x > b.x then return false end
+	return self.y < b.y
 end
 
-Location.__le = function (a, b)
-	return a.x <= b.x
+function Location:__le(b)
+	return self.x <= b.x
+end
+
+function Location:__tostring()
+	return 'Loc['..self.x..', '..self.y..']'
 end
 
 function Location.new(x, y)

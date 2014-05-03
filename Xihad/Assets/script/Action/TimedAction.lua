@@ -3,6 +3,7 @@ local Action= require 'Action.Action'
 
 local d = {
 	elapsed  = 0,
+	duration = nil,
 	easefunc = Ease.linear,
 }
 d.__index = d
@@ -41,7 +42,7 @@ function d:reset()
 end
 
 function d:hasFinished()
-	return self.elapsed >= self.duration
+	return self.elapsed > self.duration
 end
 
 return d

@@ -42,6 +42,8 @@ namespace xihad { namespace ngn
 		 */
 		GameObject* getHostObject() const;
 
+		Component* findPeer(const std::string& typeName) const;
+
 	protected:
 		virtual ~Component();
 

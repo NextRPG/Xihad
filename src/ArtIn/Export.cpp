@@ -37,7 +37,12 @@ public:
 		delegateObject.pushSelf();
 		lua_getfield(L, -1, "computeCost");
 
-		luaT::call(L, 1, delegateObject, from.X, from.Y, to.X, to.Y);
+		if (luaT::pcall(L, 1, 0, delegateObject, from.X, from.Y, to.X, to.Y) != 0) 
+		{
+			script::LuaUtil::outputErrorMessage(L, "computeCost");
+			throw std::exception("script error");
+		}
+
 		return luaL_checknumber(L, -1);
 	}
 

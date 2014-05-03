@@ -6,17 +6,17 @@ require 'Assets.script.AllPackages'	-- change package.path
 require 'math3d'					-- load math3d
 require "CreateMesh"				-- create cube mesh
 
-local Ability = require 'Warrior.Ability'
+local Warrior = require 'Warrior'
 local LevelFactory = require 'Level.XihadLevelFactory'
 local WarriorFactory = require 'Warrior.WarriorFactory'
 
 -- register game specific properties
-Ability.registerProperty('MHP')
-Ability.registerProperty('ATK')
-Ability.registerProperty('DFS')
-Ability.registerProperty('MTK')
-Ability.registerProperty('MDF')
-Ability.registerProperty('MAP')
+Warrior.registerProperty('MHP')
+Warrior.registerProperty('ATK')
+Warrior.registerProperty('DFS')
+Warrior.registerProperty('MTK')
+Warrior.registerProperty('MDF')
+Warrior.registerProperty('MAP')
 
 local battle = dofile(levelPath)
 local heros  = dofile(userSavePath)
@@ -28,13 +28,13 @@ local SRPGCamera = require 'Camera.SRPGCamera'
 g_camera = SRPGCamera.new('camera')
 
 -- TEST ROUTE
-local Location = require 'Location'
-local aHero = g_scene:findObject(c'A')
-local startLoc = aHero:findComponent(c'Barrier'):getTile():getLocation()
-local locations = g_chessboard:route(aHero:findComponent(c'Ability'), startLoc, Location.new(10, 2))
-for _, loc in ipairs(locations) do
-	print(loc:xy())
-end
+-- local Location = require 'Location'
+-- local aHero = g_scene:findObject(c'A')
+-- local startLoc = aHero:findComponent(c'Barrier'):getTile():getLocation()
+-- local locations = g_chessboard:route(aHero:findComponent(c'Warrior'), startLoc, Location.new(10, 2))
+-- for _, loc in ipairs(locations) do
+-- 	print(loc:xy())
+-- end
 
 -- TEST ITERATOR
 
@@ -46,3 +46,108 @@ lightComp:castShadow(true)
 lightComp:setType "point"
 sun:concatRotate(math3d.vector(90, 0, 0))
 sun:concatTranslate(math3d.vector(20, 30, -5))
+
+
+for heroObj in g_scene:objectsWithTag('Hero') do
+	heroObj:findComponent(c'Warrior'):activate()
+end
+
+local CommandExecutor = require 'Command.CommandExecutor'
+local cmdExecutor = CommandExecutor.new()
+
+-- INPUT
+local ui = {
+	showWarriorInfo = function (self, obj)
+		print('ui info: ', obj:getID())
+	end,
+	
+	showTileInfo = function (self, tile)
+		print('ui info: ', tile:getTerrain().type)
+	end,
+	
+	warning = function (self, msg)
+		print(msg)
+	end,
+}
+
+local camera = {
+	focus = function (self, obj)
+		print('focus at ', obj:getID())
+	end
+}
+
+local painter = {
+	colorTable = { 
+		Reachable = Color.white, 
+		Destination = Color.cyan,
+		Attack = 0xffff00ff,
+	},
+	
+	mark = function (self, tiles, type)
+		if not tiles then return end
+		
+		local color = Color.new(self.colorTable[type])
+		
+		local handle = {}
+		for _, tile in ipairs(tiles) do
+			local terrian = tile:getTerrain()
+			local idx = terrian:pushColor(color)
+			handle[terrian] = idx
+		end
+		
+		return handle
+	end,
+	
+	clear = function (self, handle)
+		if not handle then return end
+		
+		for terrian, idx in pairs(handle) do
+			terrian:removeColor(idx)
+		end
+	end,
+}
+
+local Transformer = require 'Controller.PCInputTransformer'
+local PlayerStateMachine = require 'Controller.PlayerStateMachine'
+local sm = PlayerStateMachine.new(ui, camera, painter, cmdExecutor)
+local tranformer = Transformer.new(sm)
+g_scene:pushController(tranformer)
+tranformer:drop()
+
+local finishListener = {}
+function finishListener:onStateEnter(state, prev)
+	assert(state == 'Finish', state)
+	for object in g_scene:objectsWithTag('Hero') do
+		local warrior = object:findComponent(c'Warrior')
+		if warrior:isActive() then
+			sm:nextHero()
+			return
+		end
+	end
+	
+	print('player round over')
+	for object in g_scene:objectsWithTag('Enemy') do
+		local warrior = object:findComponent(c'Warrior')
+		warrior:activate()
+	end
+	
+	for object in g_scene:objectsWithTag('Enemy') do
+		local tactic = object:findComponent(c'Tactic')
+		local cmdList = tactic:giveOrder()
+		print(tostring(cmdList))
+		cmdExecutor:execute(cmdList)
+	end
+	
+	print('player round begin')
+	for object in g_scene:objectsWithTag('Hero') do
+		local warrior = object:findComponent(c'Warrior')
+		warrior:activate()
+	end
+	sm:nextHero()
+end
+
+function finishListener:onStateExit(state, next)
+	
+end
+
+sm:addStateListener('Finish', finishListener)

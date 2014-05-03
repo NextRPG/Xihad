@@ -1,4 +1,8 @@
 local base = require 'route.MapTile'
+local Terrain = require 'Barrier.Terrain'
+local Location = require 'route.Location'
+local WarriorBarrier = require 'WarriorBarrier'
+
 local XTile = { 
 	yOffset = 0,
 	tileWidth = 10, 
@@ -28,6 +32,17 @@ function XTile.setYOffset(y)
 	XTile.yOffset = y	 
 end
 
+function XTile.projectToLocation(vector)
+	local x, _, z = vector:xyz()
+	return Location.new(math.floor(x/XTile.tileWidth)+1, math.floor(z/XTile.tileHeight)+1)
+end
+
+local ground = math3d.plane(math3d.vector(), math3d.vector(0, 1, 0))
+function XTile.intersectsGround(ray)
+	local met, ratio = math3d.intersects(ground, ray)
+	return ray:start() + ray:vector()*ratio
+end
+
 function XTile:getLeftBottomVector()
 	local loc = self:getLocation()
 	local originX = (loc.x-1) * XTile.tileWidth
@@ -36,17 +51,28 @@ function XTile:getLeftBottomVector()
 	return math3d.vector(originX, self.yOffset, originZ)
 end
 
+function XTile:getWarrior()
+	local barrier = self:findBarrierByKey(WarriorBarrier.getOptUniqueKey())
+
+	if barrier then
+		return barrier:findPeer(c'Warrior')
+	end
+end
+
+function XTile:hasWarrior()
+	return self:getWarrior() ~= nil
+end
+
+function XTile:getTerrain()
+	return self:findBarrierByKey(Terrain.getOptUniqueKey())
+end
+
 function XTile:getCenterVector()
 	local leftBottom = self:getLeftBottomVector()
 	local x, _, z = leftBottom:xyz()
 	local center = leftBottom 	-- reuse the vector
 	center:set(x+XTile.tileWidth/2, nil, z+XTile.tileHeight/2)
 	return leftBottom
-end
-
-function XTile.projectToLocation(vector)
-	local x, _, z = vector:xyz()
-	return Location.new(math.floor(x/XTile.tileWidth), math.floor(z/XTile.tileHeight))
 end
 
 return XTile

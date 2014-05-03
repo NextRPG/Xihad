@@ -29,10 +29,8 @@ end
 
 function ListenerManager:onStop()
 	-- 不要随意使用全局的 g_scene ，在未来的版本中可能会移除
-	local dispatcher = self.object:getg_scene():getDispatcher()
-	
 	-- dispatcher:removeListener("test", self.testListener)
-	dispatcher:clearListener(self.testListener)
+	g_dispatcher:clearListener(self.testListener)
 	self.testListener:drop()
 end
 

@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "MemoryLeakDetector.h"
+#include "GameObject.h"
 
 namespace xihad { namespace ngn
 {
@@ -23,6 +24,12 @@ namespace xihad { namespace ngn
 	{
 		return mHost;
 	}
+
+	Component* Component::findPeer(const std::string& typeName) const
+	{
+		return mHost->findComponent(typeName);
+	}
+
 }}
 
 

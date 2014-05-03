@@ -1,7 +1,7 @@
 local TimedAction = require 'TimedAction'
-local camAction = {}
+local CameraAction= {}
 
-function camAction.lookDir(cameraControl, spanLookDir, duration, lerp)
+function CameraAction.lookDir(cameraControl, spanLookDir, duration, lerp)
 	spanLookDir.origin = spanLookDir.origin or cameraControl:getLookDirection()
 	
 	local originQuaternion = math3d.quaternion()
@@ -17,4 +17,4 @@ function camAction.lookDir(cameraControl, spanLookDir, duration, lerp)
 	return action
 end
 
-return camAction
+return CameraAction

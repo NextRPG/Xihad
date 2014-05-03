@@ -14,13 +14,13 @@ namespace xihad { namespace script
 
 	void LuaUtil::outputErrorMessage( lua_State* L, const char* desc, int msgIdx )
 	{
-		cout << "---- lua error ----\n";
+		cerr << "---- lua error ----\n";
 
 		if (desc != nullptr) 
-			cout << desc << "\n";
+			cerr << desc << "\n";
 
-		cout << lua_tostring(L, msgIdx) << "\n";
-		cout << "==== lua error ====" << endl;
+		cerr << lua_tostring(L, msgIdx) << "\n";
+		cerr << "==== lua error ====" << endl;
 	}
 
 	bool LuaUtil::iscallable( lua_State* L, int idx )

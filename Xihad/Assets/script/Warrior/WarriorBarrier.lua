@@ -1,46 +1,49 @@
 local base = require 'Barrier'
 
-local WarriorBarrier = {
-	team = nil,
-}
+local WarriorBarrier = {}
 WarriorBarrier.__index = WarriorBarrier
 WarriorBarrier.__base = 'Barrier'
 setmetatable(WarriorBarrier, base)
 
-function WarriorBarrier.new(data, object)
-	local o = {}
-	o.team = data.team
-	setmetatable(o, WarriorBarrier)
-	return o
+function WarriorBarrier.new()
+	return setmetatable(base.new(), WarriorBarrier)
+end
+
+function WarriorBarrier.getOptUniqueKey()
+	return 'WarriorBarrier'
 end
 
 function WarriorBarrier:isLeagueWith(other)
-	return self.team == other.team
+	return self:findPeer(c'Warrior'):isLeagueWith(other)
 end
 
-function WarriorBarrier:canPass( character )
-	return self:isLeagueWith(character)
+function WarriorBarrier:canPass( warrior )
+	return self:isLeagueWith(warrior)
 end
 
-function WarriorBarrier:canStay( character )
-	return character == self
+function WarriorBarrier:canStay( warrior )
+	return warrior:getHostObject():getID() == self:getHostObject():getID()
 end
 
-function WarriorBarrier:permitCasting( character, skill )
-	if self == character then
+function WarriorBarrier:permitCasting( warrior, skill )
+	if self == warrior then
 		return skill:canCastToSelf()
-	elseif self:isLeagueWith(character) then
+	elseif self:isLeagueWith(warrior) then
 		return skill:canCastToLeague()
 	else
-		return skill:canCastToEnemty()
+		return skill:canCastToEnemy()
 	end
 end
 
 function WarriorBarrier:setTile( tile ) 
 	if base.setTile(self, tile) then
-		local translate = tile:getCenterVector()
-		self.object:resetTranslate(translate)
-		g_dispatcher:dispatch("Warrior.settle", tile, self.object)
+		if tile then
+			local object = self:getHostObject()
+			local translate = tile:getCenterVector()
+			object:resetTranslate(translate)
+		else
+			-- TODO
+		end
 	end
 end
 

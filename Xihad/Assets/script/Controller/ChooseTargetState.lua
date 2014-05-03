@@ -1,22 +1,29 @@
-local base = require 'Controller.PlayerControlState'
+local base = require 'Controller.PlayerState'
 
 local ChooseTargetState = {}
 ChooseTargetState.__index = ChooseTargetState
 setmetatable(ChooseTargetState, base)
 
-function ChooseTargetState.new()
-	local obj = setmetatable(base.new(), ChooseTargetState)
-	return obj
+function ChooseTargetState.new(...)
+	return setmetatable(base.new(...), ChooseTargetState)
 end
 
--- TODO
-function ChooseTargetState:onVacancySelected(tileObject) 
+
+function ChooseTargetState:needCDWhenTouch()
+	return false
 end
 
-function ChooseTargetState:onHeroSelected(heroObject) 
+function ChooseTargetState:needCDWhenHover()
+	return false
 end
 
-function ChooseTargetState:onEnemySelected(enemyObject) 
+function ChooseTargetState:onTileSelected(tile)
+	-- self.executor:cast()
+	-- attack
+end
+
+function ChooseTargetState:onTileHovered(tile)
+	-- show all attackable enemies' status
 end
 
 return ChooseTargetState

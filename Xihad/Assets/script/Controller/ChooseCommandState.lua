@@ -1,14 +1,14 @@
-local base = require 'Controller.PlayerControlState'
+local base = require 'Controller.PlayerState'
 local ChooseCommandState = { }
 ChooseCommandState.__index = ChooseCommandState
 setmetatable(ChooseCommandState, base)
 
-function ChooseCommandState.new()
-	local obj = setmetatable(base.new(), ChooseCommandState)
-	return obj
+function ChooseCommandState.new(...)
+	return setmetatable(base.new(...), ChooseCommandState)
 end
 
 function ChooseCommandState:onBack()
+	-- TODO
 	return 'back'
 end
 
@@ -21,9 +21,9 @@ function ChooseCommandState:onHover(x, y)
 end
 
 function ChooseCommandState:onUICommand(command)
-	if command == 'Standby' then
-		local src = self.command:getSource()
-		src:deactivate()
+	if command == '待机' then
+		local warrior = self.commandList.source
+		self.executor:standBy(warrior)
 		return 'done'
 	else
 		self.commandList:setCommand(command)

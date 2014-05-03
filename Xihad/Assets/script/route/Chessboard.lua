@@ -17,27 +17,25 @@ local function toIndex(location, width)
 end
 
 function Chessboard.new(width, height, mapTileFactory)
-	local b = {}
-	b.width = width
-	b.height= height
-	b.tiles = {}
+	local b = setmetatable({
+		width = width,
+		height= height,
+		tiles = {},
+	}, Chessboard)
 	
 	b.delegate = {
 		computeCost = function(self, x1, y1, x2, y2)
 			local tile = b:getTile(Location.new(x2, y2))
-			if not tile:canPass(self.routingCharacter) then
+			if not tile:canPass(self.routingWarrior) then
 				return 10000	-- TODO
 			end
 			
-			local cost = tile:getActionPointCost(self.routingCharacter)
-			
+			local cost = tile:getActionPointCost(self.routingWarrior)
 			assert(cost >= 1)
 			return cost
 		end
 	}
-	
 	b.graph = Astar.newChessboard(b.width, b.height, b.delegate)
-	setmetatable(b, Chessboard)
 	
 	mapTileFactory = mapTileFactory or MapTile.new
 	b:traverseLocations(function (loc)
@@ -52,7 +50,7 @@ function Chessboard:getTile(location)
 	if index < 0 or index > #self.tiles then
 		return nil
 	else
-		return self.tiles[]
+		return self.tiles[index]
 	end
 end
 
@@ -64,21 +62,14 @@ function Chessboard:traverseLocations(f)
 	end
 end
 
-function Chessboard:traverseTiles(f)
-	self:traverseLocations(function (loc)
-		return f(self:getTile(loc))
-	end)
+function Chessboard:_getSource(warrior, startLoc)
+	startLoc = startLoc or warrior:getLocation()
+	return Astar.newSinglePointSource(startLoc.x, startLoc.y)
 end
 
-function Chessboard:route(character, startLoc, targetLoc)
-	local source = Astar.newSinglePointSource(startLoc.x, startLoc.y)
-	local target = Astar.newSinglePointTarget(targetLoc.x, targetLoc.y)
-	self.delegate.routingCharacter = character
-	local reversePath = {}
-	Astar.route(source, target, self.graph, reversePath)
-	
+function Chessboard:_transformPath(reversePath)
 	local locations = {}
-	for i=1,#reversePath, 2 do
+	for i = 1, #reversePath, 2 do
 		locations[math.floor(i/2)+1] = Location.new(reversePath[i], reversePath[i+1])
 	end
 	
@@ -86,24 +77,69 @@ function Chessboard:route(character, startLoc, targetLoc)
 		Array.popBack(locations)
 	end
 	Array.reverse(locations)
+	
 	return locations
 end
 
-function Chessboard:traverseReachableTiles(character, startLoc, maxcost, f)
-	local source = Astar.newSinglePointSource(startLoc.x, startLoc.y)
-	local target = Astar.newMaxCostTarget(maxcost)
-	self.delegate.routingCharacter = character
+function Chessboard:_route(warrior, targetLoc, startLoc)
+	local source = self:_getSource(warrior, startLoc)
+	local target = Astar.newSinglePointTarget(targetLoc.x, targetLoc.y)
+	self.delegate.routingWarrior = warrior
+	local reversePath = {}
+	local cost = Astar.route(source, target, self.graph, reversePath)
+	
+	return reversePath, cost
+end
+
+function Chessboard:route(warrior, targetLoc, startLoc)
+	local reversePath, cost = self:_route(warrior, targetLoc, startLoc)
+	
+	if #reversePath == 0 then
+		return nil 	-- no path found
+	end
+	
+	return self:_transformPath(reversePath), cost
+end
+
+function Chessboard:canReach(warrior, targetLoc, startLoc)
+	local reversePath, cost = g_chessboard:_route(warrior, targetLoc, startLoc)
+	
+	return #reversePath > 0 and cost <= warrior:getActionPoint()
+end
+
+function Chessboard:getReachableTiles(warrior, startLoc)
+	local source = self:_getSource(warrior, startLoc)
+	local target = Astar.newMaxCostTarget(warrior:getActionPoint())
+	self.delegate.routingWarrior = warrior
 	Astar.route(source, target, self.graph)
 	
+	local allTiles = {}
 	target:traversePoints(function (x, y)
-		return f(self:getTile(Location.new(x, y)))
+		local tile = self:getTile(Location.new(x, y))
+		if tile:canStay(warrior) then
+			return table.insert(allTiles, tile)
+		end
 	end)
+	
+	return allTiles
 end
 
 if select('#', ...) == 0 then 
 	local board = Chessboard.new(50, 50)
 	local path = board:route(nil, Location.new(1, 1), Location.new(5, 5))
-	board:traverseReachableTiles(nil, Location.new(1, 1), 5, function (tile) end)
+	local warrior = { 
+		getActionPoint = function ()
+			return 5
+		end,
+		getLocation = function ()
+			return Location.new(1, 1)
+		end
+	}
+	
+	for _, tile in ipairs(board:getReachableTiles(warrior)) do
+		
+	end
+	
 	board:traverseLocations(function (loc) end)
 	board:traverseTiles(function (tile) end)
 end

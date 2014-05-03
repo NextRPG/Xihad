@@ -22,10 +22,12 @@ function span:interpolate(d)
 	return self.origin*(1-d) + self.finish*d
 end
 
+function span:delta()
+	return self.finish - self.origin
+end
+
 function span:flip()
-	local tmp = self.origin
-	self.origin = self.finish
-	self.finish = tmp
+	self.origin, self.finish = self.finish, self.origin
 end
 
 return span

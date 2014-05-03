@@ -37,6 +37,10 @@ function Range:addRelativeImpactLocation(loc)
 	end
 end
 
+function Range:isMultiTarget()
+	return #self.relativeImpactLocations > 1
+end
+
 function Range:getLaunchRange()
 	return self.minLaunchDistance, self.maxLaunchDistance
 end
@@ -51,7 +55,7 @@ function Range:traverseLaunchableLocations(launcherCenter, f)
 	launcherCenter = launcherCenter or Location.new(0, 0)
 	
 	local offset = Location.new()
-	for dist=self.minLaunchDistance, self.maxLaunchDistance do
+	for dist = self.minLaunchDistance, self.maxLaunchDistance do
 		local xWeight
 		for xWeight = -dist, dist do
 			offset.x = xWeight
@@ -162,4 +166,4 @@ if select('#', ...) == 0 then
 	assert(allImpact == 60, allImpact)
 end
 
-return CastableRange
+return Range
