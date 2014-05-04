@@ -1,5 +1,5 @@
 local Skill = require 'Skill.Skill'
-local Location = require 'Location'
+local Location = require 'route.Location'
 local CastableRange = require 'route.CastableRange'
 
 local SkillRegistry = {

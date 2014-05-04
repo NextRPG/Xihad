@@ -10,8 +10,10 @@ local CommandExecutor = {
 }
 CommandExecutor.__index = CommandExecutor
 
-function CommandExecutor.new()
-	return setmetatable({ }, CommandExecutor)
+function CommandExecutor.new(cameraControl)
+	return setmetatable({
+			cameraControl = cameraControl
+		}, CommandExecutor)
 end
 
 function CommandExecutor:move(object, destination)
@@ -48,6 +50,9 @@ end
 function CommandExecutor:execute(cmdList)
 	local warrior = cmdList:getSource()
 	local object = warrior:getHostObject()
+	
+	self.cameraControl:focus(object)
+	
 	self:move(object, cmdList:getLocation())
 	
 	if cmdList:getCommand() == '待机' then

@@ -82,6 +82,10 @@ namespace xihad { namespace script
 		vec->normalize();
 	}}
 
+	luaT_static void setLength(vector3df* vec, float length) 
+	{
+		vec->setLength(length);
+	}}
 	//! vector3d, axis, degree, (center)
 	static int vec3Rotate(lua_State* L)
 	{
@@ -156,7 +160,7 @@ namespace xihad { namespace script
 			{ "length2",luaT_mfunction(vector3df::getLengthSQ)	},	
 			{ "dot",	luaT_mfunction(vector3df::dotProduct)	},
 			{ "cross",	luaT_mfunction(vector3df::crossProduct)	},
-			{ "normalize",	luaT_cfunction(vec3Normal)					},
+			{ "normalize",	luaT_cfunction(vec3Normal)			},
 			{ "distance",	luaT_mfunction(vector3df::getDistanceFrom)},
 			{ "distance2",	luaT_mfunction(vector3df::getDistanceFromSQ)},
 			{ "rotate",		vec3Rotate },
@@ -169,6 +173,8 @@ namespace xihad { namespace script
 			{ "__eq",  luaT_mfunction(vector3df::operator==) },
 			{ "__le",  luaT_mfunction(vector3df::operator<=) },
 			{ "__lt",  luaT_mfunction(vector3df::operator<) },
+
+			luaT_cnamedfunc(setLength),
 		luaT_defRegsEnd
 		MetatableFactory<vector3df>::create(L, vec3Regs, 0);
 

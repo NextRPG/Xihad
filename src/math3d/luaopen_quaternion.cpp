@@ -26,9 +26,11 @@ namespace xihad { namespace script
 			{
 				// from axis
 				float angle = checkarg<float>(L, _1);
-				vector3df* axis = checkarg<vector3df*>(L, _1 + 1);
-				q->fromAngleAxis(angle*DEGTORAD, *axis);
-				q->normalize();
+				vector3df& axis = checkarg<vector3df&>(L, _1 + 1);
+				
+				vector3df normalized = axis;
+				normalized.normalize();
+				q->fromAngleAxis(angle*DEGTORAD, normalized);
 			}
 			else
 			{

@@ -1,11 +1,14 @@
-local Trigonometry = {}
+local Trigonometry = {
+	RADIAN_TO_DEGREE = 180 / math.pi,
+	DEGREE_TO_RADIAN = math.pi / 180,
+}
 
 function Trigonometry.toDegree(rad)
-	return rad * 180 / math.pi
+	return rad * Trigonometry.RADIAN_TO_DEGREE
 end
 
 function Trigonometry.toRadian(degree)
-	return degree / 180 * math.pi
+	return degree * Trigonometry.DEGREE_TO_RADIAN
 end
 
 function Trigonometry.normalize(angle)
@@ -19,11 +22,6 @@ function Trigonometry.normalize(angle)
 	assert(angle < 180 and angle >= -180)
 	
 	return angle
-end
-
-function Trigonometry.minDeltaAngle(degree1, degree2)
-	local delta = degree1 - degree2
-	return Trigonometry.normalize(delta)
 end
 
 function Trigonometry.equal(degree1, degree2)

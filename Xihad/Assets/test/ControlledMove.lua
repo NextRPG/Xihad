@@ -60,7 +60,7 @@ function ControlledMove:acquire()
 		move:setTarget(self.direction)
 
 		if self.direction.x ~= 0 or self.direction.z ~= 0 then
-			self.next = "walk"
+			self.next = "run"
 		else
 			self.next = "idle"
 		end
@@ -74,7 +74,7 @@ function ControlledMove:acquire()
 
 	function controller:onKeyDown(e)
 		-- if is jumping then do nothing
-		local magic = 'die'
+		local magic = 'magic2'
 		if e.key == "SPACE" and self.status ~= magic then
 			self.status = magic
 			self.next = "idle"

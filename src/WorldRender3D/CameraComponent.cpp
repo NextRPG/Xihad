@@ -93,7 +93,10 @@ namespace xihad { namespace render3d
 
 	void CameraComponent::setTarget( const vector3df& worldTarget )
 	{
-		getNode()->setTarget(worldTarget);
+		if (!fixedTarget)
+			setLookDirection(worldTarget - getTranslate());
+		else
+			getNode()->setTarget(worldTarget);
 	}
 
 	const vector3df& CameraComponent::getTarget() const
@@ -175,9 +178,10 @@ namespace xihad { namespace render3d
 	void CameraComponent::syncWithObject()
 	{
 		RenderComponent::syncWithObject();
+
 		if (!fixedTarget)
 		{
-			vector3df pos = getNode()->getPosition();
+			vector3df pos = getTranslate();
 			setTarget(pos + getLookDirection());
 		}
 	}
@@ -200,19 +204,20 @@ namespace xihad { namespace render3d
 		if (!fixedTarget) return lookDir;
 
 		// fix target
-		return getTarget() - getNode()->getPosition();
+		return getTarget() - getTranslate();
 	}
 
 	void CameraComponent::setLookDirection( const vector3df& lookdir )
 	{
 		if (fixedTarget)
-		{
-			setTarget(getNode()->getPosition() + lookdir);
-		}
+			setTarget(getTranslate() + lookdir);
 		else
-		{
 			this->lookDir = lookdir;
-		}
+	}
+
+	const core::vector3df& CameraComponent::getTranslate() const
+	{
+		return getHostObject()->getWorldTransform().getTranslation();
 	}
 
 }}

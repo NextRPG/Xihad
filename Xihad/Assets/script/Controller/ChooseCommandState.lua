@@ -24,6 +24,7 @@ function ChooseCommandState:onUICommand(command)
 	if command == '待机' then
 		local warrior = self.commandList.source
 		self.executor:standBy(warrior)
+		self.camera:focus(nil)
 		return 'done'
 	else
 		self.commandList:setCommand(command)

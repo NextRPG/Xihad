@@ -1,5 +1,4 @@
 local base = require 'Controller.PlayerState'
-
 local ChooseHeroState = setmetatable({}, base)
 ChooseHeroState.__index = ChooseHeroState
 
@@ -31,6 +30,8 @@ end
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
 	self.ui:showWarriorInfo(enemyObject)
+	
+	-- TODO
 	self.painter:showRange(enemyObject)
 end
 

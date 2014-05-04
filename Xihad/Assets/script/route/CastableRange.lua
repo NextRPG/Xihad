@@ -6,7 +6,7 @@ o x o
 x o x
 o x o
 ]]
-local Location  = require 'Location'
+local Location  = require 'route.Location'
 local Algorithm = require 'std.Algorithm'
 local Array		= require 'std.Array'
 

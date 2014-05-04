@@ -20,6 +20,7 @@ end
 function ChooseTargetState:onTileSelected(tile)
 	-- self.executor:cast()
 	-- attack
+	self.camera:focus(nil)
 end
 
 function ChooseTargetState:onTileHovered(tile)

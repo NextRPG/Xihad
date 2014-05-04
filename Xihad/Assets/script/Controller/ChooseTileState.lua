@@ -15,6 +15,7 @@ function ChooseTileState:onBack()
 	-- back to ChooseHeroState, clear marked range
 	self.painter:clear(self.commandList.reachableHandle)
 	self.painter:clear(self.attackRange)
+	self.camera:focus(nil)
 	return 'back'
 end
 

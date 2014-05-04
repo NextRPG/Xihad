@@ -17,7 +17,7 @@ fcomp:getMaterial(0):setDiffuseColor(Color.new(Color.red))
 floor:concatTranslate(math3d.vector(0, -5, 0))
 cubeMesh:drop()
 
-local object = g_scene:createObject(c('lalala'), camObj)
+local object = g_scene:createObject(c'lalala', camObj)
 local pcomp = object:appendComponent(c"ParticleSystem")
 Loader.load("Assets.effect.rain", pcomp)
 

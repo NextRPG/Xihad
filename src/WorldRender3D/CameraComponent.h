@@ -148,6 +148,9 @@ namespace xihad { namespace render3d
 		ICameraSceneNode * getNode() const;
 
 	private:
+		const core::vector3df& getTranslate() const;
+
+	private:
 		IrrlichtComponentSystem* irrlichtSystem;
 		CameraRenderTarget renderTarget;
 		core::rectf viewport;

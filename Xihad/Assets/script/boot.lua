@@ -24,11 +24,12 @@ local warriorFactory = WarriorFactory.new()
 local loader = LevelFactory.new({ Enemy = warriorFactory, Hero = warriorFactory }, heros)
 g_chessboard = loader:create(battle)
 
-local SRPGCamera = require 'Camera.SRPGCamera'
-g_camera = SRPGCamera.new('camera')
+local CameraFactory= require 'Camera.SimpleCameraFactory'
+local CameraFacade = require 'Camera.CameraFacade'
+local cameraObject = CameraFactory.createDefault('camera')
+local cameraControl= CameraFacade.new(cameraObject)
 
 -- TEST ROUTE
--- local Location = require 'Location'
 -- local aHero = g_scene:findObject(c'A')
 -- local startLoc = aHero:findComponent(c'Barrier'):getTile():getLocation()
 -- local locations = g_chessboard:route(aHero:findComponent(c'Warrior'), startLoc, Location.new(10, 2))
@@ -53,7 +54,7 @@ for heroObj in g_scene:objectsWithTag('Hero') do
 end
 
 local CommandExecutor = require 'Command.CommandExecutor'
-local cmdExecutor = CommandExecutor.new()
+local cmdExecutor = CommandExecutor.new(cameraControl)
 
 -- INPUT
 local ui = {
@@ -68,12 +69,6 @@ local ui = {
 	warning = function (self, msg)
 		print(msg)
 	end,
-}
-
-local camera = {
-	focus = function (self, obj)
-		print('focus at ', obj:getID())
-	end
 }
 
 local painter = {
@@ -109,7 +104,7 @@ local painter = {
 
 local Transformer = require 'Controller.PCInputTransformer'
 local PlayerStateMachine = require 'Controller.PlayerStateMachine'
-local sm = PlayerStateMachine.new(ui, camera, painter, cmdExecutor)
+local sm = PlayerStateMachine.new(ui, cameraControl, painter, cmdExecutor)
 local tranformer = Transformer.new(sm)
 g_scene:pushController(tranformer)
 tranformer:drop()

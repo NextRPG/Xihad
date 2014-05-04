@@ -24,17 +24,16 @@ function PlayStateMachine.new(ui, camera, painter, executor)
 	
 	obj.sm:setTransition('ChooseTile', 'next', 'ChooseCommand')
 	obj.sm:setTransition('ChooseTile', 'back', 'ChooseHero')
-	-- obj.sm:setTransition('ChooseTile', 'fail', 'ChooseHero')
 	
 	obj.sm:setTransition('ChooseCommand', 'next', 'ChooseTarget')
 	obj.sm:setTransition('ChooseCommand', 'done', 'Finish')
 	obj.sm:setTransition('ChooseCommand', 'back', 'ChooseTile')
-	-- obj.sm:setTransition('ChooseCommand', 'fail', 'ChooseHero')
 	
 	obj.sm:setTransition('ChooseTarget', 'next', 'Finish')
 	obj.sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
-	-- obj.sm:setTransition('ChooseTarget', 'fail', 'ChooseHero')
 	
+	---
+	-- @see nextHero()
 	obj.sm:setTransition('Finish', 'continue', 'ChooseHero')
 	
 	local commandList = CommandList.new()

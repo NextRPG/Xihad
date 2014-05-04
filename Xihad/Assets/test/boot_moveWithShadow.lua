@@ -53,7 +53,7 @@ end
 -- ninja:concatUniScale(0.3);
 ninja:resetTranslate(math3d.vector(1, 0, 1))
 
-local moveParam = { speed = 20 }
+local moveParam = { speed = 100 }
 local move = ninja:appendComponent(c"ControlledMove", moveParam)
 move:acquire()
 

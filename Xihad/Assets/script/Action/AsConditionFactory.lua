@@ -11,27 +11,6 @@ local function waitOrReturn(condition, wait)
 	end
 end
 
-function cond.waitAction(action, wait)
-	local o = AsyncCondition.new()
-	local hooked
-	function o:hook(callback)
-		action:addFinishListener(callback)
-		hooked = callback
-	end
-	
-	function o:inspect(arg)
-		return action==arg
-	end
-	
-	function o:release()
-		assert(hooked)
-		action:removeFinishListener(hooked)
-		hooked = nil
-	end
-	
-	return waitOrReturn(o, wait)
-end
-
 function cond.waitAnimation(animation, wait)
 	local o = AsyncCondition.new()
 
@@ -61,6 +40,38 @@ function cond.waitMessage(message, wait)
 	end
 	
 	return waitOrReturn(o, wait)
+end
+
+function cond.waitCommon(object, add, remove, wait)
+	local o = AsyncCondition.new()
+	
+	local hooked
+	function o:hook(callback)
+		object[add](object, callback)
+		hooked = callback
+	end
+	
+	function o:inspect(arg)
+		return object==arg
+	end
+	
+	function o:release()
+		assert(hooked)
+		object[remove](object, hooked)
+		hooked = nil
+	end
+	
+	return waitOrReturn(o, wait)
+end
+
+function cond.waitAction(action, wait)
+	return cond.waitCommon(action, 
+		'addFinishListener', 'removeFinishListener', wait)
+end
+
+function cond.waitCameraFocus(cameraControl, wait)
+	return cond.waitCommon(cameraControl, 
+		'addFocusListener', 'removeFocusListener', wait)
 end
 
 return cond
