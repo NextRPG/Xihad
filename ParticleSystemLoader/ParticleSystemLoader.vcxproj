@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\Particle\CDefaultEnv.cpp" />
     <ClCompile Include="..\src\Particle\CParticleSystemScriptFactory.cpp" />
+    <ClCompile Include="..\src\Particle\CScaleAffector.cpp" />
     <ClCompile Include="..\src\Particle\CWrappedAnimatedMeshInitializer.cpp" />
     <ClCompile Include="..\src\Particle\CWrappedMeshInitializer.cpp" />
     <ClCompile Include="..\src\Particle\luaopen_ParticleSystem.cpp" />
@@ -20,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\Particle\CDefaultEnv.h" />
     <ClInclude Include="..\src\Particle\CParticleSystemScriptFactory.h" />
+    <ClInclude Include="..\src\Particle\CScaleAffector.h" />
     <ClInclude Include="..\src\Particle\CTplStackPusher.h" />
     <ClInclude Include="..\src\Particle\CWrappedAnimatedMeshInitializer.h" />
     <ClInclude Include="..\src\Particle\CWrappedIniterStackPusherFactory.h" />
@@ -34,6 +36,9 @@
     <ClInclude Include="..\src\Particle\luaopen_ParticleSystem.h" />
     <ClInclude Include="..\src\Particle\RangeSetterFunction.h" />
     <ClInclude Include="..\src\Particle\TplStackPusherFactory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\Particle\ReadMe.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93DD2C9D-6A9D-47D3-ABF0-2FF00B6285A4}</ProjectGuid>

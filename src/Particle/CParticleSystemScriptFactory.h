@@ -24,7 +24,7 @@ namespace xihad { namespace particle
 		virtual IStackPusher* affector(const char* aname);
 		virtual IStackPusher* emitter(const char* ename);
 
-		static IParticleSystemScriptFactory* createDefault(scene::IParticleSystemFactory*);
+		static CParticleSystemScriptFactory* createDefault(scene::IParticleSystemFactory*);
 
 	private:
 		IStackPusher* createFrom(Registry&, const std::string&);
