@@ -17,7 +17,7 @@ local function addExplosion(pnode, f, env, scale)
 	-- intier
 	local bi = f:initer("Basic")
 	bi:setLifeTime(LifeTime)
-	bi:setColor(Color.new(0xffc78ef8), Color.new(0xff5d4abc))
+	bi:setColor(MinColor, MaxColor)
 	bi:setWidth(width, 1.4*width)
 	bi:setHeight(height, 1.4*height)
 	
