@@ -7,10 +7,10 @@
 -- @license MIT
 -- @copyright NextRPG
 
-local Equation = require "Equation"
-local Chessboard = require "Chessboard"
+local Equation = require "Battle.Equation"
+local Chessboard = require "ColoringManager"
 local Publisher = require "Publisher"
-local Set = require "Set"
+local Set = require "std.Set"
 
 ---
 -- @string team 
@@ -164,6 +164,10 @@ end
 
 function Character:onStop(  )
 	Chessboard:tileAt(self.tile).character = nil
+end
+
+function Character:onRoundOver()
+	g_dispatcher:dispatch('Character.RoundOver.'..self.team, self)
 end
 
 return Character

@@ -4,12 +4,11 @@
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
-local Chessboard = require "Chessboard"
-local PathFinder = require "PathFinder"
+local Chessboard = require "ColoringManager"
 local AIManager = require "AIManager"
 local HeroManager = require "HeroManager"
 
-local GoalFinder = PathFinder.new{}
+local GoalFinder = {}
 
 local function findMin( list, scores )
 	local point, minScore = {}, 100000
@@ -48,8 +47,7 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 		end
 		
 		for k,v in pairs(directions) do
-
-			repeat 
+		repeat 
 			local tile = Chessboard:tileAt(currentPoint)
 			local APcost = tile:getActionPointCost()
 			local point = {x = currentPoint.x + v.x, y = currentPoint.y + v.y, prev = currentPoint, direction = k, leftAP = currentPoint.leftAP - APcost}
@@ -60,7 +58,7 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 			 or (HeroManager:getCharacterByLocation(point) and not math.p_same(point, goal))
 			 or (predicate and predicate(currentPoint, point)) 
 			 then
-				break
+				break	-- simulate continue
 			end
 			
 
@@ -73,11 +71,27 @@ function GoalFinder:Astar( start, goal, maxAP, predicate )
 				h_score[hash(point)] = math.abs(goal.y - point.y) + math.abs(goal.x - point.x)
 			 	f_score[hash(point)] = h_score[hash(point)] + g_score[hash(point)]
 			end
-			until true
+		until true
 		end
 	end
 	
 	return false
+end
+
+
+---
+-- 通过终点构建路径，路径用direction组成
+-- @tab tile
+-- @treturn {string, ...} path 
+function GoalFinder:constructPath( tile )
+	local path = {}	
+	local tile = self.data[hash(tile:getLocation())]
+	while tile ~= self.start do
+		path[#path + 1] = tile.direction
+		tile = tile.prev
+	end
+	table.reverse(path)
+	return path
 end
 
 function GoalFinder:getCostAP( start, goal, maxAP )
@@ -114,11 +128,17 @@ end
 
 function GoalFinder:getTargetTileRemote( start, goal, maxAP, minDistance )
 	local tile = self:getTargetTile(start, goal, maxAP)
-	while tile ~= start 
-		and (AIManager:getCharacterByLocation(tile) 
-		or math.p_distance(goal, tile) < minDistance) do
+	
+	while tile ~= start do
+		if (not AIManager:getCharacterByLocation(tile) and
+			math.p_distance(goal, tile) >= minDistance) 
+		then
+			return tile
+		end
+		
 		tile = tile.prev
 	end
+	
 	return tile
 end
 

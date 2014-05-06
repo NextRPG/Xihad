@@ -47,14 +47,14 @@ end
 function Chessboard:traverseLocations(f)
 	for x = 1, self.width do
 		for y = 1, self.height do
-			f(Location.new(x, y))
+			if f(Location.new(x, y)) then return end
 		end
 	end
 end
 
 function Chessboard:traverseTiles(f)
 	self:traverseLocations(function (loc)
-		f(self:getTile(loc))
+		return f(self:getTile(loc))
 	end)
 end
 
@@ -80,7 +80,7 @@ function Chessboard:traverseReachableTiles(character, startLoc, maxcost, f)
 	Astar.route(source, target, self.graph)
 	
 	target:traversePoints(function (x, y)
-		f(self:getTile(Location.new(x, y)))
+		return f(self:getTile(Location.new(x, y)))
 	end)
 end
 

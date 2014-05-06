@@ -1,7 +1,7 @@
 local GoalFinder = require "GoalFinder"
 local SkillManager = require "SkillManager"
 local ScoreBoard = require "ScoreBoard"
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
 
 local BaseStrategy = {
 	object = nil
@@ -19,12 +19,14 @@ function BaseStrategy:judgePerson(  )
 	local names, distances, HPs = {}, {}, {}
 
 	for object in g_scene:objectsWithTag("Hero") do
+	repeat
 		local enemy = object:findComponent(c"Character")
 		local costAP = GoalFinder:getCostAP(actor.tile ,enemy.tile, actor:getProperty("maxAP"))
 		if costAP == "MAX" then break end
 		names[#names + 1] = object:getID()
 		distances[object:getID()] = costAP
 		HPs[object:getID()] = - enemy:getProperty("currentHP")
+	until true	-- support for continue
 	end	
 
 	local board = ScoreBoard.new{}
@@ -43,7 +45,7 @@ function BaseStrategy:judgeTile(  )
 	local enemy = g_scene:findObject(c(name)):findComponent(c"Character")
 	local tile = GoalFinder:getTargetTile( actor.tile, enemy.tile, actor:getProperty("maxAP"))
 	
-	return tile
+	return tile, GoalFinder
 end
 
 function BaseStrategy:judgeSkill(  )
@@ -53,18 +55,18 @@ function BaseStrategy:judgeSkill(  )
 
 	local names, damages, currentTimes, ranges = {},{},{},{}
 	for i,id in ipairs(skills) do
-		repeat
-			local skill = SkillManager:getSkill(id)
+	repeat
+		local skill = SkillManager:getSkill(id)
 
-			if not character:canTrigger(skill) or
-			   not skill:hasEnemy( center, character:getEnemyManager())
-			then break end		
+		if not character:canTrigger(skill) or
+		   not skill:hasEnemy( center, character:getEnemyManager())
+		then break end		
 
-			names[#names + 1] = skill.id
-			damages[skill.id] = skill.damage
-			currentTimes[skill.id] = character.skillTimes[skill.id] 
-			ranges[skill.id] = #skill.range
-		until true
+		names[#names + 1] = skill.id
+		damages[skill.id] = skill.damage
+		currentTimes[skill.id] = character.skillTimes[skill.id] 
+		ranges[skill.id] = #skill.range
+	until true
 	end	
 
 	if #names == 0 then

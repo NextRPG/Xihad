@@ -80,6 +80,7 @@
     <ClCompile Include="..\src\Engine\FrameRateAdjuster.cpp" />
     <ClCompile Include="..\src\Engine\GameObjectTagManager.cpp" />
     <ClCompile Include="..\src\Engine\MemoryLeakDetector.cpp" />
+    <ClCompile Include="..\src\Engine\System.cpp" />
     <ClCompile Include="..\src\Engine\UserEventReceiverStack.cpp" />
     <ClCompile Include="..\src\Engine\GameEngine.cpp" />
     <ClCompile Include="..\src\Engine\InheritancePath.cpp" />

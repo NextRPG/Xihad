@@ -5,7 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 
-local Stack = require "Stack"
+local Stack = require "std.Stack"
 
 local Highlight = {
 	 BLUE 	= Color.new(0xff102b6a),

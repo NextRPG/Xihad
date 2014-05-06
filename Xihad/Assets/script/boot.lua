@@ -5,21 +5,7 @@
 -- @license MIT
 -- @copyright NextRPG
 
-package.path = package.path 
-.. ";Assets/Script/?.lua"
-.. ";Assets/Script/Action/?.lua" 
-.. ";Assets/Script/Effect/?.lua"
-.. ";Assets/Script/Utils/?.lua"
-.. ";Assets/Script/Save/?"
-.. ";Assets/Script/Database/?.lua"
-.. ";Assets/Script/AI/?.lua"
-.. ";Assets/Script/Component/?.lua"
-.. ";Assets/Script/IO/?.lua"
-.. ";Assets/Script/Manager/?.lua"
-.. ";Assets/Script/Ease/?.lua"
-.. ";Assets/Script/route/?.lua"
-.. ";Assets/Script/MapElement/?.lua"
-
+require 'Assets.script.AllPackages'
 global = g_scene:createObject(c("global"))
 
 require "Consts"
@@ -36,12 +22,13 @@ g_meshManager:takeMesh("@chessboardCube", cubeMesh)
 -- g_meshManager:addMesh(id, mesh); 	mesh:drop()
 
 
-local Chessboard = require "Chessboard"
-local HeroManager = require "HeroManager"
-local AIManager = require "AIManager"
-local CameraManager = require "CameraManager"
-local BattleManager = require "BattleManager"
-local LightManager = require "LightManager"
+local AIManager      = require "AIManager"
+local ColoringManager= require "ColoringManager"
+local Chessboard 	 = require "Chessboard"
+local HeroManager    = require "HeroManager"
+local LightManager   = require "LightManager"
+local CameraManager  = require "CameraManager"
+local BattleManager  = require "BattleManager"
 local VictoryChecker = require "VictoryChecker"
 
 -- load resources
@@ -54,7 +41,10 @@ local heros = dofile("User/sav/Save1.hero")
 
 
 -- init battle related manager
-Chessboard:init(battle.chessboard)
+ColoringManager:init(battle.chessboard)
+g_chessboard = Chessboard.new(Consts.TILE_WIDTH, Consts.TILE_HEIGHT)
+-- g_chessboard:traverseTiles()
+
 HeroManager:init(battle.heros, heros)
 AIManager:init(battle.AIs)
 BattleManager:init(HeroManager, AIManager)
@@ -69,4 +59,4 @@ local gameController = require("InputController")
 g_scene:pushController(gameController) 
 gameController:drop()
 
--- g_world:setTimeScale(0.5)
+g_world:setTimeScale(2)

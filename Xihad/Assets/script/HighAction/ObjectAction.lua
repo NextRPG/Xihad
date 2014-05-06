@@ -4,27 +4,25 @@ local functional   = require 'std.functional'
 
 local actions = {}
 
-function actions.move(object, origin, finish, duration, lerp)
-	origin = origin or object:getTranslate()
-	local var = SpanVariable.new(origin, finish)
+function actions.move(object, spanVector, duration, lerp)
+	spanVector.origin = spanVector.origin or object:getTranslate()
 	local sync= functional.bindself(object, 'resetTranslate')
-	return SpanAction.new(var, sync, duration, lerp)
+	return SpanAction.new(spanVector, sync, duration, lerp)
 end
 
-function actions.rotateY(object, originY, finishY, duration, lerp)
-	if not originY then
+function actions.rotateY(object, spanY, duration, lerp)
+	if not spanY.origin then
 		local _, currentY, _ = object:getRotation():xyz()
-		originY = currentY
+		spanY.origin = currentY
 	end
 	
-	local var = SpanVariable.new(originY, finishY)
 	local sync= function (currentY)
 		local curr = object:getRotation()
 		curr:set(nil, currentY)
 		object:resetRotation(curr)
 	end
 	
-	return SpanAction.new(var, sync, duration, lerp)
+	return SpanAction.new(spanY, sync, duration, lerp)
 end
 
 return actions

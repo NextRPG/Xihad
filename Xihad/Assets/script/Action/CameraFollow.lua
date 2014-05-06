@@ -16,10 +16,8 @@ function CameraFollow.new( o )
 end
 
 function CameraFollow:start( object )
-
 	self.follow = object
 	self.enabled = true
-
 end
 
 function CameraFollow:stop(  )
@@ -35,9 +33,9 @@ function CameraFollow:onUpdate(  )
 	local camera = self.object
 	local ccom = self.object:findComponent(c"Camera")
 	local delta = self.follow:getTranslate() - ccom:getTarget()
+	delta:set(nil, 0, nil)
 	camera:concatTranslate(delta)
 	ccom:setTarget(self.follow:getTranslate())
-
 end
 
 

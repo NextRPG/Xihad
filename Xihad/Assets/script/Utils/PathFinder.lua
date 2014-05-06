@@ -4,8 +4,8 @@
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
-local Chessboard = require "Chessboard"
-local Queue = require "Queue"
+local Queue = require "std.Queue"
+local Chessboard = require "ColoringManager"
 
 local PathFinder = {}
 
@@ -70,20 +70,6 @@ function PathFinder:getReachableTiles( character )
 	self.start.canStay = true
 end
 
----
--- 通过终点构建路径，路径用direction组成
--- @tab tile
--- @treturn {string, ...} path 
-function PathFinder:constructPath( tile )
-	local path = {}	
-	local tile = self.data[hash(tile:getLocation())]
-	while tile ~= self.start do
-		path[#path + 1] = tile.direction
-		tile = tile.prev
-	end
-	table.reverse(path)
-	return path
-end
 ---
 -- 清理缓存
 function PathFinder:cleanUp(  )

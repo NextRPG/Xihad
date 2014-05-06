@@ -31,21 +31,29 @@ function RemoteStrategy:judgeTile(  )
 	local _, max = findMax(makeList(skills, "id", "maxDistance"))
 	local distance = math.random(min, max + 1)
 	local enemy = g_scene:findObject(c(name)):findComponent(c"Character")
-	local tile
+	
 	if math.p_distance(actor.tile, enemy.tile) > distance then
-		tile = GoalFinder:getTargetTileRemote( actor.tile, enemy.tile, actor:getProperty("maxAP"), distance)
+		local tile = GoalFinder:getTargetTileRemote( actor.tile, enemy.tile, actor:getProperty("maxAP"), distance)
+		return tile, GoalFinder
 	else
-		PathFinder:getReachableTiles(actor)
 		local distances = {}
-		for i,point in ipairs(PathFinder) do
+		actor:traverseReachableTiles(function (tile)
 			distances[point] = math.p_distance(point, enemy.tile)
 			if distances[point] >= distance then
 				return point, PathFinder
 			end
-		end
+		end)
+
+		-- PathFinder:getReachableTiles(actor)
+		-- for i,point in ipairs(PathFinder) do
+		-- 	distances[point] = math.p_distance(point, enemy.tile)
+		-- 	if distances[point] >= distance then
+		-- 		return point, PathFinder
+		-- 	end
+		-- end
+		
 		return findMax(distances), PathFinder
 	end
-	return tile
 end
 
 return RemoteStrategy

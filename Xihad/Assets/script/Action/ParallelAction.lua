@@ -1,20 +1,23 @@
-local Action = require 'Action.Action'
+local base = require 'Action.Action'
 
 local parallel = {
 	finished = false,
 	internal_actions = nil,
 }
 parallel.__index = parallel
-setmetatable(parallel, Action)
+setmetatable(parallel, base)
 
 function parallel.new(actions)
-	local o = Action.new()
+	local o = base.new()
+	
+	assert(#actions >= 1)
 	o.internal_actions = actions
 	setmetatable(o, parallel)
 	return o
 end
 
 function parallel:onUpdate(time)
+	self.finished = true
 	for _, t in ipairs(self.internal_actions) do
 		t:update(time)
 		self.finished = self.finished and t:hasFinished()

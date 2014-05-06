@@ -26,7 +26,7 @@ function MapElement:getActionPointCost( character )
 end
 
 function MapElement:getTile( )
-	return tile
+	return self.tile
 end
 
 function MapElement:setTile( tile ) 

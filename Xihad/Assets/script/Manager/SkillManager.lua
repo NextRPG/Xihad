@@ -6,7 +6,8 @@
 -- @license MIT
 -- @copyright NextRPG
 
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
+local SpanVariable  = require 'SpanVariable'
 local SkillDatabase = require "SkillDatabase"
 local CameraManager = require "CameraManager"
 local ObjectAction  = require 'ObjectAction'
@@ -130,13 +131,11 @@ function SkillManager:onCastSkill( tile, skill, character )
 	local character = characterObject:findComponent(c"Character")
 	local ty = getLogicAngle(math.p_sub(tile:getLocation(), character.tile))
 
-	local action = ObjectAction.rotateY(characterObject, nil, ty, 0.2)
-	local updater= ActionAdapter.new(action)
-	characterObject:appendUpdateHandler(updater)
+	local action = ObjectAction.rotateY(characterObject, SpanVariable.new(nil, ty), 0.2)
+	ActionAdapter.fit(characterObject, action)
 	AsConditionFactory.waitAction(action)
 	
-	-- TODO
-	-- CameraManager:move2Battle(characterObject, tile:getLocation())
+	CameraManager:move2Battle(characterObject, tile:getLocation())
 	if skill.animation then
 		local anim = characterObject:findComponent(c"AnimatedMesh")
 		anim:playAnimation(c(skill.animation), false)
@@ -148,8 +147,7 @@ function SkillManager:onCastSkill( tile, skill, character )
 		skill:trigger(character, tile:getLocation())
 	end
 	
-	-- TODO
-	-- CameraManager:back2Normal()
+	CameraManager:back2Normal(characterObject)
 	character.states.TURNOVER = true
 end
 

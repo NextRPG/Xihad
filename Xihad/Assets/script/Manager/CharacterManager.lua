@@ -6,7 +6,7 @@
 -- @copyright NextRPG
 
 local PathFinder = require "PathFinder"
-local Chessboard = require "Chessboard"
+local Chessboard = require "ColoringManager"
 local SkillManager = require "SkillManager"
 local CameraManager = require "CameraManager"
 local CharacterMovement = require 'CharacterMovement'
@@ -51,11 +51,7 @@ function CharacterManager:createCharacter( character, i, j )
 	local anim = characterObject:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid") 
 	anim:playAnimation(c"idle 1")
-
-	characterObject:appendComponent(c"MoveBy")
-	characterObject:appendComponent(c"RotateBy")
-	characterObject:appendComponent(c"Sequence")
-
+	
 	characterObject:addTag(c"Character")
 	characterObject:addTag(c(self.team))
 
@@ -99,6 +95,7 @@ function CharacterManager:onSelectCharacter( object )
 	local character = object:findComponent(c"Character")
 	PathFinder:getReachableTiles(character)
 	CameraManager:move2Character(object)
+	
 	Chessboard:pushArea(PathFinder, "BLUE")
 	Chessboard:pushArea(
 		SkillManager:getAllAvailableTargets(
@@ -125,18 +122,15 @@ end
 -- 选中要走的路径之后的行为
 -- @tparam Object characterObject
 local lastTranslate = math3d.vector(0, 0, 0)
-function CharacterManager:onSelectTile( tile, finder )
-
-	Chessboard:pushArea(PathFinder, "ALPHA")
-	Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
+function CharacterManager:onSelectTile( tile, path )
+	-- Chessboard:pushArea(PathFinder, "ALPHA")
+	-- Chessboard:pushArea(SkillManager.allTargets, "ALPHA")
 
 	lastTranslate = self.currentCharacter:getTranslate()
-	finder = finder or PathFinder 	
-	local path = finder:constructPath(tile)
+	-- local path = finder:constructPath(tile)
 	if #path == 0 then return end
 
 	local directions = Consts.directions
-	local sequence = self.currentCharacter:findComponent(c"Sequence")
 	-- TODO：优化路径
 	local actions = {}
 	for i,v in ipairs(path) do
@@ -144,13 +138,14 @@ function CharacterManager:onSelectTile( tile, finder )
 	end
 	actions = optimizePath(actions)
 
+-- TODO
 	local follow = CameraManager.camera:findComponent(c"CameraFollow")
 	follow:start(self.currentCharacter)
 	
 	local action = CharacterMovement.moveToTarget(self.currentCharacter, actions)
 	AsConditionFactory.waitAction(action) -- wait until action finish
 	follow:stop()
-
+	
 	local character = self.currentCharacter:findComponent(c"Character")
 	character:changeState("tile", tile:getLocation())
 end

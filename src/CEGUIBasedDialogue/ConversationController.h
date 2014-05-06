@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine\UserEventReceiver.h"
-#include "Engine\irr_ptr.h"
 #include "Engine\UserEvent.h"
 #include "Engine\UpdateHandler.h"
 
@@ -45,7 +44,7 @@ namespace xihad { namespace dialogue
 
 	private:
 		ngn::GameScene& scene;
-		irr_ptr<Conversation> conversation;
+		xptr<xihad::dialogue::Conversation> conversation;
 		bool autoUnregister;
 	};
 }}

@@ -73,7 +73,8 @@ public:
 			default:
 				break;
 			}
-
+			
+			
 			unsigned size = graph->getAdjacencyCount(tail);
 			for (unsigned i = 0; i < size; ++i)
 			{

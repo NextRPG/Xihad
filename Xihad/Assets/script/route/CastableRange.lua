@@ -56,11 +56,11 @@ function Range:traverseLaunchableLocations(launcherCenter, f)
 		for xWeight = -dist, dist do
 			offset.x = xWeight
 			offset.y = dist - math.abs(offset.x)
-			f(launcherCenter+offset)
+			if f(launcherCenter+offset) then return end
 			
 			if offset.y ~= 0 then
 				offset.y = -offset.y
-				f(launcherCenter+offset)
+				if f(launcherCenter+offset) then return end
 			end
 		end
 	end
@@ -81,7 +81,7 @@ function Range:traverseImpactLocations(impactCenter, f)
 			loc = impactLoc:copy()
 		end
 		
-		f(loc)
+		if f(loc) then return end
 	end
 end
 
@@ -97,7 +97,7 @@ function Range:traverseAllImpactLocations(launcherCenter, impactCenterFilter, f)
 			local idx = Array.bsearch(arr, impactLocation)
 			if idx < 0 then
 				Array.insert(arr, -idx, impactLocation)	-- bad performance
-				f(impactLocation:copy())
+				return f(impactLocation:copy())
 			end
 		end)
 	end)

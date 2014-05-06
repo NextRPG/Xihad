@@ -4,7 +4,7 @@
 -- @author wangxuanyi
 -- @license MIT
 -- @copyright NextRPG
-require "stringplus"
+require "std.stringplus"
 
 local Publisher = {
 	subscribers = {}
