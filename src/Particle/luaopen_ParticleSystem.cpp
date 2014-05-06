@@ -14,6 +14,9 @@
 #include "IParticleSystemLoaderEnv.h"
 #include "CWrappedAnimatedMeshInitializer.h"
 #include "Engine/SColor.h"
+#include "CScaleAffector.h"
+#include "CTextureInitializer.h"
+#include "CParticleSystemScriptFactory.h"
 
 using namespace irr;
 using namespace scene;
@@ -195,6 +198,8 @@ namespace xihad { namespace particle
 			luaT_lnnamefunc(ladapter<&IParticleSystemScriptFactory::affector>, affector),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleSystemScriptFactory>::create(L, factory);
+		
+		MetatableFactory<CParticleSystemScriptFactory, IParticleSystemScriptFactory>::create(L, 0);
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -360,6 +365,7 @@ namespace xihad { namespace particle
 			luaT_mnamedfunc(IParticleCylinderInitializer, setCenter),
 			luaT_mnamedfunc(IParticleCylinderInitializer, setRadius),
 			luaT_mnamedfunc(IParticleCylinderInitializer, setNormal),
+			luaT_mnamedfunc(IParticleCylinderInitializer, setLength),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleCylinderInitializer, IParticleGeometricInitializer>::create(L, cyl_initer);
 
@@ -371,6 +377,13 @@ namespace xihad { namespace particle
 		MetatableFactory<IParticleRingInitializer, IParticleGeometricInitializer>::create(L, ring_initer);
 
 		MetatableFactory<IParticleCompositeInitializer, IParticleInitializer>::create(L, 0);
+
+// 		luaT_defRegsBgn(tex_initer)
+// 			luaT_mnamedfunc(CTextureInitializer, setArea),
+// 			luaT_mnamedfunc(CTextureInitializer, setImage),
+// 		luaT_defRegsEnd
+// 		MetatableFactory<CTextureInitializer, IParticleInitializer>::create(L, tex_initer);
+
 	}
 
 
@@ -442,6 +455,11 @@ namespace xihad { namespace particle
 			luaT_mnamedfunc(IParticleRotationAffector, setSpeed),
 		luaT_defRegsEnd
 		MetatableFactory<IParticleRotationAffector, IParticleAffector>::create(L, rot_affector);
+
+		luaT_defRegsBgn(abscale_affector)
+			luaT_mnamedfunc(CScaleAffector, setTargetSize),
+		luaT_defRegsEnd
+		MetatableFactory<CScaleAffector, IParticleAffector>::create(L, abscale_affector);
 	}
 
 }}

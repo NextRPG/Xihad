@@ -30,6 +30,9 @@
     <ClCompile Include="..\src\Particle\luaopen_ParticleSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Particle\CScaleAffector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Particle\CDefaultEnv.h">
@@ -80,5 +83,11 @@
     <ClInclude Include="..\src\Particle\TplStackPusherFactory.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Particle\CScaleAffector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\Particle\ReadMe.txt" />
   </ItemGroup>
 </Project>

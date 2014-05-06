@@ -10,6 +10,9 @@
 #include "CWrappedMeshInitializer.h"
 #include "CWrappedAnimatedMeshInitializer.h"
 #include "CWrappedIniterStackPusherFactory.h"
+#include "CScaleAffector.h"
+#include "DefaultStackPusherFactory.h"
+#include "CTextureInitializer.h"
 
 namespace xihad { namespace particle
 {
@@ -86,7 +89,7 @@ namespace xihad { namespace particle
 #define NEW_WRAPPED_DELEGATE(WRAP_T, TYPE_NAME, f)	\
 	irrptr<WRAPPED_DELEGATE(WRAP_T, TYPE_NAME)>(new WRAPPED_DELEGATE(WRAP_T, TYPE_NAME)(f), false)
 
-	IParticleSystemScriptFactory* CParticleSystemScriptFactory::createDefault(
+	CParticleSystemScriptFactory* CParticleSystemScriptFactory::createDefault(
 		IParticleSystemFactory* f)
 	{
 		CParticleSystemScriptFactory* pssf = new CParticleSystemScriptFactory;
@@ -112,6 +115,9 @@ namespace xihad { namespace particle
 		pssf->Renderers["Point"]	 = NEW_DELEGATE(PointRenderer, f);
 
 		pssf->Emitters[""] = NEW_DELEGATE(Emitter, f);
+
+		pssf->Affectors["Scale"] = irrptr<IStackPusherFactory>(
+				new DefaultStackPusherFactory<CScaleAffector>, false);
 
 		return pssf;
 	}
