@@ -12,6 +12,9 @@
 #include "Engine/WindowTitleUpdater.h"
 #include "Engine/WindowEventTransmitter.h"
 #include "Engine/FrameRateAdjuster.h"
+#include <irrlicht/ISceneManager.h>
+#include <irrlicht/IFileSystem.h>
+#include "WorldRender3D/IrrlichtComponentSystem.h"
 
 using namespace irr;
 using namespace scene;
@@ -29,6 +32,11 @@ int launchScript(int argc, const char** argv)
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{
+// 		auto irrSystem = 
+// 			(render3d::IrrlichtComponentSystem*) scene->requireSystem("Render");
+// 		ISceneManager* smgr = irrSystem->getSceneManager();
+// 		smgr->getFileSystem()->addFileArchive("assets/level/koumakan");
+// 		smgr->loadScene("koumakan.irr");
 		// Usually, frame rate adjuster should be the last frame observer.
 		// So, give it a big order
 // 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);

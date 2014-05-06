@@ -182,7 +182,7 @@ namespace xihad { namespace render3d
 		if (!fixedTarget)
 		{
 			vector3df pos = getTranslate();
-			setTarget(pos + getLookDirection());
+			getNode()->setTarget(pos + getLookDirection());
 		}
 	}
 

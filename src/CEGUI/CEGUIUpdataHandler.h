@@ -1,6 +1,7 @@
 #pragma once
-#include "Engine/UpdateHandler.h"
-#include "Engine/xptr.h"
+#include "CEGUIHandle.h"
+#include <Engine/UpdateHandler.h>
+#include <Engine/xptr.h>
 
 namespace xihad { namespace ngn
 {
@@ -27,7 +28,7 @@ namespace xihad { namespace cegui
 		virtual void onStop();
 
 	private:
-		CeguiHandle* ceguiHandle;
+		CEGUIHandle* ceguiHandle;
 		xptr<ngn::UserEventReceiver> eventReceiver;
 	};
 }}

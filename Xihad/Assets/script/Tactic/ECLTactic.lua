@@ -65,6 +65,9 @@ local function insert(mapping, enemy, skill, impactCenter, launcherCenter)
 	mapping[enemy] = toEnemy
 end
 
+
+---
+-- TODO FIXME 当角色处于右边界时，AI会攻击左边界
 local log = function () end
 -- local log = function(fmt, ...) io.write(string.format(fmt, ...)) end
 function ECLTactic:_completeOrder(cmdList)

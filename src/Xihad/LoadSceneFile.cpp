@@ -9,15 +9,15 @@ using namespace video;
 int loadIrrScene(int argc, const char** argv)
 {
 	const char* path = //argc>1 ? argv[1] : 
-		"level1/level1.irr";
+		"assets/level/koumakan/koumakan.irr";
 
 	IrrlichtDevice* device = createDefaultDevice();
 	ISceneManager* smgr = device->getSceneManager();
 	IVideoDriver* driver = device->getVideoDriver();
 
-	smgr->getFileSystem()->addFileArchive("level1");
+	smgr->getFileSystem()->addFileArchive("assets/level/koumakan");
 	smgr->loadScene(path);
-	smgr->addCameraSceneNode(0, vector3df(0, 100, 0))->setTarget(vector3df(0,0,0));
+	smgr->addCameraSceneNode(0, vector3df(0, 25, 20))->setTarget(vector3df(0, 25, 0));
 	while (device->run())
 	{
 		driver->beginScene(true, true, SColor(255, 144, 100, 122));

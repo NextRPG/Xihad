@@ -27,7 +27,7 @@ g_chessboard = loader:create(battle)
 local CameraFactory= require 'Camera.SimpleCameraFactory'
 local CameraFacade = require 'Camera.CameraFacade'
 local cameraObject = CameraFactory.createDefault('camera')
-local cameraControl= CameraFacade.new(cameraObject)
+local cameraFacade= CameraFacade.new(cameraObject)
 
 -- TEST ROUTE
 -- local aHero = g_scene:findObject(c'A')
@@ -54,7 +54,7 @@ for heroObj in g_scene:objectsWithTag('Hero') do
 end
 
 local CommandExecutor = require 'Command.CommandExecutor'
-local cmdExecutor = CommandExecutor.new(cameraControl)
+local cmdExecutor = CommandExecutor.new(cameraFacade)
 
 -- INPUT
 local ui = {
@@ -85,9 +85,12 @@ local painter = {
 		
 		local handle = {}
 		for _, tile in ipairs(tiles) do
-			local terrian = tile:getTerrain()
-			local idx = terrian:pushColor(color)
-			handle[terrian] = idx
+			-- TODO why there is nil tile?
+			if tile then
+				local terrian = tile:getTerrain()
+				local idx = terrian:pushColor(color)
+				handle[terrian] = idx
+			end
 		end
 		
 		return handle
@@ -104,7 +107,7 @@ local painter = {
 
 local Transformer = require 'Controller.PCInputTransformer'
 local PlayerStateMachine = require 'Controller.PlayerStateMachine'
-local sm = PlayerStateMachine.new(ui, cameraControl, painter, cmdExecutor)
+local sm = PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
 local tranformer = Transformer.new(sm)
 g_scene:pushController(tranformer)
 tranformer:drop()
@@ -146,3 +149,15 @@ function finishListener:onStateExit(state, next)
 end
 
 sm:addStateListener('Finish', finishListener)
+
+sm:addStateListener('ChooseHero', {
+		onStateEnter = function(self, state, prev) 
+			if prev == 'Finish' then
+				cameraFacade:focus(nil)
+			end
+		end,
+		
+		onStateExit = function() end
+	})
+
+-- g_world:setTimeScale(2)

@@ -1,30 +1,32 @@
-local base = require 'Action.Action'
 local Algorithm = require 'std.Algorithm'
 local Trigonometry = require 'math.Trigonometry'
 local SmoothAiming = {
 	anglesPerSecond = 90,	-- TODO step function
-
+	elevation = 70,
+	
 	_lookDir = nil,
 	_aimObject = nil,
 	_aabbCenter= nil,
 	_cameraControl= nil,
-	_cameraObject = nil,	
+	_cameraObject = nil,
+	
+	_listeners = nil,
+	_state = 'aiming',
 }
 SmoothAiming.__index = SmoothAiming
-setmetatable(SmoothAiming, base)
 
-function SmoothAiming.new(cameraObject, lookDir)
-	local o = setmetatable(base.new(), SmoothAiming)
+function SmoothAiming.new(cameraObject)
+	local o = setmetatable({
+			_cameraObject = cameraObject,
+			_cameraControl= cameraObject:findComponent(c'Camera'),
+			_listeners = {},
+		}, SmoothAiming)
 	
-	o._lookDir = lookDir:copy()
-	o._lookDir:normalize()
-	
-	o._cameraObject = cameraObject
-	o._cameraControl= cameraObject:findComponent(c'Camera')
+	o:_setAim(nil)
 	return o
 end
 
-function SmoothAiming:onUpdate(time)
+function SmoothAiming:update(time)
 	local sourceLookDir = self._cameraControl:getLookDirection()
 	sourceLookDir:normalize()
 	
@@ -38,43 +40,73 @@ function SmoothAiming:onUpdate(time)
 	end
 	
 	if sourceLookDir == targetLookDir then
+		assert(self._state ~= 'aiming')
 		return 
 	end
 	
-	local step = self.anglesPerSecond * time
-	local rad  = math.acos(Algorithm.clamp(sourceLookDir:dot(targetLookDir), -1, 1))
-	local angle = Trigonometry.toDegree(rad)
 	local nextLookDir
-	if angle > -step and angle < step then
+	if self._state == 'aimed' then
 		nextLookDir = targetLookDir
 	else
-		if angle < -step then
-			step = -step 
-		end
+		local step = self.anglesPerSecond * time
+		local rad  = math.acos(Algorithm.clamp(sourceLookDir:dot(targetLookDir), -1, 1))
+		local angle= Trigonometry.toDegree(rad)
 		
-		local axis = sourceLookDir:cross(targetLookDir)
-		local q = math3d.quaternion(step, axis)
-		nextLookDir = q * sourceLookDir
+		if angle >= -step and angle <= step then
+			nextLookDir = targetLookDir
+			
+			if self._state == 'aiming' then
+				-- TODO
+				for lis, _ in pairs(self._listeners) do
+					lis(self)
+				end
+				self._state = 'aimed'
+			end
+		else
+			if angle < -step then
+				step = -step
+			end
+			
+			local axis = sourceLookDir:cross(targetLookDir)
+			local q = math3d.quaternion(step, axis)
+			nextLookDir = q * sourceLookDir
+		end
 	end
 	
-	-- look dir must have a large length
-	nextLookDir:setLength(10000)
-	self._cameraControl:setLookDirection(nextLookDir)
+	local XihadMapTile = require 'Chessboard.XihadMapTile'
+	local source = self._cameraObject:getTranslate()
+	local ray = math3d.line(source, source + nextLookDir)
+	local point = XihadMapTile.intersectsGround(ray)
+	self._cameraControl:setTarget(point)
 end
 
--- function SmoothAiming:addAimListener(lis)
--- end
+function SmoothAiming:addAimListener(lis)
+	self._listeners[lis] = true
+end
 
--- function SmoothAiming:removeAimListener(lis)
--- end
+function SmoothAiming:removeAimListener(lis)
+	self._listeners[lis] = nil
+end
 
-function SmoothAiming:setAim(aimObject)
-	print('set aim: ', aimObject)
+function SmoothAiming:_setAim(aimObject)
 	self._aimObject = aimObject
+	self._state = 'aiming'
 	
 	if aimObject then
 		local render = aimObject:findComponent(c'Render')
 		self._aabbCenter = render:getAABB():center()
+	else
+		local currentLookDir = self._cameraControl:getLookDirection()
+		local downVector = -self._cameraControl:getUpVector()
+		local axis = downVector:cross(currentLookDir)
+		self._lookDir = math3d.quaternion(self.elevation, axis) * downVector
+		self._lookDir:normalize()
+	end
+end
+
+function SmoothAiming:setAim(aimObject)
+	if self._aimObject ~= aimObject then
+		self:_setAim(aimObject)
 	end
 end
 

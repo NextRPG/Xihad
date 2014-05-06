@@ -2,6 +2,7 @@
 #include "Engine\UserEventReceiver.h"
 #include "Engine\UserEvent.h"
 #include "Engine\UpdateHandler.h"
+#include "Engine\xptr.h"
 
 namespace xihad { namespace ngn 
 {
@@ -15,7 +16,7 @@ namespace xihad { namespace dialogue
 	class ConversationController : public ngn::UserEventReceiver, public ngn::UpdateHandler 
 	{
 	public:
-		ConversationController(ngn::GameScene& scene, irr_ptr<Conversation> conversation);
+		ConversationController(ngn::GameScene& scene, xptr<Conversation> conversation);
 
 		~ConversationController() {}
 

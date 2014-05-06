@@ -24,6 +24,18 @@ function Skill.new(name, range, effect, animator, toEnemy, toLeague, toSelf)
 	return obj
 end
 
+function Skill:cast(sourceWarrior, targetTile, chessboard)
+	-- TODO
+	self.animator:animate(sourceWarrior, targetTile)
+	
+	local results = {}
+	for enemy in coverageOf(self.range, chessboard) do
+		table.insert(self.effect:resolve(sourceWarrior, enemy))
+	end
+	
+	return results
+end
+
 function Skill:isMultiTarget()
 	return self.range:isMultiTarget()
 end

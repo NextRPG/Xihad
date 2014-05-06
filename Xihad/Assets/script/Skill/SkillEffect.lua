@@ -10,7 +10,7 @@ function SkillEffect.new()
 	return obj
 end
 
-function SkillEffect:resolve(source, target)
+function SkillEffect:resolve(sourceWarrior, targetWarrior)
 	
 end
 

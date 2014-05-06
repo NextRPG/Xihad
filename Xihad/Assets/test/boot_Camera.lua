@@ -2,20 +2,19 @@ require 'Assets.test.boot_moveWithShadow'
 require 'Assets.script.AllPackages'
 local ThirdPersonFollow = require 'Camera.ThirdPersonFollow'
 local ActionAdapter= require 'Action.ActionAdapter'
+local SmoothAiming = require 'Camera.SmoothAiming'
+local CameraAvoid = require 'Camera.CameraAvoid'
 
 local ninja  = g_scene:findObject(c'ninja1')
 local camera = g_scene:findObject(c'camera')
 camera:concatTranslate(math3d.vector(0, 10, -100))
-local _3rdCamera = ThirdPersonFollow.new(camera, ninja)
-ActionAdapter.fit(camera, _3rdCamera)
-
-camera:appendUpdateHandler({
-	onUpdate = function()
-		local cam = camera:findComponent(c'Camera')
-		local render = ninja:findComponent(c'Render')
-		cam:setTarget(ninja:getTranslate() + render:getAABB():center())
-	end
-})
+local followControl = ThirdPersonFollow.new(camera)
+local aimingControl = SmoothAiming.new(camera, math3d.vector(0.5, -0.5, 0.5))
+ActionAdapter.fit(camera, followControl)
+ActionAdapter.fit(camera, aimingControl)
+ActionAdapter.fit(camera, CameraAvoid.new(camera))
+aimingControl:setAim(ninja)
+followControl:setFollowing(ninja)
 
 -- camera:appendUpdateHandler{
 -- 	onUpdate = function (self)
