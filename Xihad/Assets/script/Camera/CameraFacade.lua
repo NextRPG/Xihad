@@ -36,7 +36,12 @@ function CameraFacade:focus(object)
 	end
 end
 
--- function CameraFacade:...()
--- end
+function CameraFacade:descendIntoBattle()
+	-- TODO
+end
+
+function CameraFacade:ascendAwayBattle()
+	-- TODO
+end
 
 return CameraFacade

@@ -11,7 +11,7 @@ package.path = package.path..";../Xihad/Assets/test/?.lua"
 -- 	end
 -- end
 
-local param = { mesh  = "Assets/model/ninja.b3d", clips = "Assets/model/ninja.clip" }
+local param = { mesh  = "Assets/model/ninja/ninja.b3d", clips = "Assets/model/ninja/ninja.clip" }
 local ninja = g_scene:createObject(c"ninja")
 ninja:resetTranslation(math3d.vector(0, 0, -10))
 anim = ninja:appendComponent(c"AnimatedMesh", param)

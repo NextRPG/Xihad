@@ -27,8 +27,7 @@ int launchScript(int argc, const char** argv)
 	GameEngine* engine = new GameEngine(*wnd);
 	initSystem(engine);
 
-	std::string path = "Assets/";
-	path += argc>=2 ? argv[1] : "script/boot.lua";
+	std::string path = argc>=2 ? argv[1] : "Assets/script/boot.lua";
 
 	if (GameScene* scene = createScene(path.c_str()))
 	{

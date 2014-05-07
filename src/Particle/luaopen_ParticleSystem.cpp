@@ -15,7 +15,6 @@
 #include "CWrappedAnimatedMeshInitializer.h"
 #include "Engine/SColor.h"
 #include "CScaleAffector.h"
-#include "CTextureInitializer.h"
 #include "CParticleSystemScriptFactory.h"
 
 using namespace irr;

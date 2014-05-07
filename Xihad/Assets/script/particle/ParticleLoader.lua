@@ -1,5 +1,5 @@
 local loader = {}
-local Env = require "particle.ParticleLoadEnv"
+local Env = require 'Particle.ParticleLoadEnv'
 
 function loader.load(file, pcomp, source, target)
 	local createMethod = require(file)

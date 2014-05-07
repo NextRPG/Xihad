@@ -7,8 +7,8 @@ function SkillAnimator.new()
 end
 
 function SkillAnimator:animate(sourceWarrior, targetTile)
-	local amesh = sourceWarrior:findPeer(c'AnimatedMesh')
-	if not amesh then
+	local sourceAnimatable = sourceWarrior:findPeer(c'AnimatedMesh')
+	if not sourceAnimatable then
 		error('invalid sourceWarrior without AnimatedMesh')
 	end
 	

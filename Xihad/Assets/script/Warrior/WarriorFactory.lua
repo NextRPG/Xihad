@@ -50,10 +50,14 @@ function factory:create(team, name, data)
 	local anim = object:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid") 
 	anim:playAnimation(c"idle")
+	anim:setTransitionTime(0.1)
 	warrior:addRoundListener(self.highlightActiveWarrior)
-	
 	object:concatTranslate(math3d.vector(0, 3, 0))
-	object:resetScale(math3d.vector(1.5))
+	
+	-- TODO
+	if data.model == 'ninja' then
+		object:resetScale(math3d.vector(1.5))
+	end
 	
 	object:addTag(c'Warrior')
 	object:addTag(c(team))

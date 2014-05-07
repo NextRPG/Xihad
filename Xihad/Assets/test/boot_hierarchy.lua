@@ -3,7 +3,7 @@ package.path = package.path..";../Xihad/Assets/test/?.lua"
 
 g_scene:requireSystem(c"Render")
 
-local param = { mesh  = "Assets/model/ninja.b3d",  clips = "Assets/model/ninja.clip" }
+local param = { mesh  = "Assets/model/ninja/ninja.b3d",  clips = "Assets/model/ninja/ninja.clip" }
 local function addChildObject(parent, level)
 	local left = g_scene:createUniqueObject(c"ninja", parent)
 	local anim = left:appendComponent(c"AnimatedMesh", param)

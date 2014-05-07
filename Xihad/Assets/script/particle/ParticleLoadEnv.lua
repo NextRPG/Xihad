@@ -1,13 +1,20 @@
-local Env = { source = nil, target = nil, particleComponent = nil }
+local Env = { 
+	source = nil, 
+	target = nil, 
+	particleComponent = nil,
+}
+Env.__index = Env
+
+local function getRender(obj)
+	return obj:findComponent(c'Render')
+end
 
 function Env.new(pcomp, source, target)
-	local o = {
+	return setmetatable({
 		particleComponent = pcomp,
 		source = source,
 		target = target	
-	}
-	setmetatable(o, Env)
-	return o
+	}, Env)
 end
 
 function Env:getNode(objDesc)
@@ -24,14 +31,15 @@ function Env:getPosition(obj)
 end
 
 function Env:getAABB(obj)
-	return obj:getAABB()
+	return getRender(obj):getAABB()
 end
 
 function Env:getMesh(meshDesc)
 	local n = self:getNode(meshDesc)
 	if n then
-		if n.getMesh then
-			return n:getMesh()
+		local render = getRender(n)
+		if render.getMesh then
+			return render:getMesh()
 		end
 	else
 		return g_meshManager:getMesh(meshDesc)

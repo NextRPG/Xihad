@@ -47,6 +47,10 @@ local function selectResult(field, type, warrior)
 	end
 end
 
+function Terrain:keepVacancy()
+	return true
+end
+
 function Terrain:canPass( warrior )
 	return selectResult('passable', self.type, warrior)
 end

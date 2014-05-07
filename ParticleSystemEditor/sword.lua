@@ -32,9 +32,9 @@ return function(pnode, f, env)
 	
 	-- emitter
 	local e = f:emitter()
-	e:setPPS(100)	
+	e:setPPS(1200)	
 	e:setIniter(f:initer({ bi, boxi }))
-	pnode:addEmitter(e, 0, 0.3)
+	pnode:addEmitter(e, 0, 0.1)
 	
 	-- renderer
 	local r = f:renderer("Direction")

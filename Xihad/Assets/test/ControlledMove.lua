@@ -60,7 +60,7 @@ function ControlledMove:acquire()
 		move:setTarget(self.direction)
 
 		if self.direction.x ~= 0 or self.direction.z ~= 0 then
-			self.next = "run"
+			self.next = "walk"
 		else
 			self.next = "idle"
 		end

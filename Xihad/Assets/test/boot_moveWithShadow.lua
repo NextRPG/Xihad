@@ -39,7 +39,7 @@ for i = 10, 1, -1 do
 	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.1)
 	-- anim:setAnimationSpeed(0)
-	-- anim:addShadow(nil, "zfail")
+	anim:addShadow(nil, "zfail")
 	if i%2==0 then 
 		ninja:concatTranslate(math3d.vector(-i/2*3, 0, i/2*3))
 	else

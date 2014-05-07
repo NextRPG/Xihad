@@ -1,39 +1,77 @@
+---
+--[[
+技能需求：
+	+ 基础伤害值
+	+ 职业属性同技能属性
+	+ 技能需要有属性（风、火、电、光、暗）
+	+ 技能的附加状态（成功率与角色的能力有关吗？）
+	+ 是否可以对自身使用？可以对队友使用？可以对敌人使用？可以对空地使用？
+	+ 击退距离（不是水平方向怎么办？）
+	+ 攻击范围与攻击距离
+	+ 目前只有粒子效果的技能
+--]]
+
 local Skill = {
 	name  	= 'unknown',
-	toEnemy = true,
-	toLeague= false,
-	toSelf  = false,
 	
 	range 	= nil,
-	effect  = nil,
+	fitler  = nil,
 	animator= nil,
+	resolvers = nil,
 }
 Skill.__index = Skill
 
-function Skill.new(name, range, effect, animator, toEnemy, toLeague, toSelf)
+function Skill.new(name, range, filter, animator)
 	local obj = setmetatable({
-			name  	= name,
-			toSelf  = toSelf,
-			toLeague= toLeague,
-			toEnemy = toEnemy,
-			
-			range 	= range,
-			effect  = effect,
-			animator= animator,
+			name  = name,
+			filter= filter,
+			range = range,
+			resolvers= {},
+			animator = animator,
 		}, Skill)
 	return obj
 end
 
-function Skill:cast(sourceWarrior, targetTile, chessboard)
-	-- TODO
-	self.animator:animate(sourceWarrior, targetTile)
-	
+function Skill:addResolver(resolver)
+	assert(resolver)
+	table.insert(self.resolvers, resolver)
+end
+
+function Skill:resolve(sourceWarrior, impactLocation, chessboard)
 	local results = {}
-	for enemy in coverageOf(self.range, chessboard) do
-		table.insert(self.effect:resolve(sourceWarrior, enemy))
-	end
+	self.range:traverseImpactLocations(impactLocation, function(loc)
+		local tile = chessboard:getTile(loc)
+		
+		if not tile then return end
+		
+		local relativeLoc = loc:sub(impactLocation)
+		for _, barrier in ipairs(tile.barriers) do
+		repeat
+			if not barrier.newHitResult then
+				break	-- continue
+			end
+			
+			if not barrier:permitCasting(self) then
+				break	-- continue
+			end
+			
+			local result = barrier:newHitResult(sourceWarrior)
+			for _, resolver in ipairs(self.resolvers) do
+				resolver:resolve(sourceWarrior, barrier, relativeLoc, result)
+			end
+			
+			if result:isValid() then
+				table.insert(results, result)
+			end
+		until true
+		end
+	end)
 	
 	return results
+end
+
+function Skill:playAnimation(sourceWarrior, targetTile)
+	self.animator:animate(sourceWarrior, targetTile)
 end
 
 function Skill:isMultiTarget()
@@ -48,16 +86,20 @@ function Skill:getRange()
 	return self.range
 end
 
+function Skill:canCastToVacancy()
+	return self.filter.toVacancy
+end
+
 function Skill:canCastToSelf()
-	return self.toSelf
+	return self.filter.toSelf
 end
 
 function Skill:canCastToLeague()
-	return self.toLeague
+	return self.filter.toLeague
 end
 
 function Skill:canCastToEnemy()
-	return self.toEnemy
+	return self.filter.toEnemy
 end
 
 return Skill

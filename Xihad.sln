@@ -51,6 +51,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTe
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUI", "CEGUI\CEGUI.vcxproj", "{BC1E7282-6533-465E-BBC9-74651473ED72}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6ED70635-2C64-40DB-8ABC-A12FBFFDAA70} = {6ED70635-2C64-40DB-8ABC-A12FBFFDAA70}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEGUIBasedDialogue", "CEGUIBasedDialogue\CEGUIBasedDialogue.vcxproj", "{702E7CE5-4A90-4957-910E-A7B8063405BE}"
 EndProject

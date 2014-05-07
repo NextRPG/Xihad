@@ -4,6 +4,7 @@ local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'
 local WarriorMovement = require 'WarriorMovement'
 local AsConditionFactory = require 'Action.AsConditionFactory'
+local SkillRegistry = require 'Skill.SkillRegistry'
 
 local CommandExecutor = {
 	cameraFacade = nil,
@@ -26,13 +27,15 @@ function CommandExecutor:move(object, destination)
 	end
 end
 
-function CommandExecutor:cast(warrior, skill, target)
-	print(string.format('%s cast %s @%s', warrior:getHostObject():getID(), skill, tostring(target)))
+function CommandExecutor:cast(warrior, skillName, targetLocation)
+	print(string.format('%s cast %s @%s', warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
+	
 	local object = warrior:getHostObject()
 	local translate = object:getTranslate()
 	
 	-- 使角色面朝目标点
-	local targetVector = g_chessboard:getTile(target):getCenterVector()
+	local targetTile = g_chessboard:getTile(targetLocation)
+	local targetVector = targetTile:getCenterVector()
 	local sightLine = targetVector - translate
 	local x, _, z = sightLine:xyz()
 	local rotation = Trigonometry.toDegree(math.atan2(x, z)) -- x is the logic y, z is the logic x
@@ -44,8 +47,19 @@ function CommandExecutor:cast(warrior, skill, target)
 	self.cameraFacade:descendIntoBattle()
 	
 	-- 发动法术
-	local skillCaster = object:findComponent(c'SkillCaster')
-	skillCaster:castSkill(skill, target, g_chessboard)
+	-- local skill = SkillRegistry.findSkillByName(skillName)
+	-- skill:playAnimation(warrior, targetTile)
+	
+	-- -- wait until attack begin
+	-- -- takeDamage() -> playHitAnimation()
+	-- local skillCaster = object:findComponent(c'SkillCaster')
+	-- local results = skillCaster:castSkill(skill, targetLocation, g_chessboard)
+	-- for _, result in ipairs(results) do
+	-- 	result:apply()
+	-- end
+	
+	-- -- wait until attack end
+	-- -- play idle or dead animation
 	
 	-- 抬高相机
 	self.cameraFacade:ascendAwayBattle()

@@ -59,8 +59,14 @@ function MapTile:findBarrierByKey(key)
 	return self.indexed[key]
 end
 
+function MapTile:isVacancy()
+	return algo.all_of(self.barriers, function (e, v)
+		return e:keepVacancy()
+	end)
+end
+
 function MapTile:permitCasting(warrior, skill)
-	return 	skill:isMultiTarget() or 
+	return 	skill:canCastToVacancy() and self:isVacancy() or
 			algo.any_of(self.barriers, function(e, v)
 				return e:permitCasting(warrior, skill)
 			end)

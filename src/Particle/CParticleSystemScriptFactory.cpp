@@ -12,7 +12,6 @@
 #include "CWrappedIniterStackPusherFactory.h"
 #include "CScaleAffector.h"
 #include "DefaultStackPusherFactory.h"
-#include "CTextureInitializer.h"
 
 namespace xihad { namespace particle
 {

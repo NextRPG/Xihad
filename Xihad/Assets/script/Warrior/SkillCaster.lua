@@ -27,12 +27,14 @@ end
 
 --- 
 -- @return BattleResult
-function SkillCaster:castSkill(skill, targetTile, chessboard)
+function SkillCaster:castSkill(skill, targetLocation, chessboard)
 	local restCount = self.skills[skill]
-	assert(restCount and restCount > 0, "Can't cast the specified skill")
+	assert(restCount and restCount > 0, 
+		string.format("Can't cast the specified skill: %s", skill:getName()))
+	
 	self.skills[skill] = restCount - 1
 	
-	return skill:cast(self:findPeer(c'Warrior'), targetTile, chessboard)
+	return skill:resolve(self:findPeer(c'Warrior'), targetLocation, chessboard)
 end
 
 function SkillCaster:learnSkill(skill, initialCount)

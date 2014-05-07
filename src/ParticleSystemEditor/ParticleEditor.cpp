@@ -7,7 +7,6 @@
 #include "ParticleEditorEnv.h"
 #include <ctime>
 #include <Particle/IStackPusherFactory.h>
-#include "Particle/CTextureIniterStackPusherFactory.h"
 
 using namespace std;
 using namespace irr;
@@ -80,7 +79,8 @@ namespace xihad { namespace particle { namespace editor
 
 static ISceneNode* addNinja(ISceneManager* smgr, core::vector3df pos)
 {
-	IAnimatedMeshSceneNode* ninja = smgr->addAnimatedMeshSceneNode(smgr->getMesh("../Xihad/Assets/model/ninja.b3d"));
+	IAnimatedMeshSceneNode* ninja = smgr->addAnimatedMeshSceneNode(
+		smgr->getMesh("../Xihad/Assets/model/ninja/ninja.b3d"));
 	ninja->setFrameLoop(182, 204);
 	ninja->setMaterialFlag(video::EMF_LIGHTING, false);
 	ninja->setAnimationSpeed(12);

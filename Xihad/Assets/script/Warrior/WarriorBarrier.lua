@@ -1,5 +1,5 @@
 local base = require 'Barrier'
-
+local WarriorHitResult = require 'Warrior.WarriorHitResult'
 local WarriorBarrier = {}
 WarriorBarrier.__index = WarriorBarrier
 WarriorBarrier.__base = 'Barrier'
@@ -7,6 +7,10 @@ setmetatable(WarriorBarrier, base)
 
 function WarriorBarrier.new()
 	return setmetatable(base.new(), WarriorBarrier)
+end
+
+function WarriorBarrier:newHitResult(source)
+	return WarriorHitResult.new(source, self:findPeer(c'Warrior'))
 end
 
 function WarriorBarrier.getOptUniqueKey()

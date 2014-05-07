@@ -1,12 +1,13 @@
 package.cpath = package.cpath ..";../Debug/?.dll" --.."../Debug/?.dll"
 require "cegui"
 
+g_scene:requireSystem(c'Render')
 g_cursor:setVisible(false)
 local guiUpdater = createCEGUIUpdateHandler(g_engine:getWindow())
 g_scene:appendUpdateHandler(guiUpdater)
 g_scene:pushController({
 		onMouseEvent = function(self, event, arg)
-			print (event.type)
+			-- print (event.type)
 			if event.type == "lDoubleClick" then
 				print("Double click, Processed")
 				return 0
@@ -61,7 +62,7 @@ end
 
 
 local controller = require("assets.test.GUIController")
-scene:pushController({
+g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
 		if e.key == "J" then

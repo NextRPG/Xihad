@@ -17,6 +17,10 @@ function Barrier:canStay( warrior )
 	return true
 end
 
+function Barrier:keepVacancy()
+	return false
+end
+
 function Barrier:permitCasting( warrior, skill )
 	return false
 end
