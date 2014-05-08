@@ -72,7 +72,7 @@ int launchScript(int argc, const char** argv)
 	wnd->drop();
 	device->drop();
 	destroySystems();
-	return 0;
 
+	return 0;
 }
 

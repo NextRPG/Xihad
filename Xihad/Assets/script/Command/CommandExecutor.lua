@@ -47,23 +47,30 @@ function CommandExecutor:cast(warrior, skillName, targetLocation)
 	self.cameraFacade:descendIntoBattle()
 	
 	-- 发动法术
-	-- local skill = SkillRegistry.findSkillByName(skillName)
-	-- skill:playAnimation(warrior, targetTile)
+	local skill = SkillRegistry.findSkillByName(skillName)
+	local current = coroutine.running()
+	skill:playAnimation(warrior, targetTile, {
+			onAttackBegin = function() 
+				-- takeDamage() -> playHitAnimation()
+				print('results begin')
+				local skillCaster = object:findComponent(c'SkillCaster')
+				local results = skillCaster:castSkill(skill, targetLocation, g_chessboard)
+				for _, result in ipairs(results) do
+					result:apply()
+				end
+			end,
+			
+			onAttackEnd = function ()
+				print('receive end')
+				-- play idle or dead animation
+				coroutine.resume(current)
+			end,
+		})
 	
-	-- -- wait until attack begin
-	-- -- takeDamage() -> playHitAnimation()
-	-- local skillCaster = object:findComponent(c'SkillCaster')
-	-- local results = skillCaster:castSkill(skill, targetLocation, g_chessboard)
-	-- for _, result in ipairs(results) do
-	-- 	result:apply()
-	-- end
-	
-	-- -- wait until attack end
-	-- -- play idle or dead animation
+	coroutine.yield()
 	
 	-- 抬高相机
 	self.cameraFacade:ascendAwayBattle()
-	
 	warrior:deactivate()
 end
 

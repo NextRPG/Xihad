@@ -55,6 +55,8 @@ namespace xihad { namespace ngn
 		 */
 		virtual void removeListener(const MessageTag& tag, Listener* pListener) = 0;
 
+		virtual void clear() = 0;
+
 	protected:
 		virtual ~IMessageDispatcher() {}
 	};

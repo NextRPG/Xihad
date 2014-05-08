@@ -46,6 +46,16 @@ namespace xihad { namespace ngn
 				pendingOps.push_back(PendingOps(REMOVE, tag, pListener));
 		}
 
+		virtual void clear() 
+		{
+			listenerTree.clear();
+			pendingEvents.clear();
+			pendingOps.clear();
+
+			MessageQueue empty;
+			empty.swap(awaitMessageQueue);
+		}
+
 	protected:
 		virtual ~MessageDispatcher()
 		{

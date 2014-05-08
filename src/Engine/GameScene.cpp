@@ -240,6 +240,7 @@ namespace xihad { namespace ngn
 		mImpl->receiverStack = 0;
 		mImpl->objectTagManager.clear();
 		mImpl->sceneObjects.clear();
+		mImpl->dispatcher->clear();
 		CompositeUpdateHandler::onDestroy();
 	}
 

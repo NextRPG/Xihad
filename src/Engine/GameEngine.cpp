@@ -77,7 +77,7 @@ namespace xihad { namespace ngn
 		{
 			double frameBgnTime = fireFrameBegin();
 
-			getRenderer()->clearBuffer(true, true, SColor(255, 100, 100, 140));
+			getRenderer()->clearBuffer(true, true, SColor(255, 80, 120, 80));
 			getWorld()->update(mImpl->frameTime);
 			getRenderer()->swapBuffer();
 

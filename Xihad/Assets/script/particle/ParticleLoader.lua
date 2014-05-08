@@ -1,10 +1,10 @@
 local loader = {}
 local Env = require 'Particle.ParticleLoadEnv'
 
-function loader.load(file, pcomp, source, target)
+function loader.load(file, pnode, source, target)
 	local createMethod = require(file)
-	local env = Env.new(pcomp, source, target)
-	createMethod(pcomp:getParticleNode(), g_particleFactory, env)
+	local env = Env.new(pnode, source, target)
+	createMethod(pnode, g_particleFactory, env)
 end
 
 return loader

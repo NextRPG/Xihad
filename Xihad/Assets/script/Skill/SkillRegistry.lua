@@ -2,6 +2,7 @@ local Skill = require 'Skill.Skill'
 local Location = require 'route.Location'
 local CastableRange = require 'route.CastableRange'
 local HitPointResolver = require 'Skill.HitPointResolver'
+local P2PParticleSkillAnimator = require 'Skill.P2PParticleSkillAnimator'
 
 local SkillRegistry = {
 	allSkills = {}
@@ -12,7 +13,7 @@ range:addRelativeImpactLocation(Location.new(0, 0))
 
 local filter = { toEnemy = true, }
 
-local fireSkill = Skill.new('Fire', range, filter)
+local fireSkill = Skill.new('Fire', range, filter, P2PParticleSkillAnimator.new('Assets.effect.fire'))
 fireSkill:addResolver(HitPointResolver.new('fire', 30))
 SkillRegistry.allSkills['Fire']	  = fireSkill
 SkillRegistry.allSkills['skill1'] = Skill.new('skill1', range, filter)

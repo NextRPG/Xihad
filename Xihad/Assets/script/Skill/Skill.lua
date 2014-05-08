@@ -70,8 +70,8 @@ function Skill:resolve(sourceWarrior, impactLocation, chessboard)
 	return results
 end
 
-function Skill:playAnimation(sourceWarrior, targetTile)
-	self.animator:animate(sourceWarrior, targetTile)
+function Skill:playAnimation(sourceWarrior, targetTile, listener)
+	self.animator:animate(sourceWarrior:getHostObject(), targetTile, listener)
 end
 
 function Skill:isMultiTarget()

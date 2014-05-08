@@ -17,7 +17,7 @@ function Env.new(pcomp, source, target)
 	}, Env)
 end
 
-function Env:getNode(objDesc)
+function Env:getNode(nodeDesc)
 	if nodeDesc:sub(1, 1) == '@' then
 		local t = nodeDesc:sub(2)
 		if t == 'source' or t == 'target' then
@@ -27,7 +27,7 @@ function Env:getNode(objDesc)
 end
 
 function Env:getPosition(obj)
-	return obj:getTranslation()
+	return obj:getTranslate()
 end
 
 function Env:getAABB(obj)
@@ -47,9 +47,12 @@ function Env:getMesh(meshDesc)
 end
 
 function Env:deferMessage(delay, msg)
+	print('defer message', msg)
 	local msgParam = { source = self.source, target = self.target }
-	local src = particleComponent:getHostObject():getID()
-	g_scene:getDispatcher():dispatch(msg, msgParam, src, delay)
+	
+	-- TODO
+	-- local src = 'root' --self.particleComponent:getHostObject():getID()
+	g_scene:getDispatcher():dispatch(msg, msgParam, c'root', delay)
 end
 
 return Env

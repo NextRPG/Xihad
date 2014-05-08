@@ -14,17 +14,32 @@ function P2PParticleSkillAnimator.new(particleFile)
 		}, P2PParticleSkillAnimator)
 end
 
-function P2PParticleSkillAnimator:animate(sourceObject, targetTile)
+function P2PParticleSkillAnimator:animate(sourceObject, targetTile, listener)
 	local warrior = targetTile:getWarrior()
 	if not warrior then
 		error('This particle effect must be casted to enemy')
 	end
 	
-	local targetObject = warrior:findPeer(c'AnimatedMesh')
+	local targetObject = warrior:getHostObject()
 	
-	local particleSystem = g_scene:createUniqueObject(c'ParticleSystem')
-	particleSystem:appendComponent(c'ParticleSystem')
-	ParticleLoader.load(self.particleFile, particleSystem, sourceObject, targetObject)
+	local particleObject = g_scene:createUniqueObject(c'ParticleSystem')
+	local particleSystem = particleObject:appendComponent(c'ParticleSystem')
+	local pnode = particleSystem:getParticleNode()
+	ParticleLoader.load(self.particleFile, pnode:newChild(), sourceObject, targetObject)
+	
+	g_dispatcher:addListener('attack begin', {
+			onMessage = function(self, srcObject, param, msgTag)
+				if param.source == sourceObject and param.target == targetObject then
+					listener:onAttackBegin()
+				end
+			end
+		})
+	
+	g_dispatcher:addListener('attack end', {
+			onMessage = function(self, srcObjectc, param, msgTag)
+				listener:onAttackEnd()
+			end
+		})
 end
 
 return P2PParticleSkillAnimator
