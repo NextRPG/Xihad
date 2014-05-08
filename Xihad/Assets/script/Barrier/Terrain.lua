@@ -76,7 +76,7 @@ function Terrain:_updateColor()
 	local color = Array.getBack(self.colors)
 	
 	local render = self:getHostObject():findComponent(c'Render')
-	color:setAlpha(128)
+	color:setAlpha(200)
 	for i = 0, render:getMaterialCount()-1 do
 		local mat = render:getMaterial(i)
 		mat:setDiffuseColor(color)
