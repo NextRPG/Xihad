@@ -24,21 +24,6 @@ namespace xihad { namespace render3d
 		return new LightComponent(compName, obj, lightNode);
 	}
 
-	void LightComponent::setLightData( const video::SLight& light )
-	{
-		getNode()->setLightData(light);
-	}
-
-	video::SLight const& LightComponent::getLightData() const
-	{
-		return getNode()->getLightData();
-	}
-
-	video::SLight& LightComponent::getLightData()
-	{
-		return getNode()->getLightData();
-	}
-
 	void LightComponent::setRadius( float radius )
 	{
 		getNode()->setRadius(radius);
@@ -73,5 +58,46 @@ namespace xihad { namespace render3d
 	{
 		return (ILightSceneNode *) RenderComponent::getNode();
 	}
+
+	void LightComponent::setAmbientColor( const video::SColor& color )
+	{
+		getLightData().AmbientColor = color;
+	}
+
+	void LightComponent::setDiffuseColor( const video::SColor& color )
+	{
+		getLightData().DiffuseColor = color;
+	}
+
+	void LightComponent::setSpecularColor( const video::SColor& color )
+	{
+		getLightData().SpecularColor = color;
+	}
+
+	void LightComponent::setAttenuation( const core::vector3df& attenuation )
+	{
+		getLightData().Attenuation = attenuation;
+	}
+
+	void LightComponent::setOuterCone( f32 outer )
+	{
+		getLightData().OuterCone = outer;
+	}
+
+	void LightComponent::setInnerCone( f32 inner )
+	{
+		getLightData().InnerCone = inner;
+	}
+
+	void LightComponent::setFalloff( f32 falloff )
+	{
+		getLightData().Falloff = falloff;
+	}
+
+	video::SLight& LightComponent::getLightData()
+	{
+		return getNode()->getLightData();
+	}
+
 }}
 

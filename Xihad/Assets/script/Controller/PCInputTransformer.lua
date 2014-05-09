@@ -34,9 +34,11 @@ function PCInputTransformer:onKeyUp( e )
 		self.receiver:onUICommand('待机')
 	elseif e.key == '2' then
 		self.receiver:onUICommand('烈火')
+	else
+		return 1
 	end
 		
-	return 1
+	return 0
 end
 
 return PCInputTransformer

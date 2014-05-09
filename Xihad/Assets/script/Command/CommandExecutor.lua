@@ -44,7 +44,7 @@ function CommandExecutor:cast(warrior, skillName, targetLocation)
 	AsConditionFactory.waitAction(action)
 	
 	-- 拉低相机
-	self.cameraFacade:descendIntoBattle()
+	self.cameraFacade:descendIntoBattle(targetTile)
 	
 	-- 发动法术
 	local skill = SkillRegistry.findSkillByName(skillName)
@@ -52,7 +52,7 @@ function CommandExecutor:cast(warrior, skillName, targetLocation)
 	skill:playAnimation(warrior, targetTile, {
 			onAttackBegin = function() 
 				-- takeDamage() -> playHitAnimation()
-				print('results begin')
+				print('receive begin')
 				local skillCaster = object:findComponent(c'SkillCaster')
 				local results = skillCaster:castSkill(skill, targetLocation, g_chessboard)
 				for _, result in ipairs(results) do

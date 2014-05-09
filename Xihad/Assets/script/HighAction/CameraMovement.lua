@@ -1,11 +1,11 @@
-local ActionAdapter = require 'ActionAdapter'
-local ActionFactory = require 'ActionFactory'
-local ObjectAction  = require 'ObjectAction'
-local CameraAction  = require 'CameraAction'
-local camMovement = {}
+local ActionAdapter = require 'Action.ActionAdapter'
+local ActionFactory = require 'Action.ActionFactory'
+local ObjectAction  = require 'HighAction.ObjectAction'
+local CameraAction  = require 'HighAction.CameraAction'
+local CameraMovement = {}
 
 -- 锁定 lookDirection 后移动
-function camMovement.lockedMove(cameraObject, spanTranslate, duration, lerp)
+function CameraMovement.lockedMove(cameraObject, spanTranslate, duration, lerp)
 	local cameraControl = cameraObject:findComponent(c'Camera')
 	cameraControl:setTargetFixed(false)
 	
@@ -14,9 +14,10 @@ function camMovement.lockedMove(cameraObject, spanTranslate, duration, lerp)
 	return action
 end
 
-function camMovement.freelyMove(cameraObject, spanTranslate, spanLookDir, duration, lerp)
-	local moveAction = ObjectAction.move(cameraObject, spanTranslate, duration, lerp)
+function CameraMovement.freelyMove(cameraObject, spanTranslate, spanLookDir, speed, lerp)
+	local moveAction = ObjectAction.move(cameraObject, spanTranslate, speed, lerp)
 	
+	local duration = moveAction.duration
 	local cameraControl = cameraObject:findComponent(c'Camera')
 	local lookDirAction = CameraAction.lookDir(cameraControl, spanLookDir, duration, lerp)
 	
@@ -25,4 +26,4 @@ function camMovement.freelyMove(cameraObject, spanTranslate, spanLookDir, durati
 	return parallel
 end
 
-return camMovement
+return CameraMovement

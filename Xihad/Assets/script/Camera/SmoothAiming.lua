@@ -1,12 +1,12 @@
+local base = require 'Action.InterruptableAction'
 local Algorithm = require 'std.Algorithm'
 local Trigonometry = require 'math.Trigonometry'
 local SmoothAiming = {
-	anglesPerSecond = 90,	-- TODO step function
+	anglesPerSecond = 75,	-- TODO step function
 	elevation = 70,
 	
 	_lookDir = nil,
 	_aimObject = nil,
-	_aabbCenter= nil,
 	_cameraControl= nil,
 	_cameraObject = nil,
 	
@@ -14,6 +14,7 @@ local SmoothAiming = {
 	_state = 'aiming',
 }
 SmoothAiming.__index = SmoothAiming
+setmetatable(SmoothAiming, base)
 
 function SmoothAiming.new(cameraObject)
 	local o = setmetatable({
@@ -26,21 +27,32 @@ function SmoothAiming.new(cameraObject)
 	return o
 end
 
-function SmoothAiming:update(time)
+function SmoothAiming:_fireAimed()
+	for lis, _ in pairs(self._listeners) do
+		lis(self)
+	end
+	
+	self._state = 'aimed'
+end
+
+function SmoothAiming:onUpdate(time)
 	local sourceLookDir = self._cameraControl:getLookDirection()
 	sourceLookDir:normalize()
 	
 	local targetLookDir
 	if not self._aimObject then 
-		targetLookDir = self._lookDir:copy()
+		targetLookDir = self._lookDir
 	else
-		local center = self._aimObject:getTranslate() + self._aabbCenter
+		local center = self._aimObject:getTranslate()
 		targetLookDir = center - self._cameraObject:getTranslate()
 		targetLookDir:normalize()
 	end
 	
 	if sourceLookDir == targetLookDir then
-		assert(self._state ~= 'aiming')
+		if self._state == 'aiming' then
+			self:_fireAimed()
+		end
+		
 		return 
 	end
 	
@@ -56,11 +68,7 @@ function SmoothAiming:update(time)
 			nextLookDir = targetLookDir
 			
 			if self._state == 'aiming' then
-				-- TODO
-				for lis, _ in pairs(self._listeners) do
-					lis(self)
-				end
-				self._state = 'aimed'
+				self:_fireAimed()
 			end
 		else
 			if angle < -step then
@@ -77,6 +85,7 @@ function SmoothAiming:update(time)
 	local source = self._cameraObject:getTranslate()
 	local ray = math3d.line(source, source + nextLookDir)
 	local point = XihadMapTile.intersectsGround(ray)
+	
 	self._cameraControl:setTarget(point)
 end
 
@@ -92,10 +101,7 @@ function SmoothAiming:_setAim(aimObject)
 	self._aimObject = aimObject
 	self._state = 'aiming'
 	
-	if aimObject then
-		local render = aimObject:findComponent(c'Render')
-		self._aabbCenter = render:getAABB():center()
-	else
+	if not aimObject then
 		local currentLookDir = self._cameraControl:getLookDirection()
 		local downVector = -self._cameraControl:getUpVector()
 		local axis = downVector:cross(currentLookDir)

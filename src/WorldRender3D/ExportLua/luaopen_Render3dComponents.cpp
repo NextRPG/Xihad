@@ -224,7 +224,7 @@ namespace xihad { namespace render3d
 		static E_LIGHT_TYPE typeTable[] = { 
 			ELT_POINT, ELT_DIRECTIONAL, ELT_SPOT 
 		};
-		const char* options[] = { "point", "directional", "spot", NULL };
+		const char* options[] = { "point", "direction", "spot", NULL };
 
 		int idx = StringUtil::select(type, options);
 		if (idx >= 0)
@@ -232,6 +232,34 @@ namespace xihad { namespace render3d
 			light->setLightType(typeTable[idx]);
 		}
 	}}
+
+	static int material_iter(lua_State* L)
+	{
+		luaT_variable(L, 1, RenderComponent*, render);
+		luaT_variable(L, 2, int, prevIndex);
+
+		u32 currentIndex = (u32) (prevIndex + 1);
+		if (currentIndex == 0 || currentIndex > render->getMaterialCount())
+		{
+			lua_pushnil(L);
+			return 1;
+		}
+		else
+		{
+			RenderComponent::Material& mat = render->getMaterial(currentIndex - 1);
+			lua_pushinteger(L, currentIndex);
+			push<RenderComponent::Material*>(L, &mat);
+			return 2;
+		}
+	}
+
+	static int materials(lua_State* L)
+	{
+		lua_pushcfunction(L, material_iter);
+		lua_pushvalue(L, 1);
+		lua_pushinteger(L, 0);
+		return 3;
+	}
 
 	int luaopen_render3dComponents( lua_State* L )
 	{
@@ -242,6 +270,7 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(RenderComponent, isTrulyVisible),
 			luaT_mnamedfunc(RenderComponent, getMaterial),
 			luaT_mnamedfunc(RenderComponent, getMaterialCount),
+			luaT_lnamedfunc(materials),
 			luaT_mnamedfunc(RenderComponent, setMaterialTexture),
 			luaT_mnamedfunc(RenderComponent, getTransformedAABB),
 			luaT_cnamedfunc(getAABB),
@@ -301,6 +330,15 @@ namespace xihad { namespace render3d
 
 		luaT_defRegsBgn(lightRegs)
 			luaT_mnnamefunc(LightComponent, enableCastShadow, castShadow),
+			luaT_mnamedfunc(LightComponent, setAmbientColor),
+			luaT_mnamedfunc(LightComponent, setDiffuseColor),
+			luaT_mnamedfunc(LightComponent, setSpecularColor),
+			luaT_mnamedfunc(LightComponent, setAttenuation),
+			luaT_mnamedfunc(LightComponent, setOuterCone),
+			luaT_mnamedfunc(LightComponent, setInnerCone),
+			luaT_mnamedfunc(LightComponent, setFalloff),
+			luaT_mnamedfunc(LightComponent, setRadius),
+			luaT_mnamedfunc(LightComponent, getRadius),
 			luaT_cnamedfunc(setType),
 		luaT_defRegsEnd
 		MetatableFactory<LightComponent, RenderComponent>::create(L, lightRegs, 0);

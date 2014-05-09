@@ -21,6 +21,7 @@ function WarriorHitResult:getTargetBarrier()
 end
 
 function WarriorHitResult:apply()
+	print(self.damage)
 	-- if math.random() > self:getHitRate() then
 	-- 	return self:_handleMiss()
 	-- elseif math.random() < self:getKillRate() then

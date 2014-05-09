@@ -14,7 +14,7 @@ range:addRelativeImpactLocation(Location.new(0, 0))
 local filter = { toEnemy = true, }
 
 local fireSkill = Skill.new('Fire', range, filter, P2PParticleSkillAnimator.new('Assets.effect.fire'))
-fireSkill:addResolver(HitPointResolver.new('fire', 30))
+fireSkill:addResolver(HitPointResolver.new('fire', -30))
 SkillRegistry.allSkills['Fire']	  = fireSkill
 SkillRegistry.allSkills['skill1'] = Skill.new('skill1', range, filter)
 SkillRegistry.allSkills['skill2'] = Skill.new('skill2', range, filter)

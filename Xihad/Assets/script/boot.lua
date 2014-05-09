@@ -27,27 +27,26 @@ g_chessboard = loader:create(battle)
 local CameraFactory= require 'Camera.SimpleCameraFactory'
 local CameraFacade = require 'Camera.CameraFacade'
 local cameraObject = CameraFactory.createDefault('camera')
-local cameraFacade= CameraFacade.new(cameraObject)
-
--- TEST ROUTE
--- local aHero = g_scene:findObject(c'A')
--- local startLoc = aHero:findComponent(c'Barrier'):getTile():getLocation()
--- local locations = g_chessboard:route(aHero:findComponent(c'Warrior'), startLoc, Location.new(10, 2))
--- for _, loc in ipairs(locations) do
--- 	print(loc:xy())
--- end
-
--- TEST ITERATOR
-
+local cameraFacade = CameraFacade.new(cameraObject)
+g_scene:pushController {
+	onKeyUp = function (self, e)
+		local object = g_scene:findObject(c(string.upper(e.key)))
+		if not object or not object:findComponent(c'Warrior') then 
+			return 1 
+		end
+		
+		local asyncFocys = coroutine.wrap(cameraFacade.focus)
+		asyncFocys(cameraFacade, object)
+		return 0
+	end
+}
 
 -- ADD LIGHT
 local sun = g_scene:createObject(c'sun')
-lightComp = sun:appendComponent(c'Light')
-lightComp:castShadow(true)
-lightComp:setType "point"
-sun:concatRotate(math3d.vector(90, 0, 0))
-sun:concatTranslate(math3d.vector(20, 30, -5))
-
+local lightControl = sun:appendComponent(c'Light')
+lightControl:castShadow(false)
+lightControl:setType 'direction'
+sun:concatTranslate(math3d.vector(0, 30, 0))
 
 for heroObj in g_scene:objectsWithTag('Hero') do
 	heroObj:findComponent(c'Warrior'):activate()
@@ -87,6 +86,11 @@ local painter = {
 		for _, tile in ipairs(tiles) do
 			-- TODO why there is nil tile?
 			if tile then
+				if not tile.getTerrain then
+					for k,v in pairs(tile) do
+						print(k,v)
+					end
+				end
 				local terrian = tile:getTerrain()
 				local idx = terrian:pushColor(color)
 				handle[terrian] = idx
@@ -144,12 +148,9 @@ function finishListener:onStateEnter(state, prev)
 	sm:nextHero()
 end
 
-function finishListener:onStateExit(state, next)
-	
-end
+function finishListener:onStateExit(state, next) end
 
 sm:addStateListener('Finish', finishListener)
-
 sm:addStateListener('ChooseHero', {
 		onStateEnter = function(self, state, prev) 
 			if prev == 'Finish' then
@@ -160,4 +161,4 @@ sm:addStateListener('ChooseHero', {
 		onStateExit = function() end
 	})
 
--- g_world:setTimeScale(3)
+-- g_world:setTimeScale(0.3)

@@ -58,19 +58,15 @@ function SkillCaster:getCastableTiles(startLoc)
 		startLoc:top(), startLoc:down(), 
 	}
 	
-	local i, j = 1, 1
-	for _,loc in ipairs(locs) do
+	local tiles = {}
+	for _, loc in ipairs(locs) do
 		local tile = g_chessboard:getTile(loc)
 		if tile then
-			locs[i] = tile
-			i = i + 1
-		else
-			locs[j] = nil
+			table.insert(tiles, tile)
 		end
-		j = j+1
 	end
 	
-	return locs
+	return tiles
 end
 
 return SkillCaster

@@ -6,7 +6,7 @@ function adapter.new(action)
 		action:update(g_time.change)
 		if action.hasFinished and action:hasFinished() then
 			self:stop()
-		end		
+		end
 	end
 	
 	return a

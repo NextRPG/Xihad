@@ -1,7 +1,8 @@
 local base = require 'Skill.ToWarriorResolver'
+local Location  = require 'route.Location'
 local Algorithm = require 'std.Algorithm'
 local HitPointResolver = {
-	nature = nil,
+	nature = 'unkonwn',
 	attenuation = 0,
 	hitPointIncr= nil,
 	
@@ -19,7 +20,7 @@ function HitPointResolver.new(nature, hitPointIncr, attenuation)
 end
 
 function HitPointResolver.getAddition(skillNature, warriorNature)
-	local t = HitPointResolver.sNaturePromote[self.nature]
+	local t = HitPointResolver.sNaturePromote[skillNature]
 	
 	return t and t[warriorNature] or 1
 end

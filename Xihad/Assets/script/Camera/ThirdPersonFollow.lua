@@ -1,9 +1,10 @@
+local base = require 'Action.InterruptableAction'
 local Algorithm = require 'std.Algorithm'
 local ThirdPersonFollow = {
 	k = 3,
 	constant = 5,	-- TODO step function
 	avoidRadius = 30,
-	freeRadius  = 35,	
+	freeRadius  = 35,
 	declineRadius = 35,
 	
 	_state = 'focusing',
@@ -14,6 +15,7 @@ local ThirdPersonFollow = {
 	_listeners = nil,
 }
 ThirdPersonFollow.__index = ThirdPersonFollow
+setmetatable(ThirdPersonFollow, base)
 
 function ThirdPersonFollow.new(follower, baseHeight)
 	local obj = setmetatable({
@@ -94,7 +96,7 @@ function ThirdPersonFollow:_adjustHeight(distance)
 	self._follower:resetTranslate(math3d.vector(x, self:_computeHeight(distance), z))
 end
 
-function ThirdPersonFollow:update(time)
+function ThirdPersonFollow:onUpdate(time)
 	if not self._following then
 		return
 	end

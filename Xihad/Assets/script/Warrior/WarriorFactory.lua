@@ -12,9 +12,9 @@ function factory.new(team)
 					local render = warrior:findPeer(c'Render')
 					
 					if render then
-						for i = 0, render:getMaterialCount() do
-							local mat = render:getMaterial(i)
-							mat:setWireFrame(false)
+						for _, mat in render:materials() do
+							mat:setAmbientColor(Color.new(Color.white))
+							mat:setDiffuseColor(Color.new(Color.white))
 						end
 					end
 				end,
@@ -23,9 +23,9 @@ function factory.new(team)
 					local render = warrior:findPeer(c'Render')
 					
 					if render then
-						for i = 0, render:getMaterialCount() do
-							local mat = render:getMaterial(i)
-							mat:setWireFrame(true)
+						for _, mat in render:materials() do
+							mat:setAmbientColor(Color.new(0xff555555))
+							mat:setDiffuseColor(Color.new(Color.black))
 						end
 					end
 				end
@@ -50,9 +50,8 @@ function factory:create(team, name, data)
 	local anim = object:appendComponent(c"AnimatedMesh", param)
 	anim:createSelector(c"stupid") 
 	anim:playAnimation(c"idle")
-	anim:setTransitionTime(0.1)
+	anim:setTransitionTime(0.15)
 	warrior:addRoundListener(self.highlightActiveWarrior)
-	object:concatTranslate(math3d.vector(0, 3, 0))
 	
 	-- TODO
 	if data.model == 'ninja' then

@@ -83,7 +83,7 @@ end
 function ease.wrapOut(infunc, notcache)
 	local out = ease.in2out[infunc]
 	if not out then
-		local eout = require("EaseOutFunction")
+		local eout = require("Ease.EaseOutFunction")
 		out = eout.new(infunc)
 		assert(out.infunc == infunc)
 		if not notcache then
@@ -97,7 +97,7 @@ end
 function ease.wrapInout(infunc, notcache)
 	local inout = ease.in2inout[infunc]
 	if not inout then
-		local einout = require("EaseInOutFunction")
+		local einout = require("Ease.EaseInOutFunction")
 		inout = einout.new(infunc, ease.wrapOut(infunc, notcache))
 		assert(inout.infunc == infunc)
 		if not notcache then

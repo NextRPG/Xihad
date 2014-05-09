@@ -24,11 +24,13 @@ namespace xihad { namespace render3d
 			const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param, 
 			ISceneManager* smgr);
 
-		void setLightData(const video::SLight& light);
-
-		video::SLight const& getLightData() const;
-
-		video::SLight& getLightData();
+		void setAmbientColor(const video::SColor& color);
+		void setDiffuseColor(const video::SColor& color);
+		void setSpecularColor(const video::SColor& color);
+		void setAttenuation(const core::vector3df& attenuation);
+		void setOuterCone(f32 outer);
+		void setInnerCone(f32 inner);
+		void setFalloff(f32 falloff);
 
 		void setRadius(float radius);
 
@@ -41,6 +43,9 @@ namespace xihad { namespace render3d
 		void enableCastShadow(bool shadow = true);
 
 		bool getCastShadow() const;
+
+	private:
+		video::SLight& getLightData();
 
 	protected:
 		ILightSceneNode * getNode() const;

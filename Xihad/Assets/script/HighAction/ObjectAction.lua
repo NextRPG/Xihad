@@ -1,18 +1,17 @@
 local Trigonometry = require 'math.Trigonometry'
-local SpanVariable = require 'Action.SpanVariable'
 local SpanAction   = require 'Action.SpanVariableAction'
 local functional   = require 'std.functional'
 
-local actions = {}
+local ObjectAction = {}
 
-function actions.move(object, spanVector, speed, lerp)
+function ObjectAction.move(object, spanVector, speed, lerp)
 	spanVector.origin = spanVector.origin or object:getTranslate()
 	local duration = spanVector:delta():length() / speed
 	local sync= functional.bindself(object, 'resetTranslate')
 	return SpanAction.new(spanVector, sync, duration, lerp)
 end
 
-function actions.rotateY(object, spanY, rotSpeed, lerp)
+function ObjectAction.rotateY(object, spanY, rotSpeed, lerp)
 	if not spanY.origin then
 		local _, currentY, _ = object:getRotation():xyz()
 		spanY.origin = currentY
@@ -30,4 +29,4 @@ function actions.rotateY(object, spanY, rotSpeed, lerp)
 	return SpanAction.new(spanY, sync, math.abs(delta) / rotSpeed, lerp)
 end
 
-return actions
+return ObjectAction

@@ -79,6 +79,11 @@ function Warrior:getCareer()
 	return self.career
 end
 
+function Warrior:getNature()
+	-- return self.career:
+	return 'unknown'
+end
+
 function Warrior:addRoundListener(lis)
 	assert(lis.onRoundBegin and lis.onRoundEnd)
 	self.roundListeners[lis] = true

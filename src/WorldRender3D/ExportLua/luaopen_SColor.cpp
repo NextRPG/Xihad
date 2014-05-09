@@ -88,7 +88,7 @@ namespace xihad { namespace render3d
 		setField(L, -1, "orange",	0xffffa500);
 		setField(L, -1, "dimGray",	0xff696969);
 		setField(L, -1, "gold",		0xffffd700);
-		setField(L, -1, "silber",	0xffc0c0c0);
+		setField(L, -1, "silver",	0xffc0c0c0);
 		
 		setField(L, -1, "transparent", 0x00000000);
 

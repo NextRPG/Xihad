@@ -39,19 +39,22 @@ end
 
 function Skill:resolve(sourceWarrior, impactLocation, chessboard)
 	local results = {}
+	
 	self.range:traverseImpactLocations(impactLocation, function(loc)
 		local tile = chessboard:getTile(loc)
 		
-		if not tile then return end
+		if not tile then 
+			return 
+		end
 		
-		local relativeLoc = loc:sub(impactLocation)
-		for _, barrier in ipairs(tile.barriers) do
+		local relativeLoc = loc - impactLocation
+		for barrier, _ in pairs(tile.barriers) do
 		repeat
 			if not barrier.newHitResult then
 				break	-- continue
 			end
 			
-			if not barrier:permitCasting(self) then
+			if not barrier:permitCasting(sourceWarrior, self) then
 				break	-- continue
 			end
 			

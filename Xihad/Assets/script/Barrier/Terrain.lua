@@ -21,9 +21,9 @@ function Terrain.new(type, object)
 	-- TODO FIX
 	local mat = object:findComponent(c'Render'):getMaterial(0)
 	mat:setColorMaterial('none')
-	mat:setBlend('src.alpha', '1-src.alpha', 'add')
-	mat:setMaterialType('trans_alphach')
-	mat:setZWriteEnable(false)
+	-- mat:setBlend('src.alpha', '1-src.alpha', 'add')
+	-- mat:setMaterialType('trans_alphach')
+	-- mat:setZWriteEnable(false)
 	
 	return o
 end
@@ -66,7 +66,11 @@ end
 function Terrain:setTile( tile ) 
 	if not self.tile then
 		Barrier.setTile(self, tile)
-		self:getHostObject():resetTranslate(tile:getCenterVector())
+		local aabb = self:findPeer(c'Render'):getAABB()
+		local _, height, _ = aabb:extent():xyz()
+		local center = tile:getCenterVector()
+		center:set(nil, -height, nil)
+		self:getHostObject():resetTranslate(center)
 	else
 		error("Attempt to change the MapTile of a Terrain")
 	end
@@ -77,8 +81,7 @@ function Terrain:_updateColor()
 	
 	local render = self:getHostObject():findComponent(c'Render')
 	color:setAlpha(200)
-	for i = 0, render:getMaterialCount()-1 do
-		local mat = render:getMaterial(i)
+	for _, mat in render:materials() do
 		mat:setDiffuseColor(color)
 	end
 end

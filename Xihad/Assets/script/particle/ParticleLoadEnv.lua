@@ -47,7 +47,6 @@ function Env:getMesh(meshDesc)
 end
 
 function Env:deferMessage(delay, msg)
-	print('defer message', msg)
 	local msgParam = { source = self.source, target = self.target }
 	
 	-- TODO

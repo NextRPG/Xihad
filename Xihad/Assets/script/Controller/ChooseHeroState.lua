@@ -24,6 +24,7 @@ function ChooseHeroState:onHeroSelected(heroObject)
 	self.commandList.reachableHandle = self.painter:mark(reachable, 'Reachable')
 	self.camera:focus(heroObject)
 	self.commandList:setSource(warrior)
+	
 	return 'next'
 end
 

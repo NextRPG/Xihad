@@ -25,9 +25,10 @@ fcomp:getMaterial(0):setDiffuseColor(Color.new(Color.blue))
 floor:concatTranslate(math3d.vector(-15, -2.5, 0))
 
 local param = { 
-	-- mesh = "Assets/model/man2_x/2.b3d"
-	mesh  = "Assets/model/reimu/reimu.b3d", --ninja.b3d", 
-	clips = "Assets/model/reimu/reimu.clip", --ninja.clip" 
+	-- mesh  = "Assets/model/ninja/ninja.b3d", 
+	-- clips = "Assets/model/ninja/ninja.clip" 
+	mesh  = "Assets/model/reimu/reimu.b3d", 
+	clips = "Assets/model/reimu/reimu.clip",
 }
 
 local ninja = nil
@@ -39,7 +40,6 @@ for i = 10, 1, -1 do
 	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.1)
 	-- anim:setAnimationSpeed(0)
-	anim:addShadow(nil, "zfail")
 	if i%2==0 then 
 		ninja:concatTranslate(math3d.vector(-i/2*3, 0, i/2*3))
 	else
@@ -73,7 +73,6 @@ ccam:setUpVector(math3d.vector(0, 1, 0))
 
 local sun = g_scene:createObject(c"sun")
 lightComp = sun:appendComponent(c"Light")
-lightComp:castShadow(true)
 lightComp:setType "point"
 sun:concatRotate(math3d.vector(90, 0, 0))
 sun:concatTranslate(math3d.vector(20, 30, -5))

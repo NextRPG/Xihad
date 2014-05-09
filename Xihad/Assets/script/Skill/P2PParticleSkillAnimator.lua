@@ -15,12 +15,21 @@ function P2PParticleSkillAnimator.new(particleFile)
 end
 
 function P2PParticleSkillAnimator:animate(sourceObject, targetTile, listener)
-	local warrior = targetTile:getWarrior()
-	if not warrior then
+	local sourceAnimatable = sourceObject:findComponent(c'AnimatedMesh')
+	if not sourceAnimatable then
+		error('invalid sourceWarrior without AnimatedMesh')
+	end
+	
+	local targetWarrior = targetTile:getWarrior()
+	if not targetWarrior then
 		error('This particle effect must be casted to enemy')
 	end
 	
-	local targetObject = warrior:getHostObject()
+	local targetObject = targetWarrior:getHostObject()
+	
+	sourceAnimatable:playAnimation(c'magic1', function()
+		sourceAnimatable:playAnimation(c'idle')
+	end)
 	
 	local particleObject = g_scene:createUniqueObject(c'ParticleSystem')
 	local particleSystem = particleObject:appendComponent(c'ParticleSystem')
