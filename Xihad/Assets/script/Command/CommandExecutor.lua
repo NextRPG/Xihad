@@ -2,9 +2,9 @@ local ObjectAction = require 'ObjectAction'
 local Trigonometry = require 'math.Trigonometry'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'
+local SkillRegistry= require 'Skill.SkillRegistry'
 local WarriorMovement = require 'WarriorMovement'
-local AsConditionFactory = require 'Action.AsConditionFactory'
-local SkillRegistry = require 'Skill.SkillRegistry'
+local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
 	cameraFacade = nil,
@@ -28,7 +28,8 @@ function CommandExecutor:move(object, destination)
 end
 
 function CommandExecutor:cast(warrior, skillName, targetLocation)
-	print(string.format('%s cast %s @%s', warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
+	print(string.format('%s cast %s @%s', 
+		warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
 	
 	local object = warrior:getHostObject()
 	local translate = object:getTranslate()
@@ -79,8 +80,15 @@ function CommandExecutor:standBy(warrior)
 end
 
 function CommandExecutor:execute(cmdList)
-	local warrior = cmdList:getSource()
+	local warrior= cmdList:getSource()
+	
 	local object = warrior:getHostObject()
+	
+	if cmdList:getLocation() == warrior:getLocation() and cmdList:getCommand() == '待机' then
+		self:standBy(warrior)
+		-- TODO Don't wait fade out
+		return
+	end
 	
 	self.cameraFacade:focus(object)
 	
@@ -91,6 +99,8 @@ function CommandExecutor:execute(cmdList)
 	else
 		self:cast(warrior, cmdList:getCommand(), cmdList:getTarget())
 	end
+	
+	-- TODO Wait fade out
 end
 
 return CommandExecutor

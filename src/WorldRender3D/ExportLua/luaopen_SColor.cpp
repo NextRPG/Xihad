@@ -1,5 +1,6 @@
 #include <luaT/luaT.h>
 #include <irrlicht/SColor.h>
+#include <cmath>
 
 using namespace irr;
 using namespace video;
@@ -50,6 +51,16 @@ namespace xihad { namespace render3d
 		return 1;
 	}
 
+	luaT_static SColor subColor(const SColor& c1, const SColor& c2)
+	{
+		return SColor(
+				abs((int) c1.getAlpha() - (int) c2.getAlpha()),
+				abs((int) c1.getRed() 	- (int) c2.getRed()),
+				abs((int) c1.getGreen() - (int) c2.getGreen()),
+				abs((int) c1.getBlue() 	- (int) c2.getBlue())
+				);
+	}}
+
 	int luaopen_SColor(lua_State* L)
 	{
 		luaT_defRegsBgn(scolor)
@@ -64,6 +75,11 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(SColor, setGreen),
 			luaT_mnamedfunc(SColor, setBlue),
 			luaT_lnamedfunc(set),
+
+			{ "__add", luaT_mfunction_ovl( SColor (SColor::*)(const SColor&) const, SColor::operator+) },
+			{ "__eq",  luaT_mfunction_ovl( bool (SColor::*)(const SColor&) const, SColor::operator==) },
+			luaT_cnnamefunc(subColor, __sub),
+
 		luaT_defRegsEnd
 		MetatableFactory<SColor>::create(L, scolor);
 

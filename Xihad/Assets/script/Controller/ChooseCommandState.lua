@@ -1,15 +1,10 @@
 local base = require 'Controller.PlayerState'
-local ChooseCommandState = { }
+
+local ChooseCommandState = setmetatable({}, base)
 ChooseCommandState.__index = ChooseCommandState
-setmetatable(ChooseCommandState, base)
 
 function ChooseCommandState.new(...)
 	return setmetatable(base.new(...), ChooseCommandState)
-end
-
-function ChooseCommandState:onBack()
-	-- TODO
-	return 'back'
 end
 
 function ChooseCommandState:onTouch(x, y)
@@ -21,16 +16,14 @@ function ChooseCommandState:onHover(x, y)
 end
 
 function ChooseCommandState:onUICommand(command)
+	self.commandList:setCommand(command)
+	
 	if command == '待机' then
-		local warrior = self.commandList.source
-		self.executor:standBy(warrior)
+		self.executor:standBy(self.commandList:getSource())
 		return 'done'
-	else
-		self.commandList:setCommand(command)
-		-- TODO
-		-- self.chessboard:markAttackableRange(src, loc, cmd)
-		return 'next'
 	end
+	
+	return 'next'
 end
 
 return ChooseCommandState

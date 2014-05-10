@@ -3,7 +3,7 @@
 技能需求：
 	+ 基础伤害值
 	+ 职业属性同技能属性
-	+ 技能需要有属性（风、火、电、光、暗）
+	+ 技能需要有属性（风、火、冰、电、光、暗）
 	+ 技能的附加状态（成功率与角色的能力有关吗？）
 	+ 是否可以对自身使用？可以对队友使用？可以对敌人使用？可以对空地使用？
 	+ 击退距离（不是水平方向怎么办？）
@@ -83,6 +83,39 @@ end
 
 function Skill:getName()
 	return self.name
+end
+
+function Skill:getAllImpactTiles(chessboard, launcherLocation, set)
+	set = set or {}
+	
+	self.range:traverseAllImpactLocations(launcherLocation, nil, 
+		function (loc)
+			local tile = chessboard:getTile(loc)
+			
+			if tile then
+				set[tile] = true
+			end
+		end
+	)
+	
+	return set
+end
+
+function Skill:getLaunchableTiles(chessboard, sourceWarrior, launcherLocation, set)
+	set = set or {}
+	
+	self.range:traverseLaunchableLocations(launcherLocation, 
+		function (loc)
+			local tile = chessboard:getTile(loc)
+			if not tile then return end
+			
+			if tile:permitCasting(sourceWarrior, self) then
+				set[tile] = true
+			end
+		end
+	)
+	
+	return set
 end
 
 function Skill:getRange()

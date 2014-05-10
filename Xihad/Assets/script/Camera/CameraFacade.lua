@@ -3,11 +3,13 @@ local SpanVariable = require 'Action.SpanVariable'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SmoothAiming = require 'Camera.SmoothAiming'
 local CameraAvoid  = require 'Camera.CameraAvoid'
+local ModifierAdapter = require 'Modifier.ModifierAdapter'
+local ModifierFactory = require 'Modifier.TargetModifierFactory'
 local ThirdPersonFollow = require 'Camera.ThirdPersonFollow'
-local AsConditionFactory= require 'Action.AsConditionFactory'
+local AsConditionFactory= require 'Async.AsConditionFactory'
 local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
-	cameraObject = nil,
+	cameraObject  = nil,
 	followControl = nil,
 	aimingControl = nil,
 	cameraAvoid   = nil,
@@ -26,9 +28,9 @@ function CameraFacade.new(cameraObject)
 			cameraAvoid   = CameraAvoid.new(cameraObject),
 		}, CameraFacade)
 	
-	ActionAdapter.fit(cameraObject, o.cameraAvoid)
-	ActionAdapter.fit(cameraObject, o.followControl)
-	ActionAdapter.fit(cameraObject, o.aimingControl)
+	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
+	ModifierAdapter.fit(cameraObject, o.followControl)
+	ModifierAdapter.fit(cameraObject, o.aimingControl)
 	return o
 end
 
@@ -71,7 +73,7 @@ function CameraFacade:_calculateTranslate(newTarget)
 	end
 	
 	local x, y, z = 8, 20, 10
-	local offset = xDirection * x + zDirection * z + yDirection * y
+	local offset = xDirection * x + yDirection * y + zDirection * z
 	
 	return oldTarget + offset
 end
@@ -112,6 +114,37 @@ function CameraFacade:ascendAwayBattle()
 	
 	self:_waitCameraMove()
 	self:_setSmartCameraEnabled(true)
+end
+
+function CameraFacade:lockedMove(lookTarget, speed)
+	local cameraObject = self.cameraObject
+	local cameraControl= self.cameraObject:findComponent(c'Camera')
+	
+	local targetVariable = {
+		set = function (self, newLookTarget)
+			local lookDir = cameraControl:getLookDirection()
+			local translate = newLookTarget - lookDir
+			cameraObject:resetTranslate(translate)
+		end,
+		
+		get = function (self)
+			return cameraControl:getTarget()
+		end
+	}
+	
+	local mod = ModifierFactory.vector(speed, lookTarget, targetVariable)
+	function mod.onPause()
+		self:_setSmartCameraEnabled(true)
+		cameraControl:setTargetFixed(true)
+	end
+	
+	function mod.onResume()
+		self:_setSmartCameraEnabled(false)
+		cameraControl:setTargetFixed(false)
+	end
+	
+	ModifierAdapter.fit(cameraObject, mod)
+	return mod
 end
 
 return CameraFacade

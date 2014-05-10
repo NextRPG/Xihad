@@ -6,6 +6,10 @@ function ChooseHeroState.new(...)
 	return setmetatable(base.new(...), ChooseHeroState)
 end
 
+function ChooseHeroState:onBack()
+	-- Do nothing
+end
+
 function ChooseHeroState:onVacancySelected(tile)
 	-- show tile info
 	self.ui:showTileInfo(tile)
@@ -20,11 +24,7 @@ function ChooseHeroState:onHeroSelected(heroObject)
 		return
 	end
 	
-	local reachable = g_chessboard:getReachableTiles(warrior)
-	self.commandList.reachableHandle = self.painter:mark(reachable, 'Reachable')
-	self.camera:focus(heroObject)
 	self.commandList:setSource(warrior)
-	
 	return 'next'
 end
 
@@ -33,7 +33,7 @@ function ChooseHeroState:onEnemySelected(enemyObject)
 	self.ui:showWarriorInfo(enemyObject)
 	
 	-- TODO
-	self.painter:showRange(enemyObject)
+	-- self.painter:showRange(enemyObject)
 end
 
 return ChooseHeroState

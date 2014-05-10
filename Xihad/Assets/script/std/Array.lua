@@ -3,6 +3,15 @@ local Array = {
 	insert = table.insert,
 }
 
+function Array.keys(t)
+	local keys = {}
+	for k,v in pairs(t) do
+		Array.insert(keys, k)
+	end
+	
+	return keys
+end
+
 function Array.find(t, v, pos)
 	pos = pos or 1
 	pos = math.max(1, pos)

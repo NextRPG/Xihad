@@ -43,7 +43,7 @@ local function makeFire(pnode, f, env, scale, level)
 	mat:setLighting(false)		-- Default false
 	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
-
+	
 	-- affector
 	local a = f:affector("Scale")
 	a:setTargetSize(width*2, height*2)

@@ -69,6 +69,7 @@ function Algo.count_if(t, f)
 end
 
 function Algo.clamp(value, min, max)
+	assert(min <= max, string.format('value: %d; min: %d; max: %d', value, min, max))
 	return Algo.min(Algo.max(value, min), max)
 end
 

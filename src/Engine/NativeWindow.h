@@ -1,5 +1,6 @@
 #pragma once
 #include "CppBase/ReferenceCounted.h"
+#include "dimension2d.h"
 
 namespace xihad { namespace ngn
 {
@@ -37,6 +38,8 @@ namespace xihad { namespace ngn
 		virtual void close() = 0;
 
 		virtual void setResizable(bool) = 0;
+
+		virtual const dimension2du& getScreenSize() const = 0;
 	};
 }}
 

@@ -78,7 +78,6 @@ end
 
 function Terrain:_updateColor()
 	local color = Array.getBack(self.colors)
-	
 	local render = self:getHostObject():findComponent(c'Render')
 	color:setAlpha(200)
 	for _, mat in render:materials() do
@@ -93,17 +92,29 @@ function Terrain:pushColor(color)
 end
 
 function Terrain:removeColor(index)
-	local needUpdate = index == #self.colors
+	assert(index > 0 and index <= #self.colors, 
+		string.format('index: %d, size: %d', index, #self.colors))
 	
-	self.colors[index] = nil
-	
-	if needUpdate then
-		self:_updateColor()
+	if index == #self.colors then
+		self:popColor()
+	else
+		self.colors[index] = false
 	end
+end
+
+function Terrain:_trimColors()
+	local index = #self.colors
+	while index > 0 and not self.colors[index] do
+		self.colors[index] = nil
+		index = index - 1
+	end
+	
+	assert(index > 0, 'Overmuch pops')
 end
 
 function Terrain:popColor()
 	Array.popBack(self.colors)
+	self:_trimColors()
 	self:_updateColor()
 end
 

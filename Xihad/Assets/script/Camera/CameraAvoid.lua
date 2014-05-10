@@ -1,4 +1,4 @@
-local base = require 'Action.InterruptableAction'
+local base = require 'Modifier.Modifier'
 local Algorithm = require 'std.Algorithm'
 local XihadMapTile = require 'Chessboard.XihadMapTile'
 local CameraAvoid = {

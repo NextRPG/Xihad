@@ -18,10 +18,10 @@ local robber =
 
 local robberLocations = 
 {
-	{ x = 7,  y = 7, prefab = 1, rotation = 180, },
-	{ x = 10, y = 9, prefab = 1, rotation = 180, },
-	{ x = 5,  y = 9, prefab = 1, rotation = 180, },
-	{ x = 9,  y = 7, prefab = 1, rotation = 180, },
+	-- { x = 7,  y = 7, prefab = 1, rotation = 180, },
+	-- { x = 10, y = 9, prefab = 1, rotation = 180, },
+	-- { x = 5,  y = 9, prefab = 1, rotation = 180, },
+	-- { x = 9,  y = 7, prefab = 1, rotation = 180, },
 	{ x = 4,  y = 7, prefab = 1, rotation = 180, },
 }
 

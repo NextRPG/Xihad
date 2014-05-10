@@ -43,14 +43,6 @@ function XTile.intersectsGround(ray)
 	return ray:start() + ray:vector()*ratio
 end
 
-function XTile:getLeftBottomVector()
-	local loc = self:getLocation()
-	local originX = (loc.x-1) * XTile.tileWidth
-	local originZ = (loc.y-1) * XTile.tileHeight
-	
-	return math3d.vector(originX, self.yOffset, originZ)
-end
-
 function XTile:getWarrior()
 	local barrier = self:findBarrierByKey(WarriorBarrier.getOptUniqueKey())
 
@@ -67,12 +59,36 @@ function XTile:getTerrain()
 	return self:findBarrierByKey(Terrain.getOptUniqueKey())
 end
 
+function XTile:getLeftBottomVector()
+	local loc = self:getLocation()
+	local originX = (loc.x-1) * XTile.tileWidth
+	local originZ = (loc.y-1) * XTile.tileHeight
+	
+	return math3d.vector(originX, self.yOffset, originZ)
+end
+
+function XTile:getLeftTopVector()
+	local leftBottom = self:getLeftBottomVector()
+	return leftBottom + math3d.vector(0, 0, XTile.tileHeight)
+end
+
+function XTile:getRightBottomVector()
+	local leftBottom = self:getLeftBottomVector()
+	return leftBottom + math3d.vector(XTile.tileWidth, 0, 0)
+end
+
+function XTile:getRightTopVector()
+	local leftBottom = self:getLeftBottomVector()
+	return leftBottom + math3d.vector(XTile.tileWidth, 0, XTile.tileHeight)
+end
+
 function XTile:getCenterVector()
 	local leftBottom = self:getLeftBottomVector()
-	local x, _, z = leftBottom:xyz()
-	local center = leftBottom 	-- reuse the vector
-	center:set(x+XTile.tileWidth/2, nil, z+XTile.tileHeight/2)
-	return leftBottom
+	return leftBottom + math3d.vector(XTile.tileWidth/2, 0, XTile.tileHeight/2)
+end
+
+function XTile:getArea()
+	return XTile.tileWidth * XTile.tileHeight
 end
 
 return XTile

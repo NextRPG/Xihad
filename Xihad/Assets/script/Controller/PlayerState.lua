@@ -42,6 +42,17 @@ function PlayerState.new(sharedCommandList, newDispatcher, ui, camera, painter, 
 	return o
 end
 
+function PlayerState:_safeClear(handleField)
+	self.painter:clear(self[handleField])
+	self[handleField] = nil
+end
+
+function PlayerState:onStateEnter(state, prev)
+end
+
+function PlayerState:onStateExit(state, next)
+end
+
 function PlayerState:needCDWhenTouch()
 	return true
 end
@@ -51,6 +62,7 @@ function PlayerState:needCDWhenHover()
 end
 
 function PlayerState:onBack()
+	return 'back'
 end
 
 function PlayerState:onTouch(x, y)

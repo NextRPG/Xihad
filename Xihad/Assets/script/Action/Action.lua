@@ -1,5 +1,8 @@
+--- 
+-- Action is a update handler which will finish at some time. And once 
+-- it's finished, it can be stopped.
 local d = {
-	finishListeners = nil
+	finishListeners = nil,
 }
 d.__index = d
 
@@ -12,7 +15,7 @@ function d:update(time)
 		self:onUpdate(time)
 		
 		if self:hasFinished() and self.finishListeners then
-			for listener,_ in pairs(self.finishListeners) do
+			for listener, _ in pairs(self.finishListeners) do
 				listener(self)
 			end
 		end

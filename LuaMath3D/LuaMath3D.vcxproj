@@ -101,6 +101,7 @@
     <ClCompile Include="..\src\math3d\luaopen_matrix.cpp" />
     <ClCompile Include="..\src\math3d\luaopen_plane.cpp" />
     <ClCompile Include="..\src\math3d\luaopen_quaternion.cpp" />
+    <ClCompile Include="..\src\math3d\luaopen_triangle.cpp" />
     <ClCompile Include="..\src\math3d\luaopen_vector.cpp" />
   </ItemGroup>
   <ItemGroup>

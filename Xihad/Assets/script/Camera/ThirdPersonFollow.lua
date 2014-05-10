@@ -1,4 +1,4 @@
-local base = require 'Action.InterruptableAction'
+local base = require 'Modifier.Modifier'
 local Algorithm = require 'std.Algorithm'
 local ThirdPersonFollow = {
 	k = 3,

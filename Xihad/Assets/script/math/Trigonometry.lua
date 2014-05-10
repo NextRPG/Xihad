@@ -1,3 +1,4 @@
+local Algorithm = require 'std.Algorithm'
 local Trigonometry = {
 	RADIAN_TO_DEGREE = 180 / math.pi,
 	DEGREE_TO_RADIAN = math.pi / 180,
@@ -26,6 +27,20 @@ end
 
 function Trigonometry.equal(degree1, degree2)
 	return (degree2 - degree1) % 360 == 0
+end
+
+function Trigonometry.getAngleBetween(vec1, vec2)
+	vec1 = vec1:copy()
+	vec2 = vec2:copy()
+	
+	return Trigonometry.getAngleBetweenN(vec1, vec2)
+end
+
+function Trigonometry.getAngleBetweenN(vec1, vec2)
+	vec1:normalize()
+	vec2:normalize()
+	local cos = Algorithm.clamp(vec1:dot(vec2), -1, 1)
+	return Trigonometry.toDegree(math.acos(cos))
 end
 
 return Trigonometry

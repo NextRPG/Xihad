@@ -3,7 +3,7 @@ output() {
 	do
 		if test -d $dir 
 		then
-			out=$(find $dir -type f | xargs wc -l | grep total)
+			out=$(find $dir -type f | xargs wc -l | tail -n 1)
 			echo -n $out
 			echo -n '	'
 			echo $dir

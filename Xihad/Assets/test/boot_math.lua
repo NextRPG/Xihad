@@ -151,4 +151,9 @@ assert(plane:relationToPoint(m3d.vector(2,3,4)) == "front")
 assert(plane:relationToPoint(m3d.vector(0,1,2)) == "back")
 -- plane:set(```) 参数同构造函数的参数
 
+
+local triangle = m3d.triangle(m3d.vector(), m3d.vector(1, 0, 0), m3d.vector(0, 0, 1))
+assert(triangle:getNormal() == m3d.vector(0, -1, 0))
+assert(triangle:getArea() == 0.5)
+
 print("Test Complete")

@@ -141,6 +141,7 @@ namespace xihad { namespace script
 	extern int luaopen_aabb(lua_State* L);
 	extern int luaopen_line(lua_State* L);
 	extern int luaopen_plane(lua_State* L);
+	extern int luaopen_triangle(lua_State* L);
 	extern int luaopen_matrix(lua_State* L);
 	static int luaopen_math3d_impl(lua_State* L)
 	{
@@ -152,6 +153,7 @@ namespace xihad { namespace script
 			luaopen_aabb(L);
 			luaopen_line(L);
 			luaopen_plane(L);
+			luaopen_triangle(L);
 			//luaopen_matrix(L);
 		}
 

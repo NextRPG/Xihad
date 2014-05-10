@@ -113,6 +113,10 @@ namespace xihad { namespace render3d
 	{
 		luaT_defRegsBgn(smat)
 			// TODO ColorMask
+			luaT_mnamed_readattr(SMaterial, AmbientColor),
+			luaT_mnamed_readattr(SMaterial, DiffuseColor),
+			luaT_mnamed_readattr(SMaterial, SpecularColor),
+			luaT_mnamed_readattr(SMaterial, EmissiveColor),
 			luaT_mnamed_writeattr(SMaterial, AmbientColor),
 			luaT_mnamed_writeattr(SMaterial, DiffuseColor),
 			luaT_mnamed_writeattr(SMaterial, SpecularColor),

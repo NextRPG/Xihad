@@ -135,4 +135,9 @@ namespace xihad { namespace ngn
 		return renderer.get();
 	}
 
+	const dimension2du& IrrlichtWindow::getScreenSize() const
+	{
+		return device->getVideoDriver()->getScreenSize();
+	}
+
 }}

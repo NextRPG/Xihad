@@ -1,3 +1,4 @@
+local Array = require 'std.Array'
 local SkillCaster = {
 	skills = nil,
 }
@@ -51,22 +52,16 @@ function SkillCaster:_getLocation(startLoc)
 end
 
 function SkillCaster:getCastableTiles(startLoc)
-	-- TODO 
 	startLoc = self:_getLocation(startLoc)
-	local locs = {
-		startLoc:left(), startLoc:right(), 
-		startLoc:top(), startLoc:down(), 
-	}
 	
 	local tiles = {}
-	for _, loc in ipairs(locs) do
-		local tile = g_chessboard:getTile(loc)
-		if tile then
-			table.insert(tiles, tile)
+	for skill, restTimes in pairs(self.skills) do
+		if restTimes > 0 then
+			skill:getAllImpactTiles(g_chessboard, startLoc, tiles)
 		end
 	end
 	
-	return tiles
+	return Array.keys(tiles)
 end
 
 return SkillCaster

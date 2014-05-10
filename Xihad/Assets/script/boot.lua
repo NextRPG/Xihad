@@ -6,11 +6,11 @@ require 'Assets.script.AllPackages'	-- change package.path
 require 'math3d'					-- load math3d
 require "CreateMesh"				-- create cube mesh
 
-local Warrior = require 'Warrior'
-local LevelFactory = require 'Level.XihadLevelFactory'
-local WarriorFactory = require 'Warrior.WarriorFactory'
+local LevelFactory 	= require 'Level.XihadLevelFactory'
+local WarriorFactory= require 'Warrior.WarriorFactory'
 
 -- register game specific properties
+local Warrior = require 'Warrior'
 Warrior.registerProperty('MHP')
 Warrior.registerProperty('ATK')
 Warrior.registerProperty('DFS')
@@ -28,18 +28,20 @@ local CameraFactory= require 'Camera.SimpleCameraFactory'
 local CameraFacade = require 'Camera.CameraFacade'
 local cameraObject = CameraFactory.createDefault('camera')
 local cameraFacade = CameraFacade.new(cameraObject)
-g_scene:pushController {
+local debugFocusCharacter = {
 	onKeyUp = function (self, e)
 		local object = g_scene:findObject(c(string.upper(e.key)))
 		if not object or not object:findComponent(c'Warrior') then 
 			return 1 
 		end
 		
-		local asyncFocys = coroutine.wrap(cameraFacade.focus)
-		asyncFocys(cameraFacade, object)
+		local asyncFocus = coroutine.wrap(cameraFacade.focus)
+		asyncFocus(cameraFacade, object)
 		return 0
 	end
 }
+g_scene:pushController(debugFocusCharacter)
+debugFocusCharacter:drop()
 
 -- ADD LIGHT
 local sun = g_scene:createObject(c'sun')
@@ -72,9 +74,10 @@ local ui = {
 
 local painter = {
 	colorTable = { 
-		Reachable = Color.white, 
+		Reachable   = Color.white, 
 		Destination = Color.cyan,
-		Attack = 0xffff00ff,
+		Attack      = Color.orange,
+		Castable    = Color.magenta,
 	},
 	
 	mark = function (self, tiles, type)
@@ -84,17 +87,9 @@ local painter = {
 		
 		local handle = {}
 		for _, tile in ipairs(tiles) do
-			-- TODO why there is nil tile?
-			if tile then
-				if not tile.getTerrain then
-					for k,v in pairs(tile) do
-						print(k,v)
-					end
-				end
-				local terrian = tile:getTerrain()
-				local idx = terrian:pushColor(color)
-				handle[terrian] = idx
-			end
+			local terrian = tile:getTerrain()
+			local idx = terrian:pushColor(color)
+			handle[terrian] = idx
 		end
 		
 		return handle
@@ -109,10 +104,10 @@ local painter = {
 	end,
 }
 
-local Transformer = require 'Controller.PCInputTransformer'
+local PCInputTransformer = require 'Controller.PCInputTransformer'
 local PlayerStateMachine = require 'Controller.PlayerStateMachine'
-local sm = PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
-local tranformer = Transformer.new(sm)
+local stateMachine= PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
+local tranformer  = PCInputTransformer.new(stateMachine)
 g_scene:pushController(tranformer)
 tranformer:drop()
 
@@ -122,7 +117,7 @@ function finishListener:onStateEnter(state, prev)
 	for object in g_scene:objectsWithTag('Hero') do
 		local warrior = object:findComponent(c'Warrior')
 		if warrior:isActive() then
-			sm:nextHero()
+			stateMachine:nextHero()
 			return
 		end
 	end
@@ -145,14 +140,14 @@ function finishListener:onStateEnter(state, prev)
 		local warrior = object:findComponent(c'Warrior')
 		warrior:activate()
 	end
-	sm:nextHero()
+	stateMachine:nextHero()
 end
 
 function finishListener:onStateExit(state, next) end
 
-sm:addStateListener('Finish', finishListener)
-sm:addStateListener('ChooseHero', {
-		onStateEnter = function(self, state, prev) 
+stateMachine:addStateListener('Finish', finishListener)
+stateMachine:addStateListener('ChooseHero', {
+		onStateEnter = function (self, state, prev) 
 			if prev == 'Finish' then
 				cameraFacade:focus(nil)
 			end

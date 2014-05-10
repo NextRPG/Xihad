@@ -1,8 +1,14 @@
-local base = require 'Action.InterruptableAction'
+local base = require 'Modifier.Modifier'
 local Algorithm = require 'std.Algorithm'
 local Trigonometry = require 'math.Trigonometry'
 local SmoothAiming = {
-	anglesPerSecond = 75,	-- TODO step function
+	lastStep= 0,
+	maxStep = 120,
+	minStep = 45,
+	deceleration = 40,
+	acceleration = 240,
+	uniformMotionTime = 0.2,
+	
 	elevation = 70,
 	
 	_lookDir = nil,
@@ -53,6 +59,7 @@ function SmoothAiming:onUpdate(time)
 			self:_fireAimed()
 		end
 		
+		self.lastStep = 0
 		return 
 	end
 	
@@ -60,9 +67,23 @@ function SmoothAiming:onUpdate(time)
 	if self._state == 'aimed' then
 		nextLookDir = targetLookDir
 	else
-		local step = self.anglesPerSecond * time
-		local rad  = math.acos(Algorithm.clamp(sourceLookDir:dot(targetLookDir), -1, 1))
-		local angle= Trigonometry.toDegree(rad)
+		local angle = Trigonometry.getAngleBetweenN(sourceLookDir, targetLookDir)
+		
+		local step 
+		local uniformThreshold = self.minStep * self.uniformMotionTime
+		if angle <= uniformThreshold then
+			 step = self.minStep
+		else
+			local deceleratedDistance = angle - uniformThreshold
+			step = math.sqrt(deceleratedDistance * 2 * math.abs(self.deceleration) + self.minStep*self.minStep)
+			
+			assert(step > self.minStep, step)
+			step = math.min(self.maxStep, step)
+		end
+		
+		local delta = math.abs(self.acceleration) * time
+		step = Algorithm.clamp(step, self.lastStep-delta, self.lastStep+delta)
+		step = step * time
 		
 		if angle >= -step and angle <= step then
 			nextLookDir = targetLookDir
@@ -74,11 +95,16 @@ function SmoothAiming:onUpdate(time)
 			if angle < -step then
 				step = -step
 			end
-			
+
 			local axis = sourceLookDir:cross(targetLookDir)
 			local q = math3d.quaternion(step, axis)
 			nextLookDir = q * sourceLookDir
 		end
+	end
+	
+	self.lastStep = Trigonometry.getAngleBetween(sourceLookDir, nextLookDir)
+	if time ~= 0 then
+		self.lastStep = self.lastStep / time
 	end
 	
 	local XihadMapTile = require 'Chessboard.XihadMapTile'

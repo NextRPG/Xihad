@@ -1,10 +1,10 @@
-local adapter = {}
+local ActionAdapter = {}
 
-function adapter.new(action)
+function ActionAdapter.new(action)
 	local a = {}
 	function a.onUpdate(self)
 		action:update(g_time.change)
-		if action.hasFinished and action:hasFinished() then
+		if action:hasFinished() then
 			self:stop()
 		end
 	end
@@ -12,9 +12,10 @@ function adapter.new(action)
 	return a
 end
 
-function adapter.fit(gameObject, action)
-	local updateHandler = adapter.new(action)
+function ActionAdapter.fit(gameObject, action)
+	local updateHandler = ActionAdapter.new(action)
 	gameObject:appendUpdateHandler(updateHandler)
+	return updateHandler
 end
 
-return adapter
+return ActionAdapter

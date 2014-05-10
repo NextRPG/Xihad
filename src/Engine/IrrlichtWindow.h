@@ -42,6 +42,8 @@ namespace xihad { namespace ngn
 
 		virtual WindowRenderer* getRenderer();
 
+		virtual const dimension2du& getScreenSize() const;
+
 	private:
 		irr_ptr<irr::IrrlichtDevice> device;
 		irr_ptr<UserEventReceiver> receiver;

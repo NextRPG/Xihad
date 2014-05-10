@@ -1,3 +1,4 @@
+local Class = require 'std.Class'
 local CommandList = require 'Command.CommandList'
 local StateMachine = require 'std.StateMachine'
 local ChooseHeroState = require 'Controller.ChooseHeroState'
@@ -5,10 +6,10 @@ local ChooseTileState = require 'Controller.ChooseTileState'
 local ChooseTargetState = require 'Controller.ChooseTargetState'
 local ChooseCommandState = require 'Controller.ChooseCommandState'
 local CursorEventDispatcher = require 'Controller.CursorEventDispatcher'
-local Class = require 'std.Class'
 
 local PlayStateMachine = {
 	sm = nil,
+	cmdList= nil,
 	runner = nil,
 	stateControllers = nil,
 }
@@ -17,6 +18,7 @@ PlayStateMachine.__index = PlayStateMachine
 function PlayStateMachine.new(ui, camera, painter, executor)
 	local obj = setmetatable({
 			sm = StateMachine.new('ChooseHero'),
+			cmdList = CommandList.new(),
 			stateControllers = {},
 		}, PlayStateMachine)
 	
@@ -36,12 +38,16 @@ function PlayStateMachine.new(ui, camera, painter, executor)
 	-- @see nextHero()
 	obj.sm:setTransition('Finish', 'continue', 'ChooseHero')
 	
-	local commandList = CommandList.new()
+	local commandList = obj.cmdList	
 	local newDispatcher  = CursorEventDispatcher.new
-	obj.stateControllers['ChooseHero'] = ChooseHeroState.new(commandList, newDispatcher, ui, camera, painter, executor)
-	obj.stateControllers['ChooseTile'] = ChooseTileState.new(commandList, newDispatcher, ui, camera, painter, executor)
+	obj.stateControllers['ChooseHero'] 	 = ChooseHeroState.new(commandList, newDispatcher, ui, camera, painter, executor)
+	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, newDispatcher, ui, camera, painter, executor)
 	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, newDispatcher, ui, camera, painter, executor)
 	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, newDispatcher, ui, camera, painter, executor)
+	
+	for stateName, state in pairs(obj.stateControllers) do
+		obj.sm:addStateListener(stateName, state)
+	end
 	
 	return obj
 end
@@ -82,6 +88,10 @@ function PlayStateMachine:_onCommand(cmd, x, y)
 	end)
 	
 	self.runner()
+end
+
+function PlayStateMachine:getCommandList()
+	return self.cmdList
 end
 
 function PlayStateMachine:onHover(x, y)

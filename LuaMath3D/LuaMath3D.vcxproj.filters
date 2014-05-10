@@ -39,6 +39,9 @@
     <ClCompile Include="..\src\math3d\luaopen_vector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\math3d\luaopen_triangle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\math3d\luaopen_util.h">
