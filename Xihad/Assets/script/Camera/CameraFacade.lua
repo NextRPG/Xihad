@@ -32,26 +32,18 @@ function CameraFacade.new(cameraObject)
 	ModifierAdapter.fit(cameraObject, o.followControl)
 	ModifierAdapter.fit(cameraObject, o.aimingControl)
 	
-	
-	-- o.followControl:setFollowing({
-	-- 	getTranslate = function ()
-	-- 		return o.cameraObject:findComponent(c'Camera'):getTarget()
-	-- 	end
-	-- })
+	o.followControl:setFollowing({
+		getTranslate = function ()
+			return o.cameraObject:findComponent(c'Camera'):getTarget()
+		end
+	})
 	return o
 end
 
 function CameraFacade:focus(object)
 	self.focusedObject = object
-	
 	self.aimingControl:setAim(object)
-	self.followControl:setFollowing(object)
 	AsConditionFactory.waitCameraAim(self.aimingControl)
-	if object then
-		if self.followControl._state == 'focusing' then
-			AsConditionFactory.waitCameraFocus(self.followControl)
-		end
-	end
 end
 
 function CameraFacade:_setSmartCameraEnabled(b)
