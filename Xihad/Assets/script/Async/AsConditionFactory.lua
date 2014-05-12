@@ -79,4 +79,9 @@ function cond.waitCameraAim(aimingControl, wait)
 		'addAimListener', 'removeAimListener', wait)
 end
 
+function cond.waitTargetModifier(modifier, wait)
+	return cond.waitCommon(modifier,
+		'addReachListener', 'removeReachListener', wait)
+end
+
 return cond

@@ -75,6 +75,7 @@ local ui = {
 local painter = {
 	colorTable = { 
 		Reachable   = Color.white, 
+		Selected 	= Color.gray,
 		Destination = Color.cyan,
 		Attack      = Color.orange,
 		Castable    = Color.magenta,
@@ -156,4 +157,4 @@ stateMachine:addStateListener('ChooseHero', {
 		onStateExit = function() end
 	})
 
--- g_world:setTimeScale(0.3)
+-- g_world:setTimeScale(0.5)

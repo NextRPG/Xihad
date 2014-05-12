@@ -11,6 +11,10 @@ function Modifier.new()
 end
 
 function Modifier:start()
+	if self._enabled ~= nil then
+		return
+	end
+	
 	self:onStart()
 	self._enabled = false
 	self:setEnabled(true)

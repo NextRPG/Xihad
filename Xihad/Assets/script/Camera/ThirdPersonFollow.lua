@@ -4,8 +4,8 @@ local ThirdPersonFollow = {
 	k = 3,
 	constant = 5,	-- TODO step function
 	avoidRadius = 30,
-	freeRadius  = 35,
-	declineRadius = 35,
+	freeRadius  = 45,
+	declineRadius = 45,
 	
 	_state = 'focusing',
 	_following= nil,
@@ -58,6 +58,12 @@ function ThirdPersonFollow:setFollowing(following)
 	if following then
 		self._lastFollowingPosition = self:_getFollowingPos()
 		self._state = 'focusing'
+		
+		if self:_getDistance() > self.declineRadius then
+			self._state = 'focusing'
+		else
+			self._state = 'chasing'
+		end
 	end
 end
 
@@ -107,7 +113,7 @@ function ThirdPersonFollow:onUpdate(time)
 	if self._state == 'focusing' then
 		followerVel = self:_getToFollowing()
 		
-		local expectedDistance = self.avoidRadius + (self.freeRadius - self.avoidRadius) / 2
+		local expectedDistance = self.freeRadius -- self.avoidRadius + (self.freeRadius - self.avoidRadius) / 2
 		local difference = distance - expectedDistance
 		local step
 		if difference > 0 then

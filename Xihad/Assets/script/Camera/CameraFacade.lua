@@ -31,6 +31,13 @@ function CameraFacade.new(cameraObject)
 	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
 	ModifierAdapter.fit(cameraObject, o.followControl)
 	ModifierAdapter.fit(cameraObject, o.aimingControl)
+	
+	
+	-- o.followControl:setFollowing({
+	-- 	getTranslate = function ()
+	-- 		return o.cameraObject:findComponent(c'Camera'):getTarget()
+	-- 	end
+	-- })
 	return o
 end
 
@@ -39,7 +46,6 @@ function CameraFacade:focus(object)
 	
 	self.aimingControl:setAim(object)
 	self.followControl:setFollowing(object)
-	
 	AsConditionFactory.waitCameraAim(self.aimingControl)
 	if object then
 		if self.followControl._state == 'focusing' then
@@ -116,7 +122,7 @@ function CameraFacade:ascendAwayBattle()
 	self:_setSmartCameraEnabled(true)
 end
 
-function CameraFacade:lockedMove(lookTarget, speed)
+function CameraFacade:_lockedMove(speed, lookTarget)
 	local cameraObject = self.cameraObject
 	local cameraControl= self.cameraObject:findComponent(c'Camera')
 	
@@ -125,6 +131,7 @@ function CameraFacade:lockedMove(lookTarget, speed)
 			local lookDir = cameraControl:getLookDirection()
 			local translate = newLookTarget - lookDir
 			cameraObject:resetTranslate(translate)
+			cameraControl:setLookDirection(lookDir)
 		end,
 		
 		get = function (self)
@@ -135,16 +142,21 @@ function CameraFacade:lockedMove(lookTarget, speed)
 	local mod = ModifierFactory.vector(speed, lookTarget, targetVariable)
 	function mod.onPause()
 		self:_setSmartCameraEnabled(true)
-		cameraControl:setTargetFixed(true)
 	end
 	
 	function mod.onResume()
 		self:_setSmartCameraEnabled(false)
-		cameraControl:setTargetFixed(false)
 	end
 	
 	ModifierAdapter.fit(cameraObject, mod)
 	return mod
+end
+
+function CameraFacade:translateToTarget(speed, target)
+	local targetModifier = self:_lockedMove(speed, target)
+	ModifierAdapter.fit(self.cameraObject, targetModifier)
+	AsConditionFactory.waitTargetModifier(targetModifier)
+	targetModifier:setEnabled(false)
 end
 
 return CameraFacade

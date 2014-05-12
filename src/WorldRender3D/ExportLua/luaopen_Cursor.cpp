@@ -21,7 +21,7 @@ namespace xihad { namespace render3d
 	{
 		// cursor
 		luaT_defRegsBgn(cursorRegs)
-			luaT_mnamedfunc_ovl(ICursorControl, void (ICursorControl::*)(float, float), setPosition),
+			luaT_mnamedfunc_ovl(ICursorControl, void (ICursorControl::*)(int, int), setPosition),
 			luaT_lnamedfunc(getPosition),
 			luaT_mnamedfunc(ICursorControl, setVisible),
 			luaT_mnamedfunc(ICursorControl, isVisible),

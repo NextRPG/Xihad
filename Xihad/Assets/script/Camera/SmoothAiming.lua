@@ -9,7 +9,7 @@ local SmoothAiming = {
 	acceleration = 240,
 	uniformMotionTime = 0.2,
 	
-	elevation = 70,
+	elevation = 60,
 	
 	_lookDir = nil,
 	_aimObject = nil,

@@ -3,6 +3,7 @@ local TargetModifier = setmetatable({
 	speed = nil,
 	target= nil,
 	_variable = nil,
+	_listeners= {},
 }, base)
 TargetModifier.__index = TargetModifier
 
@@ -15,6 +16,14 @@ function TargetModifier.new(speed, target, variable)
 	o._variable = variable
 	
 	return o
+end
+
+function TargetModifier:addReachListener(lis)
+	self._listeners[lis] = true
+end
+
+function TargetModifier:removeReachListener(lis)
+	self._listeners[lis] = nil
 end
 
 function TargetModifier:setSpeed(speed)
@@ -33,9 +42,19 @@ function TargetModifier:between(current, expect, target)
 	error('No implementation by default')
 end
 
+function TargetModifier:reachTarget()
+	return self._variable:get() == self.target
+end
+
+function TargetModifier:_fireTargetReached()
+	for lis, _ in pairs(self._listeners) do
+		lis(self)
+	end
+end
+
 function TargetModifier:onUpdate(time)
-	if not self.target then return end
-	
+	if self:reachTarget() then return end
+
 	local delta = self.target - self._variable:get()
 	delta = self:setLength(delta, self.speed * time)
 	
@@ -46,6 +65,10 @@ function TargetModifier:onUpdate(time)
 	end
 	
 	self._variable:set(expect)
+	
+	if self:reachTarget() then
+		self:_fireTargetReached()
+	end
 end
 
 return TargetModifier

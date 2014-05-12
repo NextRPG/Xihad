@@ -1,6 +1,7 @@
 local base = require 'route.MapTile'
-local Terrain = require 'Barrier.Terrain'
+local Terrain  = require 'Barrier.Terrain'
 local Location = require 'route.Location'
+local Rectangle= require 'math.Rectangle' 
 local WarriorBarrier = require 'WarriorBarrier'
 
 local XTile = { 
@@ -67,19 +68,8 @@ function XTile:getLeftBottomVector()
 	return math3d.vector(originX, self.yOffset, originZ)
 end
 
-function XTile:getLeftTopVector()
-	local leftBottom = self:getLeftBottomVector()
-	return leftBottom + math3d.vector(0, 0, XTile.tileHeight)
-end
-
-function XTile:getRightBottomVector()
-	local leftBottom = self:getLeftBottomVector()
-	return leftBottom + math3d.vector(XTile.tileWidth, 0, 0)
-end
-
-function XTile:getRightTopVector()
-	local leftBottom = self:getLeftBottomVector()
-	return leftBottom + math3d.vector(XTile.tileWidth, 0, XTile.tileHeight)
+function XTile:getRectangle()
+	return Rectangle.newXZ(self:getLeftBottomVector(), XTile.tileWidth, XTile.tileHeight)
 end
 
 function XTile:getCenterVector()
