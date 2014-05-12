@@ -1,5 +1,5 @@
 local base = require 'Modifier.Modifier'
-local CameraAvoid = {
+local DirectAvoid = {
 	maxSpeed = 120,		-- 120/s
 	avoidRadius = 30,
 	
@@ -7,33 +7,33 @@ local CameraAvoid = {
 	following= nil,
 	_lastFollowingPos = nil,
 }
-CameraAvoid.__index = CameraAvoid
-setmetatable(CameraAvoid, base)
+DirectAvoid.__index = DirectAvoid
+setmetatable(DirectAvoid, base)
 
-function CameraAvoid.new(follower, following)
+function DirectAvoid.new(follower, following)
 	return setmetatable({
 			follower = follower,
 			following= following,
 			_lastFollowingPos = following:getTranslate(),
-		}, CameraAvoid)
+		}, DirectAvoid)
 end
 
-function CameraAvoid:_toGround(vec)
+function DirectAvoid:_toGround(vec)
 	vec:set(nil, 0, nil)
 	return vec
 end
 
-function CameraAvoid:_getFollowingPos()
+function DirectAvoid:_getFollowingPos()
 	return self.following:getTranslate()
 end
 
-function CameraAvoid:_getToFollowing()
+function DirectAvoid:_getToFollowing()
 	local followerPosition  = self.follower:getTranslate()
 	local followingPosition = self:_getFollowingPos()
 	return self:_toGround(followingPosition - followerPosition)
 end
 
-function CameraAvoid:_getFollowerVelDir(toFollowing)
+function DirectAvoid:_getFollowerVelDir(toFollowing)
 	local followingVel= self:_getFollowingPos() - self._lastFollowingPos
 	local followerDir = followingVel:cross(math3d.vector(0, 1, 0))
 	followerDir:normalize()
@@ -45,7 +45,7 @@ function CameraAvoid:_getFollowerVelDir(toFollowing)
 	return followerDir
 end
 
-function CameraAvoid:_getFollowerVelSize(toFollowing, followerDir, time)
+function DirectAvoid:_getFollowerVelSize(toFollowing, followerDir, time)
 	---
 	-- According to `Law of cosines`
 	-- and then resolve a*x^2 + b*x + c = 0
@@ -58,15 +58,15 @@ function CameraAvoid:_getFollowerVelSize(toFollowing, followerDir, time)
 	local x = (-b + math.sqrt(delta)) / (2*a)
 	assert(x > 0)
 	
-	return math.min(CameraAvoid.maxSpeed * time, x)
+	return math.min(DirectAvoid.maxSpeed * time, x)
 end
 
-function CameraAvoid:_tooClose(toFollowing)
+function DirectAvoid:_tooClose(toFollowing)
 	local avoidRadius = self.avoidRadius
 	return toFollowing:length2() < avoidRadius*avoidRadius
 end
 
-function CameraAvoid:onUpdate(time)
+function DirectAvoid:onUpdate(time)
 	local toFollowing = self:_getToFollowing()
 	if self:_tooClose(toFollowing) then
 		local velDir = self:_getFollowerVelDir(toFollowing)
@@ -77,4 +77,4 @@ function CameraAvoid:onUpdate(time)
 	self._lastFollowingPos = self:_getFollowingPos()
 end
 
-return CameraAvoid
+return DirectAvoid

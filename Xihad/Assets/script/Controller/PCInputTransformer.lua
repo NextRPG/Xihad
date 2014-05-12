@@ -21,7 +21,6 @@ function PCInputTransformer:onMouseEvent( e )
 	if e.type == 'rPressed' then
 		receiver:onBack()
 	elseif e.type == 'lPressed' then
-		-- self.pressedX, self.pressedY = g_cursor:getPosition()
 		receiver:onTouch(g_cursor:getPosition())
 	elseif e.type == 'mouseMoved' then
 		if not e.leftPressed and not e.rightPressed then

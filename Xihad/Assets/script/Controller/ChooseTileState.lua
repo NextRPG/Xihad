@@ -51,14 +51,26 @@ end
 
 function ChooseTileState:onTileSelected(tile)
 	-- show tile info
-	local warrior = self.commandList.source
+	local warrior = self.commandList:getSource()
 	if tile:canStay(warrior) then
 		local destLocation= tile:getLocation()
 		if not g_chessboard:canReach(warrior, destLocation) then
 			print('can not reach')
 		elseif self.selectedTile ~= tile then
 			self.painter:clear(self.selectedHandle)
+			
+			-- TODO
+			local XihadMapTile = require 'Chessboard.XihadMapTile'
+			local x, y = g_cursor:getPosition()
+			local ray = g_collision:getRayFromScreenCoord(x, y)
+			local point = XihadMapTile.intersectsGround(ray)
+			local fixCursor = { onUpdate = function ()
+				local x,y = g_collision:getScreenCoordFromPosition(point)
+				g_cursor:setPosition(x, y)
+			end}
+			self.camera.cameraObject:appendUpdateHandler(fixCursor)
 			self.camera:focus(tile:getTerrain():getHostObject())
+			fixCursor:stop()
 			self.selectedHandle = self.painter:mark({ tile }, 'Selected')
 			self.selectedTile = tile
 		else
@@ -69,7 +81,7 @@ function ChooseTileState:onTileSelected(tile)
 			local destinationHandle = self.painter:mark({ tile }, 'Destination')
 			do 
 				-- move back to warrior location
-				self.camera:translateToTarget(90, warriorTile:getCenterVector())
+				self.camera:translateToTarget(warriorTile:getCenterVector())
 				
 				-- continue to focus host object
 				self.camera:focus(warrior:getHostObject())

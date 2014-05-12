@@ -1,15 +1,20 @@
-local functional = require 'std.functional'
+local functional   = require 'std.functional'
 local EaseFunction = require 'Ease.EaseFunction'
 local SpanVariable = require 'Action.SpanVariable'
-local ActionAdapter= require 'Action.ActionAdapter'
 local SmoothAiming = require 'Camera.SmoothAiming'
-local CameraAvoid  = require 'Camera.CameraAvoid'
+local DirectAvoid  = require 'Camera.DirectAvoid'
+local DirectFollow = require 'Camera.DirectFollow'
+local ActionAdapter= require 'Action.ActionAdapter'
 local ModifierAdapter = require 'Modifier.ModifierAdapter'
 local ModifierFactory = require 'Modifier.TargetModifierFactory'
-local ThirdPersonFollow = require 'Camera.ThirdPersonFollow'
 local AsConditionFactory= require 'Async.AsConditionFactory'
 local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
+	offsetSourceVec= math3d.vector(8, 20, 10),
+	translateSpeed = 90, 
+	slideSpeed = 60,
+	slideEase  = EaseFunction.wrapInOut(EaseFunction[3]),
+	
 	cameraObject  = nil,
 	followControl = nil,
 	aimingControl = nil,
@@ -28,10 +33,10 @@ function CameraFacade.new(cameraObject)
 	}
 	
 	local o = setmetatable({
-			cameraObject = cameraObject,
+			cameraObject  = cameraObject,
 			aimingControl = SmoothAiming.new(cameraObject, math3d.vector(0.5, -0.5, 0.5)),
-			followControl = ThirdPersonFollow.new(cameraObject),
-			cameraAvoid   = CameraAvoid.new(cameraObject, following),
+			followControl = DirectFollow.new(cameraObject),
+			cameraAvoid   = DirectAvoid.new(cameraObject, following),
 		}, CameraFacade)
 	
 	o.followControl:setFollowing(following)
@@ -73,42 +78,34 @@ function CameraFacade:_calculateTranslate(newTarget)
 		xDirection = -xDirection
 	end
 	
-	local x, y, z = 8, 20, 10
-	local offset = xDirection * x + yDirection * y + zDirection * z
-	
-	return oldTarget + offset
+	local x, y, z = self.offsetSourceVec:xyz()
+	return oldTarget + xDirection*x + yDirection*y + zDirection*z
 end
 
 function CameraFacade:_waitCameraMove()
-	local action = CameraMovement.freelyMove(
-		self.cameraObject, self.spanTranslate, self.spanLookDir, 20, math.sqrt)
+	local action = CameraMovement.slide(self.cameraObject, 
+		self.spanTranslate, self.spanLookDir, self.slideSpeed, self.slideEase)
 	
 	ActionAdapter.fit(self.cameraObject, action)
 	AsConditionFactory.waitAction(action)
 end
 
 function CameraFacade:descendIntoBattle(targetTile)
-	if not self.focusedObject then
-		error('Illegal state to descend into battle')
-	end
+	assert(self.focusedObject, 'Illegal state to descend into battle')
 	
 	self:_setSmartCameraEnabled(false)
 	
-	local newTranslate = self:_calculateTranslate(targetTile:getCenterVector())
-	
-	local newTarget = targetTile:getCenterVector() + math3d.vector(0, 5, 0)
-	local newLookDir= newTarget - newTranslate
+	local tileCenter = targetTile:getCenterVector()
+	local newTranslate = self:_calculateTranslate(tileCenter)
+	local newLookDir = tileCenter - newTranslate
 	
 	self.spanTranslate = SpanVariable.new(nil, newTranslate)
 	self.spanLookDir = SpanVariable.new(nil, newLookDir)
-	
 	self:_waitCameraMove()
 end
 
 function CameraFacade:ascendAwayBattle()
-	if not self.spanTranslate then
-		error('Illegal state to ascend away battle')
-	end
+	assert(self.spanTranslate, 'Illegal state to ascend away battle')
 	
 	self.spanTranslate:flip()
 	self.spanLookDir:flip()
@@ -126,7 +123,7 @@ function CameraFacade:_lockedMove(speed, lookTarget)
 			local lookDir = cameraControl:getLookDirection()
 			local translate = newLookTarget - lookDir
 			cameraObject:resetTranslate(translate)
-			cameraControl:setLookDirection(lookDir)
+			cameraControl:setTarget(newLookTarget)
 		end,
 		
 		get = function (self)
@@ -135,19 +132,13 @@ function CameraFacade:_lockedMove(speed, lookTarget)
 	}
 	
 	local mod = ModifierFactory.vector(speed, lookTarget, targetVariable)
-	function mod.onPause()
-		self:_setSmartCameraEnabled(true)
-	end
-	
-	function mod.onResume()
-		self:_setSmartCameraEnabled(false)
-	end
-	
+	mod.onPause = functional.bind2(self._setSmartCameraEnabled, self, true)
+	mod.onResume= functional.bind2(self._setSmartCameraEnabled, self, false)
 	return mod
 end
 
-function CameraFacade:translateToTarget(speed, target)
-	local targetModifier = self:_lockedMove(speed, target)
+function CameraFacade:translateToTarget(target)
+	local targetModifier = self:_lockedMove(self.translateSpeed, target)
 	local updater = ModifierAdapter.fit(self.cameraObject, targetModifier)
 
 	AsConditionFactory.waitTargetModifier(targetModifier)

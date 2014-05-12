@@ -56,6 +56,8 @@ function Chessboard:getTile(location)
 	local index = toIndex(location, self.width)
 	
 	if math.floor(index) ~= index then
+		print('invalid location: ', tostring(location))
+		print(debug.traceback())
 		error('non-integer location found')
 	end
 	

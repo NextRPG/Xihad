@@ -1,6 +1,5 @@
 local ObjectAction = require 'ObjectAction'
 local ActionFactory= require 'Action.ActionFactory'
-local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'
 local MovementBuilder = require 'MovementBuilder'
 local WarriorMovement = {}
@@ -13,10 +12,7 @@ function WarriorMovement.moveOnPath(object, path)
 		actionBuilder:move(location, newActions)
 	end
 	
-	local sequence = ActionFactory.sequence(newActions)
-	ActionAdapter.fit(object, sequence)
-	
-	return sequence
+	return ActionFactory.sequence(newActions)
 end
 
 function WarriorMovement.moveToLocation(object, location, checkCost)

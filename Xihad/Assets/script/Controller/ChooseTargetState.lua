@@ -39,8 +39,10 @@ end
 function ChooseTargetState:onTileSelected(tile)
 	-- self.executor:cast()
 	-- attack
-	self.cmdList:setTarget(tile:getLocation())
-	self.camera:focus(nil)
+	-- TODO CHECK
+	self.commandList:setTarget(tile:getLocation())
+	
+	-- self.camera:focus(nil)
 end
 
 function ChooseTargetState:onTileHovered(tile)

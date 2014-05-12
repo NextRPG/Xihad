@@ -30,6 +30,7 @@ local cameraObject = CameraFactory.createDefault('camera')
 local cameraFacade = CameraFacade.new(cameraObject)
 local debugFocusCharacter = {
 	onKeyUp = function (self, e)
+		print('onKeyUp', e.key)
 		local object = g_scene:findObject(c(string.upper(e.key)))
 		if not object or not object:findComponent(c'Warrior') then 
 			return 1 
@@ -71,7 +72,7 @@ local ui = {
 local painter = {
 	colorTable = { 
 		Reachable   = Color.white, 
-		Selected 	= Color.gray,
+		Selected 	= Color.black,
 		Destination = Color.cyan,
 		Attack      = Color.orange,
 		Castable    = Color.magenta,
@@ -167,4 +168,4 @@ else
 	coroutine.wrap(startEnemy)()
 end
 
--- g_world:setTimeScale(3)
+-- g_world:setTimeScale(0.2)

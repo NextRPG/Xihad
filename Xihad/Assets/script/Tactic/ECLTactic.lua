@@ -38,11 +38,11 @@ function ECLTactic.new(graders)
 	return setmetatable(o, ECLTactic)
 end
 
-function encode(skill, impactCenter)
+local function encode(skill, impactCenter)
 	return skill:getName()..'@'..tostring(impactCenter)
 end
 
-function decode(castID)
+local function decode(castID)
 	local f, s, var = string.gmatch(castID, '[^@]+')
 	local skillName = f(s, var)
 	local locationStr = f(s, skillName)

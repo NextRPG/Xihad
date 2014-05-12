@@ -1,7 +1,8 @@
 local ObjectAction = require 'ObjectAction'
 local Trigonometry = require 'math.Trigonometry'
 local ActionAdapter= require 'Action.ActionAdapter'
-local SpanVariable = require 'Action.SpanVariable'
+local SpanVariable = require 'Action.SpanVariable'	
+local ActionAdapter= require 'Action.ActionAdapter'
 local SkillRegistry= require 'Skill.SkillRegistry'
 local WarriorMovement = require 'WarriorMovement'
 local AsConditionFactory = require 'Async.AsConditionFactory'
@@ -20,6 +21,7 @@ end
 function CommandExecutor:move(object, destination)
 	local action = WarriorMovement.moveToLocation(object, destination)
 	if action then
+		ActionAdapter.fit(object, action)
 		local animator = object:findComponent(c'AnimatedMesh')
 		animator:playAnimation(c'walk')
 		AsConditionFactory.waitAction(action)

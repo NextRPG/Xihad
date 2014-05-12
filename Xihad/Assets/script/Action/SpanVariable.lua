@@ -14,6 +14,12 @@ function span.new(origin, finish)
 	return o
 end
 
+function span:__add(span2)
+	return span.new(
+			self.origin + span2.origin, 
+			self.finish + span2.finish)
+end
+
 function span.newWithDelta(origin, delta)
 	return span.new(origin, origin+delta)
 end
@@ -24,6 +30,10 @@ end
 
 function span:delta()
 	return self.finish - self.origin
+end
+
+function span:transform(f)
+	return span.new(f(self.origin), f(self.finish))
 end
 
 function span:flip()

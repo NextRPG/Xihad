@@ -21,10 +21,10 @@ IrrlichtDevice* createDefaultDevice()
 
 	// D3D9 + AntiAlias + RenderToTexture = No Z buffer
 	param.DriverType = video::EDT_DIRECT3D9;
-	param.WindowSize = core::dimension2du(1024, 600);
-
+	param.WindowSize = core::dimension2du(1024, 576);
+	param.Fullscreen = false;
 	param.Stencilbuffer = true;
 	param.Vsync = true;
-	param.AntiAlias = video::EAAM_QUALITY;
+	param.AntiAlias = 4;
 	return irr::createDeviceEx(param);
 }

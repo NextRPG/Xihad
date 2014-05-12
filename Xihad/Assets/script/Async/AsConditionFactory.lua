@@ -69,11 +69,6 @@ function cond.waitAction(action, wait)
 		'addFinishListener', 'removeFinishListener', wait)
 end
 
-function cond.waitCameraFocus(focusControl, wait)
-	return cond.waitCommon(focusControl, 
-		'addFocusListener', 'removeFocusListener', wait)
-end
-
 function cond.waitCameraAim(aimingControl, wait)
 	return cond.waitCommon(aimingControl, 
 		'addAimListener', 'removeAimListener', wait)

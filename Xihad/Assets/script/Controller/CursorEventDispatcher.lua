@@ -31,4 +31,8 @@ function CursorEventDispatcher:dispatch(x, y)
 	end
 end
 
+function CursorEventDispatcher:onTouch(x, y)
+	
+end
+
 return CursorEventDispatcher

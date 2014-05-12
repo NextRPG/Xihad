@@ -54,13 +54,14 @@ end
 
 function TargetModifier:onUpdate(time)
 	if self:reachTarget() then return end
-
-	local delta = self.target - self._variable:get()
-	delta = self:setLength(delta, self.speed * time)
 	
 	local current= self._variable:get()
+	local delta = self.target - current
+	delta = self:setLength(delta, self.speed * time)
+	
 	local expect = current + delta
-	if not self:between(current, expect, self.target) then
+	if not self:between(current, expect, self.target) or 
+		expect == current then
 		expect = self.target
 	end
 	

@@ -19,12 +19,12 @@ end
 function TargetModifierFactory.vector(speed, target, variable)
 	local action = TargetModifier.new(speed, target, variable)
 	
-	function action.setLength(self, delta, length)
+	function action:setLength(delta, length)
 		delta:setLength(length)
 		return delta
 	end
 	
-	function action.between(self, current, expect, target)
+	function action:between(current, expect, target)
 		return (expect - current):dot(expect - target) < 0
 	end
 	

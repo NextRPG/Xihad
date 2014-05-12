@@ -25,6 +25,10 @@ function Trigonometry.normalize(angle)
 	return angle
 end
 
+function Trigonometry.nearestTarget(source, target)
+	return source + Trigonometry.normalize(target - source)
+end
+
 function Trigonometry.equal(degree1, degree2)
 	return (degree2 - degree1) % 360 == 0
 end
