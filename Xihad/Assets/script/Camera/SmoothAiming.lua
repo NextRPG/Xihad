@@ -1,18 +1,11 @@
 local base = require 'Modifier.Modifier'
-local Algorithm = require 'std.Algorithm'
 local Trigonometry = require 'math.Trigonometry'
 local SmoothAiming = {
-	lastStep= 0,
-	maxStep = 120,
-	minStep = 45,
-	deceleration = 40,
-	acceleration = 240,
-	uniformMotionTime = 0.2,
+	angularVel= 90, -- 角速度
+	elevation = 60,	-- 仰角
 	
-	elevation = 60,
-	
-	_lookDir = nil,
-	_aimObject = nil,
+	_lookDir  = nil,
+	_aimObject= nil,
 	_cameraControl= nil,
 	_cameraObject = nil,
 	
@@ -37,82 +30,61 @@ function SmoothAiming:_fireAimed()
 	for lis, _ in pairs(self._listeners) do
 		lis(self)
 	end
+end
+
+function SmoothAiming:_checkAiming()
+	if self._state == 'aiming' then
+		self:_fireAimed()
+		self._state = 'aimed'
+	end
+end
+
+function SmoothAiming:_getSourceLookDir()
+	local sourceLookDir = self._cameraControl:getLookDirection()
+	sourceLookDir:normalize()
+	return sourceLookDir
+end
+
+function SmoothAiming:_getFinishLookDir()
+	local finishLookDir
+	if not self._aimObject then 
+		finishLookDir = self._lookDir
+	else
+		local center = self._aimObject:getTranslate()
+		finishLookDir = center - self._cameraObject:getTranslate()
+		finishLookDir:normalize()
+	end
 	
-	self._state = 'aimed'
+	return finishLookDir
+end
+
+function SmoothAiming:_getTarget(lookDir)
+	local XihadMapTile = require 'Chessboard.XihadMapTile'
+	local source = self._cameraObject:getTranslate()
+	local ray = math3d.line(source, source + lookDir)
+	return XihadMapTile.intersectsGround(ray)
 end
 
 function SmoothAiming:onUpdate(time)
-	local sourceLookDir = self._cameraControl:getLookDirection()
-	sourceLookDir:normalize()
-	
-	local targetLookDir
-	if not self._aimObject then 
-		targetLookDir = self._lookDir
-	else
-		local center = self._aimObject:getTranslate()
-		targetLookDir = center - self._cameraObject:getTranslate()
-		targetLookDir:normalize()
-	end
-	
-	if sourceLookDir == targetLookDir then
-		if self._state == 'aiming' then
-			self:_fireAimed()
-		end
+	local sourceLookDir = self:_getSourceLookDir()
+	local finishLookDir = self:_getFinishLookDir()
+	local nextLookDir = finishLookDir
+	if sourceLookDir ~= finishLookDir and self._state ~= 'aimed' then
+		local step = math.abs(self.angularVel * time)
+		local angle= Trigonometry.getAngleBetweenN(sourceLookDir, finishLookDir)
 		
-		self.lastStep = 0
-		return 
-	end
-	
-	local nextLookDir
-	if self._state == 'aimed' then
-		nextLookDir = targetLookDir
-	else
-		local angle = Trigonometry.getAngleBetweenN(sourceLookDir, targetLookDir)
-		
-		local step 
-		local uniformThreshold = self.minStep * self.uniformMotionTime
-		if angle <= uniformThreshold then
-			 step = self.minStep
-		else
-			local deceleratedDistance = angle - uniformThreshold
-			step = math.sqrt(deceleratedDistance * 2 * math.abs(self.deceleration) + self.minStep*self.minStep)
-			
-			assert(step > self.minStep, step)
-			step = math.min(self.maxStep, step)
-		end
-		
-		local delta = math.abs(self.acceleration) * time
-		step = Algorithm.clamp(step, self.lastStep-delta, self.lastStep+delta)
-		step = step * time
-		
-		if angle >= -step and angle <= step then
-			nextLookDir = targetLookDir
-			
-			if self._state == 'aiming' then
-				self:_fireAimed()
-			end
-		else
-			if angle < -step then
-				step = -step
-			end
-
-			local axis = sourceLookDir:cross(targetLookDir)
-			local q = math3d.quaternion(step, axis)
-			nextLookDir = q * sourceLookDir
+		-- angle >= 0 and angle <= 180
+		-- step  >= 0
+		if angle > step then
+			local axis = sourceLookDir:cross(finishLookDir)
+			nextLookDir = math3d.quaternion(step, axis) * sourceLookDir
 		end
 	end
 	
-	self.lastStep = Trigonometry.getAngleBetween(sourceLookDir, nextLookDir)
-	if time ~= 0 then
-		self.lastStep = self.lastStep / time
+	self._cameraControl:setTarget(self:_getTarget(nextLookDir))
+	if nextLookDir == finishLookDir then
+		self:_checkAiming()
 	end
-	
-	local XihadMapTile = require 'Chessboard.XihadMapTile'
-	local source = self._cameraObject:getTranslate()
-	local ray = math3d.line(source, source + nextLookDir)
-	local point = XihadMapTile.intersectsGround(ray)
-	
-	self._cameraControl:setTarget(point)
 end
 
 function SmoothAiming:addAimListener(lis)

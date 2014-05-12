@@ -55,7 +55,7 @@
 
 	 void LuaRef::gain( lua_State* newState, int newHandle, int* newRefPtr )
 	 {
-		 this->L = newState;
+		 this->L = toMainState(newState);
 		 this->handle = newHandle;
 		 this->refPtr = newRefPtr;
 
@@ -70,11 +70,6 @@
 		lua_pop(L, 2);
 
 		return equal==1;
-	 }
-
-	 lua_State* LuaRef::getMainState() const
-	 {
-		 return toMainState(L);
 	 }
 
  }

@@ -40,13 +40,17 @@ function P2PParticleSkillAnimator:animate(sourceObject, targetTile, listener)
 			onMessage = function(self, srcObject, param, msgTag)
 				if param.source == sourceObject and param.target == targetObject then
 					listener:onAttackBegin()
+					g_dispatcher:removeListener('attack begin', self)
+					self:drop()
 				end
 			end
 		})
 	
 	g_dispatcher:addListener('attack end', {
-			onMessage = function(self, srcObjectc, param, msgTag)
+			onMessage = function(self, srcObject, param, msgTag)
 				listener:onAttackEnd()
+				g_dispatcher:removeListener('attack end', self)
+				self:drop()
 			end
 		})
 end

@@ -29,7 +29,7 @@ namespace xihad { namespace script
 
 	void LuaMessageListener::receive( GameObject& pSource, const Parameter& pEvent )
 	{
-		lua_State* L = mObject.getMainState();
+		lua_State* L = mObject.getState();
 		StackMemo memo(L);
 
 		mObject.pushOnto(L);

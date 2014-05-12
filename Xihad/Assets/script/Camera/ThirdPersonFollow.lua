@@ -103,9 +103,7 @@ function ThirdPersonFollow:_adjustHeight(distance)
 end
 
 function ThirdPersonFollow:onUpdate(time)
-	if not self._following then
-		return
-	end
+	if not self._following then return end
 	
 	local followerVel
 	local distance = self:_getDistance()

@@ -40,14 +40,14 @@ namespace xihad { namespace script
 	{
 		if (!callSelf(table, funcName, optional))
 		{
-			outputErrorMessage(table.getMainState());
-			lua_pop(table.getMainState(), 1);
+			outputErrorMessage(table.getState());
+			lua_pop(table.getState(), 1);
 		}
 	}
 
 	bool LuaUtil::callSelf( luaT::LuaRef& table, const char* funcName, bool optional /*= true*/ )
 	{
-		lua_State* L = table.getMainState();
+		lua_State* L = table.getState();
 
 		table.pushOnto(L);
 		lua_getfield(L, -1, funcName);

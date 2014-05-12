@@ -50,10 +50,6 @@ lightControl:castShadow(false)
 lightControl:setType 'direction'
 sun:concatTranslate(math3d.vector(0, 30, 0))
 
-for heroObj in g_scene:objectsWithTag('Hero') do
-	heroObj:findComponent(c'Warrior'):activate()
-end
-
 local CommandExecutor = require 'Command.CommandExecutor'
 local cmdExecutor = CommandExecutor.new(cameraFacade)
 
@@ -112,17 +108,7 @@ local tranformer  = PCInputTransformer.new(stateMachine)
 g_scene:pushController(tranformer)
 tranformer:drop()
 
-local finishListener = {}
-function finishListener:onStateEnter(state, prev)
-	assert(state == 'Finish', state)
-	for object in g_scene:objectsWithTag('Hero') do
-		local warrior = object:findComponent(c'Warrior')
-		if warrior:isActive() then
-			stateMachine:nextHero()
-			return
-		end
-	end
-	
+local function startEnemy()
 	print('player round over')
 	for object in g_scene:objectsWithTag('Enemy') do
 		local warrior = object:findComponent(c'Warrior')
@@ -144,6 +130,20 @@ function finishListener:onStateEnter(state, prev)
 	stateMachine:nextHero()
 end
 
+local finishListener = {}
+function finishListener:onStateEnter(state, prev)
+	assert(state == 'Finish', state)
+	for object in g_scene:objectsWithTag('Hero') do
+		local warrior = object:findComponent(c'Warrior')
+		if warrior:isActive() then
+			stateMachine:nextHero()
+			return
+		end
+	end
+	
+	startEnemy()
+end
+
 function finishListener:onStateExit(state, next) end
 
 stateMachine:addStateListener('Finish', finishListener)
@@ -157,4 +157,14 @@ stateMachine:addStateListener('ChooseHero', {
 		onStateExit = function() end
 	})
 
-g_world:setTimeScale(3)
+
+local enemyRound = false
+if not enemyRound then
+	for heroObj in g_scene:objectsWithTag('Hero') do
+		heroObj:findComponent(c'Warrior'):activate()
+	end
+else
+	coroutine.wrap(startEnemy)()
+end
+
+-- g_world:setTimeScale(3)

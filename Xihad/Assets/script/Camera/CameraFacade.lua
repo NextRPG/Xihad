@@ -1,3 +1,4 @@
+local functional = require 'std.functional'
 local EaseFunction = require 'Ease.EaseFunction'
 local SpanVariable = require 'Action.SpanVariable'
 local ActionAdapter= require 'Action.ActionAdapter'
@@ -21,22 +22,24 @@ local CameraFacade = {
 CameraFacade.__index = CameraFacade
 
 function CameraFacade.new(cameraObject)
+	local cameraControl = cameraObject:findComponent(c'Camera')
+	local following = {
+		getTranslate = functional.bindself(cameraControl, 'getTarget'),
+	}
+	
 	local o = setmetatable({
 			cameraObject = cameraObject,
 			aimingControl = SmoothAiming.new(cameraObject, math3d.vector(0.5, -0.5, 0.5)),
 			followControl = ThirdPersonFollow.new(cameraObject),
-			cameraAvoid   = CameraAvoid.new(cameraObject),
+			cameraAvoid   = CameraAvoid.new(cameraObject, following),
 		}, CameraFacade)
+	
+	o.followControl:setFollowing(following)
 	
 	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
 	ModifierAdapter.fit(cameraObject, o.followControl)
 	ModifierAdapter.fit(cameraObject, o.aimingControl)
 	
-	o.followControl:setFollowing({
-		getTranslate = function ()
-			return o.cameraObject:findComponent(c'Camera'):getTarget()
-		end
-	})
 	return o
 end
 
@@ -140,15 +143,17 @@ function CameraFacade:_lockedMove(speed, lookTarget)
 		self:_setSmartCameraEnabled(false)
 	end
 	
-	ModifierAdapter.fit(cameraObject, mod)
 	return mod
 end
 
 function CameraFacade:translateToTarget(speed, target)
 	local targetModifier = self:_lockedMove(speed, target)
-	ModifierAdapter.fit(self.cameraObject, targetModifier)
+	local updater = ModifierAdapter.fit(self.cameraObject, targetModifier)
+
 	AsConditionFactory.waitTargetModifier(targetModifier)
+
 	targetModifier:setEnabled(false)
+	updater:stop()
 end
 
 return CameraFacade

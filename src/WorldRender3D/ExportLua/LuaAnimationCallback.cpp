@@ -35,7 +35,7 @@ namespace xihad { namespace render3d
 	void LuaAnimationCallback::OnAnimationEnd( 
 		irr::scene::IAnimatedMeshSceneNode* node )
 	{
-		lua_State* L = mCallable.getMainState();
+		lua_State* L = mCallable.getState();
 		mCallable.pushOnto(L);
 		RenderComponent* rc = RenderComponent::getComponentFromNode(node);
 		auto ac = boost::polymorphic_downcast<AnimatedMeshComponent*> (rc);
