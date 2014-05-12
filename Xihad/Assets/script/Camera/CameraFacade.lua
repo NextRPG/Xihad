@@ -28,15 +28,15 @@ function CameraFacade.new(cameraObject)
 			cameraAvoid   = CameraAvoid.new(cameraObject),
 		}, CameraFacade)
 	
-	-- ModifierAdapter.fit(cameraObject, o.cameraAvoid)
-	-- ModifierAdapter.fit(cameraObject, o.followControl)
+	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
+	ModifierAdapter.fit(cameraObject, o.followControl)
 	ModifierAdapter.fit(cameraObject, o.aimingControl)
 	
-	-- o.followControl:setFollowing({
-	-- 	getTranslate = function ()
-	-- 		return o.cameraObject:findComponent(c'Camera'):getTarget()
-	-- 	end
-	-- })
+	o.followControl:setFollowing({
+		getTranslate = function ()
+			return o.cameraObject:findComponent(c'Camera'):getTarget()
+		end
+	})
 	return o
 end
 
