@@ -157,4 +157,4 @@ stateMachine:addStateListener('ChooseHero', {
 		onStateExit = function() end
 	})
 
--- g_world:setTimeScale(0.5)
+g_world:setTimeScale(3)
