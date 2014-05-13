@@ -11,14 +11,14 @@ function CursorEventDispatcher.new(listener)
 		}, CursorEventDispatcher)
 end
 
-function CursorEventDispatcher:dispatch(x, y)
+function CursorEventDispatcher:dispatch(x, y, times)
 	local ray = g_collision:getRayFromScreenCoord(x, y)
 	
 	if self.listener:needCollisionDetection() then
 		local obj = g_collision:detect(ray)
 		
 		if obj and obj:hasTag(c'Warrior') then
-			return self.listener:onWarrior(obj)
+			return self.listener:onWarrior(obj, times)
 		end
 	end
 	
@@ -27,7 +27,7 @@ function CursorEventDispatcher:dispatch(x, y)
 	local tile = g_chessboard:getTile(location)
 	
 	if tile ~= nil then
-		return self.listener:onTile(tile)
+		return self.listener:onTile(tile, times)
 	end
 end
 

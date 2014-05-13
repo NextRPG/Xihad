@@ -13,6 +13,7 @@ function class.delegate(type, delegated, field, delegating)
 end
 
 function class.delegateClosure(type, delegated, object, delegating)
+	delegating = delegating or delegated
 	type[delegated] = function(self, ...)
 		return object[delegating](object, ...)
 	end

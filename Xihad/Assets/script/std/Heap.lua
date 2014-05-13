@@ -1,4 +1,4 @@
-local Array = require 'Array'
+local Array = require 'std.Array'
 Heap = {}
 Heap.__index = Heap
 
@@ -76,14 +76,17 @@ function Heap:remove(t, i)
 	i = i or 1
 	assert(i >= 1 and i <= #t, "out of heap range")
 	
+	local element 
 	if i == #t then
-		Array.popBack(t)
+		element = Array.popBack(t)
 	else
 		t[i] = t[#t]
-		Array.popBack(t)
+		element = Array.popBack(t)
 		
 		sink(t, i, self.isAncestor)
 	end
+	
+	return element
 end
 
 function Heap:insert(t, v)
@@ -176,3 +179,5 @@ if select('#', ...) == 0 then
 		assert(a[i] <= a[i+1])
 	end
 end
+
+return Heap

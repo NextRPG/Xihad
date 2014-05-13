@@ -41,12 +41,14 @@ function functional.bindself(t, fname)
 end
 
 function functional.bind1(f, _1)
+	assert(f)
 	return function (...)
 		return f(_1, ...)
 	end
 end
 
 function functional.bind2(f, _1, _2)
+	assert(f)
 	return function (...)
 		return f(_1, _2, ...)
 	end

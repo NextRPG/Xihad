@@ -33,6 +33,7 @@ namespace xihad { namespace ngn
 		 * @return 如果处理了事件，则返回 0；否则，返回的任意非零值会被当作参数传递给下一个事件接收者
 		 */
 		virtual int onMouseEvent(const MouseEvent& event, int argFromPreviousReceiver) = 0;
+
 	};
 }}
 

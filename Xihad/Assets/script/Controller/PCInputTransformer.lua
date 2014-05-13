@@ -1,34 +1,54 @@
+local functional = require 'std.functional'
+local MultiClickDetector = require 'Mouse.MultiClickDetector'
 local PCInputTransformer = {
-	leftPressX = 0,
 	receiver = nil,
+	leftDetector = nil,
+	rightDetector= nil,
 }
+PCInputTransformer.__index = PCInputTransformer
 
 -- Event receiver must deepcopy
 function PCInputTransformer.new(receiver)
-	return {
-		pressedX = 0,
-		pressedY = 0,
+	local o = setmetatable({
 		receiver = receiver,
-		onKeyUp  = PCInputTransformer.onKeyUp,
-		onKeyDown= PCInputTransformer.onKeyDown,
-		onMouseEvent = PCInputTransformer.onMouseEvent,
-	}
+		leftDetector = MultiClickDetector.new(g_scheduler, 'lPressed'),
+		rightDetector= MultiClickDetector.new(g_scheduler, 'rPressed'),
+	}, PCInputTransformer)
+	
+	local leftListener = functional.bindself(o, 'onLeftClick')
+	o.leftDetector:addClickTimesListener(1, leftListener)
+	o.leftDetector:addClickTimesListener(2, leftListener)
+	
+	local rightListener= functional.bindself(o, 'onRightClick')
+	o.rightDetector:addClickTimesListener(1, rightListener)
+	
+	return o
+end
+
+function PCInputTransformer:onRightClick(detector, times, x, y)
+	assert(detector == self.rightDetector and times == 1)
+	print('on right click', times)
+	self.receiver:onBack()
+end
+
+function PCInputTransformer:onLeftClick(detector, times, x, y)
+	assert(detector == self.leftDetector)
+	assert(times == 1 or times == 2)
+	print('on left click: ', times)
+	self.receiver:onTouch(x, y, times)
 end
 
 function PCInputTransformer:onMouseEvent( e )
-	local receiver = self.receiver
-	
-	if e.type == 'rPressed' then
-		receiver:onBack()
-	elseif e.type == 'lPressed' then
-		receiver:onTouch(g_cursor:getPosition())
-	elseif e.type == 'mouseMoved' then
-		if not e.leftPressed and not e.rightPressed then
-			receiver:onHover(g_cursor:getPosition())
-		end
+	if e.type == 'mouseMoved'and not e.leftPressed and not e.rightPressed then
+		self.receiver:onHover(g_cursor:getPosition())
+	elseif self.leftDetector:onMouseEvent(e) == 0 then
+		-- absorbed
+	elseif self.rightDetector:onMouseEvent(e) == 0 then
+		-- absorbed
+	else-- pass to others
+		return 1
 	end
 	
-	-- TODO need to return non-zero if not handled?
 	return 0
 end
 

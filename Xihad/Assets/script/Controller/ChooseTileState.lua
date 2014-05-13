@@ -49,28 +49,28 @@ function ChooseTileState:needCDWhenHover()
 	return false
 end
 
-function ChooseTileState:onTileSelected(tile)
+function ChooseTileState:onTileSelected(tile, times)
 	-- show tile info
 	local warrior = self.commandList:getSource()
 	if tile:canStay(warrior) then
 		local destLocation= tile:getLocation()
 		if not g_chessboard:canReach(warrior, destLocation) then
 			print('can not reach')
-		elseif self.selectedTile ~= tile then
+		elseif self.selectedTile ~= tile and times == 1 then
 			self.painter:clear(self.selectedHandle)
 			
 			-- TODO
-			local XihadMapTile = require 'Chessboard.XihadMapTile'
-			local x, y = g_cursor:getPosition()
-			local ray = g_collision:getRayFromScreenCoord(x, y)
-			local point = XihadMapTile.intersectsGround(ray)
-			local fixCursor = { onUpdate = function ()
-				local x,y = g_collision:getScreenCoordFromPosition(point)
-				g_cursor:setPosition(x, y)
-			end}
-			self.camera.cameraObject:appendUpdateHandler(fixCursor)
+			-- local XihadMapTile = require 'Chessboard.XihadMapTile'
+			-- local x, y = g_cursor:getPosition()
+			-- local ray = g_collision:getRayFromScreenCoord(x, y)
+			-- local point = XihadMapTile.intersectsGround(ray)
+			-- local fixCursor = { onUpdate = function ()
+			-- 	local x,y = g_collision:getScreenCoordFromPosition(point)
+			-- 	g_cursor:setPosition(x, y)
+			-- end}
+			-- self.camera.cameraObject:appendUpdateHandler(fixCursor)
 			self.camera:focus(tile:getTerrain():getHostObject())
-			fixCursor:stop()
+			-- fixCursor:stop()
 			self.selectedHandle = self.painter:mark({ tile }, 'Selected')
 			self.selectedTile = tile
 		else

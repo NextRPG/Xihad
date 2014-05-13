@@ -65,16 +65,16 @@ function PlayerState:onBack()
 	return 'back'
 end
 
-function PlayerState:onTouch(x, y)
-	return self.touchDispatcher:dispatch(x, y)
+function PlayerState:onTouch(x, y, times)
+	return self.touchDispatcher:dispatch(x, y, times)
 end
 
-function PlayerState:_onTile(tile, warriorFunc, vacancyFunc)
+function PlayerState:_onTile(tile, times, warriorFunc, vacancyFunc)
 	local warrior = tile:getWarrior()
 	if warrior then
-		return self[warriorFunc](self, warrior:getHostObject())
+		return self[warriorFunc](self, warrior:getHostObject(), times)
 	else
-		return self[vacancyFunc](self, tile)
+		return self[vacancyFunc](self, tile, times)
 	end
 end
 
@@ -92,7 +92,7 @@ function PlayerState:onWarriorSelected(warriorObj)
 	return self:_onWarrior(warriorObj, 'onHeroSelected', 'onEnemySelected')
 end
 
-function PlayerState:onTileSelected(tile)
+function PlayerState:onTileSelected(tile, times)
 	return self:_onTile(tile, 'onWarriorSelected', 'onVacancySelected')
 end
 
@@ -114,7 +114,7 @@ function PlayerState:onWarriorHovered(warriorObj)
 end
 
 function PlayerState:onTileHovered(tile)
-	return self:_onTile(tile, 'onWarriorHovered', 'onVacancyHovered')
+	return self:_onTile(tile, nil, 'onWarriorHovered', 'onVacancyHovered')
 end
 
 function PlayerState:onVacancyHovered(tileObject) 

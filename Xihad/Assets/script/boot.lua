@@ -1,8 +1,17 @@
+require 'Assets.script.AllPackages'	-- change package.path
+
+-- create g_scheduler
+local functional 	= require 'std.functional'
+local TaskScheduler = require 'Scheduler.TaskScheduler'
+g_scheduler = TaskScheduler.new()
+g_scene:appendUpdateHandler { 
+	onUpdate = functional.bindself(g_scheduler, 'onUpdate')
+}
+
 g_scene:requireSystem(c"Render")	-- load Irrlicht render component system
 local levelPath = 'Assets/level/level_01.battle'
 local userSavePath = 'User/sav/Save1.hero'
 
-require 'Assets.script.AllPackages'	-- change package.path
 require 'math3d'					-- load math3d
 require "CreateMesh"				-- create cube mesh
 
@@ -104,10 +113,11 @@ local painter = {
 
 local PCInputTransformer = require 'Controller.PCInputTransformer'
 local PlayerStateMachine = require 'Controller.PlayerStateMachine'
+local ControllerAdapter  = require 'Controller.ControllerAdapter'
 local stateMachine= PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
-local tranformer  = PCInputTransformer.new(stateMachine)
-g_scene:pushController(tranformer)
-tranformer:drop()
+local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
+g_scene:pushController(controller)
+controller:drop()
 
 local function startEnemy()
 	print('player round over')

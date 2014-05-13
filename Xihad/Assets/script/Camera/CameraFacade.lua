@@ -12,7 +12,7 @@ local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
 	offsetSourceVec= math3d.vector(8, 20, 10),
 	translateSpeed = 90, 
-	slideSpeed = 60,
+	slideSpeed = 45,
 	slideEase  = EaseFunction.wrapInOut(EaseFunction[3]),
 	
 	cameraObject  = nil,

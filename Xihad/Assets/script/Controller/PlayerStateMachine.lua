@@ -79,11 +79,11 @@ function PlayStateMachine:_process(cmd, ...)
 	end
 end
 
-function PlayStateMachine:_onCommand(cmd, x, y)
+function PlayStateMachine:_onCommand(cmd, x, y, times)
 	if self.runner then return end
 	
 	self.runner = coroutine.wrap(function ()
-		self:_process(cmd, x, y)
+		self:_process(cmd, x, y, times)
 		self.runner = nil
 	end)
 	
@@ -100,8 +100,8 @@ function PlayStateMachine:onHover(x, y)
 	end
 end
 
-function PlayStateMachine:onTouch(x, y)
-	return self:_onCommand('onTouch', x, y)
+function PlayStateMachine:onTouch(x, y, times)
+	return self:_onCommand('onTouch', x, y, times)
 end
 
 function PlayStateMachine:onBack()

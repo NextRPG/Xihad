@@ -33,6 +33,10 @@ function Array.findLast(t, v, last)
 	end
 end
 
+function Array.empty(t)
+	return #t == 0
+end
+
 function Array.getFront(t)
 	return t[1]
 end
@@ -46,12 +50,12 @@ function Array.pushBack(t, v)
 end
 
 function Array.popBack(t)
-	table.remove(t)
+	return table.remove(t)
 end
 
 function Array.removeElementAt(t, i)
 	assert(i, "index required")
-	table.remove(t, i)
+	return table.remove(t, i)
 end
 
 function Array.removeElement(t, v)

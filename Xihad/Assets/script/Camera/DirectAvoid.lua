@@ -1,6 +1,7 @@
 local base = require 'Modifier.Modifier'
 local DirectAvoid = {
 	maxSpeed = 120,		-- 120/s
+	tangent  = nil,
 	avoidRadius = 30,
 	
 	follower = nil,
@@ -21,6 +22,11 @@ end
 function DirectAvoid:_toGround(vec)
 	vec:set(nil, 0, nil)
 	return vec
+end
+
+-- TODO
+function DirectAvoid:setAvoidElevation(degree)
+	
 end
 
 function DirectAvoid:_getFollowingPos()
