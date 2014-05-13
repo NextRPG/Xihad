@@ -1,6 +1,6 @@
 local base = require 'Modifier.Modifier'
 local DirectAvoid = {
-	maxSpeed = 120,		-- 120/s
+	maxSpeed = 1200,		-- 120/s
 	tangent  = nil,
 	avoidRadius = 30,
 	

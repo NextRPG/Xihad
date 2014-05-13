@@ -29,7 +29,7 @@ function CommandExecutor:move(object, destination)
 	end
 end
 
-function CommandExecutor:cast(warrior, skillName, targetLocation)
+function CommandExecutor:cast(warrior, targetLocation, skillName)
 	print(string.format('%s cast %s @%s', 
 		warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
 	
@@ -99,7 +99,7 @@ function CommandExecutor:execute(cmdList)
 	if cmdList:getCommand() == '待机' then
 		self:standBy(warrior)
 	else
-		self:cast(warrior, cmdList:getCommand(), cmdList:getTarget())
+		self:cast(warrior, cmdList:getTarget(), cmdList:getCommand())
 	end
 	
 	-- TODO Wait fade out

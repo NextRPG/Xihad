@@ -6,32 +6,32 @@ function ChooseHeroState.new(...)
 	return setmetatable(base.new(...), ChooseHeroState)
 end
 
-function ChooseHeroState:onBack()
-	-- Do nothing
+function ChooseHeroState:onStateEnter(state, prev)
+	self.camera:focus(nil)
 end
 
 function ChooseHeroState:onVacancySelected(tile)
 	-- show tile info
-	self.ui:showTileInfo(tile)
+	self:_showTileInfo(tile)
+	self:_focusTile(tile)
 end
 
 function ChooseHeroState:onHeroSelected(heroObject)
-	self.ui:showWarriorInfo(heroObject)
-	
 	local warrior = heroObject:findComponent(c'Warrior')
+	self:_showWarriorInfo(warrior)
+	
 	if not warrior:isActive() then 
 		print('Warrior is not active')
-		return
+	else
+		self.commandList:setSource(warrior)
+		return 'next'
 	end
-	
-	self.commandList:setSource(warrior)
-	return 'next'
 end
 
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
-	self.ui:showWarriorInfo(enemyObject)
-	
+	self:_showWarriorInfo(enemyObject:findComponent(c'Warrior'))
+	self.camera:focus(enemyObject)
 	-- TODO
 	-- self.painter:showRange(enemyObject)
 end

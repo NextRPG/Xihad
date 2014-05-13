@@ -11,15 +11,24 @@ function ChooseTargetState.new(...)
 	return setmetatable(base.new(...), ChooseTargetState)
 end
 
+function ChooseTargetState:_getWC()
+	return 	self:_getSource(), self.commandList:getCommand()
+			
+end
+
+function ChooseTargetState:_getCommand()
+	return self.commandList:getCommand()
+end
+
+function ChooseTargetState:_getLaunchableTiles()
+	local warrior, command = self:_getWC()
+	local skill = SkillRegistry.findSkillByName(command)
+	return skill:getLaunchableTiles(g_chessboard, warrior, warrior:getLocation())
+end
+
 function ChooseTargetState:onStateEnter()
 	assert(not self.castableHandle)
-	local command = self.commandList:getCommand()
-	local skill = SkillRegistry.findSkillByName(command)
-	
-	local warrior = self.commandList:getSource()
-	local location = self.commandList:getLocation()
-	local tiles = skill:getLaunchableTiles(g_chessboard, warrior, location)
-	
+	local tiles = self:_getLaunchableTiles()
 	self.castableHandle = self.painter:mark(Array.keys(tiles), 'Castable')
 end
 
@@ -37,12 +46,14 @@ function ChooseTargetState:needCDWhenHover()
 end
 
 function ChooseTargetState:onTileSelected(tile)
-	-- self.executor:cast()
-	-- attack
-	-- TODO CHECK
-	self.commandList:setTarget(tile:getLocation())
-	
-	-- self.camera:focus(nil)
+	local tiles = self:_getLaunchableTiles()
+	if not tiles[tile] then
+		print('not castable', tostring(tile:getLocation()))
+	else
+		self.commandList:setTarget(tile:getLocation())
+		local source, cmd = self:_getWC()
+		self.executor:cast(source, self.commandList:getTarget(), cmd)
+	end
 end
 
 function ChooseTargetState:onTileHovered(tile)

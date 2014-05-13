@@ -65,8 +65,8 @@ local cmdExecutor = CommandExecutor.new(cameraFacade)
 
 -- INPUT
 local ui = {
-	showWarriorInfo = function (self, obj)
-		print('ui info: ', obj:getID())
+	showWarriorInfo = function (self, warrior)
+		print('ui info: ', warrior:getHostObject():getID())
 	end,
 	
 	showTileInfo = function (self, tile)
@@ -158,16 +158,6 @@ end
 function finishListener:onStateExit(state, next) end
 
 stateMachine:addStateListener('Finish', finishListener)
-stateMachine:addStateListener('ChooseHero', {
-		onStateEnter = function (self, state, prev) 
-			if prev == 'Finish' then
-				cameraFacade:focus(nil)
-			end
-		end,
-		
-		onStateExit = function() end
-	})
-
 
 local enemyRound = false
 if not enemyRound then

@@ -40,7 +40,6 @@ end
 function Task:start()
 	local run = self.callback
 	self.callback = nil
-	
 	run()
 end
 

@@ -49,9 +49,11 @@ function CameraFacade.new(cameraObject)
 end
 
 function CameraFacade:focus(object)
-	self.focusedObject = object
-	self.aimingControl:setAim(object)
-	AsConditionFactory.waitCameraAim(self.aimingControl)
+	if self.focusedObject ~= object then
+		self.focusedObject = object
+		self.aimingControl:setAim(object)
+		AsConditionFactory.waitCameraAim(self.aimingControl)
+	end
 end
 
 function CameraFacade:_setSmartCameraEnabled(b)

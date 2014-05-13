@@ -42,9 +42,65 @@ function PlayerState.new(sharedCommandList, newDispatcher, ui, camera, painter, 
 	return o
 end
 
+function PlayerState:_getSource()
+	return self.commandList:getSource()
+end
+
+function PlayerState:_getSourceBarrier()
+	local source = self:_getSource()
+	if source then
+		return source:findPeer(c'Barrier')
+	end
+end
+
+function PlayerState:_getSourceTile()
+	local barrier = self:_getSourceBarrier()
+	if barrier then
+		return barrier:getTile()
+	end
+end
+
+function PlayerState:_getSourceObject()
+	local source = self:_getSource()
+	if source then
+		return source:getHostObject()
+	end
+end
+
+function PlayerState:_getSourceCaster()
+	local source = self:_getSource()
+	if source then
+		return source:findPeer(c'SkillCaster')
+	end
+end
+
+function PlayerState:_markTile(tile, desc)
+	return self.painter:mark({ tile }, desc)
+end
+
+function PlayerState:_markRange(range, desc)
+	return self.painter:mark(range, desc)
+end
+
+function PlayerState:_clearMark(handle)
+	self.painter:clear(handle)
+end
+
 function PlayerState:_safeClear(handleField)
 	self.painter:clear(self[handleField])
 	self[handleField] = nil
+end
+
+function PlayerState:_showTileInfo(tile)
+	self.ui:showTileInfo(tile)
+end
+
+function PlayerState:_showWarriorInfo(warrior)
+	self.ui:showWarriorInfo(warrior)
+end
+
+function PlayerState:_focusTile(tile)
+	self.camera:focus(tile:getTerrain():getHostObject())
 end
 
 function PlayerState:onStateEnter(state, prev)
@@ -78,31 +134,31 @@ function PlayerState:_onTile(tile, times, warriorFunc, vacancyFunc)
 	end
 end
 
-function PlayerState:_onWarrior(warriorObj, heroFunc, enemyFunc)
+function PlayerState:_onWarrior(warriorObj, times, heroFunc, enemyFunc)
 	if warriorObj:hasTag(c'Hero') then
-		return self[heroFunc](self, warriorObj)
+		return self[heroFunc](self, warriorObj, times)
 	elseif warriorObj:hasTag(c'Enemy') then
-		return self[enemyFunc](self, warriorObj)
+		return self[enemyFunc](self, warriorObj, times)
 	else
 		print('Non-hero and Non-AI person found')
 	end
 end
 
-function PlayerState:onWarriorSelected(warriorObj)
-	return self:_onWarrior(warriorObj, 'onHeroSelected', 'onEnemySelected')
+function PlayerState:onWarriorSelected(warriorObj, times)
+	return self:_onWarrior(warriorObj, times, 'onHeroSelected', 'onEnemySelected')
 end
 
 function PlayerState:onTileSelected(tile, times)
-	return self:_onTile(tile, 'onWarriorSelected', 'onVacancySelected')
+	return self:_onTile(tile, times, 'onWarriorSelected', 'onVacancySelected')
 end
 
-function PlayerState:onVacancySelected(tileObject) 
+function PlayerState:onVacancySelected(tileObject, times) 
 end
 
-function PlayerState:onHeroSelected(heroObject) 
+function PlayerState:onHeroSelected(heroObject, times) 
 end
 
-function PlayerState:onEnemySelected(enemyObject) 
+function PlayerState:onEnemySelected(enemyObject, times) 
 end
 
 function PlayerState:onHover(x, y)
@@ -110,7 +166,7 @@ function PlayerState:onHover(x, y)
 end
 
 function PlayerState:onWarriorHovered(warriorObj)
-	return self:_onWarrior(warriorObj, 'onHeroHovered', 'onEnemyHovered')
+	return self:_onWarrior(warriorObj, nil, 'onHeroHovered', 'onEnemyHovered')
 end
 
 function PlayerState:onTileHovered(tile)
