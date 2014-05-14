@@ -45,21 +45,11 @@ function Chessboard.new(width, height, mapTileFactory)
 end
 
 function Chessboard:getTile(location)
-	if location.x <= 0 or location.x > self.width then
-		return nil
-	end
-	
-	if location.y <= 0 then
+	if location.x <= 0 or location.y <= 0 or location.x > self.width then
 		return nil
 	end
 	
 	local index = toIndex(location, self.width)
-	
-	if math.floor(index) ~= index then
-		print('invalid location: ', tostring(location))
-		print(debug.traceback())
-		error('non-integer location found')
-	end
 	
 	assert(index > 0)
 	if index > #self.tiles then

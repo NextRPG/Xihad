@@ -8,6 +8,8 @@ local XTile = {
 	yOffset = 0,
 	tileWidth = 10, 
 	tileHeight = 10,
+	tileThickness = 0.5,
+	ground = math3d.plane(math3d.vector(), math3d.vector(0, 1, 0)),
 }
 XTile.__index = XTile
 setmetatable(XTile, base)
@@ -25,6 +27,15 @@ function XTile.setTileDimension(tileWidth, tileHeight)
 	XTile.tileHeight= tileHeight
 end
 
+function XTile.setThickness(thickness)
+	thickness = math.abs(thickness)
+	XTile.tileThickness = thickness
+end
+
+function XTile.getThickness()
+	return XTile.tileThickness
+end
+
 function XTile.getTileDimension()
 	return XTile.tileWidth, XTile.tileHeight
 end
@@ -38,9 +49,9 @@ function XTile.projectToLocation(vector)
 	return Location.new(math.floor(x/XTile.tileWidth)+1, math.floor(z/XTile.tileHeight)+1)
 end
 
-local ground = math3d.plane(math3d.vector(), math3d.vector(0, 1, 0))
+
 function XTile.intersectsGround(ray)
-	local met, ratio = math3d.intersects(ground, ray)
+	local met, ratio = math3d.intersects(XTile.ground, ray)
 	return ray:start() + ray:vector()*ratio
 end
 

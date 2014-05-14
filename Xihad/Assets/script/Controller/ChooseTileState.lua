@@ -21,8 +21,9 @@ end
 
 function ChooseTileState:onStateEnter(state, prev)
 	if prev == 'ChooseCommand' then
-		assert(self.prevSourceTile)
 		self:_getSourceBarrier():setTile(self.prevSourceTile)
+		assert(self.prevSourceTile)
+		
 	end
 	
 	self.prevSourceTile = nil
@@ -81,28 +82,29 @@ function ChooseTileState:_moveWarrior(destLocation)
 end
 
 function ChooseTileState:_selectTile(tile)
-	self:_safeClear('selectedHandle')
-		
 	-- TODO
 	-- self:_fastenCusor()
 	self:_focusTile(tile)
+	assert(not self.selectedHandle)
 	self.selectedHandle = self:_markTile(tile, 'Selected')
 	self.selectedTile = tile
 end
 
 function ChooseTileState:_confirmTile(tile)
 	-- double click or confirm click
+	self.prevSourceTile = self:_getSourceTile()
+	
 	local destHandle = self:_markTile(tile, 'Destination')
 	self:_moveWarrior(tile:getLocation())
 	self:_clearMark(destHandle)
 	
-	self.prevSourceTile = self:_getSourceTile()
 	self.commandList:setLocation(tile:getLocation())
 end
 
 function ChooseTileState:onTileSelected(tile, times)
 	-- show tile info
 	self:_updatePromote(tile)
+	self:_safeClear('selectedHandle')
 	
 	if not tile:canStay(self:_getSource()) then
 		self.ui:warning('not stayable')

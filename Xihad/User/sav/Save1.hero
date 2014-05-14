@@ -16,8 +16,7 @@ return
  		getexP = 0,
  		skills = 
  		{
- 			['skill1'] = 1, 
- 			['skill2'] = 2,
+ 			['Fire'] = 1, 
  		},
  		level = 1,
  		currentexP = 0,
@@ -41,8 +40,7 @@ return
  		getexP = 0,
  		skills =  
  		{ 
- 			['skill2'] = 4, 
- 			['skill3'] = 3,
+ 			['Fire'] = 4, 
  		},
 		level = 1,
 		currentexP = 0,
@@ -65,8 +63,7 @@ return
 		getexP = 0,
 		skills = 
  		{ 
- 			['skill4'] = 4, 
- 			['skill5'] = 5,
+ 			['Fire'] = 4, 
  		},
 		level = 1,
 		currentexP = 0,

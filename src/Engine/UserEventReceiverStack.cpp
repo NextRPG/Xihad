@@ -23,7 +23,6 @@ namespace xihad { namespace ngn
 	{
 		UserEventReceiver* first = receivers.front().get();
 		receivers.pop_front();
-		first->onStackEvent();
 		return first;
 	}
 

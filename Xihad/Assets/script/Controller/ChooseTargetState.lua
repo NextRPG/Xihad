@@ -16,10 +16,6 @@ function ChooseTargetState:_getWC()
 			
 end
 
-function ChooseTargetState:_getCommand()
-	return self.commandList:getCommand()
-end
-
 function ChooseTargetState:_getLaunchableTiles()
 	local warrior, command = self:_getWC()
 	local skill = SkillRegistry.findSkillByName(command)
@@ -53,6 +49,7 @@ function ChooseTargetState:onTileSelected(tile)
 		self.commandList:setTarget(tile:getLocation())
 		local source, cmd = self:_getWC()
 		self.executor:cast(source, self.commandList:getTarget(), cmd)
+		return 'next'
 	end
 end
 
