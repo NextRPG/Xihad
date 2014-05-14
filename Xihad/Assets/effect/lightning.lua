@@ -1,3 +1,5 @@
+-- 雷爆
+
 require "math3d"
 local Utils = require "ParticleUtils"
 local IniterCreator = Utils.IniterCreator
@@ -35,10 +37,7 @@ local function addExplosion(pnode, f, env, scale)
 	local r = f:renderer("Direction")
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial(), nil, "1")
 	pnode:setRendererTexture(r, 0, img)
 
 	Utils.addTransparentAffector(pnode, f)
@@ -71,11 +70,7 @@ local function addVerticleLightning(pnode, f, env, scale)
 	Utils.addEquilRegion(r, 2, 4)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector
@@ -108,10 +103,7 @@ local function addSpark(pnode, f, env, scale)
 	Utils.addEquilRegion(r, 2, 4)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)
 
 	Utils.addTransparentAffector(pnode, f, 0)
@@ -150,10 +142,7 @@ local function addHorizontalLightning(pnode, f, env, scale, direction)
 	pnode:setRenderer(r)
 	
 	local mat = r:getMaterial()
-	mat:setBlend("0", "1", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	local a = f:affector("Scale")
@@ -164,9 +153,9 @@ local function addHorizontalLightning(pnode, f, env, scale, direction)
 	Utils.addTransparentAffector(pnode, f, CollisionTime / LifeTime)	
 end
 
-return function(pnode, f, env)
+return function(pnode, f, env, scale)
 ----------------------------------------------
-	local scale = env.scale or 1
+	scale = scale or 1
 	
 	local tar = env:getNode("@target")
 	local tarAABB = env:getAABB(tar)

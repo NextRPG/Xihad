@@ -28,10 +28,7 @@ local function addMagicCircle(pnode, f, lifetime, scale, color)
 	pnode:setRenderer(r)
 	
 	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)	
 	
 	-- affector

@@ -29,11 +29,7 @@ local function addFlame(pnode, f, scale, outLineOnly)
 	Utils.addEquilRegion(r, 2, 2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("1", "0", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial(), "1", "0")
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector
@@ -70,11 +66,7 @@ local function addSmoke(pnode, f, scale)
 	Utils.addEquilRegion(r, 2, 2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("1-dst.alpha", "dst.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector
@@ -115,10 +107,7 @@ local function addSpark(pnode, f, scale)
 	local r = f:renderer("Billboard")
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)
 
 	-- affector
@@ -155,10 +144,7 @@ local function addSpark2(pnode, f, scale)
 	local r = f:renderer("Direction")
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)
 
 	-- affector
@@ -199,10 +185,7 @@ local function addFlash(pnode, f, scale)
 	local r = f:renderer("Billboard")
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial(), nil, "1")
 	pnode:setRendererTexture(r, 0, img)
 
 	Utils.addTransparentAffector(pnode, f, 0, 0.8)
@@ -230,10 +213,7 @@ local function addWave(pnode, f, scale)
 	local r = f:renderer("Billboard")
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setZWriteEnable(true)	
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)
 
 	local a = f:affector("Scale")
@@ -243,14 +223,14 @@ local function addWave(pnode, f, scale)
 	Utils.addTransparentAffector(pnode, f)
 end
 
-return function(pnode, f, env)
+return function(pnode, f, env, scale)
 ----------------------------------------------
 	-- locate pnode
 	local tar = env:getNode("@target")
 	pnode:setPosition(env:getPosition(tar) + env:getAABB(tar):center())
 	pnode:setParticlesAreGlobal(false)
 	
-	local scale = env.scale or 1
+	scale = scale or 1
 	
 	addFlash(pnode, f, scale)
 	addSmoke(pnode:newChild(), f, scale)

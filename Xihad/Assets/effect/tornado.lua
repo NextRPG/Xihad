@@ -2,17 +2,15 @@
 
 require "math3d"
 local Utils = require "ParticleUtils"
-local AssetsPath = "../Xihad/Assets/gfx/"
 
 local function addWind(pnode, f, delay, pos, width, len)
 	pnode:setPosition(pos)
 	
 	local height = width
-	local img = AssetsPath.."kaze.jpg"
 	
 	-- intier
 	local bi = f:initer("Basic")
-	bi:setColor(Color.new(0x88888888))
+	bi:setColor(Color.new(0x888888))
 	bi:setLifeTime(0.2)
 	bi:setWidth(width, width*2)
 	bi:setHeight(height, height*2)
@@ -38,12 +36,8 @@ local function addWind(pnode, f, delay, pos, width, len)
 	r:setOrintation(math3d.vector(0, 0, 1), math3d.vector(1, 0, 0))
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("1", "0", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(false)	-- For transparent object, set it to false. Default true
-	pnode:setRendererTexture(r, 0, img)	
+	Utils.setMaterial(r:getMaterial())
+	pnode:setRendererTexture(r, 0, Utils.getImagePath("kaze.jpg"))	
 	
 	-- affector
 	local a = f:affector("Rotation")
@@ -56,7 +50,6 @@ end
 
 local function addSand(pnode, f, scale, delay, pos, radius, len)
 	pnode:setPosition(pos)
-	local img = AssetsPath.."leaf.png"
 	
 	local width = 0.5 * scale
 	local height = width/5*3
@@ -90,12 +83,8 @@ local function addSand(pnode, f, scale, delay, pos, radius, len)
 	Utils.addEquilRegion(r, 1, 5)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("1", "0", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(false)	-- For transparent object, set it to false. Default true
-	pnode:setRendererTexture(r, 0, img)
+	Utils.setMaterial(r:getMaterial())
+	pnode:setRendererTexture(r, 0, Utils.getImagePath("leaf.png"))
 	
 	local tornadoStop = 1.2/life
 	local downtime = 1.8/life
@@ -120,9 +109,9 @@ local function addSand(pnode, f, scale, delay, pos, radius, len)
 end
 
 
-return function(pnode, f, env)	
+return function(pnode, f, env, scale)	
 ----------------------------------------------
-	local scale = env.scale or 1
+	scale = scale or 1
 	local tar = env:getNode("@target")
 	pnode:setPosition(env:getPosition(tar))
 	

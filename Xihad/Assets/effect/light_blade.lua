@@ -37,11 +37,7 @@ local function addWindBlade(pnode, f, scale, dir, getRender)
 	local r = getRender()
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1", defaultBlendType)
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial(), nil, "1", defaultBlendType)
 	pnode:setRendererTexture(r, 0, img)	
 	
 
@@ -77,17 +73,14 @@ local function addBlood(pnode, f, scale)
 	Utils.addEquilRegion(r, 1, 2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_alphach")
-	mat:setZWriteEnable(false)	
+	Utils.setMaterial(r:getMaterial(), nil, nil, nil, "trans_alphach", false)
 	pnode:setRendererTexture(r, 0, img)
 
 end
 
-return function(pnode, f, env, blendType)	
+return function(pnode, f, env, scale, blendType)	
 ----------------------------------------------
-	local scale = env.scale or 1
+	scale = scale or 1
 	scale = scale*1.5
 
 	defaultBlendType = blendType or defaultBlendType
@@ -116,4 +109,9 @@ return function(pnode, f, env, blendType)
 	local blood = pnode:newChild()
 	blood:setPosition(dir)
 	addBlood(blood, f, scale)
+	
+	
+-------------------------------------------
+	env:deferMessage(bladeLife, "attack begin")
+	env:deferMessage(bladeLife+0.1, "attack end")
 end
