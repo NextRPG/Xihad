@@ -43,7 +43,29 @@ function IniterCreator.sphere(factory, directionSize, radius, outlineOnly)
 	return si;
 end
 
+function Utils.getImagePath(img)
+	local AssetsPath = "../Xihad/Assets/gfx/"
+	return AssetsPath..img
+end
 
+function Utils.colorMul(color, ratio)
+	return Color.new(0xff, ratio*color:getRed(), ratio*color:getGreen(), ratio*color:getBlue())
+end
 
+function Utils.colorAdd(color, offset)
+	return Color.new(0xff, color:getRed() + offset, color:getGreen() + offset, color:getBlue() + offset)
+end
 
+function Utils.setMaterial(mat, blendSrc, blendDst, blendOp, materialType, ZEnable)
+	blendSrc = blendSrc or "src.alpha"
+	blendDst = blendDst or "1-src.alpha"
+	blendOp = blendOp or "add"
+	materialType = materialType or "trans_add"
+	ZEnable = ZEnable or true
+	
+	mat:setBlend(blendSrc, blendSrc, blendOp)
+	mat:setMaterialType(materialType)
+	mat:setLighting(false)
+	mat:setZWriteEnable(ZEnable)
+end
 return Utils

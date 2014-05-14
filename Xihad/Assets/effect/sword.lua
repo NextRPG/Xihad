@@ -2,9 +2,9 @@ require "math3d"
 local Utils = require "ParticleUtils"
 local AssetsPath = "../Xihad/Assets/gfx/"
 
-return function(pnode, f, env)
+return function(pnode, f, env, scale)
 ----------------------------------------------
-	local scale = env.scale or 1
+	scale = scale or 1
 	
 	local src = env:getNode("@source")
 	local tar = env:getNode("@target")
@@ -41,11 +41,7 @@ return function(pnode, f, env)
 	Utils.addEquilRegion(r, 1 ,2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1-src.alpha", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial())
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector

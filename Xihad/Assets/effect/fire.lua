@@ -1,3 +1,4 @@
+-- 狱火
 require "math3d"
 local Utils = require "ParticleUtils"
 local IniterCreator = Utils.IniterCreator
@@ -37,11 +38,7 @@ local function makeFire(pnode, f, env, scale, level)
 	Utils.addEquilRegion(r, 2 ,2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("1", "0", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial(), "1", "0")
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector
@@ -90,11 +87,7 @@ local function makeSmoke(pnode, f, env, scale)
 	Utils.addEquilRegion(r, 2, 2)
 	pnode:setRenderer(r)
 	
-	local mat = r:getMaterial()
-	mat:setBlend("src.alpha", "1", "add")
-	mat:setMaterialType("trans_add")
-	mat:setLighting(false)		-- Default false
-	mat:setZWriteEnable(true)	-- For transparent object, set it to false. Default true
+	Utils.setMaterial(r:getMaterial(), nil, "1")
 	pnode:setRendererTexture(r, 0, img)	-- 由于支持多重纹理，所以需要指明纹理层
 
 	-- affector
@@ -115,18 +108,16 @@ local function makeSmoke(pnode, f, env, scale)
 end
 	
 
-return function(pnode, f, env)
+return function(pnode, f, env, scale)
 ----------------------------------------------
-	local scale = env.scale or 1
+	scale = scale or 1
 	
 	local tar = env:getNode("@target")
-
 	pnode:setPosition(env:getPosition(tar))
 	pnode:setParticlesAreGlobal(false)
 	
 	local magic = require "magic_circle"
 	magic(pnode:newChild(), f, env, 3.5, 20*scale, Color.new(0xffff8833))
-	
 	
 	pnode = pnode:newChild()
 	pnode:setPosition(math3d.vector(0, -1, 0))

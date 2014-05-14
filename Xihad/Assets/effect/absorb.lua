@@ -2,7 +2,6 @@ require "math3d"
 
 local function createIniter(f, env)
 	local bi = f:initer("Basic")
-	-- bi:setColor(0xff1040f0, 0xff808090)
 	bi:setColor(Color.new(0x00008000), Color.new(0xff00ff00))
 	bi:setLifeTime(0.3)
 	
@@ -37,7 +36,7 @@ return function(pnode, f, env)
 	local mat = r:getMaterial()
 	mat:setMaterialType("trans_add")
 	mat:setZWriteEnable(false)	-- For transparent object, set it to false. Default true
-	pnode:setRendererTexture(r, 0, "../Xihad/Assets/gfx/fire2.png")	-- 由于支持多重纹理，所以需要指明纹理层
+	pnode:setRendererTexture(r, 0, "../Xihad/Assets/gfx/flare.bmp")	-- 由于支持多重纹理，所以需要指明纹理层
 	
 ---------------------------------------------- 
 -- * affector
