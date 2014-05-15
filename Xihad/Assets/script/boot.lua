@@ -159,7 +159,7 @@ function finishListener:onStateExit(state, next) end
 
 stateMachine:addStateListener('Finish', finishListener)
 
-local enemyRound = false
+local enemyRound = true
 if not enemyRound then
 	for heroObj in g_scene:objectsWithTag('Hero') do
 		heroObj:findComponent(c'Warrior'):activate()

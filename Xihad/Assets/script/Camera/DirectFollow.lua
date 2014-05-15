@@ -15,7 +15,7 @@ function DirectFollow.new(follower, freeElevation)
 			_listeners = {},
 		}, DirectFollow)
 	
-	freeElevation = freeElevation or 60
+	freeElevation = freeElevation or 55
 	obj:setFreeElevation(freeElevation)
 	return obj
 end

@@ -2,7 +2,7 @@ local base = require 'Skill.ToWarriorResolver'
 local Location  = require 'route.Location'
 local Algorithm = require 'std.Algorithm'
 local HitPointResolver = {
-	nature = 'unkonwn',
+	nature = 'unkonwn', 
 	attenuation = 0,
 	hitPointIncr= nil,
 	
@@ -18,6 +18,10 @@ function HitPointResolver.new(nature, hitPointIncr, attenuation)
 	obj.attenuation  = attenuation	
 	return obj
 end
+
+function HitPointResolver.registerAddition(skillNature, warriorNature, addition)
+	assert(type(addition) == 'number')
+ end
 
 function HitPointResolver.getAddition(skillNature, warriorNature)
 	local t = HitPointResolver.sNaturePromote[skillNature]
@@ -43,9 +47,9 @@ function HitPointResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, re
 	hitPointIncr = hitPointIncr * ratio
 	
 	if harmful and hitPointIncr <= 0 then
-		result.damage = -hitPointIncr
+		result:addDamage(-hitPointIncr, 1)
 	elseif not harmful and hitPointIncr >= 0 then
-		result.recovery = hitPointIncr
+		result:addRecovery(hitPointIncr, 1)
 	end
 end
 

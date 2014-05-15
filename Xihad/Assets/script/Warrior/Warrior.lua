@@ -7,6 +7,7 @@ local Warrior = {
 	roundListeners = nil,
 	
 	properties = nil,	-- Property Host
+	hitPoint = nil,
 	
 	career = nil,
 	
@@ -102,7 +103,7 @@ function Warrior:activate()
 	assert(not self.active)
 	self.active = true
 	
-	for listener,_ in pairs(self.roundListeners) do
+	for listener, _ in pairs(self.roundListeners) do
 		listener:onRoundBegin(self)
 	end
 end
@@ -123,26 +124,16 @@ end
 
 ---
 -- BattleReuslt = { deltaHP, states }
-function Warrior:applyResult(battleResult)
-	if self:isDead() then return end
-	
-	local deltaHP = battleResult.deltaHP or 0
+function Warrior:takeDamage(damage)
+	assert(damage >= 0)
 	local currHP = Algorithm.clamp(self:getCurrentHP()+deltaHP, 0, self:getMaxHP())
-	if deltaHP > 0 then
-		-- TODO self.object:emittMessage()
-	elseif deltaHP < 0 then
-		-- TODO self.object:emittMessage()
-		
-		if self:isDead() then
-			-- TODO
-			-- self.object:emittMessage('Warrior.dead', self)
-			
-			return
-		end
-	end
+	-- TODO self.object:emittMessage()
 	
-	if battleResult.states then
-		-- TODO append states to property host
+	if self:isDead() then
+		-- TODO
+		-- self.object:emittMessage('Warrior.dead', self)
+		
+		return
 	end
 end
 
