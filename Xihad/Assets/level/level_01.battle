@@ -7,8 +7,8 @@ local robber =
 		['Fire'] = 10,
 	},
 	properties = {
-		MHP = 100,
-		ATK = 5,
+		MHP = 50,
+		ATK = 25,
 		DFS = 5,
 		MTK = 5,
 		MDF = 10,
@@ -28,8 +28,8 @@ local robberLocations =
 local heroLocations = 
 {
 	{ x = 4, y = 2, prefab = 'A', rotation = 0, },
-	{ x = 6, y = 2, prefab = 'B', rotation = 0, },
-	{ x = 8, y = 2, prefab = 'D', rotation = 0, },
+	-- { x = 6, y = 2, prefab = 'B', rotation = 0, },
+	-- { x = 8, y = 2, prefab = 'D', rotation = 0, },
 }
 
 -- 平原、河流、树林

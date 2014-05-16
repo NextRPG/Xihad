@@ -9,6 +9,22 @@ function WarriorBarrier.new()
 	return setmetatable(base.new(), WarriorBarrier)
 end
 
+function WarriorBarrier:_getAnimator()
+	return self:findPeer(c'AnimatedMesh')
+end
+
+function WarriorBarrier:onHitBegin()
+	local animator = self:_getAnimator()
+	animator:playAnimation(c'hit', false)
+end
+
+function WarriorBarrier:onHitEnd()
+	local animator = self:_getAnimator()
+	if not self:findPeer(c'Warrior'):isDead() then
+		animator:playAnimation(c'idle')
+	end
+end
+
 function WarriorBarrier:newHitResult(source)
 	return WarriorHitResult.new(source, self:findPeer(c'Warrior'))
 end

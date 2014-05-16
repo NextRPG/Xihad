@@ -44,6 +44,7 @@ function ascondition:wait()
 		local t = { coroutine.resume(running, ...) }
 		if t [1] == false then
 			io.stderr:write("<AsyncCondition> coroutine resume failed\r\n\t", t[2], '\n')
+			-- io.stderr:write(debug.traceback())
 			io.stderr:flush()
 		else
 			table.remove(t, 1)

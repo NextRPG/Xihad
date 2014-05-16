@@ -411,7 +411,7 @@ namespace xihad { namespace ngn
 
 		// link
 		if (newParent != nullptr)
-			newParent->mImpl->notNullChildrenList(this)->appendChildHandler(this);
+			newParent->notNullChildrenList()->appendChildHandler(this);
 
 		mImpl->transfromHints |= PARENT_DIRTY;
 	}
@@ -486,6 +486,11 @@ namespace xihad { namespace ngn
 	vector3df GameObject::getTranslate() const
 	{
 		return mImpl->localTransform.getTranslation();
+	}
+
+	CompositeUpdateHandler* GameObject::notNullChildrenList()
+	{
+		return mImpl->notNullChildrenList(this);
 	}
 
 }}

@@ -22,7 +22,7 @@ function WarriorHitResult.new(source, target)
 end
 
 function WarriorHitResult:getTargetBarrier()
-	return self.targetWarrior
+	return self.targetWarrior:findPeer(c'Barrier')
 end
 
 Class.delegate(WarriorHitResult, 'hasDamage',	 'damages', 'empty')
@@ -56,16 +56,23 @@ function WarriorHitResult:_applyDamage()
 	local damage
 	if math.random() >= self:getHitRate() then
 		-- miss
+		print('damage miss')
 		damage = 1
 	elseif math.random() < self:getKillRate() then
 		-- TODO how to present kill
 		-- self.sourceWarrior:launchKill()
+		print('damage kill')
 		damage = self.targetWarrior:getHitPoint()
 	else-- normal
+		print('damage normal')
 		damage = self:_getDamage()
 	end
 	
 	self.targetWarrior:takeDamage(damage)
+end
+
+function WarriorHitResult:_applyRecovery()
+	self.targetWarrior:takeRecovery(self:randomRecovery())
 end
 
 function WarriorHitResult:_applyBuff()
@@ -91,7 +98,7 @@ function WarriorHitResult:apply()
 	end
 	
 	if self:hasRecovery() then
-		
+		self:_applyRecovery()
 	end
 	
 	if self:hasBuff() then

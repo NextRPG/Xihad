@@ -38,6 +38,7 @@ function Task:hasStarted()
 end
 
 function Task:start()
+	assert(not self:hasStarted())
 	local run = self.callback
 	self.callback = nil
 	run()

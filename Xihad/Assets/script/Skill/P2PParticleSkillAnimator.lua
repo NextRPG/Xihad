@@ -34,25 +34,14 @@ function P2PParticleSkillAnimator:animate(sourceObject, targetTile, listener)
 	local particleObject = g_scene:createUniqueObject(c'ParticleSystem')
 	local particleSystem = particleObject:appendComponent(c'ParticleSystem')
 	local pnode = particleSystem:getParticleNode()
-	ParticleLoader.load(self.particleFile, pnode:newChild(), sourceObject, targetObject)
-	
-	g_dispatcher:addListener('attack begin', {
-			onMessage = function(self, srcObject, param, msgTag)
-				if param.source == sourceObject and param.target == targetObject then
-					listener:onAttackBegin()
-					g_dispatcher:removeListener('attack begin', self)
-					self:drop()
-				end
-			end
-		})
-	
-	g_dispatcher:addListener('attack end', {
-			onMessage = function(self, srcObject, param, msgTag)
+	ParticleLoader.load(self.particleFile, pnode:newChild(), sourceObject, targetObject, 
+		function (message)
+			if message == 'attack begin' then
+				listener:onAttackBegin()
+			elseif message == 'attack end' then
 				listener:onAttackEnd()
-				g_dispatcher:removeListener('attack end', self)
-				self:drop()
 			end
-		})
+		end)
 end
 
 return P2PParticleSkillAnimator

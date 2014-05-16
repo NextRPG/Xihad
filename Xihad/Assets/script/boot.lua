@@ -1,5 +1,11 @@
 require 'Assets.script.AllPackages'	-- change package.path
 
+-- local resume = coroutine.resume
+-- coroutine.resume = function(co, ...)
+-- 	print('resuming from ', coroutine.running(), ' to ', co)
+-- 	return resume(co, ...)
+-- end
+
 -- create g_scheduler
 local functional 	= require 'std.functional'
 local TaskScheduler = require 'Scheduler.TaskScheduler'
@@ -12,8 +18,9 @@ g_scene:requireSystem(c"Render")	-- load Irrlicht render component system
 local levelPath = 'Assets/level/level_01.battle'
 local userSavePath = 'User/sav/Save1.hero'
 
+require 'cegui'
 require 'math3d'					-- load math3d
-require "CreateMesh"				-- create cube mesh
+require 'CreateMesh'				-- create cube mesh
 
 local LevelFactory 	= require 'Level.XihadLevelFactory'
 local WarriorFactory= require 'Warrior.WarriorFactory'
@@ -159,7 +166,7 @@ function finishListener:onStateExit(state, next) end
 
 stateMachine:addStateListener('Finish', finishListener)
 
-local enemyRound = true
+local enemyRound = false
 if not enemyRound then
 	for heroObj in g_scene:objectsWithTag('Hero') do
 		heroObj:findComponent(c'Warrior'):activate()
@@ -168,4 +175,4 @@ else
 	coroutine.wrap(startEnemy)()
 end
 
--- g_world:setTimeScale(0.2)
+-- g_world:setTimeScale(3)

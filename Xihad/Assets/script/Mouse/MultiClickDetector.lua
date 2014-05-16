@@ -67,13 +67,14 @@ function MultiClickDetector:_timeout()
 	assert(self.clickTimes ~= 0)
 	
 	-- at least clicked one time
-	self:_fireClickEvent()
+	local times = self.clickTimes
 	self.clickTimes = 0
 	self.task = nil
+	
+	self:_fireClickEvent(times)
 end
 
-function MultiClickDetector:_fireClickEvent()
-	local times = self.clickTimes
+function MultiClickDetector:_fireClickEvent(times)
 	local x, y  = self.lastClickX, self.lastClickY
 	
 	print('MultiClickDetector: ', times)

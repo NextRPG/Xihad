@@ -76,13 +76,11 @@ function Heap:remove(t, i)
 	i = i or 1
 	assert(i >= 1 and i <= #t, "out of heap range")
 	
-	local element 
-	if i == #t then
-		element = Array.popBack(t)
-	else
-		t[i] = t[#t]
-		element = Array.popBack(t)
-		
+	local element, last = t[i], #t
+	
+	t[i] = Array.getBack(t)
+	Array.popBack(t)
+	if i ~= last then
 		sink(t, i, self.isAncestor)
 	end
 	

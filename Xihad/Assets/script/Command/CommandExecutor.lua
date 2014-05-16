@@ -53,7 +53,9 @@ function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results
 	
 	skill:playAnimation(warrior, targetTile, {
 			onAttackBegin = function() 
-				-- playHitAnimation()
+				for _, result in pairs(results) do
+					result:getTargetBarrier():onHitBegin()
+				end
 			end,
 			
 			onAttackEnd = function ()
@@ -70,6 +72,8 @@ function CommandExecutor:_applyBattleResults(results)
 	for _, result in ipairs(results) do
 		local asyncTask = function ()
 			result:apply()
+			result:getTargetBarrier():onHitEnd()
+			
 			runningTasks = runningTasks - 1
 			coroutine.resume(current)
 		end
@@ -83,16 +87,16 @@ function CommandExecutor:_applyBattleResults(results)
 end
 
 function CommandExecutor:_gainExp(warrior, exp)
-	local level = warrior:findPeer(c'Level')
-	for usedExp, levelUpInfo in level:obtainExp(exp) do
-		-- wait for some a seconds
-		self.ui:showExpGauge() 
+	-- local level = warrior:findPeer(c'Level')
+	-- for usedExp, levelUpInfo in level:obtainExp(exp) do
+	-- 	-- wait for some a seconds
+	-- 	self.ui:showExpGauge() 
 		
-		if levelUpInfo then
-			-- wait for user interactive
-			self.ui:showLevelUpPanel(levelUpInfo)
-		end
-	end
+	-- 	if levelUpInfo then
+	-- 		-- wait for user interactive
+	-- 		self.ui:showLevelUpPanel(levelUpInfo)
+	-- 	end
+	-- end
 end
 
 function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
@@ -116,9 +120,18 @@ function CommandExecutor:cast(warrior, targetLocation, skillName)
 	
 	self:_applyBattleResults(results)
 	
-	self:_gainExp(warrior, self.expCaculator:calculate())
+	-- self:_gainExp(warrior, self.expCaculator:calculate())
 	
 	-- TODO gain item
+	
+	local current = coroutine.running()
+	
+	assert(g_scheduler:schedule(function ()
+		coroutine.resume(current)
+		print('resume from timer')
+	end, 0.5))
+	
+	coroutine.yield()
 	
 	self.cameraFacade:ascendAwayBattle()
 	

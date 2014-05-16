@@ -72,7 +72,7 @@ function Terrain:setTile( tile )
 		center:set(nil, -height, nil)
 		self:getHostObject():resetTranslate(center)
 	else
-		error("Attempt to change the MapTile of a Terrain")
+		-- error("Attempt to change the MapTile of a Terrain")
 	end
 end
 

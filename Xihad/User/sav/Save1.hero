@@ -5,18 +5,18 @@ return
  		model = "ninja",
  		properties =  
  		{
- 			MHP = 500,
- 			ATK = 5,
+ 			MHP = 100,
+ 			ATK = 55,
  			DFS = 5,
  			MTK = 5,
  			MDF = 10,
- 			MAP = 600,
+ 			MAP = 10,
 		},
  		career = "WARRIOR",
  		getexP = 0,
  		skills = 
  		{
- 			['Fire'] = 1, 
+ 			['Fire'] = 10, 
  		},
  		level = 1,
  		currentexP = 0,
@@ -29,9 +29,9 @@ return
  		model = "ninja",
  		properties =  
  		{
-			DFS = 5,
-			ATK = 5,
-			MHP = 500,
+			MHP = 100,
+			ATK = 45,
+			DFS = 10,
 			MTK = 5,
 			MAP = 10,
 			MDF = 5,
@@ -52,9 +52,9 @@ return
 		model = "ninja",
 		properties =  
 		{
-			DFS = 5,
+			MHP = 100,
+			DFS = 60,
 			ATK = 5,
-			MHP = 500,
 			MTK = 5,
 			MAP = 8,
 			MDF = 10,

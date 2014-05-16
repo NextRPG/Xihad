@@ -2,14 +2,15 @@ local Algorithm = require 'std.Algorithm'
 local PropertyHost = require 'Warrior.PropertyHost'
 
 local Warrior = {
-	team = nil,
-	active = true,
-	roundListeners = nil,
-	
-	properties = nil,	-- Property Host
-	hitPoint = nil,
-	
+	team   = nil,
 	career = nil,
+	active = true,
+	
+	hitPoint   = 0,
+	properties = nil,	-- Property Host
+	
+	roundListeners = nil,
+	propertyListeners = nil,
 	
 	sAllProperties = {}
 }
@@ -19,41 +20,51 @@ function Warrior.new( data, object )
 	assert(data.career)
 	local o = setmetatable({
 		team = data.team,
-		roundListeners = {},
-		properties = PropertyHost.new(),
 		career = data.career,
+		properties = PropertyHost.new(),
+		
+		roundListeners = {},
+		propertyListeners = {},
 	}, Warrior)
 	
-	for _, propertyName in ipairs(Warrior.sAllProperties) do
-		local value = data.properties[propertyName]
+	for _, pname in ipairs(Warrior.sAllProperties) do
+		local value = data.properties[pname]
 		if type(value) ~= 'number' then
-			error('Missing property field in Warrior data: '..propertyName)
+			error('Missing property field in Warrior data: '..pname)
 		end
 		
-		o.properties:addProperty(propertyName)
-		o.properties:setBasic(propertyName, value)
+		o:_initProperty(pname)
+		o.properties:addProperty(pname)
+		o.properties:setBasic(pname, value)
 	end
 	
+	o:_initProperty('HitPoint')
+	o:_initProperty('Dead')
+	o:_setHitPoint(o:getMHP())
 	return o
 end
 
-function Warrior.registerProperty(propertyName)
-	assert(type(propertyName) == 'string')
+function Warrior:_initProperty(pname)
+	self.propertyListeners[pname] = {}
+end
+
+function Warrior.registerProperty(pname)
+	assert(type(pname) == 'string')
 	
-	if #propertyName == 0 then
+	if #pname == 0 then
 		error('Empty property name')
 	end
 	
-	local methodName = 'get'..propertyName
+	local methodName = 'get'..pname
 	if Warrior[methodName] ~= nil then
-		error('Duplicated property name: ', propertyName)
+		error('Duplicated property name: ', pname)
 	end
 	
 	Warrior[methodName] = function (self)
-		return self.properties:get(propertyName)
+		return self.properties:get(pname)
 	end
 	
-	table.insert(Warrior.sAllProperties, propertyName)
+	table.insert(Warrior.sAllProperties, pname)
 end
 
 function Warrior:getTeam()
@@ -85,15 +96,6 @@ function Warrior:getNature()
 	return 'unknown'
 end
 
-function Warrior:addRoundListener(lis)
-	assert(lis.onRoundBegin and lis.onRoundEnd)
-	self.roundListeners[lis] = true
-end
-
-function Warrior:removeRoundListener(lis)
-	self.roundListeners[lis] = nil
-end
-
 function Warrior:isActive()
 	return self.active
 end
@@ -118,22 +120,65 @@ function Warrior:deactivate()
 	end
 end
 
-function Warrior:isDead()
-	return self:getProperpty('currentHP') <= 0
+function Warrior:addRoundListener(lis)
+	assert(lis.onRoundBegin and lis.onRoundEnd)
+	self.roundListeners[lis] = true
 end
 
----
--- BattleReuslt = { deltaHP, states }
+function Warrior:removeRoundListener(lis)
+	self.roundListeners[lis] = nil
+end
+
+function Warrior:_getListeners(pname)
+	local listeners = self.propertyListeners[pname]
+	assert(listeners, string.format('No such property: %s', pname))
+	return listeners
+end
+
+function Warrior:addPropertyListener(pname, lis)
+	self:_getListeners(pname)[lis] = true
+	
+	-- initial update
+	lis(self, pname, nil)
+end
+
+function Warrior:removePropertyListener(pname, lis)
+	self:_getListeners(pname)[lis] = nil
+end
+
+function Warrior:_firePropertyChange(pname, prev)
+	for lis, _ in pairs(self:_getListeners(pname)) do
+		lis(self, pname, prev)
+	end
+end
+
+function Warrior:getHitPoint()
+	return self.hitPoint
+end
+
+function Warrior:isDead()
+	return self.hitPoint <= 0
+end
+
+function Warrior:_clampHitPoint(hp)
+	return Algorithm.clamp(hp, 0, self:getMHP())
+end
+
+function Warrior:_setHitPoint(newHitPoint)
+	local prev = self:getHitPoint()
+	self.hitPoint = self:_clampHitPoint(newHitPoint)
+	self:_firePropertyChange('HitPoint', prev)
+end
+
 function Warrior:takeDamage(damage)
 	assert(damage >= 0)
-	local currHP = Algorithm.clamp(self:getCurrentHP()+deltaHP, 0, self:getMaxHP())
-	-- TODO self.object:emittMessage()
-	
 	if self:isDead() then
-		-- TODO
-		-- self.object:emittMessage('Warrior.dead', self)
-		
-		return
+		error('The warrior has already died')
+	end
+	
+	self:_setHitPoint(self:getHitPoint() - damage)
+	if self:isDead() then
+		self:_firePropertyChange('Dead', true)
 	end
 end
 
