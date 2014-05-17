@@ -3,6 +3,93 @@
 	
 	<!--
 	*****************************************************************
+		Xihad/DoubleIcon
+	*****************************************************************
+	-->
+	<WidgetLook name="Xihad/DoubleIcon">
+		<PropertyDefinition name="LeftIcon" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="RightIcon" initialValue="" redrawOnWrite="true" type="Image"/>
+		<ImagerySection name="left">
+			<ImageryComponent>
+				<ImageProperty name="LeftIcon"/>
+				<VertFormat type="CentreAligned"/>
+				<HorzFormat type="LeftAligned"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="right">
+			<ImageryComponent>
+				<ImageProperty name="RightIcon"/>
+				<VertFormat type="CentreAligned"/>
+				<HorzFormat type="RightAligned"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="right"/>
+				<Section section="left" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+			 	<Section section="right" />
+				<Section section="left" />
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+	<!--
+	*****************************************************************
+		Xihad/RoundedRectangle
+	*****************************************************************
+	-->
+	<WidgetLook name="Xihad/RoundedRectangle">
+		<PropertyDefinition name="TextColor" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
+		<ImagerySection name="frame">
+			<FrameComponent>
+				<Image component="TopEdge" name="XihadUI/Map/frameT"/>
+				<Image component="BottomEdge" name="XihadUI/Map/frameB"/>
+			</FrameComponent>
+			<ImageryComponent>
+				<Area>
+					<Dim type="LeftEdge"><AbsoluteDim value="3" /></Dim>
+					<Dim type="Width"><ImageDim name="XihadUI/Map/nail" dimension="Width" /></Dim>
+				</Area>
+				<Image name="XihadUI/Map/nail"/>
+				<VertFormat type="CentreAligned"/>
+				<HorzFormat type="CentreAligned"/>
+			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="text">
+			<TextComponent>
+				<Area>
+					<Dim type="BottomEdge"><UnifiedDim scale="0.5" type="Height" /></Dim>
+				</Area>
+				<VertFormat type="CentreAligned"/>
+				<HorzFormat type="CentreAligned"/>
+			</TextComponent>
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="frame" />
+				<Section section="text">
+					<ColourProperty name="TextColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="frame" />
+				<Section section="text">
+					<ColourProperty name="TextColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+	
+	
+	
+	<!--
+	*****************************************************************
 		Xihad/Container
 	*****************************************************************
 	-->
@@ -433,7 +520,7 @@
 		</StateImagery>
 	</WidgetLook>
 
-	<!--
+ 	<!--
 	*****************************************************************
 		Xihad/PopupMenu
 	*****************************************************************
@@ -441,6 +528,7 @@
 	<WidgetLook name="Xihad/PopupMenu">
 		<PropertyDefinition name="BorderWidth" initialValue="0" layoutOnWrite="true" type="uint"/>
 		<Property name="ItemSpacing" value="0" />
+		<Property name="AutoCloseNestedPopups" value="true"/>
 		<NamedArea name="ItemRenderArea">
 			<Area>
 				<Dim type="LeftEdge" >
@@ -496,33 +584,50 @@
 		</StateImagery>
 	</WidgetLook>
 
+	
 	<!--
 	*****************************************************************
 		Xihad/MenuItem
 	*****************************************************************
 	-->
 	<WidgetLook name="Xihad/MenuItem">
+		<PropertyDefinition name="VertMargin" initialValue="3" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="HorzMargin" initialValue="3" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="Blank" initialValue="15" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="Icon" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="XihadName" initialValue="" redrawOnWrite="false" type="String"/>
+		<PropertyDefinition name="XihadValue" initialValue="" redrawOnWrite="false" type="String"/>
+		
 		<PropertyDefinition name="NormalTextColour" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="HoverTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="PushedTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="DisabledTextColour" initialValue="FFA39079" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="PushedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="OpenedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
-		<PropertyDefinition name="PopupCloseOffset" initialValue="0" redrawOnWrite="true" type="uint"/>
-		<Property name="Font" value="fangzheng-14"/>
+		<Property name="Font" value="simhei-14"/>
+		<Property name="AutoPopupTimeout" value="0.01"/>
 		<Property name="WantsMultiClickEvents" value="False" />
 		<NamedArea name="ContentSize">
 			<Area>
 				<Dim type="Width">
 					<OperatorDim op="Add">
 						<FontDim type="HorzExtent" />
-						<AbsoluteDim value="46"/>
+						<OperatorDim op="Add">
+							<FontDim type="LineSpacing" />
+								<OperatorDim op="Multiply">
+									<PropertyDim name="HorzMargin"/>
+									<AbsoluteDim value="2"/>
+								</OperatorDim>
+						</OperatorDim>
 					</OperatorDim>
 				</Dim>
 				<Dim type="Height">
 					<OperatorDim op="Add">
 						<FontDim type="LineSpacing" />
-						<AbsoluteDim value="6" />
+						<OperatorDim op="Multiply">
+							<PropertyDim name="VertMargin"/>
+							<AbsoluteDim value="2"/>
+						</OperatorDim>
 					</OperatorDim>
 				</Dim>
 			</Area>
@@ -531,20 +636,29 @@
 			<Area>
 				<Dim type="Width">
 					<OperatorDim op="Add">
-						<AbsoluteDim value="46" />
+						<FontDim type="HorzExtent" />
 						<OperatorDim op="Add">
-							<FontDim type="HorzExtent" />
+							<FontDim type="LineSpacing" />
 							<OperatorDim op="Add">
 								<ImageDim name="XihadUI/Menu/popup_close" dimension="Width" />
-								<AbsoluteDim value="3" />
+								<OperatorDim op="Add">
+									<PropertyDim name="Blank"/>
+									<OperatorDim op="Multiply">
+										<PropertyDim name="HorzMargin"/>
+										<AbsoluteDim value="2"/>
+									</OperatorDim>
+								</OperatorDim>
 							</OperatorDim>
 						</OperatorDim>
 					</OperatorDim>
 				</Dim>
 				<Dim type="Height">
 					<OperatorDim op="Add">
-						<AbsoluteDim value="6" />
 						<FontDim type="LineSpacing" />
+						<OperatorDim op="Multiply">
+							<PropertyDim name="VertMargin"/>
+							<AbsoluteDim value="2"/>
+						</OperatorDim>
 					</OperatorDim>
 				</Dim>
 			</Area>
@@ -552,14 +666,44 @@
 		<ImagerySection name="label">
 			<TextComponent>
 				<Area>
-					<Dim type="LeftEdge"><AbsoluteDim value="6" /></Dim>
+					<Dim type="LeftEdge">
+						<OperatorDim op="Add">
+							<PropertyDim name="HorzMargin" />
+							<FontDim type="LineSpacing" />
+						</OperatorDim>
+					</Dim>
 					<Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
-					<Dim type="RightEdge"><UnifiedDim scale="1" type="RightEdge" /></Dim>
-					<Dim type="BottomEdge"><UnifiedDim scale="1" type="BottomEdge" /></Dim>
 				</Area>
+				<TextProperty name="XihadName" />
 				<VertFormat type="CentreAligned" />
 				<HorzFormat type="LeftAligned" />
 			</TextComponent>
+			<TextComponent>
+				<Area>
+					<Dim type="RightEdge">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="RightEdge" />
+							<PropertyDim name="HorzMargin" />
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<TextProperty name="XihadValue" />
+				<VertFormat type="CentreAligned" />
+				<HorzFormat type="RightAligned" />
+			</TextComponent>
+		</ImagerySection>
+		<ImagerySection name="icon">
+			<ImageryComponent>
+				<Area>
+					<Dim type="LeftEdge"><PropertyDim name="HorzMargin" /></Dim>
+					<Dim type="TopEdge"><PropertyDim name="VertMargin" /></Dim>
+					<Dim type="Width"><FontDim type="LineSpacing" /></Dim>
+					<Dim type="Height"><FontDim type="LineSpacing" /></Dim>
+				</Area>
+				<ImageProperty name="Icon" />
+				<VertFormat type="CentreAligned" />
+				<HorzFormat type="CentreAligned" />
+			</ImageryComponent>
 		</ImagerySection>
 		<ImagerySection name="normal_frame">
 			<FrameComponent>
@@ -590,24 +734,26 @@
 		<ImagerySection name="popup_close">
 			<ImageryComponent>
 				<Area>
-					<Dim type="RightEdge">
+					<Dim type="LeftEdge">
 						<OperatorDim op="Subtract">
-							<UnifiedDim scale="1" type="Width" />
+							<UnifiedDim scale="1" type="RightEdge" />
 							<OperatorDim op="Add">
-								<PropertyDim name="PopupCloseOffset"/>
-								<AbsoluteDim value="3"/>
+								<ImageDim name="XihadUI/Menu/popup_close" dimension="Width" />
+								<PropertyDim name="HorzMargin" />
 							</OperatorDim>
 						</OperatorDim>
 					</Dim>
+					<Dim type="Width"><ImageDim name="XihadUI/Menu/popup_close" dimension="Width" /></Dim>
 				</Area>
 				<Image name="XihadUI/Menu/popup_close" />
 				<VertFormat type="CentreAligned" />
-				<HorzFormat type="RightAligned" />
+				<HorzFormat type="CentreAligned" />
 			</ImageryComponent>
 		</ImagerySection>
 		<StateImagery name="EnabledNormal">
 			<Layer>
 				<Section section="normal_frame" />
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="NormalTextColour" />
 				</Section>
@@ -616,6 +762,7 @@
 		<StateImagery name="EnabledHover">
 			<Layer>
 				<Section section="hover_frame" />
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
 				</Section>
@@ -624,6 +771,7 @@
 		<StateImagery name="EnabledPushed">
 			<Layer>
 				<Section section="hover_frame"/>
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
 				</Section>
@@ -632,6 +780,7 @@
 		<StateImagery name="EnabledPopupOpen">
 			<Layer>
 				<Section section="hover_frame"/>
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
 				</Section>
@@ -640,6 +789,7 @@
 		<StateImagery name="DisabledNormal">
 			<Layer>
 				<Section section="normal_frame" />
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
 				</Section>
@@ -648,6 +798,7 @@
 		<StateImagery name="DisabledHover">
 			<Layer>
 				<Section section="normal_frame"/>
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
 				</Section>
@@ -656,6 +807,7 @@
 		<StateImagery name="DisabledPushed">
 			<Layer>
 				<Section section="hover_frame"/>
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
 				</Section>
@@ -664,6 +816,7 @@
 		<StateImagery name="DisabledPopupOpen">
 			<Layer>
 				<Section section="hover_frame"/>
+				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
 				</Section>
@@ -679,15 +832,169 @@
 				<Section section="popup_close" />
 			</Layer>
 		</StateImagery>
+	</WidgetLook>
 
-		<AnimationDefinition name="MovePopupClose" autoStart="false" duration="0.4" replayMode="once">
-			<Affector property="PopupCloseOffset" interpolator="uint" applicationMethod="absolute">
-				<KeyFrame position="0.0" value="0" />
-				<KeyFrame position="0.2" value="3" progression="quadratic accelerating"/>
-				<KeyFrame position="0.4" value="0" progression="quadratic accelerating"/>
+	<!--
+	*****************************************************************
+		Xihad/Button
+	*****************************************************************
+	-->
+	<WidgetLook name="Xihad/Button">
+		<PropertyDefinition name="NormalTextColour" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="HoverTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="PushedTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="DisabledTextColour" initialValue="FFA39079" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="PushedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
+		
+		<PropertyDefinition name="HoverFrameColor" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
+		<ImagerySection name="out_frame">
+			<FrameComponent>
+				<Image component="BottomLeftCorner" name="XihadUI/Menu/frameLB" />
+				<Image component="BottomRightCorner" name="XihadUI/Menu/frameRB" />
+				<Image component="TopRightCorner" name="XihadUI/Menu/frameRT" />
+				<Image component="RightEdge" name="XihadUI/Menu/frameR" />
+				<Image component="BottomEdge" name="XihadUI/Menu/frameB" />
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="normal_frame">
+			<FrameComponent>
+				<Area>
+					<Dim type="Width">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Width"/>
+							<ImageDim name="XihadUI/Menu/frameR" dimension="Width"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Height"/>
+							<ImageDim name="XihadUI/Menu/frameB" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="XihadUI/Menu/itemLT"/>
+				<Image component="TopRightCorner" name="XihadUI/Menu/itemRT"/>
+				<Image component="BottomLeftCorner" name="XihadUI/Menu/itemLB"/>
+				<Image component="BottomRightCorner" name="XihadUI/Menu/itemRB"/>
+				<Image component="LeftEdge" name="XihadUI/Menu/itemL"/>
+				<Image component="RightEdge" name="XihadUI/Menu/itemR"/>
+				<Image component="TopEdge" name="XihadUI/Menu/itemT"/>
+				<Image component="BottomEdge" name="XihadUI/Menu/itemB"/>
+				<Image component="Background" name="XihadUI/Menu/itemM"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="hover_frame">
+			<FrameComponent>
+				<Area>
+					<Dim type="Width">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Width"/>
+							<ImageDim name="XihadUI/Menu/frameR" dimension="Width"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Height"/>
+							<ImageDim name="XihadUI/Menu/frameB" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="XihadUI/Menu/hover_itemLT"/>
+				<Image component="TopRightCorner" name="XihadUI/Menu/hover_itemRT"/>
+				<Image component="BottomLeftCorner" name="XihadUI/Menu/hover_itemLB"/>
+				<Image component="BottomRightCorner" name="XihadUI/Menu/hover_itemRB"/>
+				<Image component="LeftEdge" name="XihadUI/Menu/hover_itemL"/>
+				<Image component="RightEdge" name="XihadUI/Menu/hover_itemR"/>
+				<Image component="TopEdge" name="XihadUI/Menu/hover_itemT"/>
+				<Image component="BottomEdge" name="XihadUI/Menu/hover_itemB"/>
+				<Image component="Background" name="XihadUI/Menu/hover_itemM"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="label">
+			<TextComponent>
+				<Area>
+					<Dim type="Width">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Width"/>
+							<ImageDim name="XihadUI/Menu/frameR" dimension="Width"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1" type="Height"/>
+							<ImageDim name="XihadUI/Menu/frameB" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<VertFormat type="CentreAligned"/>
+				<HorzFormat type="CentreAligned"/>
+			</TextComponent>
+		</ImagerySection>
+		
+		<StateImagery name="Normal">
+			<Layer>
+				<Section section="out_frame"/>
+				<Section section="normal_frame"/>
+				<Section section="label">
+					<ColourProperty name="NormalTextColour"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Hover">
+			<Layer>
+				<Section section="out_frame"/>
+				<Section section="normal_frame"/>
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
+				<Section section="label">
+					<ColourProperty name="HoverTextColour"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Pushed">
+			<Layer>
+				<Section section="out_frame"/>
+				<Section section="normal_frame"/>
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
+				<Section section="label">
+					<ColourProperty name="HoverTextColour"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="PushedOff">
+			<Layer>
+				<Section section="out_frame"/>
+				<Section section="normal_frame"/>
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
+				<Section section="label">
+					<ColourProperty name="HoverTextColour"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="out_frame"/>
+				<Section section="normal_frame"/>
+				<Section section="label">
+					<ColourProperty name="DisabledTextColour"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+		
+		<AnimationDefinition name="HoverShining" duration="1.8" replayMode="loop">
+			<Affector property="HoverFrameColor" interpolator="ColourRect" applicationMethod="absolute">
+				<KeyFrame position="0.0" value="88FFFFFF" />
+				<KeyFrame position="0.8" value="FFFFFFFF" progression="linear"/>
+				<KeyFrame position="1.0" value="FFFFFFFF" progression="linear"/>
+				<KeyFrame position="1.8" value="88FFFFFF" progression="linear"/>
 			</Affector>
-
-			<Subscription event="Clicked" action="Start"/>
+			<Subscription event="MouseEntersArea" action="Start" />
+			<Subscription event="MouseLeavesArea" action="Stop" />
 		</AnimationDefinition>		
 	</WidgetLook>
 

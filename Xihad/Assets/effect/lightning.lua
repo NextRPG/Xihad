@@ -1,7 +1,7 @@
 -- 雷爆
 
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 local IniterCreator = Utils.IniterCreator
 local AssetsPath = "../Xihad/Assets/gfx/"
 
@@ -174,7 +174,7 @@ return function(pnode, f, env, scale)
 	addExplosion(pnode:newChild(), f, env, scale)
 	addSpark(pnode:newChild(), f, env, scale)
 	
-	local magic = require "magic_circle"
+	local magic = require "effect.magic_circle"
 	magic(pnode:newChild(), f, env, 1.1, 26*scale, MinColor)
 ---------------------------------------------- 	
 	env:deferMessage(CollisionTime, "attack begin")

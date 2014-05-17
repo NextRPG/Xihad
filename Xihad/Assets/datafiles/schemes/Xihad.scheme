@@ -11,6 +11,10 @@
 	<LookNFeel filename="Xihad.looknfeel" />	
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 
+	<FalagardMapping windowType="Xihad/MapTileInfo" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/RoundedRectangle" />
+	<FalagardMapping windowType="Xihad/Button" targetType="CEGUI/PushButton" renderer="Core/Button" lookNFeel="Xihad/Button" />
+	
+	<FalagardMapping windowType="Xihad/DoubleIcon" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/DoubleIcon" />
 	<FalagardMapping windowType="Xihad/Image" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Image" />
 	<FalagardMapping windowType="Xihad/DialogNameCard" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/DialogNameCard" />
 	<FalagardMapping windowType="Xihad/ImageButton" targetType="CEGUI/PushButton"  renderer="Core/Button"       lookNFeel="Xihad/ImageButton" />

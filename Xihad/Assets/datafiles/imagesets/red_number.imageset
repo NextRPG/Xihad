@@ -1,4 +1,4 @@
-<Imageset autoScaled="" imagefile="red_number.png" name="RedNumber" nativeHorzRes="19" nativeVertRes="37" version="2">
+<Imageset autoScaled="false" imagefile="red_number.png" name="RedNumber" nativeHorzRes="19" nativeVertRes="37" version="2">
     <Image height="37" name="1" width="19" xPos="0" yPos="0" />
     <Image height="37" name="5" width="19" xPos="128" yPos="0" />
     <Image height="37" name="4" width="19" xPos="96" yPos="0" />

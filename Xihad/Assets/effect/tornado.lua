@@ -1,7 +1,7 @@
 -- 龙卷风
 
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 
 local function addWind(pnode, f, delay, pos, width, len)
 	pnode:setPosition(pos)

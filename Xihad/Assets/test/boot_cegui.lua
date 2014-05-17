@@ -35,52 +35,46 @@ context:setRootWindow(root)
 context:setDefaultFont(CEGUI.FontManager:getSingleton():get("simhei-14"))
 context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
+-- load animation
+require "assets.ui.Animations"
 
--- animation
-local animMgr = CEGUI.AnimationManager:getSingleton()
-animMgr:loadAnimationsFromXML("Xihad.anims")
-
-local animations = 	{ 
-						TextFadeIn = { "AttackDamageLabel"},
-						
-						Magnify = { "LeftDialog/TextArea", "RightDialog/TextArea" },
-						Shrink = { "LeftDialog/TextArea", "RightDialog/TextArea" },
-						
-						PortraitLighter = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
-						PortraitDarker = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
-
-						DialogueClose = { "LeftDialog", "RightDialog" },
-					}
-
-for animName, targetList in pairs(animations) do
-	local anim = animMgr:getAnimation(animName)
-	for _, name in ipairs(targetList) do
-		local targetWindow = root:getChild(name)
-		animMgr:instantiateAnimation(anim):setTargetWindow(targetWindow)
-	end
-end
-
-
-local controller = require("assets.test.GUIController")
+-- ont only for test but an example for you.
+local controller = require("assets.ui.GUIController")
 g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
-		if e.key == "J" then
+		if e.key == "C" then
 
-			controller:showWindow("CommandWindow", 
-			{ 
-
-				["技能"] = { shortcut = "A", list = { ["技能1"] = true , ["技能2"] = true } }, 
-				["道具"] = { list = { ["道具1"] = true} }, 
-				["待机"] = { } 
+			controller:showWindow("Command", 
+			{ 	
+				[1] = { name = "技能", 
+						hover = true,
+						list = {[1] = {name = "狱火", value = 3 }, 
+								[2] = {name = "破冰刃", value =12, disabled = true },
+								[3] = {name = "普通", }
+								},
+					  } ,
+				[2] = { name = "道具", list = { [1] = { name = "药", value = 10}}},
+				[3] = { name = "交换", disabled = true, },
+				[4] = { name = "待机", },
 			})
-
+		elseif e.key == "M" then
+ 			controller:showWindow("MapTileInfo",
+ 			{
+ 				name = "草地",
+				effects = {
+					[1] = { attrName = "攻击力", effectLevel = 3 },
+					[2] = { attrName = "攻击力", effectLevel = 2 },
+					[3] = { attrName = "攻击力", effectLevel = 1 }
+				}
+ 			})
 		elseif e.key == "Q" then
-			controller:hideWindow("CommandWindow")
+			controller:hideWindow("Command")
+			controller:hideWindow("MapTileInfo")
 		elseif e.key == "I" then
-			damageNumber = damageNumber or 0
-			controller:showWindow("AttackDamage", { damage = damageNumber})
-			damageNumber = (damageNumber + 5)%1000	
+			-- damageNumber = damageNumber or 0
+			-- controller:showWindow("AttackDamage", { damage = damageNumber})
+			-- damageNumber = (damageNumber + 5)%1000	
 		else
 			handled = 1
 		end
@@ -96,6 +90,9 @@ g_scene:pushController({
 		return 1
 	end
 })
-controller:subscribeEvent("CommandSelected", function (args)
-				print(args)
+controller:subscribeEvent("Command.Select", function (parent, child, eventType)
+				print(parent, child, eventType)
+			end)
+controller:subscribeEvent("Command.Hover", function (parent, child, eventType)
+				print(parent, child, eventType)
 			end)
