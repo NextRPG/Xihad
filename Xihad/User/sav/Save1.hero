@@ -5,7 +5,7 @@ return
  		model = "ninja",
  		properties =  
  		{
- 			MHP = 100,
+ 			MHP = 200,
  			ATK = 55,
  			DFS = 5,
  			MTK = 5,

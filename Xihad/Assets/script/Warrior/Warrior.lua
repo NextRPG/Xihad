@@ -1,5 +1,5 @@
 local Algorithm = require 'std.Algorithm'
-local PropertyHost = require 'Warrior.PropertyHost'
+local Property = require 'Warrior.Property'
 
 local Warrior = {
 	team   = nil,
@@ -12,7 +12,7 @@ local Warrior = {
 	roundListeners = nil,
 	propertyListeners = nil,
 	
-	sAllProperties = {}
+	sAllProperties = {},
 }
 Warrior.__index = Warrior
 
@@ -21,7 +21,7 @@ function Warrior.new( data, object )
 	local o = setmetatable({
 		team = data.team,
 		career = data.career,
-		properties = PropertyHost.new(),
+		properties = {},
 		
 		roundListeners = {},
 		propertyListeners = {},
@@ -34,13 +34,14 @@ function Warrior.new( data, object )
 		end
 		
 		o:_initProperty(pname)
-		o.properties:addProperty(pname)
-		o.properties:setBasic(pname, value)
+		local newProperty = Property.new()
+		o.properties[pname] = newProperty
+		newProperty:addBasic(value)
 	end
 	
 	o:_initProperty('HitPoint')
 	o:_initProperty('Dead')
-	o:_setHitPoint(o:getMHP())
+	o:_setHitPoint(o:getMHP())	-- TODO REFACTOR
 	return o
 end
 
@@ -61,7 +62,7 @@ function Warrior.registerProperty(pname)
 	end
 	
 	Warrior[methodName] = function (self)
-		return self.properties:get(pname)
+		return self:get(pname)
 	end
 	
 	table.insert(Warrior.sAllProperties, pname)
@@ -92,7 +93,6 @@ function Warrior:getCareer()
 end
 
 function Warrior:getNature()
-	-- return self.career:
 	return 'unknown'
 end
 
@@ -150,6 +150,40 @@ function Warrior:_firePropertyChange(pname, prev)
 	for lis, _ in pairs(self:_getListeners(pname)) do
 		lis(self, pname, prev)
 	end
+end
+
+function Warrior:_getProperty(pname)
+	if not self.properties[pname] then
+		error('no such property', pname)
+	end
+	
+	return self.properties[pname]
+end
+
+function Warrior:get(pname)
+ 	return self:_getProperty(pname):get()
+ end 
+
+function Warrior:attachState(pname, type, state)
+	local prev = self:get(pname)
+	self:_getProperty(pname):attach(type, state)
+	self:_firePropertyChange(pname, prev)
+end
+
+function Warrior:detachState(pname, type)
+	local prev = self:get(pname)
+	self:_getProperty(pname):detach(type)
+	self:_firePropertyChange(pname, prev)
+end
+
+function Warrior:getBasic(pname)
+	return self:_getProperty(pname):getBasic()
+end
+
+function Warrior:addBasic(pname, delta)
+	local prev = self:get(pname)
+	self:_getProperty(pname):addBasic(delta)
+	self:_firePropertyChange(pname, prev)
 end
 
 function Warrior:getHitPoint()

@@ -90,7 +90,7 @@ function MapTile:getActionPointCost(warrior)
 		accum = accum + e:getActionPointCost(warrior)
 	end
 	
-	return algo.max(1, accum)
+	return math.max(1, accum)
 end
 
 return MapTile

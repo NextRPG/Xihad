@@ -44,6 +44,10 @@ function WarriorHitResult:_getDamage()
 	return math.abs(atk + skillDamage - dfs)
 end
 
+function WarriorHitResult:addSkillEffect(state, probability)
+	self.states[state] = probability
+end
+
 function WarriorHitResult:hasBuff()
 	return next(self.states) ~= nil
 end
@@ -78,7 +82,7 @@ end
 function WarriorHitResult:_applyBuff()
 	for buff, probability in pairs(self.states) do
 		if math.random() < probability then
-			
+			buff:bind(self.targetWarrior)
 		end
 	end
 end

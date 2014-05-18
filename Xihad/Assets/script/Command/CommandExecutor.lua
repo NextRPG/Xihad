@@ -1,9 +1,11 @@
+local sCoroutine = require 'std.sCoroutine'
 local ObjectAction = require 'HighAction.ObjectAction'
 local Trigonometry = require 'math.Trigonometry'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'	
 local ActionAdapter= require 'Action.ActionAdapter'
 local SkillRegistry= require 'Skill.SkillRegistry'
+local ConcurrentJobs = require 'std.ConcurrentJobs'
 local WarriorMovement = require 'HighAction.WarriorMovement'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 
@@ -59,7 +61,7 @@ function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results
 			end,
 			
 			onAttackEnd = function ()
-				coroutine.resume(current)
+				sCoroutine.resume(current)
 			end,
 		})
 	
@@ -67,23 +69,15 @@ function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results
 end
 
 function CommandExecutor:_applyBattleResults(results)
-	local current = coroutine.running()
-	local runningTasks = #results
+	local jobs = ConcurrentJobs.new()
 	for _, result in ipairs(results) do
-		local asyncTask = function ()
+		jobs:addJob(function ()
 			result:apply()
 			result:getTargetBarrier():onHitEnd()
-			
-			runningTasks = runningTasks - 1
-			coroutine.resume(current)
-		end
-		
-		coroutine.wrap(asyncTask)()
+		end)
 	end
 	
-	while runningTasks > 0 do
-		coroutine.yield()
-	end
+	jobs:join()
 end
 
 function CommandExecutor:_gainExp(warrior, exp)
@@ -127,7 +121,7 @@ function CommandExecutor:cast(warrior, targetLocation, skillName)
 	local current = coroutine.running()
 	
 	assert(g_scheduler:schedule(function ()
-		coroutine.resume(current)
+		sCoroutine.resume(current)
 		print('resume from timer')
 	end, 0.5))
 	

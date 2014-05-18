@@ -31,14 +31,14 @@ end
 
 function HitPointResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
 	local distance = relativeLoc:distance(Location.new())
-	local ratio = Algorithm.max(0, 1 - distance * self.attenuation)
+	local ratio = math.max(0, 1 - distance * self.attenuation)
 		
 	local hitPointIncr = self.hitPointIncr
 	local harmful = hitPointIncr <= 0
 	if harmful then
 		local atk = sourceWarrior:getATK()
 		local dfs = targetWarrior:getDFS()
-		hitPointIncr = -Algorithm.max(0, (atk - dfs)) + hitPointIncr
+		hitPointIncr = -math.max(0, (atk - dfs)) + hitPointIncr
 		
 		local addition = HitPointResolver.getAddition(self.nature, targetWarrior:getNature())
 		hitPointIncr = hitPointIncr * addition

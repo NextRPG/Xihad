@@ -26,8 +26,8 @@ function Skill.new(name, range, filter, animator)
 			name  = name,
 			filter= filter,
 			range = range,
-			resolvers= {},
 			animator = animator,
+			resolvers= {},
 		}, Skill)
 	return obj
 end

@@ -175,4 +175,4 @@ else
 	coroutine.wrap(startEnemy)()
 end
 
--- g_world:setTimeScale(3)
+g_world:setTimeScale(3)

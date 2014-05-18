@@ -1,25 +1,23 @@
---- TODO
--- local base = require 'Skill.ToWarriorResolver'
--- local BuffResolver = {
--- 	centerOnly = true,
--- 	repelDistance = 1,
--- }
--- BuffResolver.__index = BuffResolver
--- setmetatable(BuffResolver, base)
+local base = require 'Skill.ToWarriorResolver'
+local BuffResolver = {
+	boundEffect = nil,
+	probability = nil,
+}
+BuffResolver.__index = BuffResolver
+setmetatable(BuffResolver, base)
 
--- function BuffResolver.new(centerOnly, distance)
--- 	local obj = setmetatable(base.new(), BuffResolver)
--- 	obj.centerOnly = centerOnly
--- 	obj.repelDistance = math.floor(distance)
--- 	return obj
--- end
-
--- function BuffResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
--- 	if relativeLoc ~= Location.new() and not self.centerOnly then
--- 		return 
--- 	end
+function BuffResolver.new(boundEffect, probability)
+	local obj = setmetatable(base.new(), BuffResolver)
 	
--- 	result.repelDst = self.repelDistance
--- end
+	boundEffect.__index = boundEffect
+	obj.boundEffect = boundEffect
+	obj.probability = probability
+	return obj
+end
 
--- return BuffResolver
+function BuffResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
+	local copyEffect = setmetatable({}, self.boundEffect)
+	result:addSkillEffect(copyEffect, self.probability)
+end
+
+return BuffResolver

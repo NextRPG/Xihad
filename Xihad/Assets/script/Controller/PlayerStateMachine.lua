@@ -1,4 +1,5 @@
 local Class = require 'std.Class'
+local sCoroutine = require 'std.sCoroutine'
 local CommandList = require 'Command.CommandList'
 local StateMachine = require 'std.StateMachine'
 local ChooseHeroState = require 'Controller.ChooseHeroState'
@@ -15,7 +16,7 @@ local PlayStateMachine = {
 }
 PlayStateMachine.__index = PlayStateMachine
 
-function PlayStateMachine.new(ui, camera, painter, executor)
+function PlayStateMachine.new(...)
 	local obj = setmetatable({
 			sm = StateMachine.new('ChooseHero'),
 			cmdList = CommandList.new(),
@@ -40,10 +41,10 @@ function PlayStateMachine.new(ui, camera, painter, executor)
 	
 	local commandList = obj.cmdList	
 	local newDispatcher  = CursorEventDispatcher.new
-	obj.stateControllers['ChooseHero'] 	 = ChooseHeroState.new(commandList, newDispatcher, ui, camera, painter, executor)
-	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, newDispatcher, ui, camera, painter, executor)
-	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, newDispatcher, ui, camera, painter, executor)
-	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, newDispatcher, ui, camera, painter, executor)
+	obj.stateControllers['ChooseHero'] 	 = ChooseHeroState.new(commandList, newDispatcher, ...)
+	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, newDispatcher, ...)
+	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, newDispatcher, ...)
+	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, newDispatcher, ...)
 	
 	for stateName, state in pairs(obj.stateControllers) do
 		obj.sm:addStateListener(stateName, state)
@@ -82,12 +83,12 @@ end
 function PlayStateMachine:_onCommand(cmd, x, y, times)
 	if self.runner then return end
 	
-	self.runner = coroutine.wrap(function ()
+	self.runner = coroutine.create(function ()
 		self:_process(cmd, x, y, times)
 		self.runner = nil
 	end)
 	
-	self.runner()
+	sCoroutine.resume(self.runner)
 end
 
 function PlayStateMachine:getCommandList()
