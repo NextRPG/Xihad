@@ -145,7 +145,21 @@ local function startEnemy()
 		local warrior = object:findComponent(c'Warrior')
 		warrior:activate()
 	end
-	stateMachine:nextHero()
+	
+	local hasActive = false
+	for object in g_scene:objectsWithTag('Hero') do
+		local warrior = object:findComponent(c'Warrior')
+		if warrior:isActive() then
+			hasActive = true
+			break
+		end
+	end
+	
+	if hasActive then
+		stateMachine:nextHero()
+	else
+		startEnemy()
+	end
 end
 
 local finishListener = {}

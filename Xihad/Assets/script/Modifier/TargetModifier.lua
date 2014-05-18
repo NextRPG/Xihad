@@ -53,7 +53,10 @@ function TargetModifier:_fireTargetReached()
 end
 
 function TargetModifier:onUpdate(time)
-	if self:reachTarget() then return end
+	if self:reachTarget() then 
+		self:_fireTargetReached()
+		return 'stop'
+	end
 	
 	local current= self._variable:get()
 	local delta = self.target - current
@@ -66,10 +69,6 @@ function TargetModifier:onUpdate(time)
 	end
 	
 	self._variable:set(expect)
-	
-	if self:reachTarget() then
-		self:_fireTargetReached()
-	end
 end
 
 return TargetModifier

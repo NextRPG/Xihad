@@ -1,5 +1,6 @@
 local Class = require 'std.Class'
 local ProbabilityValue = require 'Warrior.ProbabilityValue'
+local AsConditionFactory = require 'Async.AsConditionFactory'
 local WarriorHitResult = {
 	sourceWarrior = nil,
 	targetWarrior = nil,
@@ -7,7 +8,7 @@ local WarriorHitResult = {
 	repelDistance = 0,
 	recoveries = nil,
 	damages = nil,
-	states  = nil,
+	effects = nil,
 }
 WarriorHitResult.__index = WarriorHitResult
 
@@ -17,7 +18,7 @@ function WarriorHitResult.new(source, target)
 			targetWarrior = target,
 			recoveries = ProbabilityValue.new(),
 			damages = ProbabilityValue.new(),
-			states  = {},
+			effects = {},
 		}, WarriorHitResult)
 end
 
@@ -44,12 +45,12 @@ function WarriorHitResult:_getDamage()
 	return math.abs(atk + skillDamage - dfs)
 end
 
-function WarriorHitResult:addSkillEffect(state, probability)
-	self.states[state] = probability
+function WarriorHitResult:addSkillEffect(effect, probability)
+	self.effects[effect] = probability
 end
 
-function WarriorHitResult:hasBuff()
-	return next(self.states) ~= nil
+function WarriorHitResult:hasSkillEffect()
+	return next(self.effects) ~= nil
 end
 
 function WarriorHitResult:canRepel()
@@ -80,10 +81,34 @@ function WarriorHitResult:_applyRecovery()
 end
 
 function WarriorHitResult:_applyBuff()
-	for buff, probability in pairs(self.states) do
+	for effect, probability in pairs(self.effects) do
 		if math.random() < probability then
-			buff:bind(self.targetWarrior)
+			effect:bind(self.targetWarrior)
 		end
+	end
+end
+
+function WarriorHitResult:_getTargetAnimator()
+	return self.targetWarrior:findPeer(c'AnimatedMesh')
+end
+
+function WarriorHitResult:onHitBegin()
+	self:_getTargetAnimator():playAnimation(c'hit', false)
+	if self:canRepel() then
+		
+	end
+end
+
+function WarriorHitResult:onHitEnd()
+	local animator = self:_getTargetAnimator()
+	if not self.targetWarrior:isDead() then
+		animator:playAnimation(c'idle')
+	else
+		animator:playAnimation(c'die', false)
+		AsConditionFactory.waitAnimation(animator)
+		g_scheduler:schedule(function ()
+			self.targetWarrior:getHostObject():stop()
+		end)
 	end
 end
 
@@ -105,7 +130,7 @@ function WarriorHitResult:apply()
 		self:_applyRecovery()
 	end
 	
-	if self:hasBuff() then
+	if self:hasSkillEffect() then
 		self:_applyBuff()
 	end
 end
@@ -122,7 +147,7 @@ function WarriorHitResult:isValid()
 	return self:hasDamage() 
 		or self:hasRecovery()
 		or self:canRepel() 
-		or self:hasBuff()
+		or self:hasSkillEffect()
 end
 
 return WarriorHitResult

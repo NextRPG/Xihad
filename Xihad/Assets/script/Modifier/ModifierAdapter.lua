@@ -3,7 +3,9 @@ local ModifierAdapter = {}
 function ModifierAdapter.new(modifier)
 	local a = {}
 	function a.onUpdate(self)
-		modifier:update(g_time.change)
+		if modifier:update(g_time.change) == 'stop' then
+			self:stop()
+		end
 	end
 	
 	return a

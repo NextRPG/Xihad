@@ -1,5 +1,6 @@
 local Algorithm = require 'std.Algorithm'
 local Property = require 'Warrior.Property'
+local NamedEffects = require 'Warrior.NamedEffects'
 
 local Warrior = {
 	team   = nil,
@@ -9,6 +10,7 @@ local Warrior = {
 	hitPoint   = 0,
 	properties = nil,	-- Property Host
 	
+	namedEffects = nil,
 	roundListeners = nil,
 	propertyListeners = nil,
 	
@@ -23,6 +25,7 @@ function Warrior.new( data, object )
 		career = data.career,
 		properties = {},
 		
+		namedEffects = NamedEffects.new(),
 		roundListeners = {},
 		propertyListeners = {},
 	}, Warrior)
@@ -135,6 +138,28 @@ function Warrior:_getListeners(pname)
 	return listeners
 end
 
+function Warrior:_checkEffectBinding(effect)
+	assert(effect:isBound() and effect:getBinding() == self, 
+		'Invoke effect:bind() instead')
+end
+
+function Warrior:_checkEffectUnbinding(effect)
+	assert(not effect:isBound() and effect:getBinding() == self, 
+		'Invoke effect:unbind() instead')
+end
+
+function Warrior:attachEffect(type, effect)
+	self:_checkEffectBinding(effect)
+	
+	self.namedEffects:attach(type, effect)
+end
+
+function Warrior:detachEffect(type, effect)
+	self:_checkEffectUnbinding(effect)
+	
+	self.namedEffects:detach(type, effect)
+end
+
 function Warrior:addPropertyListener(pname, lis)
 	self:_getListeners(pname)[lis] = true
 	
@@ -162,17 +187,21 @@ end
 
 function Warrior:get(pname)
  	return self:_getProperty(pname):get()
- end 
+end
 
-function Warrior:attachState(pname, type, state)
+function Warrior:attachPropertyEffect(pname, type, effect)
+	self:_checkEffectBinding(effect)
+	
 	local prev = self:get(pname)
-	self:_getProperty(pname):attach(type, state)
+	self:_getProperty(pname):attach(type, effect)
 	self:_firePropertyChange(pname, prev)
 end
 
-function Warrior:detachState(pname, type)
+function Warrior:detachPropertyEffect(pname, type, effect)
+	self:_checkEffectUnbinding(effect)
+	
 	local prev = self:get(pname)
-	self:_getProperty(pname):detach(type)
+	self:_getProperty(pname):detach(type, effect)
 	self:_firePropertyChange(pname, prev)
 end
 

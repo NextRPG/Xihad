@@ -80,15 +80,15 @@ function PlayStateMachine:_process(cmd, ...)
 	end
 end
 
-function PlayStateMachine:_onCommand(cmd, x, y, times)
+function PlayStateMachine:_onCommand(cmd, ...)
 	if self.runner then return end
 	
-	self.runner = coroutine.create(function ()
-		self:_process(cmd, x, y, times)
+	self.runner = coroutine.create(function (...)
+		self:_process(cmd, ...)
 		self.runner = nil
 	end)
 	
-	sCoroutine.resume(self.runner)
+	sCoroutine.resume(self.runner, ...)
 end
 
 function PlayStateMachine:getCommandList()

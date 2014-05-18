@@ -1,5 +1,5 @@
 local base = require 'Level.BaseLevelFactory'
-local Terrain = require 'Barrier.Terrain'
+local TerrainBarrier = require 'Barrier.TerrainBarrier'
 local Chessboard = require 'route.Chessboard'
 local XihadMapTile = require 'Chessboard.XihadMapTile'
 local WarriorFactory = require 'Warrior.WarriorFactory'
@@ -32,7 +32,7 @@ function XLoader:createTerrian(terrainType)
 	local meshComponent = highlightObject:appendComponent(c'Mesh')
 	meshComponent:setMesh(g_meshManager:getMesh('@colorCube'))
 	
-	return highlightObject:appendComponent(c'Terrain', terrainType)
+	return highlightObject:appendComponent(c'TerrainBarrier', terrainType)
 end
 
 function XLoader:_checkTeam(team)

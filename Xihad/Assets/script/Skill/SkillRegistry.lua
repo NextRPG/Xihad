@@ -2,8 +2,11 @@ local Skill = require 'Skill.Skill'
 local Location = require 'route.Location'
 local Equation = require 'Warrior.Equation'
 local BuffEffect = require 'Effect.BuffEffect'
+local SleepEffect = require 'Effect.SleepEffect'
+local HitPointEffect= require 'Effect.HitPointEffect'
+local RoundRecycler = require 'Effect.RoundRecycler'
 local CastableRange = require 'route.CastableRange'
-local BuffResolver  = require 'Skill.BuffResolver'
+local EffectResolver  = require 'Skill.EffectResolver'
 local HitPointResolver = require 'Skill.HitPointResolver'
 local RelativeLocationParser   = require 'Skill.RelativeLocationParser'
 local P2PParticleSkillAnimator = require 'Skill.P2PParticleSkillAnimator'
@@ -42,8 +45,32 @@ local range = toRange(2, 2, '@')
 
 local enemyOnly = { toEnemy = true, }
 local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'Assets.effect.tornado')
+
 fireSkill:addResolver(HitPointResolver.new('fire', -30))
-fireSkill:addResolver(BuffResolver.new(BuffEffect.new('ATK', Equation.new(-10), 2), 1.0))
+
+-- fireSkill:addResolver(
+-- 	EffectResolver.new(
+-- 		BuffEffect.new(
+-- 			'ATK', 
+-- 			Equation.new(-10), 
+-- 			RoundRecycler.new(2)), 
+-- 		1.0)
+-- 	)
+
+fireSkill:addResolver(
+	EffectResolver.new(
+		HitPointEffect.new(
+			-10,
+			RoundRecycler.new(3)),
+		1.0)
+	)
+
+-- fireSkill:addResolver(
+-- 	EffectResolver.new(
+-- 		SleepEffect.new(
+-- 			RoundRecycler.new(2)),
+-- 		1.0)
+-- 	)
 
 SkillRegistry.allSkills['skill1'] = Skill.new('skill1', range, enemyOnly)
 SkillRegistry.allSkills['skill2'] = Skill.new('skill2', range, enemyOnly)

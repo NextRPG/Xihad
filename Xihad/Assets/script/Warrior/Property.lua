@@ -1,4 +1,5 @@
 local Equation = require 'Warrior.Equation'
+local NamedEffects = require 'Warrior.NamedEffects'
 
 -- Battle Module 
 local Property = {
@@ -10,7 +11,7 @@ local Property = {
 	
 	--- 
 	-- Temporary states those generated in a battle
-	namedStates = nil,
+	namedEffects = nil,
 }
 Property.__index = Property
 
@@ -18,7 +19,7 @@ function Property.new()
 	return setmetatable({
 			basic = 0,
 			equation = Equation.new(),
-			namedStates = {},
+			namedEffects = NamedEffects.new(),
 		}, Property)
 end
 
@@ -36,35 +37,36 @@ function Property:getBasic()
 	return self.basic
 end
 
-function Property:attach(type, state)
-	self:_detach_no_check(type)
-	
-	self.equation = self.equation + state:getEquation()
-	self.namedStates[type] = state
-	state:onAttached()
+function Property:_addEffect(effect)
+	self.equation = self.equation + effect:getEquation()
 end
 
-function Property:_detach_no_check(type)
-	local attached = self.namedStates[type]
+function Property:_subEffect(effect)
+	self.equation = self.equation - effect:getEquation()
+end
+
+function Property:attach(type, effect)
+	local detached = self.namedEffects:attach(type, effect)
 	
-	if attached then
-		self.equation = self.equation - attached:getEquation()
-		self.namedStates[type] = nil
+	if effect then
+		self:_addEffect(effect)
+	end
 	
-		attached:onDetached()
+	if detached then
+		self:_subEffect(detached)
 	end
 end
 
-function Property:detach(type, state)
-	local attached = self.namedStates[type]
+function Property:detach(type, effect)
+	local detached = self.namedEffects:detach(type, effect)
 	
-	if attached == state then
-		self:_detach_no_check(type)
+	if detached	then
+		self:_subEffect(detached)
 	end
 end
 
 function Property:allAttachedStates()
-	return pairs(self.namedStates)
+	return pairs(self.namedEffects)
 end
 
 return Property

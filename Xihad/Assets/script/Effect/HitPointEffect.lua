@@ -1,29 +1,29 @@
-local base = require 'Effect.BoundEffect'
+local base = require 'Effect.RoundEffect'
 local HitPointEffect = setmetatable({
 	inc = 0,
 }, base)
 HitPointEffect.__index = HitPointEffect
 
-function HitPointEffect.new(inc, round)
-	local obj = setmetatable(base.new(round), HitPointEffect)
+function HitPointEffect.new(inc, recycler)
+	local effectType = inc > 0 and 'recover' or 'poison'
+	local obj = setmetatable(base.new(effectType, recycler), HitPointEffect)
 	obj.inc = inc
 	
 	return obj
 end
 
-function HitPointEffect:doAffect()
-	local warrior = self:getBinding()
-	if self.inc > 0 then
-		warrior:takeRecovery(inc)
-	elseif self.inc < 0 then
-		warrior:takeRecovery(-inc)
-	end
-end
-
 function HitPointEffect:onRoundBegin()
 	-- require camera focus
-	self:doAffect()
-	base.onRoundBegin()
+	local warrior = self:getBinding()
+	local inc = self.inc
+	if inc > 0 then
+		warrior:takeRecovery(inc)
+	elseif inc < 0 then
+		warrior:takeDamage(-inc)
+	end
+	
+	local AsConditionFactory = require 'Async.AsConditionFactory'
+	AsConditionFactory.waitTimer(0.5)
 end
 
 return HitPointEffect

@@ -1,5 +1,5 @@
 local base = require 'route.MapTile'
-local Terrain  = require 'Barrier.Terrain'
+local TerrainBarrier  = require 'Barrier.TerrainBarrier'
 local Location = require 'route.Location'
 local Rectangle= require 'math.Rectangle' 
 local WarriorBarrier = require 'WarriorBarrier'
@@ -68,7 +68,7 @@ function XTile:hasWarrior()
 end
 
 function XTile:getTerrain()
-	return self:findBarrierByKey(Terrain.getOptUniqueKey())
+	return self:findBarrierByKey(TerrainBarrier.getOptUniqueKey())
 end
 
 function XTile:getLeftBottomVector()

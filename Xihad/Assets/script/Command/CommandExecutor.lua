@@ -56,7 +56,7 @@ function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results
 	skill:playAnimation(warrior, targetTile, {
 			onAttackBegin = function() 
 				for _, result in pairs(results) do
-					result:getTargetBarrier():onHitBegin()
+					result:onHitBegin()
 				end
 			end,
 			
@@ -73,7 +73,7 @@ function CommandExecutor:_applyBattleResults(results)
 	for _, result in ipairs(results) do
 		jobs:addJob(function ()
 			result:apply()
-			result:getTargetBarrier():onHitEnd()
+			result:onHitEnd()
 		end)
 	end
 	
@@ -118,14 +118,7 @@ function CommandExecutor:cast(warrior, targetLocation, skillName)
 	
 	-- TODO gain item
 	
-	local current = coroutine.running()
-	
-	assert(g_scheduler:schedule(function ()
-		sCoroutine.resume(current)
-		print('resume from timer')
-	end, 0.5))
-	
-	coroutine.yield()
+	AsConditionFactory.waitTimer(0.5)
 	
 	self.cameraFacade:ascendAwayBattle()
 	

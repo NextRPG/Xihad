@@ -3,6 +3,7 @@ local robber =
 	career = '强盗',
 	model = 'reimu',
 	level = 1,
+	exp = 50,
 	skills = {
 		['Fire'] = 10,
 	},

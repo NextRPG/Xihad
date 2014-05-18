@@ -58,10 +58,10 @@ end
 
 function Modifier:update(time)
 	if self._enabled then
-		self:onUpdate(time)
+		return self:onUpdate(time)
 	elseif self._enabled == nil then
 		self:start()
-		self:update(time)
+		return self:update(time)
 	end
 end
 

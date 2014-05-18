@@ -144,18 +144,18 @@ function factory:create(team, name, data)
 	end)
 	
 	-- 死亡自动销毁
-	warrior:addPropertyListener('Dead', function (warrior, pname, prev)
-		if warrior:isDead() then
-			-- TODO
-			local animator = warrior:findPeer(c'AnimatedMesh')
-			animator:playAnimation(c'die', false)
-			AsConditionFactory.waitAnimation(animator)
+	-- warrior:addPropertyListener('Dead', function (warrior, pname, prev)
+	-- 	if warrior:isDead() then
+	-- 		-- TODO
+	-- 		local animator = warrior:findPeer(c'AnimatedMesh')
+	-- 		animator:playAnimation(c'die', false)
+	-- 		AsConditionFactory.waitAnimation(animator)
 			
-			g_scheduler:schedule(function ()
-				warrior:getHostObject():stop()
-			end)
-		end
-	end)
+	-- 		g_scheduler:schedule(function ()
+	-- 			warrior:getHostObject():stop()
+	-- 		end)
+	-- 	end
+	-- end)
 	
 	warrior:deactivate()
 	return object
