@@ -42,9 +42,17 @@ end
 
 function GUIController:subscribeEvent(eventName, callback)
 	if eventName == "Command.Select" then
-		self.Command:pushSelectListener(callback)
+		self.Command:addSelectListener(callback)
 	elseif eventName == "Command.Hover" then
-		self.Command:pushHoverListener(callback)	
+		self.Command:addHoverListener(callback)	
+	end
+end
+
+function GUIController:unsubscribeEvent(eventName, callback)
+	if eventName == "Command.Select" then
+		self.Command:removeSelectListener(callback)
+	elseif eventName == "Command.Hover" then
+		self.Command:removeHoverListener(callback)	
 	end
 end
 
