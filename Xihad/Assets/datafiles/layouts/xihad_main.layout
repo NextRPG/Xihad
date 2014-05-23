@@ -31,21 +31,31 @@
 		<Property name="AutoCloseNestedPopups" value="true" />
 		<Property name="FadeInTime" value="0.2" />
 		<Property name="FadeOutTime" value="0.2" />
-		<!-- <Property name="AutoCloseNestedPopups" value="true"/> -->
-		<Window name="Skill" type="Xihad/MenuItem">
-			<Property name="Text" value="技能" />
-			
-			<Window name="List" type="Xihad/PopupMenu">
-			</Window>	
+	</Window>
+	
+	<Window name="testButton" type="Xihad/Button">
+		<Property name="Font" value="fangzheng-14" />
+		<Property name="Text" value="确定"/>
+		<Property name="Size" value="{{0, 100}, {0, 30}}" />
+	</Window>
+		
+	
+	<Window name="MapTileInfo" type="Xihad/MapTileInfo">
+		<Property name="Size" value="{{0, 175}, {0, 73}}" />
+		<Property name="Font" value="fangzheng-14" />
+		<Property name="Alpha" value="0" />
+		<Property name="Position" value="{{0.5, -87}, {0, 0}}" />
+		<Window name="Attr1" type="Xihad/DoubleIcon">
+			<Property name="Position" value="{{0, 34}, {0, 45}}"/>
+			<Property name="Size" value="{{0, 26}, {0, 17}}" />
 		</Window>
-		<Window name="Prop" type="Xihad/MenuItem">
-			<Property name="Text" value="道具" />
-			
-			<Window name="List" type="Xihad/PopupMenu">
-			</Window>	
+		<Window name="Attr2" type="Xihad/DoubleIcon">
+			<Property name="Position" value="{{0, 77}, {0, 45}}"/>
+			<Property name="Size" value="{{0, 26}, {0, 17}}" />
 		</Window>
-		<Window name="Stay" type="Xihad/MenuItem">
-			<Property name="Text" value="待机" />
+		<Window name="Attr3" type="Xihad/DoubleIcon">
+			<Property name="Position" value="{{0, 118}, {0, 45}}"/>
+			<Property name="Size" value="{{0, 26}, {0, 17}}" />
 		</Window>
 	</Window>
 	

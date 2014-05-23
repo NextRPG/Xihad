@@ -4,6 +4,6 @@ return function(pnode, f, env, scale)
 	local tar = env:getNode("@target")
 	pnode:setPosition(env:getPosition(tar))
 	
-	local buff = require "buff"
+	local buff = require "effect.buff"
 	buff(pnode:newChild(), f, env, scale, Color.new(Color.red))
 end

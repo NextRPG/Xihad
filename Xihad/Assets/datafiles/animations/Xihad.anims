@@ -1,5 +1,120 @@
 <?xml version="1.0" ?>
 <Animations>
+	<AnimationDefinition name="MapEffectUpToOne" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="BottomAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_up_one" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Start" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectUpToTwo" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="BottomAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_up_one" />
+			<KeyFrame position="0.2" value="XihadUI/Map/effect_up_two" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Start" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectUpToThree" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="BottomAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_up_one" />
+			<KeyFrame position="0.2" value="XihadUI/Map/effect_up_two" />
+			<KeyFrame position="0.4" value="XihadUI/Map/effect_up_three" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Start" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectDownToOne" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="TopAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_down_one" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Start" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectDownToTwo" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="TopAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_down_one" />
+			<KeyFrame position="0.2" value="XihadUI/Map/effect_down_two" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Start" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectDownToThree" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="TopAligned" />
+		</Affector>
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Map/effect_down_one" />
+			<KeyFrame position="0.2" value="XihadUI/Map/effect_down_two" />
+			<KeyFrame position="0.4" value="XihadUI/Map/effect_down_three" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Start" />
+		<Subscription event="MapEffectToZero" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MapEffectToZero" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="RightIcon" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="" />
+		</Affector>
+		<Subscription event="MapEffectUpToOne" action="Stop" />
+		<Subscription event="MapEffectUpToTwo" action="Stop" />
+		<Subscription event="MapEffectUpToThree" action="Stop" />
+		<Subscription event="MapEffectDownToOne" action="Stop" />
+		<Subscription event="MapEffectDownToTwo" action="Stop" />
+		<Subscription event="MapEffectDownToThree" action="Stop" />
+		<Subscription event="MapEffectToZero" action="Start" />
+	</AnimationDefinition>
+	
 	<AnimationDefinition name="TextFadeIn" duration="1.5" replayMode="once">
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
 			<KeyFrame position="0" value="0.0" />
@@ -21,20 +136,20 @@
 		<Subscription event="Enabled" action="Start" />
 	</AnimationDefinition>
 
-	<AnimationDefinition name="FrameLighter" duration="0.3" replayMode="once">
+	<AnimationDefinition name="FrameShow" duration="0.3" replayMode="once">
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="0.3"/>
+			<KeyFrame position="0.0" sourceProperty="Alpha" />
 			<KeyFrame position="0.3" value="1.0" progression="quadratic accelerating"/>
 		</Affector>
-		<Subscription event="MouseEntersArea" action="Start"/>
+		<Subscription event="FrameShow" action="Start"/>
 	</AnimationDefinition>
 
-	<AnimationDefinition name="FrameDarker" duration="0.3" replayMode="once">
+	<AnimationDefinition name="FrameHide" duration="0.3" replayMode="once">
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="1.0"/>
-			<KeyFrame position="0.3" value="0.3" progression="quadratic accelerating" />
+			<KeyFrame position="0.0" sourceProperty="Alpha" />
+			<KeyFrame position="0.3" value="0.0" progression="quadratic accelerating" />
 		</Affector>
-		<Subscription event="MouseLeavesArea" action="Start" />
+		<Subscription event="FrameHide" action="Start" />
 	</AnimationDefinition>
 
 	<AnimationDefinition name="Magnify" duration="0.35" replayMode="once">

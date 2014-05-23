@@ -1,6 +1,6 @@
 -- 狱火
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 local IniterCreator = Utils.IniterCreator
 local AssetsPath = "../Xihad/Assets/gfx/"
 
@@ -116,7 +116,7 @@ return function(pnode, f, env, scale)
 	pnode:setPosition(env:getPosition(tar))
 	pnode:setParticlesAreGlobal(false)
 	
-	local magic = require "magic_circle"
+	local magic = require "effect.magic_circle"
 	magic(pnode:newChild(), f, env, 3.5, 20*scale, Color.new(0xffff8833))
 	
 	pnode = pnode:newChild()

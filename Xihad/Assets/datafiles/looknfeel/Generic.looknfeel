@@ -31,7 +31,7 @@
                     </Dim>
                 </Area>
                 <VertFormatProperty name="VertFormatting"/>
-                <HorzFormatPropertxy name="HorzFormatting"/>
+                <HorzFormatProperty name="HorzFormatting"/>
             </TextComponent>
         </ImagerySection>
         <StateImagery name="Enabled">

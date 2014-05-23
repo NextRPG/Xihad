@@ -1,5 +1,5 @@
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 
 local function addBuff(pnode, f, color, radius, width, height, pps, img, len, speed)
 	local bi = f:initer("Basic")

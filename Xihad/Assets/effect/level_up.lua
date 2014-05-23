@@ -1,5 +1,5 @@
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 local color = Color.new(Color.gold)
 local life = 1
 

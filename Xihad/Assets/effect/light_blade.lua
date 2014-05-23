@@ -1,7 +1,7 @@
 -- 月光斩
 
 require "math3d"
-local Utils = require "ParticleUtils"
+local Utils = require "effect.ParticleUtils"
 local IniterCreator = Utils.IniterCreator
 local AssetsPath = "../Xihad/Assets/gfx/"
 local bladeLife = 0.5	
