@@ -89,7 +89,8 @@ function Command:onEvent(e, eventType)
 	local parentName = hasParentMenu and parent:getProperty("XihadName") or name
 	local childName = hasParentMenu and name or nil
 	
-	for callback,_ in pairs(self.clickListeners) do
+	local listener = eventType == "Select" and self.clickListeners or self.hoverListeners
+	for callback,_ in pairs(listener) do
 		callback(parentName, childName, eventType)
 	end
 end
