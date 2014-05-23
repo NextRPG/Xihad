@@ -83,7 +83,7 @@ end
 function WarriorHitResult:_applyBuff()
 	for effect, probability in pairs(self.effects) do
 		if math.random() < probability then
-			effect:bind(self.targetWarrior)
+			effect:bind(self.targetWarrior, 'skill')
 		end
 	end
 end

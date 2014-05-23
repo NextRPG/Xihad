@@ -1,14 +1,14 @@
-local TerrainDatabase = {
+local TerrainRegistry = {
 	passable = {},
 	stayable = {},
 	apcost = {},
 }
 
 local function getFiled(forID, field)
-	local ret = TerrainDatabase[field][forID]
+	local ret = TerrainRegistry[field][forID]
 	if not ret then
 		ret = {}
-		TerrainDatabase[field][forID] = ret
+		TerrainRegistry[field][forID] = ret
 	end
 	
 	return ret
@@ -49,4 +49,4 @@ loadTerrain{
 	APcost = 2
 }
 
-return TerrainDatabase
+return TerrainRegistry

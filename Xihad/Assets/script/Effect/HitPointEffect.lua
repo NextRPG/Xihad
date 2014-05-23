@@ -5,11 +5,14 @@ local HitPointEffect = setmetatable({
 HitPointEffect.__index = HitPointEffect
 
 function HitPointEffect.new(inc, recycler)
-	local effectType = inc > 0 and 'recover' or 'poison'
-	local obj = setmetatable(base.new(effectType, recycler), HitPointEffect)
+	local obj = setmetatable(base.new(recycler), HitPointEffect)
 	obj.inc = inc
 	
 	return obj
+end
+
+function HitPointEffect:_generateUID()
+	return self.inc > 0 and 'recover' or 'poison'
 end
 
 function HitPointEffect:onRoundBegin()

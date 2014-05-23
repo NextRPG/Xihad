@@ -10,7 +10,7 @@ local Warrior = {
 	hitPoint   = 0,
 	properties = nil,	-- Property Host
 	
-	namedEffects = nil,
+	namedEffects = nil,	-- To avoid duplicated effect to a warrior
 	roundListeners = nil,
 	propertyListeners = nil,
 	
@@ -148,15 +148,13 @@ function Warrior:_checkEffectUnbinding(effect)
 		'Invoke effect:unbind() instead')
 end
 
-function Warrior:attachEffect(type, effect)
+function Warrior:registerEffect(type, effect)
 	self:_checkEffectBinding(effect)
-	
 	self.namedEffects:attach(type, effect)
 end
 
-function Warrior:detachEffect(type, effect)
+function Warrior:unregisterEffect(type, effect)
 	self:_checkEffectUnbinding(effect)
-	
 	self.namedEffects:detach(type, effect)
 end
 
@@ -189,19 +187,9 @@ function Warrior:get(pname)
  	return self:_getProperty(pname):get()
 end
 
-function Warrior:attachPropertyEffect(pname, type, effect)
-	self:_checkEffectBinding(effect)
-	
+function Warrior:addProperty(pname, equation)
 	local prev = self:get(pname)
-	self:_getProperty(pname):attach(type, effect)
-	self:_firePropertyChange(pname, prev)
-end
-
-function Warrior:detachPropertyEffect(pname, type, effect)
-	self:_checkEffectUnbinding(effect)
-	
-	local prev = self:get(pname)
-	self:_getProperty(pname):detach(type, effect)
+	self:_getProperty(pname):addEquation(equation)
 	self:_firePropertyChange(pname, prev)
 end
 

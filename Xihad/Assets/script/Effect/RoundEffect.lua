@@ -1,30 +1,17 @@
 local base = require 'Effect.BoundEffect'
-local RoundEffect = setmetatable({
-		eType = nil,
-	}, base)
+local RoundEffect = setmetatable({}, base)
 RoundEffect.__index = RoundEffect
 
-function RoundEffect.new(eType, recycler)
-	local o = setmetatable(base.new(recycler), RoundEffect)
-	o.eType = eType
-	return o
+function RoundEffect.new(recycler)
+	return setmetatable(base.new(recycler), RoundEffect)
 end
 
 function RoundEffect:onBind(warrior)
 	warrior:addRoundListener(self)
-	
-	if self.eType then
-		warrior:attachEffect(self.eType, self)
-	end
 end
 
-function RoundEffect:onUnbind()
-	local warrior = self:getBinding()
+function RoundEffect:onUnbind(warrior)
 	warrior:removeRoundListener(self)
-	
-	if self.eType then
-		warrior:detachEffect(self.eType, self)
-	end
 end
 
 function RoundEffect:onRoundBegin()

@@ -13,6 +13,14 @@ function Equation.new(defaultOffset)
 		}, Equation)
 end
 
+function Equation:__unm()
+	local ret = Equation.new()
+	ret._power = -self._power
+	ret._offset= -self._offset
+	ret._fixed = -self._fixed
+	return ret
+end
+
 function Equation:__add(other)
 	local ret = Equation.new()
 	ret._power = self._power + other._power

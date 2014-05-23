@@ -14,25 +14,24 @@ function BuffEffect.new(field, equation, recycler)
 	return obj
 end
 
+function BuffEffect:_generateUID(cause)
+	return cause .. '#' .. self.field
+end
+
 function BuffEffect:onBind(bindingWarrior)
 	print('BuffEffect toAttach', self.field, self:getBinding():get(self.field))
-	bindingWarrior:attachPropertyEffect(self.field, 'skill', self)
-	print('BuffEffect attached', self.field, self:getBinding():get(self.field))
 	
-	-- TODO 添加动画
+	bindingWarrior:addProperty(self.field, self.equation)
+	
+	print('BuffEffect attached', self.field, self:getBinding():get(self.field))
 end
 
-function BuffEffect:onUnbind()
+function BuffEffect:onUnbind(bindingWarrior)
 	print('onUnbind BuffEffect')
 	
-	self:getBinding():detachPropertyEffect(self.field, 'skill', self)
+	bindingWarrior:addProperty(self.field, -self.equation)
 	
-	-- TODO 移除动画
 	print('BuffEffect detached', self.field, self:getBinding():get(self.field))
-end
-
-function BuffEffect:getEquation()
-	return self.equation
 end
 
 return BuffEffect

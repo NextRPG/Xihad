@@ -1,11 +1,14 @@
 local Color = require 'Color'
 local Array = require 'std.Array'
 local Barrier = require 'Barrier'
-local TerrainDB  = require 'TerrainDatabase'
+local WarriorBarrier = require 'WarriorBarrier'
+local TerrainRegistry= require 'TerrainRegistry'
 
 local TerrainBarrier = {
 	type = nil,
 	colors = nil,
+	effects= nil,
+	attached = nil,
 }
 TerrainBarrier.__index = TerrainBarrier
 TerrainBarrier.__base = 'Barrier'
@@ -14,9 +17,11 @@ setmetatable(TerrainBarrier, Barrier)
 function TerrainBarrier.new(type, object)
 	local o = Barrier.new()
 	setmetatable(o, TerrainBarrier)
-	assert(type and TerrainDB.passable[type])
+	assert(type and TerrainRegistry.passable[type])
 	o.type = type
 	o.colors = {}
+	o.effects= {}
+	o.attached = {}
 	
 	-- TODO FIX
 	local mat = object:findComponent(c'Render'):getMaterial(0)
@@ -38,12 +43,12 @@ function TerrainBarrier.getOptUniqueKey()
 end
 
 local function selectResult(field, type, warrior)
-	local dedicated = TerrainDB[field][type][warrior:getCareer()] 
+	local dedicated = TerrainRegistry[field][type][warrior:getCareer()] 
 	
 	if dedicated ~= nil then
 		return dedicated
 	else
-		return TerrainDB[field][type]['*']
+		return TerrainRegistry[field][type]['*']
 	end
 end
 
@@ -116,6 +121,27 @@ function TerrainBarrier:popColor()
 	Array.popBack(self.colors)
 	self:_trimColors()
 	self:_updateColor()
+end
+
+function TerrainBarrier:inhabitWith(other, optKey)
+	local warrior = other:findPeer(c'Warrior')
+	if warrior then
+		self.attached = {}
+		for _, effect in ipairs(self.effects) do
+			local copy = effect:copy()
+			copy:bind(warrior, 'terrain')
+			table.insert(self.attached, copy)
+		end
+	end
+end
+
+function TerrainBarrier:leaveFrom(other, optKey)
+	local warrior = other:findPeer(c'Warrior')
+	if warrior then
+		for _, effect in ipairs(self.attached) do
+			effect:unbind()
+		end
+	end
 end
 
 return TerrainBarrier

@@ -1,5 +1,6 @@
 local BoundEffect = {
 	_state = 'init',
+	_uid = nil,
 	_binding = nil,
 	_recycler= nil,
 }
@@ -36,13 +37,19 @@ function BoundEffect:isBound()
 	return self._state == 'binding' and self._binding ~= nil
 end
 
-function BoundEffect:bind(warrior)
+function BoundEffect:_generateUID(cause)
+	return cause
+end
+
+function BoundEffect:bind(warrior, cause)
 	assert(self._state ~= 'binded', 'Attempt to re-bind to another warrior')
 	assert(not self:isBound())
 	
 	self._binding = warrior
 	self._state = 'binding'
 	
+	self._uid = self:_generateUID(cause)
+	warrior:registerEffect(self._uid, self)
 	self:onBind(warrior)
 	
 	if self._recycler then
@@ -63,11 +70,13 @@ function BoundEffect:unbind()
 	self._state = 'unbinding'
 	
 	print('unbind BoundEffect')
-	self:onUnbind()
+	local warrior = self:getBinding()
+	warrior:unregisterEffect(self._uid, self)
+	self:onUnbind(warrior)
 	
 	if self._recycler then
 		-- 由于可能会主动解绑，所以需要通知回收器停止
-		self._recycler:stop(self, self:getBinding())
+		self._recycler:stop(self, warrior)
 	end
 	
 	self._binding = nil

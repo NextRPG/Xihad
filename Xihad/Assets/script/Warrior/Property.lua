@@ -9,9 +9,6 @@ local Property = {
 	
 	equation = nil,
 	
-	--- 
-	-- Temporary states those generated in a battle
-	namedEffects = nil,
 }
 Property.__index = Property
 
@@ -37,36 +34,12 @@ function Property:getBasic()
 	return self.basic
 end
 
-function Property:_addEffect(effect)
-	self.equation = self.equation + effect:getEquation()
+function Property:addEquation(equation)
+	self.equation = self.equation + equation
 end
 
-function Property:_subEffect(effect)
-	self.equation = self.equation - effect:getEquation()
-end
-
-function Property:attach(type, effect)
-	local detached = self.namedEffects:attach(type, effect)
-	
-	if effect then
-		self:_addEffect(effect)
-	end
-	
-	if detached then
-		self:_subEffect(detached)
-	end
-end
-
-function Property:detach(type, effect)
-	local detached = self.namedEffects:detach(type, effect)
-	
-	if detached	then
-		self:_subEffect(detached)
-	end
-end
-
-function Property:allAttachedStates()
-	return pairs(self.namedEffects)
+function Property:subEquation(equation)
+	self.equation = self.equation - equation
 end
 
 return Property

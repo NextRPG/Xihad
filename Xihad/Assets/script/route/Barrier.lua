@@ -44,6 +44,14 @@ function Barrier:getOptUniqueKey( )
 	return nil
 end
 
+function Barrier:inhabitWith(other, optKey)
+	
+end
+
+function Barrier:leaveFrom(other, optKey)
+	
+end
+
 function Barrier:setTile( tile ) 
 	if self.tile == tile then return false end
 	

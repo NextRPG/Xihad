@@ -48,22 +48,22 @@ local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'Assets.effec
 
 fireSkill:addResolver(HitPointResolver.new('fire', -30))
 
--- fireSkill:addResolver(
--- 	EffectResolver.new(
--- 		BuffEffect.new(
--- 			'ATK', 
--- 			Equation.new(-10), 
--- 			RoundRecycler.new(2)), 
--- 		1.0)
--- 	)
-
 fireSkill:addResolver(
 	EffectResolver.new(
-		HitPointEffect.new(
-			-10,
-			RoundRecycler.new(3)),
+		BuffEffect.new(
+			'ATK', 
+			Equation.new(-10), 
+			RoundRecycler.new(2)), 
 		1.0)
 	)
+
+-- fireSkill:addResolver(
+-- 	EffectResolver.new(
+-- 		HitPointEffect.new(
+-- 			-10,
+-- 			RoundRecycler.new(3)),
+-- 		1.0)
+-- 	)
 
 -- fireSkill:addResolver(
 -- 	EffectResolver.new(
