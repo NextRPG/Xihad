@@ -17,6 +17,14 @@ local animations = 	{
 					
 						FrameShow = { "MapTileInfo" },
 						FrameHide = { "MapTileInfo" },
+						
+						["MapEffectUpToOne"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectUpToTwo"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectUpToThree"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectDownToOne"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectDownToTwo"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectDownToThree"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						["MapEffectToZero"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 					}
 
 for animName, targetList in pairs(animations) do

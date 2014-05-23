@@ -2,24 +2,28 @@ local Utils = require "assets.ui.StaticUtils"
 local findWindow = Utils.findWindow
 
 local effectIconMap = {
-	[-3] = "XihadUI/Map/effect_down_three",
-	[-2] = "XihadUI/Map/effect_down_two",
-	[-1] = "XihadUI/Map/effect_down_one",
-	[1] = "XihadUI/Map/effect_up_one",
-	[2] = "XihadUI/Map/effect_up_two",
-	[3] = "XihadUI/Map/effect_up_three",
+	[-3] = "MapEffectDownToThree",
+	[-2] = "MapEffectDownToTwo",
+	[-1] = "MapEffectDownToOne",
+	[0] = "MapEffectToZero",
+	[1] = "MapEffectUpToOne",
+	[2] = "MapEffectUpToTwo",
+	[3] = "MapEffectUpToThree",
 }
 local attrIconMap = {
 	["攻击力"] = "XihadUI/Map/sword_icon",
 }
-local function getIcons(effect)
+local function getWidgetConfig(effect)
 	if not effect then return "", "" end
 
 	local attrIcon = attrIconMap[effect.attrName] or ""
-	local effectIcon = effectIconMap[effect.effectLevel] or ""
-	local tooltip = effect.attrName..(effect.effectLevel > 0 and "上升" or "下降")
+	local event = effectIconMap[effect.effectLevel]
+	if effect.effectLevel == 0 or not event then
+		print("effectLevel should not be :", effect.effectLevel)
+	end
+	-- local tooltip = effect.attrName..(effect.effectLevel > 0 and "上升" or "下降")
 	
-	return attrIcon, effectIcon 
+	return attrIcon, event --, tooltip
 end
 
 local MapTileInfo = {
@@ -52,9 +56,9 @@ function MapTileInfo:show(args)
 	local effects = args.effects
 	
 	for i=1,3 do
-		local left, right, tooltip = getIcons(effects[i])
+		local left, event, tooltip = getWidgetConfig(effects[i])
 		iconWidget[i]:setProperty("LeftIcon", left)
-		iconWidget[i]:setProperty("RightIcon", right)
+		iconWidget[i]:fireEvent(event, CEGUI.WindowEventArgs(iconWidget[i]))
 		-- iconWidget[i]:setTooltipText(tooltip)
 	end
 	

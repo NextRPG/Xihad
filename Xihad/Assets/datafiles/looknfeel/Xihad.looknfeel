@@ -9,6 +9,7 @@
 	<WidgetLook name="Xihad/DoubleIcon">
 		<PropertyDefinition name="LeftIcon" initialValue="" redrawOnWrite="true" type="Image"/>
 		<PropertyDefinition name="RightIcon" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="RightIconVertFormat" initialValue="CentreAligned" redrawOnWrite="true" type="VerticalFormatting"/>
 		<ImagerySection name="left">
 			<ImageryComponent>
 				<ImageProperty name="LeftIcon"/>
@@ -19,7 +20,7 @@
 		<ImagerySection name="right">
 			<ImageryComponent>
 				<ImageProperty name="RightIcon"/>
-				<VertFormat type="CentreAligned"/>
+				<VertFormatProperty name="RightIconVertFormat" />
 				<HorzFormat type="RightAligned"/>
 			</ImageryComponent>
 		</ImagerySection>
@@ -36,6 +37,8 @@
 			</Layer>
 		</StateImagery>
 	</WidgetLook>
+	
+	
 	<!--
 	*****************************************************************
 		Xihad/RoundedRectangle

@@ -59,13 +59,17 @@ g_scene:pushController({
 				[4] = { name = "待机", },
 			})
 		elseif e.key == "M" then
+			local function getRandomEffectValue()
+				local result = math.random(-3, 3)
+				return result
+			end
  			controller:showWindow("MapTileInfo",
  			{
  				name = "草地",
 				effects = {
-					[1] = { attrName = "攻击力", effectLevel = 3 },
-					[2] = { attrName = "攻击力", effectLevel = 2 },
-					[3] = { attrName = "攻击力", effectLevel = 1 }
+					[1] = { attrName = "攻击力", effectLevel = getRandomEffectValue() },
+					[2] = { attrName = "攻击力", effectLevel = getRandomEffectValue() },
+					[3] = { attrName = "攻击力", effectLevel = getRandomEffectValue() },
 				}
  			})
 		elseif e.key == "Q" then
