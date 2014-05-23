@@ -11,8 +11,8 @@ PCInputTransformer.__index = PCInputTransformer
 function PCInputTransformer.new(receiver)
 	local o = setmetatable({
 		receiver = receiver,
-		leftDetector = MultiClickDetector.new(g_scheduler, 'lPressed'),
-		rightDetector= MultiClickDetector.new(g_scheduler, 'rPressed'),
+		leftDetector = MultiClickDetector.new(g_scheduler, 'lPressed', 2),
+		rightDetector= MultiClickDetector.new(g_scheduler, 'rPressed', 1),
 	}, PCInputTransformer)
 	
 	local leftListener = functional.bindself(o, 'onLeftClick')

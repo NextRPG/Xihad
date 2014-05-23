@@ -7,13 +7,16 @@ function ChooseHeroState.new(...)
 end
 
 function ChooseHeroState:onStateEnter(state, prev)
-	self.camera:focus(nil)
+	self:_focusObject(nil)
 end
 
 function ChooseHeroState:onVacancySelected(tile)
 	-- show tile info
 	self:_showTileInfo(tile)
-	self:_focusTile(tile)
+	
+	self:_fastenCursorWhen(function ()
+		self:_focusTile(tile)
+	end)
 end
 
 function ChooseHeroState:onHeroSelected(heroObject)
@@ -31,7 +34,11 @@ end
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
 	self:_showWarriorInfo(enemyObject:findComponent(c'Warrior'))
-	self.camera:focus(enemyObject)
+	
+	self:_fastenCursorWhen(function ()
+		self:_focusObject(enemyObject)
+	end)
+	
 	-- TODO
 	-- self.painter:showRange(enemyObject)
 end

@@ -14,6 +14,10 @@ end
 
 function class.delegateClosure(type, delegated, object, delegating)
 	delegating = delegating or delegated
+	if not object[delegating] then
+		error(string.format('no such a function in object: %q', delegating))
+	end
+	
 	type[delegated] = function(self, ...)
 		return object[delegating](object, ...)
 	end

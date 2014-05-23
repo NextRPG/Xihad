@@ -103,6 +103,7 @@ end
 
 function Skill:getLaunchableTiles(chessboard, sourceWarrior, launcherLocation, set)
 	set = set or {}
+	launcherLocation = launcherLocation or sourceWarrior:getLocation()
 	
 	self.range:traverseLaunchableLocations(launcherLocation, 
 		function (loc)

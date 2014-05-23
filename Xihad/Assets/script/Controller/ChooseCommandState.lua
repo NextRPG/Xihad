@@ -7,12 +7,12 @@ function ChooseCommandState.new(...)
 	return setmetatable(base.new(...), ChooseCommandState)
 end
 
-function ChooseCommandState:onTouch(x, y)
-	-- ignore
+function ChooseCommandState:needTouch()
+	return false
 end
 
-function ChooseCommandState:onHover(x, y)
-	-- ignore
+function ChooseCommandState:needHover()
+	return false
 end
 
 function ChooseCommandState:onUICommand(command)

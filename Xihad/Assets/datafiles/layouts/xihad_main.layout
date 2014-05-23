@@ -34,6 +34,7 @@
 	</Window>
 	
 	<Window name="testButton" type="Xihad/Button">
+		<Property name="Visible" value="false" />
 		<Property name="Font" value="fangzheng-14" />
 		<Property name="Text" value="确定"/>
 		<Property name="Size" value="{{0, 100}, {0, 30}}" />

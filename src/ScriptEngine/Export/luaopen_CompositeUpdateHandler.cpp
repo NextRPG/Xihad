@@ -7,11 +7,8 @@ using namespace luaT;
 using namespace xihad::ngn;
 namespace xihad { namespace script
 {
-	static int appendUpdater(lua_State* L)
+	static UpdateHandler* getUpdateHandler(lua_State* L, int idx) 
 	{
-		luaL_checkany(L, 2);
-		auto group = checkarg<CompositeUpdateHandler*>(L, 1);
-
 		UpdateHandler* updater = 0;
 		if (updater = checkarg<UpdateHandler*>(L, 2))
 		{
@@ -26,8 +23,23 @@ namespace xihad { namespace script
 		{
 			luaL_typerror(L, 2, "appendUpdater requires table/UpdateHandler");
 		}
-		
+
+		return updater;
+	}
+
+	static int appendUpdater(lua_State* L)
+	{
+		auto group = checkarg<CompositeUpdateHandler*>(L, 1);
+		UpdateHandler* updater = getUpdateHandler(L, 2);
 		push<bool>(L, group->appendChildHandler(updater));
+		return 1;
+	}
+
+	static int prependUpdater(lua_State* L)
+	{
+		auto group = checkarg<CompositeUpdateHandler*>(L, 1);
+		UpdateHandler* updater = getUpdateHandler(L, 2);
+		push<bool>(L, group->prependChildHandler(updater));
 		return 1;
 	}
 
@@ -49,8 +61,11 @@ namespace xihad { namespace script
 		luaT_defRegsBgn(cuhRegs)
 			{ "appendUpdater", appendUpdater },
 			{ "removeUpdater", removeUpdater},
+			{ "prependUpdater", prependUpdater },
+
 			{ "appendUpdateHandler", appendUpdater },
 			{ "removeUpdateUpdater", removeUpdater},
+			{ "prependUpdateHandler", prependUpdater },
 		luaT_defRegsEnd
 		MetatableFactory<CompositeUpdateHandler, UpdateHandler>::create(L, cuhRegs, 0);
 

@@ -2,6 +2,7 @@ local Class = require 'std.Class'
 local sCoroutine = require 'std.sCoroutine'
 local CommandList = require 'Command.CommandList'
 local StateMachine = require 'std.StateMachine'
+local CursorFastener  = require 'Controller.CursorFastener'
 local ChooseHeroState = require 'Controller.ChooseHeroState'
 local ChooseTileState = require 'Controller.ChooseTileState'
 local ChooseTargetState = require 'Controller.ChooseTargetState'
@@ -13,6 +14,9 @@ local PlayStateMachine = {
 	cmdList= nil,
 	runner = nil,
 	stateControllers = nil,
+	
+	touchDispatcher = nil,
+	hoverDispatcher = nil,
 }
 PlayStateMachine.__index = PlayStateMachine
 
@@ -23,34 +27,53 @@ function PlayStateMachine.new(...)
 			stateControllers = {},
 		}, PlayStateMachine)
 	
-	obj.sm:setTransition('ChooseHero', 'next', 'ChooseTile')
+	obj:_initTransitions()	
 	
-	obj.sm:setTransition('ChooseTile', 'next', 'ChooseCommand')
-	obj.sm:setTransition('ChooseTile', 'back', 'ChooseHero')
-	
-	obj.sm:setTransition('ChooseCommand', 'next', 'ChooseTarget')
-	obj.sm:setTransition('ChooseCommand', 'done', 'Finish')
-	obj.sm:setTransition('ChooseCommand', 'back', 'ChooseTile')
-	
-	obj.sm:setTransition('ChooseTarget', 'next', 'Finish')
-	obj.sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
-	
-	---
-	-- @see nextHero()
-	obj.sm:setTransition('Finish', 'continue', 'ChooseHero')
+	local cursorFastener = CursorFastener.new()
 	
 	local commandList = obj.cmdList	
-	local newDispatcher  = CursorEventDispatcher.new
-	obj.stateControllers['ChooseHero'] 	 = ChooseHeroState.new(commandList, newDispatcher, ...)
-	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, newDispatcher, ...)
-	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, newDispatcher, ...)
-	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, newDispatcher, ...)
+	obj.stateControllers['ChooseHero'] 	 = ChooseHeroState.new(commandList, cursorFastener, ...)
+	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, cursorFastener, ...)
+	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, cursorFastener, ...)
+	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, cursorFastener, ...)
 	
 	for stateName, state in pairs(obj.stateControllers) do
 		obj.sm:addStateListener(stateName, state)
 	end
 	
+	local touchListener = {}
+	Class.delegateClosure(touchListener, 'needCollisionDetection', obj, 'needCDWhenTouch')
+	Class.delegateClosure(touchListener, 'onWarrior', obj, 'onWarriorSelected')
+	Class.delegateClosure(touchListener, 'onTile' ,   obj, 'onTileSelected')
+	obj.touchDispatcher = CursorEventDispatcher.new(touchListener, cursorFastener)
+	
+	local hoverListener = {}
+	Class.delegateClosure(hoverListener, 'needCollisionDetection', obj, 'needCDWhenHover')
+	Class.delegateClosure(hoverListener, 'onWarrior', obj, 'onWarriorHovered')
+	Class.delegateClosure(hoverListener, 'onTile' ,   obj, 'onTileHovered')
+	obj.hoverDispatcher = CursorEventDispatcher.new(hoverListener, cursorFastener)
+	
 	return obj
+end
+
+function PlayStateMachine:_initTransitions()
+	local sm = self.sm
+	
+	sm:setTransition('ChooseHero', 'next', 'ChooseTile')
+	
+	sm:setTransition('ChooseTile', 'next', 'ChooseCommand')
+	sm:setTransition('ChooseTile', 'back', 'ChooseHero')
+	
+	sm:setTransition('ChooseCommand', 'next', 'ChooseTarget')
+	sm:setTransition('ChooseCommand', 'done', 'Finish')
+	sm:setTransition('ChooseCommand', 'back', 'ChooseTile')
+	
+	sm:setTransition('ChooseTarget', 'next', 'Finish')
+	sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
+	
+	---
+	-- @see nextHero()
+	sm:setTransition('Finish', 'continue', 'ChooseHero')
 end
 
 Class.delegate(PlayStateMachine, 'addStateListener',	'sm')
@@ -96,13 +119,44 @@ function PlayStateMachine:getCommandList()
 end
 
 function PlayStateMachine:onHover(x, y)
-	if not self.runner then 
-		return self:_process('onHover', x, y)
+	if self.runner then return end
+	
+	if self:_getCurrentStateController():needHover() then
+		self.hoverDispatcher:dispatch(x, y)
 	end
 end
 
+function PlayStateMachine:needCDWhenHover()
+	return self:_getCurrentStateController():needCDWhenHover()
+end
+
+function PlayStateMachine:onWarriorHovered(obj)
+	return self:_process('onWarriorHovered', obj)
+end
+
+function PlayStateMachine:onTileHovered(tile)
+	return self:_process('onTileHovered', tile)
+end
+
 function PlayStateMachine:onTouch(x, y, times)
-	return self:_onCommand('onTouch', x, y, times)
+	if self.runner then return end
+		
+	if self:_getCurrentStateController():needTouch() then
+		print(times)
+		self.touchDispatcher:dispatch(x, y, times)
+	end
+end
+
+function PlayStateMachine:needCDWhenTouch()
+	return self:_getCurrentStateController():needCDWhenTouch()
+end
+
+function PlayStateMachine:onWarriorSelected(obj, times)
+	return self:_onCommand('onWarriorSelected', obj, times)
+end
+
+function PlayStateMachine:onTileSelected(tile, times)
+	return self:_onCommand('onTileSelected', tile, times)
 end
 
 function PlayStateMachine:onBack()

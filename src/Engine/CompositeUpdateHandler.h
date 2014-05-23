@@ -40,7 +40,7 @@ namespace xihad { namespace ngn
 		/// 判断是否包含对象
 		bool containsChildHandler(UpdateHandler* ) const;
 
-		/// 附加更新对象
+		/// 附加更新对象到尾部
 		/**
 		 * handler 必须是一个非空并且没有被附加到其他 CompositeUpdateHandler 之上，才能够
 		 * 成功附加。
@@ -54,6 +54,12 @@ namespace xihad { namespace ngn
 		 * @return true if append
 		 */ 
 		virtual bool appendChildHandler(UpdateHandler*);
+
+		/// 附加更新对象到头部
+		/**
+		 * @see appendChildHandler()
+		 */
+		virtual bool prependChildHandler(UpdateHandler*);
 
 		/// 移除并摧毁子对象
 		/**

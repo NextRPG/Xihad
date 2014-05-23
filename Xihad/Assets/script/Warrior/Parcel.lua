@@ -10,11 +10,19 @@ function Parcel.new()
 	return o
 end
 
-function Parcel:gainItem(item)
+function Parcel:gainItem(item, count)
 	
 end
 
 function Parcel:useItem(item)
+	
+end
+
+function Parcel:canUse(item)
+	
+end
+
+function Parcel:allItems()
 	
 end
 

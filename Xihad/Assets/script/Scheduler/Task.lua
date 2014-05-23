@@ -6,7 +6,7 @@ local Task = {
 Task.__index = Task
 
 function Task.new(id, startTime, callback)
-	assert(callback)
+	assert(callback and id)
 	
 	return setmetatable({
 			taskId = id,

@@ -180,6 +180,25 @@ function finishListener:onStateExit(state, next) end
 
 stateMachine:addStateListener('Finish', finishListener)
 
+-- init gui module
+g_cursor:setVisible(false)
+local GUISystem = require 'GUI.GUISystem'
+GUISystem.init()
+
+-- ont only for test but an example for you.
+local CommandView = require 'GUI.CommandView'
+
+stateMachine:addStateListener('ChooseCommand', {
+		onStateEnter = function() 
+			local cmdList = stateMachine:getCommandList()
+			CommandView.show(cmdList:getSource(), 400, 200)
+		end,
+		
+		onStateExit = function ()
+			CommandView.close()
+		end
+	})
+
 local enemyRound = false
 if not enemyRound then
 	for heroObj in g_scene:objectsWithTag('Hero') do
@@ -189,4 +208,4 @@ else
 	coroutine.wrap(startEnemy)()
 end
 
--- g_world:setTimeScale(3)
+g_world:setTimeScale(0.3)
