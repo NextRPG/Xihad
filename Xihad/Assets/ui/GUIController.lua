@@ -6,11 +6,15 @@ local GUIController = {
 
 G_CEGUISubscriberSlot = {
 	CommandSelect = function (e)
-		GUIController.Command:onEvent(e, "Select")	
+		GUIController.Command:onSelect(e)	
 	end,
 	CommandHover = function (e)
-		GUIController.Command:onEvent(e, "Hover")
-	end
+		GUIController.Command:onHover(e)
+	end,
+	CommandHoverNil = function (e)
+		GUIController.Command:onHoverNil(e)
+	end	
+
 }
 
 --[[

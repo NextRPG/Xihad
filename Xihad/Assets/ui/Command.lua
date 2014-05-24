@@ -34,6 +34,7 @@ local function addMenuItems(parent, itemList, receiveHover)
 		item:subscribeEvent("Clicked", G_CEGUISubscriberSlot.CommandSelect)
 		if receiveHover then
 			item:subscribeEvent("MouseEntersArea", G_CEGUISubscriberSlot.CommandHover)
+			item:subscribeEvent("MouseLeavesArea", G_CEGUISubscriberSlot.CommandHoverNil)	
 		end
 	end
 end
@@ -74,7 +75,7 @@ function Command:close()
 	CEGUI.toPopupMenu(findWindow("CommandWindow")):closePopupMenu()
 end
 
-function Command:onEvent(e, eventType)
+local function explainEvent(e)
 	local item = CEGUI.toMenuItem(CEGUI.toWindowEventArgs(e).window)
 	
 	-- escape callback when click high level menu, which has child menu.
@@ -89,9 +90,26 @@ function Command:onEvent(e, eventType)
 	local parentName = hasParentMenu and parent:getProperty("XihadName") or name
 	local childName = hasParentMenu and name or nil
 	
-	local listener = eventType == "Select" and self.clickListeners or self.hoverListeners
-	for callback,_ in pairs(listener) do
-		callback(parentName, childName, eventType)
+	return parentName, childName
+end
+
+function Command:onHover(e)
+	local parentName, childName = explainEvent(e)
+	for callback,_ in pairs(self.hoverListeners) do
+		callback(parentName, childName, "Hover")
+	end
+end
+
+function Command:onSelect(e)
+	local parentName, childName = explainEvent(e)
+	for callback,_ in pairs(self.hoverListeners) do
+		callback(parentName, childName, "Hover")
+	end
+end
+
+function Command:onHoverNil(e)
+	for callback,_ in pairs(self.hoverListeners) do
+		callback(nil, nil, "Hover")
 	end
 end
 
