@@ -90,7 +90,7 @@ namespace xihad { namespace cegui
 
 	void CEGUIHandle::update(float delta)
 	{
-		void checkWindowResize();
+		checkWindowResize();
 
 		CEGUI::System& gui_system(CEGUI::System::getSingleton());
 

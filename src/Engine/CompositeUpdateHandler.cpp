@@ -27,6 +27,18 @@ namespace xihad { namespace ngn
 		return true;
 	}
 
+	bool CompositeUpdateHandler::prependChildHandler( UpdateHandler* handler )
+	{
+		if (!handler) return false;
+
+		xassert(!containsChildHandler(handler));
+		mChildHandlerList.push_front(handler);
+		if (status() == STARTING || isUpdating()) 
+			handler->start();
+
+		return true;
+	}
+
 	void CompositeUpdateHandler::onStart()
 	{
 		for (iterator it = childHandlerBegin(); it != childHandlerEnd(); ++it)

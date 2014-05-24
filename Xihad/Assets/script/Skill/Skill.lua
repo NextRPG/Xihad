@@ -26,8 +26,8 @@ function Skill.new(name, range, filter, animator)
 			name  = name,
 			filter= filter,
 			range = range,
-			resolvers= {},
 			animator = animator,
+			resolvers= {},
 		}, Skill)
 	return obj
 end
@@ -103,6 +103,7 @@ end
 
 function Skill:getLaunchableTiles(chessboard, sourceWarrior, launcherLocation, set)
 	set = set or {}
+	launcherLocation = launcherLocation or sourceWarrior:getLocation()
 	
 	self.range:traverseLaunchableLocations(launcherLocation, 
 		function (loc)

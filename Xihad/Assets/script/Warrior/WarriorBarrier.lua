@@ -45,6 +45,10 @@ function WarriorBarrier:setTile( tile )
 			local object = self:getHostObject()
 			local translate = tile:getCenterVector()
 			object:resetTranslate(translate)
+			
+			-- local terrain = tile:getTerrain()
+			-- local effect = terrain:getEffect():copy()
+			-- effect:bind(self:findPeer(c'Warrior'))
 		else
 			-- TODO
 		end

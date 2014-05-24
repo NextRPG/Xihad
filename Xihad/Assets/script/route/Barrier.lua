@@ -33,11 +33,23 @@ function Barrier:getTile( )
 	return self.tile
 end
 
+function Barrier:onStop()
+	self:setTile(nil)
+end
+
 ---
 -- 可以通过返回的键值从 MapTile 中取得 Barrier 。但是，必须保证
 -- 键值唯一性。否则直接返回 nil
 function Barrier:getOptUniqueKey( )
 	return nil
+end
+
+function Barrier:inhabitWith(other, optKey)
+	
+end
+
+function Barrier:leaveFrom(other, optKey)
+	
 end
 
 function Barrier:setTile( tile ) 

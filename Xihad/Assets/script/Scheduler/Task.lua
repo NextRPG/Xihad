@@ -6,7 +6,7 @@ local Task = {
 Task.__index = Task
 
 function Task.new(id, startTime, callback)
-	assert(callback)
+	assert(callback and id)
 	
 	return setmetatable({
 			taskId = id,
@@ -38,6 +38,7 @@ function Task:hasStarted()
 end
 
 function Task:start()
+	assert(not self:hasStarted())
 	local run = self.callback
 	self.callback = nil
 	run()

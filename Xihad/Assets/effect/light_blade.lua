@@ -95,14 +95,15 @@ return function(pnode, f, env, scale, blendType)
 	addWindBlade(pnode:newChild(), f, scale, dir, 
 		function ()
 			local r = f:renderer("Quad")
-			r:setOrintation(math3d.vector(0, 0, 1), dir)
+			local vertical = dir:cross(math3d.vector(0, -1, 0))
+			r:setOrintation(vertical, dir)
 			return r	
 		end)
 	
 	addWindBlade(pnode:newChild(), f, scale, dir, 
 		function ()
 			local r = f:renderer("Quad")
-			r:setOrintation(math3d.vector(1, 0, 0), dir)
+			r:setOrintation(math3d.vector(0, 1, 0), dir)
 			return r	
 		end)
 
@@ -113,5 +114,5 @@ return function(pnode, f, env, scale, blendType)
 	
 -------------------------------------------
 	env:deferMessage(bladeLife, "attack begin")
-	env:deferMessage(bladeLife+0.1, "attack end")
+	env:deferMessage(bladeLife+0.3, "attack end")
 end

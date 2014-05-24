@@ -45,19 +45,7 @@ g_scene:pushController({
 		local handled = 0
 		if e.key == "C" then
 
-			controller:showWindow("Command", 
-			{ 	
-				[1] = { name = "技能", 
-						hover = true,
-						list = {[1] = {name = "狱火", value = 3 }, 
-								[2] = {name = "破冰刃", value =12, disabled = true },
-								[3] = {name = "普通", }
-								},
-					  } ,
-				[2] = { name = "道具", list = { [1] = { name = "药", value = 10}}},
-				[3] = { name = "交换", disabled = true, },
-				[4] = { name = "待机", },
-			})
+			2
 		elseif e.key == "M" then
 			local function getRandomEffectValue()
 				local result = math.random(-3, 3)

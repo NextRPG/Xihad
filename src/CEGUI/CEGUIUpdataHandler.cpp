@@ -23,8 +23,8 @@ namespace xihad { namespace cegui
 
 	void CEGUIUpdateHandler::onUpdate( const ngn::Timeline& tl )
 	{
-		ceguiHandle->update(tl.getLastTimeChange());
 		ceguiHandle->renderFrame();
+		ceguiHandle->update(tl.getLastTimeChange());
 	}
 
 	void CEGUIUpdateHandler::onStop()

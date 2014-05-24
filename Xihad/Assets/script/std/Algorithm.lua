@@ -70,15 +70,7 @@ end
 
 function Algo.clamp(value, min, max)
 	assert(min <= max, string.format('value: %d; min: %d; max: %d', value, min, max))
-	return Algo.min(Algo.max(value, min), max)
-end
-
-function Algo.min(a, b)
-	return a<b and a or b
-end
-
-function Algo.max(a, b)
-	return a>b and a or b
+	return math.min(math.max(value, min), max)
 end
 
 function Algo.min_max(a, b)

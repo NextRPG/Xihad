@@ -240,5 +240,7 @@ return function(pnode, f, env, scale)
 	
 ---------------------------------------------- 	
 	env:deferMessage(layer*timeGap, "attack begin")
+	
+	-- TODO 过长
 	env:deferMessage(layer*timeGap+iceLife*1.3, "attack end")
 end

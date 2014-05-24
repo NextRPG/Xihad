@@ -23,14 +23,21 @@ function ChooseTileState:onStateEnter(state, prev)
 	if prev == 'ChooseCommand' then
 		self:_getSourceBarrier():setTile(self.prevSourceTile)
 		assert(self.prevSourceTile)
-		
 	end
 	
 	self.prevSourceTile = nil
+	self.selectedTile = nil
 	
 	local reachable = self:_getSourceReachables()
-	self.reachableHandle = self:_markRange(reachable, 'Reachable')
-	self.camera:focus(self:_getSourceObject())
+	self:_markRange(reachable, 'Reachable', 'reachableHandle')
+	
+	if prev == 'ChooseCommand' then
+		self:_focusObject(self:_getSourceObject())
+	else
+		self:_fastenCursorWhen(function ()
+			self:_focusObject(self:_getSourceObject())
+		end)
+	end
 end
 
 function ChooseTileState:onStateExit()
@@ -40,7 +47,7 @@ function ChooseTileState:onStateExit()
 end
 
 function ChooseTileState:onBack()
-	self.camera:focus(nil)
+	self:_focusObject(nil)
 	return 'back'
 end
 
@@ -50,20 +57,6 @@ end
 
 function ChooseTileState:needCDWhenHover()
 	return false
-end
-
-function ChooseTileState:_fastenCusor()
-	-- local XihadMapTile = require 'Chessboard.XihadMapTile'
-	-- local x, y = g_cursor:getPosition()
-	-- local ray = g_collision:getRayFromScreenCoord(x, y)
-	-- local point = XihadMapTile.intersectsGround(ray)
-	-- local fixCursor = { onUpdate = function ()
-	-- 	local x,y = g_collision:getScreenCoordFromPosition(point)
-	-- 	g_cursor:setPosition(x, y)
-	-- end}
-	-- self.camera.cameraObject:appendUpdateHandler(fixCursor)
-	
-	-- fixCursor:stop()
 end
 
 function ChooseTileState:_canReachTile(tile)
@@ -77,17 +70,18 @@ function ChooseTileState:_moveWarrior(destLocation)
 	
 	-- continue to focus host object
 	local sourceObject = self:_getSourceObject()
-	self.camera:focus(sourceObject)
+	self:_focusObject(sourceObject)
 	self.executor:move(sourceObject, destLocation)
 end
 
 function ChooseTileState:_selectTile(tile)
-	-- TODO
-	-- self:_fastenCusor()
-	self:_focusTile(tile)
 	assert(not self.selectedHandle)
-	self.selectedHandle = self:_markTile(tile, 'Selected')
+	self:_markTile(tile, 'Selected', 'selectedHandle')
 	self.selectedTile = tile
+	
+	self:_fastenCursorWhen(function() 
+			self:_focusTile(tile)
+		end)
 end
 
 function ChooseTileState:_confirmTile(tile)
@@ -95,7 +89,9 @@ function ChooseTileState:_confirmTile(tile)
 	self.prevSourceTile = self:_getSourceTile()
 	
 	local destHandle = self:_markTile(tile, 'Destination')
-	self:_moveWarrior(tile:getLocation())
+	self:_fastenCursorWhen(function ()
+		self:_moveWarrior(tile:getLocation())
+	end)
 	self:_clearMark(destHandle)
 	
 	self.commandList:setLocation(tile:getLocation())
@@ -106,6 +102,8 @@ function ChooseTileState:onTileSelected(tile, times)
 	self:_updatePromote(tile)
 	self:_safeClear('selectedHandle')
 	
+	
+	-- print('onTileSelected', tile, times, self.selectedTile)
 	if not tile:canStay(self:_getSource()) then
 		self.ui:warning('not stayable')
 	elseif not self:_canReachTile(tile) then
@@ -122,7 +120,7 @@ function ChooseTileState:_showAttackRange(tile)
 	local skillCaster = self:_getSourceCaster()
 	local attackRange = skillCaster:getCastableTiles(tile:getLocation())
 	
-	self.attackableHandle = self:_markRange(attackRange, 'Attack')
+	self:_markRange(attackRange, 'Attack', 'attackableHandle')
 	self.promotingTile = tile
 end
 

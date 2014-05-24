@@ -2,7 +2,7 @@ local base = require 'Modifier.Modifier'
 local Trigonometry = require 'math.Trigonometry'
 local SmoothAiming = {
 	angularVel= 90, -- 角速度
-	elevation = 60,	-- 仰角
+	elevation = 55,	-- 仰角
 	
 	_lookDir  = nil,
 	_aimObject= nil,

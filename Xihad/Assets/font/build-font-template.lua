@@ -1,6 +1,7 @@
 local pathToExe			= '../../../Release/FontTool.exe'
-local fontFileDir 		= 'F:/Projects/JAVA/_magold/assets/font'
-local fontFileName		= 'fangzheng.ttf'
+-- local fontFileDir 		= 'F:/Projects/JAVA/_magold/assets/font'
+local fontFileDir 		= 'F:/Projects/C++/Xihad/Xihad/Assets/font'
+local fontFileName		= 'ZYKai_C.ttf'
 local outputFilePrefix	= string.sub(fontFileName, 1, string.find(fontFileName, '%.')-1)
 
 --- 

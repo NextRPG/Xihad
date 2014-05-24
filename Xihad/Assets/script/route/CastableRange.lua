@@ -7,7 +7,6 @@ x o x
 o x o
 ]]
 local Location  = require 'route.Location'
-local Algorithm = require 'std.Algorithm'
 local Array		= require 'std.Array'
 
 local Range = {
@@ -20,8 +19,8 @@ Range.__index = Range
 function Range.new(minD, maxD)
 	local r = {}
 	if type(minD) == 'number' and type(maxD) == 'number' then
-		r.minLaunchDistance = Algorithm.max(0, minD)
-		r.maxLaunchDistance = Algorithm.max(minD, maxD)
+		r.minLaunchDistance = math.max(0, minD)
+		r.maxLaunchDistance = math.max(minD, maxD)
 	end
 	
 	r.relativeImpactLocations = {}

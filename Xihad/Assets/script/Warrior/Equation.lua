@@ -1,31 +1,44 @@
+--- 
+-- Equation is constant value, non-changable
 local Equation = {
-	power = 1,
-	offset = 0,
-	fixed = 0
+	_power = 0,
+	_offset= 0,
+	_fixed = 0,
 }
 Equation.__index = Equation
 
-
-function Equation.new()
-	local o = setmetatable({}, Equation)
-
-	return o
+function Equation.new(defaultOffset)
+	return setmetatable({
+			_offset = defaultOffset
+		}, Equation)
 end
 
-function Equation:calculate(  )
-	return self.power*self.offset + self.fixed
+function Equation:__unm()
+	local ret = Equation.new()
+	ret._power = -self._power
+	ret._offset= -self._offset
+	ret._fixed = -self._fixed
+	return ret
 end
 
-function Equation:incOffset( inc )
-	self.offset = self.offset + inc
+function Equation:__add(other)
+	local ret = Equation.new()
+	ret._power = self._power + other._power
+	ret._offset= self._offset+ other._offset
+	ret._fixed = self._fixed + other._fixed
+	return ret
+end 
+
+function Equation:__sub(other)
+	local ret = Equation.new()
+	ret._power = self._power - other._power
+	ret._offset= self._offset- other._offset
+	ret._fixed = self._fixed - other._fixed
+	return ret
 end
 
-function Equation:incPower( inc )
-	self.power = self.power + inc
-end
-
-function Equation:incFixed( inc )
-	self.fixed = self.fixed + inc
+function Equation:calculate( )
+	return (self._power + 1) * self._offset + self._fixed
 end
 
 return Equation

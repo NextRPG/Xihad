@@ -1,19 +1,67 @@
 local base = require 'Controller.PlayerState'
-local ChooseHeroState = setmetatable({}, base)
+local Table= require 'std.Table'
+local ChooseHeroState = setmetatable({
+		visited = nil,
+	}, base)
 ChooseHeroState.__index = ChooseHeroState
 
 function ChooseHeroState.new(...)
-	return setmetatable(base.new(...), ChooseHeroState)
+	local o = setmetatable(base.new(...), ChooseHeroState)
+	o.visited = {}
+	return o
+end
+
+function ChooseHeroState:_shouldFocus(warrior)
+	return not self.visited[warrior] and warrior:isActive()
+end
+
+function ChooseHeroState:_findNextFocus()
+	for object in g_scene:objectsWithTag('Hero') do
+		local warrior = object:findComponent(c'Warrior')
+		assert(warrior)
+		
+		if self:_shouldFocus(warrior) then 
+			self.visited[warrior] = true
+			return object
+		end
+	end
+end
+
+function ChooseHeroState:_clearVisited()
+	Table.clear(self.visited)
+end
+
+function ChooseHeroState:traverseFocus()
+	local nextFocus = self:_findNextFocus()
+	
+	if not nextFocus then
+		self:_clearVisited()
+		nextFocus = self:_findNextFocus()
+	end
+	
+	assert(nextFocus)
+	self:_focusObject(nextFocus)
+end
+
+function ChooseHeroState:onBack()
+	self:traverseFocus()
 end
 
 function ChooseHeroState:onStateEnter(state, prev)
-	self.camera:focus(nil)
+	self:_focusObject(nil)
+	
+	if prev == 'Finish' then
+		self:_clearVisited()
+	end
 end
 
 function ChooseHeroState:onVacancySelected(tile)
 	-- show tile info
 	self:_showTileInfo(tile)
-	self:_focusTile(tile)
+	
+	self:_fastenCursorWhen(function ()
+		self:_focusTile(tile)
+	end)
 end
 
 function ChooseHeroState:onHeroSelected(heroObject)
@@ -31,7 +79,11 @@ end
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
 	self:_showWarriorInfo(enemyObject:findComponent(c'Warrior'))
-	self.camera:focus(enemyObject)
+	
+	self:_fastenCursorWhen(function ()
+		self:_focusObject(enemyObject)
+	end)
+	
 	-- TODO
 	-- self.painter:showRange(enemyObject)
 end

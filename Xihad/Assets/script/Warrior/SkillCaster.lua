@@ -1,4 +1,4 @@
-local Array = require 'std.Array'
+local Table = require 'std.Table'
 local SkillCaster = {
 	skills = nil,
 }
@@ -22,8 +22,27 @@ function SkillCaster:castableSkills()
 	end, self.skills
 end
 
-function SkillCaster:canCastSkill(skill)
-	return self.skills[skill] and self[skills] > 0
+function SkillCaster:allSkills()
+	return pairs(self.skills)
+end
+
+function SkillCaster:hasDrained(skill)
+	return self:getRestCount(skill) < 1
+end
+
+function SkillCaster:canCast(skill, location)
+	if self:hasDrained(skill) then
+		return false
+	end
+	
+	local launchables = skill:getLaunchableTiles(g_chessboard, 
+		self:findPeer(c'Warrior'), location)
+	
+	return next(launchables) ~= nil
+end
+
+function SkillCaster:getRestCount(skill)
+	return self.skills[skill] or 0
 end
 
 --- 
@@ -61,7 +80,7 @@ function SkillCaster:getCastableTiles(startLoc)
 		end
 	end
 	
-	return Array.keys(tiles)
+	return Table.extractKeys(tiles)
 end
 
 return SkillCaster

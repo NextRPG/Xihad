@@ -31,11 +31,15 @@ local function addMenuItems(parent, itemList, receiveHover)
 			item:setPopupMenu(child)
 		end
 		parent:addItem(item)
-		item:subscribeEvent("Clicked", G_CEGUISubscriberSlot.CommandSelect)
-		if receiveHover then
-			item:subscribeEvent("MouseEntersArea", G_CEGUISubscriberSlot.CommandHover)
-			item:subscribeEvent("MouseLeavesArea", G_CEGUISubscriberSlot.CommandHoverNil)	
-		end
+		
+		g_scheduler:runOnMainThread(function()
+				item:subscribeEvent("Clicked", G_CEGUISubscriberSlot.CommandSelect)
+				
+				if receiveHover then
+					item:subscribeEvent("MouseEntersArea", G_CEGUISubscriberSlot.CommandHover)
+					item:subscribeEvent("MouseLeavesArea", G_CEGUISubscriberSlot.CommandHoverNil)	
+				end
+			end)
 	end
 end
 

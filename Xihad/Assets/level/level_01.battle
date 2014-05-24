@@ -3,12 +3,13 @@ local robber =
 	career = '强盗',
 	model = 'reimu',
 	level = 1,
+	exp = 50,
 	skills = {
 		['Fire'] = 10,
 	},
 	properties = {
-		MHP = 100,
-		ATK = 5,
+		MHP = 50,
+		ATK = 25,
 		DFS = 5,
 		MTK = 5,
 		MDF = 10,

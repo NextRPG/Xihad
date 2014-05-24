@@ -11,8 +11,8 @@ PCInputTransformer.__index = PCInputTransformer
 function PCInputTransformer.new(receiver)
 	local o = setmetatable({
 		receiver = receiver,
-		leftDetector = MultiClickDetector.new(g_scheduler, 'lPressed'),
-		rightDetector= MultiClickDetector.new(g_scheduler, 'rPressed'),
+		leftDetector = MultiClickDetector.new(g_scheduler, 'lPressed', 2),
+		rightDetector= MultiClickDetector.new(g_scheduler, 'rPressed', 1),
 	}, PCInputTransformer)
 	
 	local leftListener = functional.bindself(o, 'onLeftClick')
@@ -49,18 +49,6 @@ function PCInputTransformer:onMouseEvent( e )
 		return 1
 	end
 	
-	return 0
-end
-
-function PCInputTransformer:onKeyUp( e )
-	if e.key == '1' then
-		self.receiver:onUICommand('待机')
-	elseif e.key == '2' then
-		self.receiver:onUICommand('Fire')
-	else
-		return 1
-	end
-		
 	return 0
 end
 

@@ -1,14 +1,18 @@
-local ObjectAction = require 'ObjectAction'
+local sCoroutine = require 'std.sCoroutine'
+local ObjectAction = require 'HighAction.ObjectAction'
 local Trigonometry = require 'math.Trigonometry'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'	
 local ActionAdapter= require 'Action.ActionAdapter'
 local SkillRegistry= require 'Skill.SkillRegistry'
-local WarriorMovement = require 'WarriorMovement'
+local ConcurrentJobs = require 'std.ConcurrentJobs'
+local WarriorMovement = require 'HighAction.WarriorMovement'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
 	cameraFacade = nil,
+	expCaculator = nil,
+	ui = nil,
 }
 CommandExecutor.__index = CommandExecutor
 
@@ -29,51 +33,95 @@ function CommandExecutor:move(object, destination)
 	end
 end
 
-function CommandExecutor:cast(warrior, targetLocation, skillName)
-	print(string.format('%s cast %s @%s', 
-		warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
-	
-	local object = warrior:getHostObject()
-	local translate = object:getTranslate()
-	
-	-- 使角色面朝目标点
-	local targetTile = g_chessboard:getTile(targetLocation)
-	local targetVector = targetTile:getCenterVector()
-	local sightLine = targetVector - translate
+local function getRotationFromSightLine(sightLine)
 	local x, _, z = sightLine:xyz()
-	local rotation = Trigonometry.toDegree(math.atan2(x, z)) -- x is the logic y, z is the logic x
+	
+	-- x is the logic y, z is the logic x
+	return Trigonometry.toDegree(math.atan2(x, z)) 
+end
+
+function CommandExecutor:_faceToTarget(warrior, targetTile)
+	local object = warrior:getHostObject()
+	local sightLine = targetTile:getCenterVector() - object:getTranslate()
+	local rotation = getRotationFromSightLine(sightLine)
+	
 	local action = ObjectAction.rotateY(object, SpanVariable.new(nil, rotation), 90/0.1)
 	ActionAdapter.fit(object, action)
 	AsConditionFactory.waitAction(action)
+end
+
+function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results)
+	local current= coroutine.running()
 	
-	-- 拉低相机
-	self.cameraFacade:descendIntoBattle(targetTile)
-	
-	-- 发动法术
-	local skill = SkillRegistry.findSkillByName(skillName)
-	local current = coroutine.running()
 	skill:playAnimation(warrior, targetTile, {
 			onAttackBegin = function() 
-				-- takeDamage() -> playHitAnimation()
-				print('receive begin')
-				local skillCaster = object:findComponent(c'SkillCaster')
-				local results = skillCaster:castSkill(skill, targetLocation, g_chessboard)
-				for _, result in ipairs(results) do
-					result:apply()
+				for _, result in pairs(results) do
+					result:onHitBegin()
 				end
 			end,
 			
 			onAttackEnd = function ()
-				print('receive end')
-				-- play idle or dead animation
-				coroutine.resume(current)
+				sCoroutine.resume(current)
 			end,
 		})
 	
-	coroutine.yield()
+	coroutine.yield()	-- wait until onAttackEnd
+end
+
+function CommandExecutor:_applyBattleResults(results)
+	local jobs = ConcurrentJobs.new()
+	for _, result in ipairs(results) do
+		jobs:addJob(function ()
+			result:apply()
+			result:onHitEnd()
+		end)
+	end
 	
-	-- 抬高相机
+	jobs:join()
+end
+
+function CommandExecutor:_gainExp(warrior, exp)
+	-- local level = warrior:findPeer(c'Level')
+	-- for usedExp, levelUpInfo in level:obtainExp(exp) do
+	-- 	-- wait for some a seconds
+	-- 	self.ui:showExpGauge() 
+		
+	-- 	if levelUpInfo then
+	-- 		-- wait for user interactive
+	-- 		self.ui:showLevelUpPanel(levelUpInfo)
+	-- 	end
+	-- end
+end
+
+function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
+	local caster = warrior:findPeer(c'SkillCaster')
+	return caster:castSkill(skill, targetLocation, g_chessboard)
+end
+
+function CommandExecutor:cast(warrior, targetLocation, skill)
+	print(string.format('%s cast %s @%s', 
+		warrior:getHostObject():getID(), skill:getName(), tostring(targetLocation)))
+	
+	-- local skill  = SkillRegistry.findSkillByName(skillName)
+	local results= self:_getBattleResults(warrior, skill, targetLocation)
+	local targetTile = g_chessboard:getTile(targetLocation)
+	
+	self:_faceToTarget(warrior, targetTile)
+	
+	self.cameraFacade:descendIntoBattle(targetTile)
+	
+	self:_playSkillAnimation(warrior, skill, targetTile, results)
+	
+	self:_applyBattleResults(results)
+	
+	-- self:_gainExp(warrior, self.expCaculator:calculate())
+	
+	-- TODO gain item
+	
+	AsConditionFactory.waitTimer(0.5)
+	
 	self.cameraFacade:ascendAwayBattle()
+	
 	warrior:deactivate()
 end
 
@@ -99,7 +147,7 @@ function CommandExecutor:execute(cmdList)
 	if cmdList:getCommand() == '待机' then
 		self:standBy(warrior)
 	else
-		self:cast(warrior, cmdList:getTarget(), cmdList:getCommand())
+		self:cast(warrior, cmdList:getTarget(), cmdList:getAsCastable())
 	end
 	
 	-- TODO Wait fade out

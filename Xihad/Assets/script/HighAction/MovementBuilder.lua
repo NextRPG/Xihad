@@ -1,6 +1,6 @@
 local Trigonometry = require 'math.Trigonometry'
 local SpanVariable = require 'Action.SpanVariable'
-local ObjectAction = require 'ObjectAction'
+local ObjectAction = require 'HighAction.ObjectAction'
 local Location = require 'route.Location'
 
 local MovementBuilder = {

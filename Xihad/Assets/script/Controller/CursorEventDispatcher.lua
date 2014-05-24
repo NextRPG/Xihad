@@ -1,24 +1,34 @@
 local XihadMapTile = require 'Chessboard.XihadMapTile'
 
 local CursorEventDispatcher = { 
-	listener = nil,
+	objectListener = nil,
+	intersectionListener = nil,
 }
 CursorEventDispatcher.__index = CursorEventDispatcher
 
-function CursorEventDispatcher.new(listener)
+function CursorEventDispatcher.new(objectListener, intersectionListener)
 	return setmetatable({
-			listener = listener,
+			objectListener = objectListener,
+			intersectionListener = intersectionListener,
 		}, CursorEventDispatcher)
 end
 
-function CursorEventDispatcher:dispatch(x, y, times)
+function CursorEventDispatcher:onIntersection(intersection)
+	if self.intersectionListener then
+		self.intersectionListener:onIntersection(intersection)
+	end
+end
+
+function CursorEventDispatcher:dispatch(x, y, ...)
 	local ray = g_collision:getRayFromScreenCoord(x, y)
 	
-	if self.listener:needCollisionDetection() then
-		local obj = g_collision:detect(ray)
+	if self.objectListener:needCollisionDetection() then
+		local obj, intersection = g_collision:detect(ray)
 		
 		if obj and obj:hasTag(c'Warrior') then
-			return self.listener:onWarrior(obj, times)
+			self:onIntersection(intersection)
+			
+			return self.objectListener:onWarrior(obj, ...)
 		end
 	end
 	
@@ -27,12 +37,9 @@ function CursorEventDispatcher:dispatch(x, y, times)
 	local tile = g_chessboard:getTile(location)
 	
 	if tile ~= nil then
-		return self.listener:onTile(tile, times)
+		self:onIntersection(intersection)
+		return self.objectListener:onTile(tile, ...)
 	end
-end
-
-function CursorEventDispatcher:onTouch(x, y)
-	
 end
 
 return CursorEventDispatcher

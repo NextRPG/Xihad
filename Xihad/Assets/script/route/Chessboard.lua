@@ -1,4 +1,5 @@
 require 'ArtIn'
+
 local Array = require 'std.Array'
 local MapTile  = require 'route.MapTile'
 local Location = require 'route.Location'
@@ -51,8 +52,7 @@ function Chessboard:getTile(location)
 	
 	local index = toIndex(location, self.width)
 	
-	assert(index > 0)
-	if index > #self.tiles then
+	if index <= 0 or index > #self.tiles then
 		return nil
 	end
 	

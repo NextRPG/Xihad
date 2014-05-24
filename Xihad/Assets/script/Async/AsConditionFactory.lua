@@ -79,4 +79,13 @@ function cond.waitTargetModifier(modifier, wait)
 		'addReachListener', 'removeReachListener', wait)
 end
 
+function cond.waitTimer(secs, wait)
+	local o = AsyncCondition.new()
+	function o:hook(callback)
+		g_scheduler:schedule(callback, secs)
+	end
+	
+	return waitOrReturn(o, wait)
+end
+
 return cond

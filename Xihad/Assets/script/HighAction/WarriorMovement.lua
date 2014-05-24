@@ -1,7 +1,7 @@
-local ObjectAction = require 'ObjectAction'
+local ObjectAction = require 'HighAction.ObjectAction'
 local ActionFactory= require 'Action.ActionFactory'
 local SpanVariable = require 'Action.SpanVariable'
-local MovementBuilder = require 'MovementBuilder'
+local MovementBuilder = require 'HighAction.MovementBuilder'
 local WarriorMovement = {}
 
 function WarriorMovement.moveOnPath(object, path)

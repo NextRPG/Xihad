@@ -25,19 +25,21 @@ end
 ---
 -- @return level-up information
 function Level:_obtainExp(exp)
-	self.exp = self.exp + exp
 	local object = self:getHostObject()
 	
-	while true do
-		local nextLevelExp = self:getNextLevelExp()
-		if self.exp >= nextLevelExp then
-			self.exp = self.exp - nextLevelExp
-			self.level = self.level + 1
+	while exp > 0 do
+		local maxGain = self:getNextLevelExp()
+		local used = math.min(maxGain, exp)
+		if used >= maxGain then
+			self.exp = self.exp + used
 			
-			coroutine.yield(self.grader:promote(object, self.level))
+			coroutine.yield(used, self.grader:promote(object, self.level+1))
+			self.level = self.level + 1
 		else
-			break
+			coroutine.yield(used)
 		end
+		
+		exp = exp - used
 	end
 end
 
@@ -45,35 +47,6 @@ function Level:obtainExp(exp)
 	return coroutine.wrap(function()
 			return self:_obtainExp(exp)
 		end)
-end
-
-if select('#', ...) == 0 then 
-	local grader = {
-		promote = function (self, obj, level)
-			return level
-		end,
-		
-		getNextLevelExp = function (self, level)
-			return level*2
-		end,
-	}
-	
-	local levelComp = Level.new(10, grader, nil)
-	levelComp.getHostObject = function () return nil end
-	
-	assert(levelComp:getNextLevelExp() == 20)
-	local continueLevelUp = levelComp:obtainExp(100)
-	
-	local level = levelComp:getLevel()
-	local levelUpResult
-	repeat
-		levelUpResult = continueLevelUp()
-		
-		assert(levelUpResult and levelComp:getLevel() == level+1 
-							 or  levelComp:getLevel() == level)
-		
-		level = levelComp:getLevel()
-	until not levelUpResult
 end
 
 return Level

@@ -242,6 +242,7 @@ namespace xihad { namespace ngn
 		virtual ~GameObject();
 
 	private:
+		CompositeUpdateHandler* notNullChildrenList();
 		void updateChildrenWorldMatrix();
 		void updateWorldMatrix() const;
 

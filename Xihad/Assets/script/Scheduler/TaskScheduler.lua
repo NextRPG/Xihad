@@ -15,10 +15,14 @@ function TaskScheduler.new()
 		}, TaskScheduler)
 end
 
+function TaskScheduler:runOnMainThread(callback)
+	self:schedule(callback)
+end
+
 function TaskScheduler:schedule(callback, delay)
 	delay = delay or 0
 	
-	local task = Task.new(taskId, g_time.global + delay, callback)
+	local task = Task.new(self.taskId, g_time.global + delay, callback)
 	self.taskId = self.taskId + 1
 	
 	MinHeap:insert(self.tasks, task)
@@ -50,6 +54,8 @@ function TaskScheduler:adjustTask(task, delay)
 end
 
 function TaskScheduler:onUpdate()
+	assert(coroutine.running() == nil, 'Scheduler must run no main thread')
+	
 	local tasks = self.tasks
 	local current = g_time.global
 	while not Array.empty(tasks) do

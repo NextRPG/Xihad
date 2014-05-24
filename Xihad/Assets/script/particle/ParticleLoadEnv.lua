@@ -1,23 +1,25 @@
-local Env = { 
+local ParticleLoaderEnv = { 
 	source = nil, 
 	target = nil, 
+	messageReceiver = nil,
 	particleComponent = nil,
 }
-Env.__index = Env
+ParticleLoaderEnv.__index = ParticleLoaderEnv
 
 local function getRender(obj)
 	return obj:findComponent(c'Render')
 end
 
-function Env.new(pcomp, source, target)
+function ParticleLoaderEnv.new(pcomp, source, target, msgReceiver)
 	return setmetatable({
 		particleComponent = pcomp,
 		source = source,
-		target = target	
-	}, Env)
+		target = target,
+		messageReceiver = msgReceiver,
+	}, ParticleLoaderEnv)
 end
 
-function Env:getNode(nodeDesc)
+function ParticleLoaderEnv:getNode(nodeDesc)
 	if nodeDesc:sub(1, 1) == '@' then
 		local t = nodeDesc:sub(2)
 		if t == 'source' or t == 'target' then
@@ -26,15 +28,15 @@ function Env:getNode(nodeDesc)
 	end
 end
 
-function Env:getPosition(obj)
+function ParticleLoaderEnv:getPosition(obj)
 	return obj:getTranslate()
 end
 
-function Env:getAABB(obj)
+function ParticleLoaderEnv:getAABB(obj)
 	return getRender(obj):getAABB()
 end
 
-function Env:getMesh(meshDesc)
+function ParticleLoaderEnv:getMesh(meshDesc)
 	local n = self:getNode(meshDesc)
 	if n then
 		local render = getRender(n)
@@ -46,12 +48,10 @@ function Env:getMesh(meshDesc)
 	end
 end
 
-function Env:deferMessage(delay, msg)
-	local msgParam = { source = self.source, target = self.target }
-	
-	-- TODO
-	-- local src = 'root' --self.particleComponent:getHostObject():getID()
-	g_scene:getDispatcher():dispatch(msg, msgParam, c'root', delay)
+function ParticleLoaderEnv:deferMessage(delay, msg)
+	g_scheduler:schedule(function ()
+		self.messageReceiver(msg)
+	end, delay)
 end
 
-return Env
+return ParticleLoaderEnv

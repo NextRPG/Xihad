@@ -131,6 +131,6 @@ return function(pnode, f, env, scale)
 	
 ----------------------------------------------
 	env:deferMessage(6*timeGap, "attack begin")
-	env:deferMessage(2.5, "attack end")
+	env:deferMessage(1.5, "attack end")
 end
 

@@ -1,3 +1,4 @@
+local SkillRegistry = require 'Skill.SkillRegistry'
 local CommandList = {
 	source = nil,		-- warrior
 	destination = nil,	-- location
@@ -54,6 +55,20 @@ end
 
 function CommandList:getCommand()
 	return self.command
+end
+
+function CommandList:getAsCastable()
+	local cmd = self.command
+	if cmd == '待机' or cmd == '交换' then
+		error('Can not getAsCastable')
+	end
+	
+	local skill = SkillRegistry.findSkillByName(cmd)
+	if skill then
+		return skill
+	end
+	
+	-- as item ?
 end
 
 function CommandList:setTarget(targetLocation)

@@ -39,6 +39,13 @@ function MapTile:onBarrierAdded(e, optKey)
 	
 	assert(value ~= nil)
 	self.barriers[e] = value
+	
+	for existed, otherKey in pairs(self.barriers) do
+		if existed ~= e then
+			existed:inhabitWith(e, optKey)
+			e:inhabitWith(existed, otherKey)
+		end
+	end
 end
 
 function MapTile:onBarrierRemoved(e)
@@ -53,6 +60,11 @@ function MapTile:onBarrierRemoved(e)
 	end
 	
 	self.barriers[e] = nil
+	
+	for existed, otherKey in pairs(self.barriers) do
+		existed:leaveFrom(e, optKey)
+		e:leaveFrom(existed, otherKey)
+	end
 end
 
 function MapTile:findBarrierByKey(key)
@@ -90,7 +102,7 @@ function MapTile:getActionPointCost(warrior)
 		accum = accum + e:getActionPointCost(warrior)
 	end
 	
-	return algo.max(1, accum)
+	return math.max(1, accum)
 end
 
 return MapTile

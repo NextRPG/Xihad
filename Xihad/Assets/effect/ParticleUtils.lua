@@ -67,5 +67,6 @@ function Utils.setMaterial(mat, blendSrc, blendDst, blendOp, materialType, ZEnab
 	mat:setMaterialType(materialType)
 	mat:setLighting(false)
 	mat:setZWriteEnable(ZEnable)
+	mat:setBackfaceCulling(false)
 end
 return Utils
