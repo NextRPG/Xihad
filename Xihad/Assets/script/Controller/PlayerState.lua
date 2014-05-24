@@ -56,12 +56,22 @@ function PlayerState:_getSourceCaster()
 	end
 end
 
-function PlayerState:_markTile(tile, desc)
-	return self.painter:mark({ tile }, desc)
+function PlayerState:_assignHandle(handle, field)
+	if type(field) == 'string' then
+		self[field] = handle
+	else
+		return handle
+	end
 end
 
-function PlayerState:_markRange(range, desc)
-	return self.painter:mark(range, desc)
+function PlayerState:_markTile(tile, desc, field)
+	local handle = self.painter:mark({ tile }, desc)
+	return self:_assignHandle(handle, field)
+end
+
+function PlayerState:_markRange(range, desc, field)
+	local handle = self.painter:mark(range, desc)
+	return self:_assignHandle(handle, field)
 end
 
 function PlayerState:_clearMark(handle)

@@ -89,25 +89,12 @@ function ECLTactic:_completeOrder(cmdList)
 			end
 			
 			log('canCastToEnemy\n')
-			local range = skill:getRange()
 			local launcherCenter = tile:getLocation()
-			range:traverseLaunchableLocations(launcherCenter, function (impactCenterLoc)
-				local impactCenterTile = g_chessboard:getTile(impactCenterLoc)
-				log('\t\tcastCenter: %s\t', tostring(impactCenterLoc))
-				
-				if not impactCenterTile then 
-					log('notExistTile\n')
-					return 
-				end
-				log('existTile\t')
-				
-				if not impactCenterTile:permitCasting(warrior, skill) then
-					log('notPermitCasting\n')
-					return
-				end
-				log('permitCasting\n')
-				
-				range:traverseImpactLocations(impactCenterLoc, function (impactLocation)
+			local launchables = skill:getLaunchableTiles(g_chessboard, warrior, launcherCenter)
+			for impactCenterTile, _ in pairs(launchables) do 
+				local impactCenterLoc = impactCenterTile:getLocation()
+				local skillRange = skill:getRange()
+				skillRange:traverseImpactLocations(impactCenterLoc, function (impactLocation)
 					local impactTile = g_chessboard:getTile(impactLocation)
 					log('\t\t\timpact: %s\t', tostring(impactLocation))
 					if not impactTile or not impactTile:hasWarrior() then
@@ -124,7 +111,7 @@ function ECLTactic:_completeOrder(cmdList)
 						log('isNotEnemy\n')
 					end
 				end)
-			end)
+			end
 		until true
 		end
 	end

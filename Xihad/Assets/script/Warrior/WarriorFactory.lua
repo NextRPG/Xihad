@@ -75,9 +75,9 @@ function factory:create(team, name, data)
 	anim:setTransitionTime(0.15)
 	warrior:addRoundListener(self.highlightActiveWarrior)
 
+	local parcel = object:appendComponent(c'Parcel')
 	local barrier = object:appendComponent(c'WarriorBarrier')
 	local skillCaster = object:appendComponent(c'SkillCaster')
-	
 	
 	-- TODO remove
 	if data.model == 'ninja' then
@@ -133,7 +133,8 @@ function factory:create(team, name, data)
 			
 			local extent = parent:findComponent(c'Render'):getAABB():extent()
 			local _, height = extent:xyz()
-			local var = SpanVariable.new(math3d.vector(0, height*0.8, 0), math3d.vector(0, height*1.2, 0))
+			damageObject:resetTranslate(math3d.vector(0, height*0.8, 0))
+			local var = SpanVariable.new(nil, math3d.vector(0, height*1.2, 0))
 			local action = ObjectAction.move(damageObject, var, 8)
 			action:addFinishListener(function ()
 				damageObject:stop()

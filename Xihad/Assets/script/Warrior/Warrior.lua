@@ -1,6 +1,12 @@
+local Array = require 'std.Array'
+local functional= require 'std.functional'
 local Algorithm = require 'std.Algorithm'
-local Property = require 'Warrior.Property'
+local Property  = require 'Warrior.Property'
 local NamedEffects = require 'Warrior.NamedEffects'
+
+if select('#', ...) ~= 0 then 
+	assert(select(1, ...) == 'Warrior', 'require for "Warrior" instead')
+end
 
 local Warrior = {
 	team   = nil,
@@ -69,6 +75,31 @@ function Warrior.registerProperty(pname)
 	end
 	
 	table.insert(Warrior.sAllProperties, pname)
+end
+
+function Warrior:exchangables(startLoc)
+	startLoc = startLoc or self:getLocation()
+	local locations = {
+		startLoc:left(),
+		startLoc:right(),
+		startLoc:top(),
+		startLoc:down()
+	}
+	
+	local iter = functional.bind1(Array.elements, locations)
+	local filter = function (tile)
+		local adjWarrior = tile:getWarrior()
+		if adjWarrior and adjWarrior:isLeagueWith(self) then
+			local adjHasItem = adjWarrior:findPeer(c'Parcel'):hasItem()
+			local selfHasItem= self:findPeer(c'Parcel'):hasItem()
+			
+			return adjHasItem or selfHasItem
+		end
+		
+		return false
+	end
+	
+	return iter, filter
 end
 
 function Warrior:getTeam()

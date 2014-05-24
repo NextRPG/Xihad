@@ -1,5 +1,7 @@
 local Window = require 'GUI.Window'
-local GUIController = require 'ui.GUIController'
+local functional   = require 'std.functional'
+local XihadTileSet = require 'Chessboard.XihadTileSet'
+local GUIController= require 'ui.GUIController'
 local CommandView = {
 	skillEntry= '技能',
 	itemEntry = '道具',
@@ -45,14 +47,30 @@ function CommandView._createItemList(parcel)
 	-- return list
 end
 
-function CommandView.setListener(listener)
-	-- GUIController:subscribeEvent('Command.Hover', function ()
-		
-	-- end)
+function CommandView.hook(playStateMachine)
+	local listener = functional.bindself(playStateMachine, 'onUICommand')
+	CommandView.setHoverListener(listener)
+	CommandView.setSelectListener(listener)
 	
-	-- GUIController:subscribeEvent('Command.Select', function ()
-		
-	-- end)
+	playStateMachine:addStateListener('ChooseCommand', {
+			onStateEnter = function() 
+				local cmdList = playStateMachine:getCommandList()
+				local w, h = g_window:getScreenSize()
+				CommandView.show(cmdList:getSource(), w/2+50, h/2-80)
+			end,
+			
+			onStateExit = function ()
+				CommandView.close()
+			end
+		})
+end
+
+function CommandView.setHoverListener(hoverListener)
+	GUIController:subscribeEvent('Command.Hover', hoverListener)
+end
+	
+function CommandView.setSelectListener(selectListener)
+	GUIController:subscribeEvent('Command.Select', selectListener)
 end
 
 function CommandView.setList(entry, list)
@@ -64,7 +82,8 @@ function CommandView.setList(entry, list)
 end
 
 function CommandView.canExchange(warrior)
-	return false
+	local set = XihadTileSet.create(warrior:exchangables())
+	return next(set) ~= nil
 end
 
 function CommandView.show(warrior, x, y)

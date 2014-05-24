@@ -34,6 +34,11 @@ namespace xihad { namespace render3d
 		mat.Wireframe = b;
 	}}
 
+	luaT_static void setBackfaceCulling(SMaterial& mat, bool b)
+	{
+		mat.BackfaceCulling = b;
+	}}
+
 	static int setColorMaterial(lua_State* L)
 	{
 		static const char* const modes[] = { "none", "diffuse", "ambient", 
@@ -127,6 +132,7 @@ namespace xihad { namespace render3d
 			luaT_cnamedfunc(setBlend),
 			luaT_cnamedfunc(setLighting),
 			luaT_cnamedfunc(setWireFrame),
+			luaT_cnamedfunc(setBackfaceCulling),
 			luaT_cnamedfunc(setZWriteEnable),
 		luaT_defRegsEnd
 		MetatableFactory<SMaterial>::create(L, smat);

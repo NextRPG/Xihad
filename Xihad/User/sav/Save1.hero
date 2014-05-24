@@ -10,7 +10,7 @@ return
  			DFS = 5,
  			MTK = 5,
  			MDF = 10,
- 			MAP = 100,
+ 			MAP = 10,
 		},
  		career = "WARRIOR",
  		getexP = 0,

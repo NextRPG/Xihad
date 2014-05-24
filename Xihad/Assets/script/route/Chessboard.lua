@@ -1,4 +1,5 @@
 require 'ArtIn'
+
 local Array = require 'std.Array'
 local MapTile  = require 'route.MapTile'
 local Location = require 'route.Location'

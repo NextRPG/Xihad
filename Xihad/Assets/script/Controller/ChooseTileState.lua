@@ -29,7 +29,7 @@ function ChooseTileState:onStateEnter(state, prev)
 	self.selectedTile = nil
 	
 	local reachable = self:_getSourceReachables()
-	self.reachableHandle = self:_markRange(reachable, 'Reachable')
+	self:_markRange(reachable, 'Reachable', 'reachableHandle')
 	
 	if prev == 'ChooseCommand' then
 		self:_focusObject(self:_getSourceObject())
@@ -75,13 +75,13 @@ function ChooseTileState:_moveWarrior(destLocation)
 end
 
 function ChooseTileState:_selectTile(tile)
+	assert(not self.selectedHandle)
+	self:_markTile(tile, 'Selected', 'selectedHandle')
+	self.selectedTile = tile
+	
 	self:_fastenCursorWhen(function() 
 			self:_focusTile(tile)
 		end)
-	
-	assert(not self.selectedHandle)
-	self.selectedHandle = self:_markTile(tile, 'Selected')
-	self.selectedTile = tile
 end
 
 function ChooseTileState:_confirmTile(tile)
@@ -120,7 +120,7 @@ function ChooseTileState:_showAttackRange(tile)
 	local skillCaster = self:_getSourceCaster()
 	local attackRange = skillCaster:getCastableTiles(tile:getLocation())
 	
-	self.attackableHandle = self:_markRange(attackRange, 'Attack')
+	self:_markRange(attackRange, 'Attack', 'attackableHandle')
 	self.promotingTile = tile
 end
 

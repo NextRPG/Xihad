@@ -1,4 +1,3 @@
-local Array = require 'std.Array'
 local Table = require 'std.Table'
 local SkillCaster = {
 	skills = nil,
@@ -81,7 +80,7 @@ function SkillCaster:getCastableTiles(startLoc)
 		end
 	end
 	
-	return Array.keys(tiles)
+	return Table.extractKeys(tiles)
 end
 
 return SkillCaster

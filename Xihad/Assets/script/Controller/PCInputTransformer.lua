@@ -52,16 +52,4 @@ function PCInputTransformer:onMouseEvent( e )
 	return 0
 end
 
-function PCInputTransformer:onKeyUp( e )
-	if e.key == '1' then
-		self.receiver:onUICommand('待机')
-	elseif e.key == '2' then
-		self.receiver:onUICommand('Fire')
-	else
-		return 1
-	end
-		
-	return 0
-end
-
 return PCInputTransformer

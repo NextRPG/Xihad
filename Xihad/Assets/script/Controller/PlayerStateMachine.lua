@@ -163,8 +163,8 @@ function PlayStateMachine:onBack()
 	return self:_onCommand('onBack')
 end
 
-function PlayStateMachine:onUICommand(cmd)
-	return self:_onCommand('onUICommand', cmd)
+function PlayStateMachine:onUICommand(...)
+	return self:_onCommand('onUICommand', ...)
 end
 
 function PlayStateMachine:nextHero()

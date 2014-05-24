@@ -3,13 +3,14 @@ local Array = {
 	insert = table.insert,
 }
 
-function Array.keys(t)
-	local keys = {}
-	for k,v in pairs(t) do
-		Array.insert(keys, k)
+function Array.elements(t)
+	local idx = 0
+	local function iter(t)
+		idx = idx + 1
+		return t[idx]
 	end
 	
-	return keys
+	return iter, t
 end
 
 function Array.find(t, v, pos)

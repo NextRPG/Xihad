@@ -2,8 +2,7 @@ local SkillAnimator = { }
 SkillAnimator.__index = SkillAnimator
 
 function SkillAnimator.new()
-	local obj = setmetatable({ }, SkillAnimator)
-	return obj
+	return setmetatable({ }, SkillAnimator)
 end
 
 function SkillAnimator:animate(sourceWarrior, targetTile)

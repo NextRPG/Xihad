@@ -1,6 +1,7 @@
 local Parcel = {
 	items = nil,	-- { Item -> count }
 }
+Parcel.__index = Parcel
 
 function Parcel.new()
 	local o  = setmetatable({
@@ -24,6 +25,10 @@ end
 
 function Parcel:allItems()
 	
+end
+
+function Parcel:hasItem()
+	return #self.items >= 1
 end
 
 return Parcel

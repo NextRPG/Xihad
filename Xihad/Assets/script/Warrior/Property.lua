@@ -21,7 +21,7 @@ function Property.new()
 end
 
 function Property:get()
-	return math.abs(self.equation:calculate())
+	return math.max(0, self.equation:calculate())
 end
 
 function Property:addBasic(delta)

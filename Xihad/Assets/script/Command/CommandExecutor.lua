@@ -98,11 +98,11 @@ function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
 	return caster:castSkill(skill, targetLocation, g_chessboard)
 end
 
-function CommandExecutor:cast(warrior, targetLocation, skillName)
+function CommandExecutor:cast(warrior, targetLocation, skill)
 	print(string.format('%s cast %s @%s', 
-		warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
+		warrior:getHostObject():getID(), skill:getName(), tostring(targetLocation)))
 	
-	local skill  = SkillRegistry.findSkillByName(skillName)
+	-- local skill  = SkillRegistry.findSkillByName(skillName)
 	local results= self:_getBattleResults(warrior, skill, targetLocation)
 	local targetTile = g_chessboard:getTile(targetLocation)
 	
@@ -147,7 +147,7 @@ function CommandExecutor:execute(cmdList)
 	if cmdList:getCommand() == '待机' then
 		self:standBy(warrior)
 	else
-		self:cast(warrior, cmdList:getTarget(), cmdList:getCommand())
+		self:cast(warrior, cmdList:getTarget(), cmdList:getAsCastable())
 	end
 	
 	-- TODO Wait fade out

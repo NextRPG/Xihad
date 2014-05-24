@@ -1,6 +1,5 @@
 local base = require 'Controller.PlayerState'
-local Array= require 'std.Array'
-local SkillRegistry = require 'Skill.SkillRegistry'
+local SkillQuery = require 'Skill.SkillQuery'
 
 local ChooseTargetState = setmetatable({
 	castableHandle = nil,
@@ -16,20 +15,18 @@ function ChooseTargetState:_getWC()
 			
 end
 
-function ChooseTargetState:_getLaunchableTiles()
-	local warrior, command = self:_getWC()
-	local skill = SkillRegistry.findSkillByName(command)
-	return skill:getLaunchableTiles(g_chessboard, warrior, warrior:getLocation())
+function ChooseTargetState:_getLaunchableTiles(array)
+	local w, c = self:_getWC()
+	return SkillQuery.getLaunchableTiles(w, c, array)
 end
 
 function ChooseTargetState:onStateEnter()
 	assert(not self.castableHandle)
-	local tiles = self:_getLaunchableTiles()
-	self.castableHandle = self.painter:mark(Array.keys(tiles), 'Castable')
+	local tiles = self:_getLaunchableTiles(true)
+	self:_markRange(tiles, 'Castable', 'castableHandle')
 end
 
 function ChooseTargetState:onStateExit()
-	assert(self.castableHandle)
 	self:_safeClear('castableHandle')
 end
 
@@ -42,21 +39,26 @@ function ChooseTargetState:needCDWhenHover()
 end
 
 function ChooseTargetState:onTileSelected(tile)
-	local tiles = self:_getLaunchableTiles()
+	local tiles = self:_getLaunchableTiles(false)
 	if not tiles[tile] then
 		print('not castable', tostring(tile:getLocation()))
 	else
+		self:_safeClear('castableHandle')
+		
 		self.commandList:setTarget(tile:getLocation())
-		local source, cmd = self:_getWC()
-		self.executor:cast(source, self.commandList:getTarget(), cmd)
+		local source = self:_getSource()
+		local skill = self.commandList:getAsCastable()
+		assert(skill ~= nil)
+		self.executor:cast(source, self.commandList:getTarget(), skill)
 		return 'next'
 	end
 end
 
 function ChooseTargetState:onTileHovered(tile)
-	-- show all attackable enemies' status
-	-- 估算所有敌人受伤害后的血量值
-	
+	-- local source, command = self:_getWC()
+	-- local caster = source:findPeer(c'SkillCaster')
+	-- local skill = SkillRegistry.findSkillByName(command)
+	-- local result = caster:castSkill(skill, tile:getLocation(), g_chessboard)
 end
 
 return ChooseTargetState
