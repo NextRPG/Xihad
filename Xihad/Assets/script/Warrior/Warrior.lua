@@ -1,8 +1,9 @@
 local Array = require 'std.Array'
+local Class = require 'std.Class'
 local functional= require 'std.functional'
 local Algorithm = require 'std.Algorithm'
 local Property  = require 'Warrior.Property'
-local NamedEffects = require 'Warrior.NamedEffects'
+local EffectBindPoint = require 'Effect.EffectBindPoint'
 
 if select('#', ...) ~= 0 then 
 	assert(select(1, ...) == 'Warrior', 'require for "Warrior" instead')
@@ -14,11 +15,11 @@ local Warrior = {
 	active = true,
 	
 	hitPoint   = 0,
-	properties = nil,	-- Property Host
+	properties = nil,
 	
-	namedEffects = nil,	-- To avoid duplicated effect to a warrior
-	roundListeners = nil,
-	propertyListeners = nil,
+	bindPoint  = nil,
+	roundListeners= nil,
+	propertyListeners= nil,
 	
 	sAllProperties = {},
 }
@@ -31,7 +32,7 @@ function Warrior.new( data, object )
 		career = data.career,
 		properties = {},
 		
-		namedEffects = NamedEffects.new(),
+		bindPoint = EffectBindPoint.new(),
 		roundListeners = {},
 		propertyListeners = {},
 	}, Warrior)
@@ -169,25 +170,12 @@ function Warrior:_getListeners(pname)
 	return listeners
 end
 
-function Warrior:_checkEffectBinding(effect)
-	assert(effect:isBound() and effect:getBinding() == self, 
-		'Invoke effect:bind() instead')
-end
+Class.delegate(Warrior, 'unbindStickyEffects', 'bindPoint')
+Class.delegate(Warrior, 'registerStickyEffect', 'bindPoint')
+Class.delegate(Warrior, 'unregisterStickyEffect', 'bindPoint')
 
-function Warrior:_checkEffectUnbinding(effect)
-	assert(not effect:isBound() and effect:getBinding() == self, 
-		'Invoke effect:unbind() instead')
-end
-
-function Warrior:registerEffect(type, effect)
-	self:_checkEffectBinding(effect)
-	self.namedEffects:attach(type, effect)
-end
-
-function Warrior:unregisterEffect(type, effect)
-	self:_checkEffectUnbinding(effect)
-	self.namedEffects:detach(type, effect)
-end
+Class.delegate(Warrior, 'registerExclusiveEffect', 'bindPoint')
+Class.delegate(Warrior, 'unregisterExclusiveEffect', 'bindPoint')
 
 function Warrior:addPropertyListener(pname, lis)
 	self:_getListeners(pname)[lis] = true

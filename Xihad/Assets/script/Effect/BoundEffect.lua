@@ -1,6 +1,7 @@
 local BoundEffect = {
 	_state = 'init',
 	_uid = nil,
+	_source  = nil,
 	_binding = nil,
 	_recycler= nil,
 }
@@ -41,46 +42,68 @@ function BoundEffect:_generateUID(cause)
 	return cause
 end
 
-function BoundEffect:bind(warrior, cause)
-	assert(self._state ~= 'binded', 'Attempt to re-bind to another warrior')
-	assert(not self:isBound())
+function BoundEffect:_prepare_bind(bindPoint)
+	assert(self._state == 'init', 'Attempt to re-bind to another bindPoint')
 	
-	self._binding = warrior
+	self._binding = bindPoint
 	self._state = 'binding'
-	
-	self._uid = self:_generateUID(cause)
-	warrior:registerEffect(self._uid, self)
-	self:onBind(warrior)
+end
+
+function BoundEffect:_after_bind()
+	self:onBind(self._binding)
 	
 	if self._recycler then
-		-- 通知回收器开始计时
-		self._recycler:start(self, warrior)
+		self._recycler:start(self, self._binding)
 	end
+end
+
+function BoundEffect:bindSticky(bindPoint, source)
+	self:_prepare_bind(bindPoint)
 	
+	assert(source ~= nil)
+	self._source = source
+	bindPoint:registerStickyEffect(self, source)
+	
+	self:_after_bind()
+end
+
+function BoundEffect:bindExclusive(bindPoint, cause)
+	self:_prepare_bind(bindPoint)
+	
+	self._uid = self:_generateUID(cause)
+	assert(self._uid ~= nil, "uid shouldn't be nil")
+	
+	bindPoint:registerExclusiveEffect(self, self._uid)
+	
+	self:_after_bind()
 end
 
 function BoundEffect:unbind()
-	-- 可能是由于unbind操作而主动脱离；
-	-- 也可能是由于其他技能影响了该属性，而被动脱离。
-	if self._state == 'unbinding' then
-		return
-	end
+	assert(self:isBound(), 'no binding, please invoke bind*() first')
 	
-	assert(self:isBound(), 'no binding, please invoke bind() first')
-	self._state = 'unbinding'
+	self._state = 'unbinding' -- assert(not self:isBound())
 	
 	print('unbind BoundEffect')
-	local warrior = self:getBinding()
-	warrior:unregisterEffect(self._uid, self)
-	self:onUnbind(warrior)
+	local bindPoint = self:getBinding()
+	
+	if self._uid then
+		assert(self._source == nil)
+		bindPoint:unregisterExclusiveEffect(self, self._uid)
+		self._uid = nil
+	else
+		assert(self._source ~= nil)
+		bindPoint:unregisterStickyEffect(self)
+		self._source = nil
+	end
+	
+	self:onUnbind(bindPoint)
 	
 	if self._recycler then
-		-- 由于可能会主动解绑，所以需要通知回收器停止
-		self._recycler:stop(self, warrior)
+		self._recycler:stop(self, bindPoint)
 	end
 	
 	self._binding = nil
-	self._state = 'binded'
+	self._state = 'unbinded'
 end
 
 return BoundEffect

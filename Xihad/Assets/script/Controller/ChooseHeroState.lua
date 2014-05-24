@@ -44,6 +44,7 @@ function ChooseHeroState:traverseFocus()
 end
 
 function ChooseHeroState:onBack()
+	self:_showTileInfo(nil)
 	self:traverseFocus()
 end
 
@@ -64,9 +65,14 @@ function ChooseHeroState:onVacancySelected(tile)
 	end)
 end
 
+function ChooseHeroState:_promoteWarrior(warrior)
+	self:_showTileInfo(warrior:findPeer(c'Barrier'):getTile())
+	self:_showWarriorInfo(warrior)
+end
+
 function ChooseHeroState:onHeroSelected(heroObject)
 	local warrior = heroObject:findComponent(c'Warrior')
-	self:_showWarriorInfo(warrior)
+	self:_promoteWarrior(warrior)
 	
 	if not warrior:isActive() then 
 		print('Warrior is not active')
@@ -78,7 +84,7 @@ end
 
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
-	self:_showWarriorInfo(enemyObject:findComponent(c'Warrior'))
+	self:_promoteWarrior(enemyObject:findComponent(c'Warrior'))
 	
 	self:_fastenCursorWhen(function ()
 		self:_focusObject(enemyObject)

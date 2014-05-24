@@ -1,7 +1,21 @@
 local Table = {}
 
+function Table.filteredPairs(t, filter)
+	local function iter(t, lastKey) 
+		local k, v
+		
+		repeat
+			k, v = next(t, lastKey)
+		until not k or filter(k, v)
+			
+		return k, v
+	end
+	
+	return iter, t
+end
+
 function Table.keys(t)
-	local f, s, v = pairs(self.skills)
+	local f, s, v = pairs(t)
 	local wrapped = function (s, v)
 		return (f(s, v))
 	end

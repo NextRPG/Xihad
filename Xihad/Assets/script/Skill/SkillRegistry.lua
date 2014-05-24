@@ -44,7 +44,7 @@ local toRange = SkillRegistry.toRange
 local range = toRange(2, 2, '@')
 
 local enemyOnly = { toEnemy = true, }
-local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'effect.dark_blade')
+local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'effect.tornado')
 
 fireSkill:addResolver(HitPointResolver.new('fire', -30))
 

@@ -21,8 +21,16 @@ namespace xihad { namespace render3d
 		LightComponent(std::string const& name, ngn::GameObject& host, ILightSceneNode* node);
 
 		static LightComponent* create(
-			const std::string& compName, ngn::GameObject& obj, const ngn::Properties& param, 
-			ISceneManager* smgr);
+			const std::string& compName, ngn::GameObject& obj, 
+			const ngn::Properties& param, ISceneManager* smgr);
+
+		video::SColor getAmbientColor() const;
+		video::SColor getDiffuseColor() const;
+		video::SColor getSpecularColor() const;
+		core::vector3df getAttenuation() const;
+		f32 getOuterCone() const;
+		f32 getInnerCone() const;
+		f32 getFalloff() const;
 
 		void setAmbientColor(const video::SColor& color);
 		void setDiffuseColor(const video::SColor& color);
@@ -46,6 +54,7 @@ namespace xihad { namespace render3d
 
 	private:
 		video::SLight& getLightData();
+		const video::SLight& getLightData() const;
 
 	protected:
 		ILightSceneNode * getNode() const;

@@ -52,6 +52,10 @@ local function selectResult(field, type, warrior)
 	end
 end
 
+function TerrainBarrier:getName()
+	return TerrainRegistry.names[self.type]
+end
+
 function TerrainBarrier:keepVacancy()
 	return true
 end
@@ -123,13 +127,15 @@ function TerrainBarrier:popColor()
 	self:_updateColor()
 end
 
+
+-- TODO
 function TerrainBarrier:inhabitWith(other, optKey)
 	local warrior = other:findPeer(c'Warrior')
 	if warrior then
 		self.attached = {}
 		for _, effect in ipairs(self.effects) do
 			local copy = effect:copy()
-			copy:bind(warrior, 'terrain')
+			copy:bindSticky(warrior, self)
 			table.insert(self.attached, copy)
 		end
 	end

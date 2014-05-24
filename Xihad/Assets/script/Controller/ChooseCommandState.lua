@@ -41,22 +41,29 @@ function ChooseCommandState:onSelectCommand(command, subcommand)
 	return 'next'
 end
 
+function ChooseCommandState:_updateMark(subcommand)
+	local range = SkillQuery.getLaunchableTiles(
+					self:_getSource(), subcommand, true)
+	
+	if #range == 0 then
+		io.err:write('Hover a non-launchable tile')
+	else
+		self:_markRange(range, 'Castable', 'commandRange')
+	end
+end
+
 function ChooseCommandState:onHoverCommand(command, subcommand)
+	self:_safeClear('commandRange')
+	
 	if command == '技能' then
-		print('mark skill range')
-		local range = SkillQuery.getLaunchableTiles(
-						self:_getSource(), subcommand, true)
-		
-		if #range == 0 then
-			io.err:write('Hover a non-launchable tile')
-		else
-			self:_safeClear('commandRange')
-			self:_markRange(range, 'Castable', 'commandRange')
+		if subcommand ~= nil then
+			self:_updateMark(subcommand)
 		end
 	end
 end
 
 function ChooseCommandState:onUICommand(command, subcommand, type)
+	print(command, subcommand, type)
 	if type == 'Select' then
 		return self:onSelectCommand(command, subcommand)
 	elseif type == 'Hover' then

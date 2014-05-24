@@ -63,6 +63,7 @@ function MapTileInfo:show(args)
 	end
 	
 	window:fireEvent("FrameShow", CEGUI.WindowEventArgs:new(window))
+	return window
 end
 
 function MapTileInfo:close()

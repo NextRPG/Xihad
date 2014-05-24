@@ -14,6 +14,7 @@ local PlayStateMachine = {
 	cmdList= nil,
 	runner = nil,
 	stateControllers = nil,
+	inputBlockListener = nil,
 	
 	touchDispatcher = nil,
 	hoverDispatcher = nil,
@@ -103,13 +104,26 @@ function PlayStateMachine:_process(cmd, ...)
 	end
 end
 
+function PlayStateMachine:setBlockListener(blockListener)
+	self.inputBlockListener = blockListener
+end
+
+function PlayStateMachine:_setRunner(runner)
+	self.runner = runner
+	
+	if self.inputBlockListener then
+		local blocked = (runner ~= nil)
+		self.inputBlockListener:onBlocked(self, blocked)
+	end
+end
+
 function PlayStateMachine:_onCommand(cmd, ...)
 	if self.runner then return end
 	
-	self.runner = coroutine.create(function (...)
+	self:_setRunner(coroutine.create(function (...)
 		self:_process(cmd, ...)
-		self.runner = nil
-	end)
+		self:_setRunner(nil)
+	end))
 	
 	sCoroutine.resume(self.runner, ...)
 end

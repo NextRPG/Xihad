@@ -99,5 +99,45 @@ namespace xihad { namespace render3d
 		return getNode()->getLightData();
 	}
 
+	const video::SLight& LightComponent::getLightData() const
+	{
+		return getNode()->getLightData();
+	}
+
+	video::SColor LightComponent::getAmbientColor() const
+	{
+		return getLightData().AmbientColor.toSColor();
+	}
+
+	video::SColor LightComponent::getDiffuseColor() const
+	{
+		return getLightData().DiffuseColor.toSColor();
+	}
+
+	video::SColor LightComponent::getSpecularColor() const
+	{
+		return getLightData().SpecularColor.toSColor();
+	}
+
+	core::vector3df LightComponent::getAttenuation() const
+	{
+		return getLightData().Attenuation;
+	}
+
+	irr::f32 LightComponent::getOuterCone() const
+	{
+		return getLightData().OuterCone;
+	}
+
+	irr::f32 LightComponent::getInnerCone() const
+	{
+		return getLightData().InnerCone;
+	}
+
+	irr::f32 LightComponent::getFalloff() const
+	{
+		return getLightData().Falloff;
+	}
+
 }}
 

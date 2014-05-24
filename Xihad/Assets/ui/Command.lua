@@ -107,7 +107,7 @@ end
 function Command:onSelect(e)
 	local parentName, childName = explainEvent(e)
 	for callback,_ in pairs(self.hoverListeners) do
-		callback(parentName, childName, "Hover")
+		callback(parentName, childName, "Select")
 	end
 end
 

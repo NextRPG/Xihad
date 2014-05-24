@@ -74,10 +74,10 @@ function CommandView.setSelectListener(selectListener)
 end
 
 function CommandView.setList(entry, list)
-	entry.list = list
-	
 	if #list == 0 then
 		entry.disabled = true
+	else
+		entry.list = list
 	end
 end
 

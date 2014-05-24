@@ -102,8 +102,7 @@ function CommandExecutor:cast(warrior, targetLocation, skill)
 	print(string.format('%s cast %s @%s', 
 		warrior:getHostObject():getID(), skill:getName(), tostring(targetLocation)))
 	
-	-- local skill  = SkillRegistry.findSkillByName(skillName)
-	local results= self:_getBattleResults(warrior, skill, targetLocation)
+	local results = self:_getBattleResults(warrior, skill, targetLocation)
 	local targetTile = g_chessboard:getTile(targetLocation)
 	
 	self:_faceToTarget(warrior, targetTile)

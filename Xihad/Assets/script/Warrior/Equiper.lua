@@ -13,13 +13,14 @@ function Equiper:getEquipment( etype )
 end
 
 function Equiper:equip( equipment )
-	local etype = equipment:getType()
-	
-	self:unequip(etype)
-	assert(self.equipments[etype] == nil)
-	
-	equipment:promote(self:getHostObject())
-	self.equipments[etype] = equipment
+	if not equipment:isEquiped(self) then
+		local etype = equipment:getType()
+		self:unequip(etype)
+		assert(self.equipments[etype] == nil)
+		
+		equipment:promote(self:findPeer(c'Warrior'))
+		self.equipments[etype] = equipment
+	end
 end
 
 function Equiper:unequip( etype )

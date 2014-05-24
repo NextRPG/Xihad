@@ -1,5 +1,4 @@
 local Equation = require 'Warrior.Equation'
-local NamedEffects = require 'Warrior.NamedEffects'
 
 -- Battle Module 
 local Property = {
@@ -16,7 +15,6 @@ function Property.new()
 	return setmetatable({
 			basic = 0,
 			equation = Equation.new(),
-			namedEffects = NamedEffects.new(),
 		}, Property)
 end
 

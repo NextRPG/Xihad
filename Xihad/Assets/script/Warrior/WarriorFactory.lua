@@ -4,6 +4,7 @@ local ObjectAction = require 'HighAction.ObjectAction'
 local RenderAction = require 'HighAction.RenderAction'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'
+local SpanColor = require 'Action.SpanColor'
 
 local factory = {
 	highlightActiveWarrior = nil,	
@@ -18,11 +19,11 @@ function factory.new(team)
 					local render = warrior:findPeer(c'Render')
 					
 					if render then
-						local spanColor = SpanVariable.new(nil, Color.new(Color.white))
+						local spanColor = SpanColor.new(nil, Color.new(Color.white))
 						local action = RenderAction.diffuse(render, spanColor, duration)
 						ActionAdapter.fit(render:getHostObject(), action)
 						
-						-- spanColor = SpanVariable.new(nil, Color.new(Color.white))
+						-- spanColor = SpanColor.new(nil, Color.new(Color.white))
 						-- action = RenderAction.ambient(render, spanColor, duration)
 						-- ActionAdapter.fit(render:getHostObject(), action)
 						
@@ -36,11 +37,11 @@ function factory.new(team)
 					local render = warrior:findPeer(c'Render')
 					
 					if render then
-						local spanColor = SpanVariable.new(nil, Color.new(Color.black))
+						local spanColor = SpanColor.new(nil, Color.new(Color.black))
 						local action = RenderAction.diffuse(render, spanColor, duration)
 						ActionAdapter.fit(render:getHostObject(), action)
 						
-						-- local spanColor = SpanVariable.new(nil, Color.new(0xff555555))
+						-- local spanColor = SpanColor.new(nil, Color.new(0xff555555))
 						-- action = RenderAction.ambient(render, spanColor, duration)
 						-- ActionAdapter.fit(render:getHostObject(), action)
 						

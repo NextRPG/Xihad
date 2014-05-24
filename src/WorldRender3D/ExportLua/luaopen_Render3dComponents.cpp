@@ -338,6 +338,14 @@ namespace xihad { namespace render3d
 			luaT_mnamedfunc(LightComponent, setInnerCone),
 			luaT_mnamedfunc(LightComponent, setFalloff),
 			luaT_mnamedfunc(LightComponent, setRadius),
+
+			luaT_mnamedfunc(LightComponent, getAmbientColor),
+			luaT_mnamedfunc(LightComponent, getDiffuseColor),
+			luaT_mnamedfunc(LightComponent, getSpecularColor),
+			luaT_mnamedfunc(LightComponent, getAttenuation),
+			luaT_mnamedfunc(LightComponent, getOuterCone),
+			luaT_mnamedfunc(LightComponent, getInnerCone),
+			luaT_mnamedfunc(LightComponent, getFalloff),
 			luaT_mnamedfunc(LightComponent, getRadius),
 			luaT_cnamedfunc(setType),
 		luaT_defRegsEnd
