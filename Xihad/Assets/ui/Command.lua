@@ -94,19 +94,25 @@ function Command:onEvent(e, eventType)
 	local parentName = hasParentMenu and parent:getProperty("XihadName") or name
 	local childName = hasParentMenu and name or nil
 	
-	for _, callback in pairs(self.clickListeners) do
+	local listener = eventType == "Select" and self.clickListeners or self.hoverListeners
+	for callback,_ in pairs(listener) do
 		callback(parentName, childName, eventType)
 	end
 end
 
-function Command:pushSelectListener(listener)
-	local list = self.clickListeners
-	list[#list + 1] = listener
+function Command:addSelectListener(listener)
+	self.clickListeners[listener] = true
 end
 
-function Command:pushHoverListener(listener)
-	local list = self.hoverListeners
-	list[#list + 1] = listener
+function Command:addHoverListener(listener)
+	self.hoverListeners[listener] = true
 end
 
+function Command:removeSelectListener(listener)
+	self.clickListeners[listener] = nil
+end
+
+function Command:removeHoverListener(listener)
+	self.hoverListeners[listener] = nil
+end
 return Command

@@ -82,9 +82,14 @@ g_scene:pushController({
 		return 1
 	end
 })
-controller:subscribeEvent("Command.Select", function (parent, child, eventType)
-				print(parent, child, eventType)
-			end)
-controller:subscribeEvent("Command.Hover", function (parent, child, eventType)
-				print(parent, child, eventType)
-			end)
+local function hoverListener(parent, child, eventType)
+	print(parent, child, eventType)
+end
+
+local function selectListener(parent, child, eventType)
+	controller:unsubscribeEvent("Command.Hover", hoverListener)
+	print(parent, child, eventType)
+end
+
+controller:subscribeEvent("Command.Select", selectListener)
+controller:subscribeEvent("Command.Hover", hoverListener)

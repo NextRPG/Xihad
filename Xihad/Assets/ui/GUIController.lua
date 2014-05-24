@@ -41,10 +41,22 @@ end
 --------------------- Exposed Interface ---------------------
 
 function GUIController:subscribeEvent(eventName, callback)
-	if eventName == "Command.Select" then
-		self.Command:pushSelectListener(callback)
-	elseif eventName == "Command.Hover" then
-		self.Command:pushHoverListener(callback)	
+	local idx = string.find(eventName, "%.")
+	local wnd = string.sub(eventName, 1, idx - 1)
+	if string.find(eventName, "Select") then
+		self[wnd]:addSelectListener(callback)
+	elseif string.find(eventName, "Hover") then
+		self[wnd]:addHoverListener(callback)
+	end
+end
+
+function GUIController:unsubscribeEvent(eventName, callback)
+	local idx = string.find(eventName, "%.")
+	local wnd = string.sub(eventName, 1, idx - 1)
+	if string.find(eventName, "Select") then
+		self[wnd]:removeSelectListener(callback)
+	elseif string.find(eventName, "Hover") then
+		self[wnd]:removeHoverListener(callback)
 	end
 end
 
