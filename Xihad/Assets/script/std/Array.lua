@@ -54,6 +54,14 @@ function Array.popBack(t)
 	return table.remove(t)
 end
 
+function Array.fastRemoveElementAt(t, i)
+	if i ~= #t then
+		t[i] = Array.getBack(t)
+	end
+	
+	table.remove(t)
+end
+
 function Array.removeElementAt(t, i)
 	assert(i, "index required")
 	return table.remove(t, i)

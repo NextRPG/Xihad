@@ -100,12 +100,16 @@ function PlayerState:_focusObject(object)
 end
 
 function PlayerState:_fastenCursorWhen(callback)
-	local updater = ModifierAdapter.new(
-			self.cursorFastener:createFixCursorModifier())
+	local mod = self.cursorFastener:createFixCursorModifier()
 	
-	g_scene:appendUpdater(updater)
-	callback() 
-	updater:stop()
+	if not mod then
+		callback()
+	else
+		local updater = ModifierAdapter.new(mod)
+		g_scene:appendUpdater(updater)
+		callback()
+		updater:stop()
+	end
 end
 
 function PlayerState:onStateEnter(state, prev)
@@ -134,7 +138,7 @@ function PlayerState:onBack()
 	return 'back'
 end
 
-function PlayerState:onUICommand(command)
+function PlayerState:onUICommand(command, subcommand)
 end
 
 function PlayerState:_onTile(tile, times, warriorFunc, vacancyFunc)

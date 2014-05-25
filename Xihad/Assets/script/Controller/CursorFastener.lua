@@ -13,7 +13,9 @@ function CursorFastener:onIntersection(intersection)
 end
 
 function CursorFastener:createFixCursorModifier()
-	return FixCursorModifier.new(self.fixPoint)
+	if self.fixPoint then
+		return FixCursorModifier.new(self.fixPoint)
+	end
 end
 
 return CursorFastener

@@ -25,6 +25,8 @@ local CameraFacade = {
 	focusedObject = nil,
 	spanTranslate = nil,
 	spanLookDir   = nil,
+	
+	autoRestListener = nil,
 }
 CameraFacade.__index = CameraFacade
 
@@ -42,6 +44,11 @@ function CameraFacade.new(cameraObject)
 		}, CameraFacade)
 	
 	o.followControl:setFollowing(following)
+	o.autoRestListener = function (warrior, pname, prev)
+		if warrior:isDead() then
+			o:focus(nil)
+		end
+	end
 	
 	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
 	ModifierAdapter.fit(cameraObject, o.followControl)
@@ -50,11 +57,28 @@ function CameraFacade.new(cameraObject)
 	return o
 end
 
+function CameraFacade:_listenObject(object, add)
+	if not object then return end
+	
+	local warrior = object:findComponent(c'Warrior')
+	if not warrior then return end
+	
+	if add then
+		warrior:addPropertyListener('Dead', self.autoRestListener)
+	else
+		warrior:removePropertyListener('Dead', self.autoRestListener)
+	end
+end
+
 function CameraFacade:focus(object)
 	if self.focusedObject ~= object then
+		self:_listenObject(self.focusedObject, false)
+		
 		self.focusedObject = object
 		self.aimingControl:setAim(object)
 		AsConditionFactory.waitCameraAim(self.aimingControl)
+		
+		self:_listenObject(object, true)
 	end
 end
 

@@ -15,23 +15,27 @@ function BuffEffect.new(field, equation, recycler)
 end
 
 function BuffEffect:_generateUID(cause)
-	return cause .. '#' .. self.field
+	return string.format('%q, %q', cause, self.field)
+end
+
+local function log(...) 
+	print(...)
 end
 
 function BuffEffect:onBind(bindingWarrior)
-	print('BuffEffect toAttach', self.field, self:getBinding():get(self.field))
+	log('BuffEffect toAttach', self.field, self:getBinding():get(self.field))
 	
 	bindingWarrior:addProperty(self.field, self.equation)
 	
-	print('BuffEffect attached', self.field, self:getBinding():get(self.field))
+	log('BuffEffect attached', self.field, self:getBinding():get(self.field))
 end
 
 function BuffEffect:onUnbind(bindingWarrior)
-	print('onUnbind BuffEffect')
+	log('onUnbind BuffEffect')
 	
 	bindingWarrior:addProperty(self.field, -self.equation)
 	
-	print('BuffEffect detached', self.field, self:getBinding():get(self.field))
+	log('BuffEffect detached', self.field, self:getBinding():get(self.field))
 end
 
 return BuffEffect

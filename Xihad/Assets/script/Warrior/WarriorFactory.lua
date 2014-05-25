@@ -1,10 +1,11 @@
-local SkillRegistry = require 'Skill.SkillRegistry'
-local AsConditionFactory = require 'Async.AsConditionFactory'
+local ItemRegistry = require 'Item.ItemRegistry'
+local SkillRegistry= require 'Skill.SkillRegistry'
 local ObjectAction = require 'HighAction.ObjectAction'
 local RenderAction = require 'HighAction.RenderAction'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'
 local SpanColor = require 'Action.SpanColor'
+local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local factory = {
 	highlightActiveWarrior = nil,	
@@ -77,6 +78,7 @@ function factory:create(team, name, data)
 	warrior:addRoundListener(self.highlightActiveWarrior)
 
 	local parcel = object:appendComponent(c'Parcel')
+	local equiper= object:appendComponent(c'Equiper')
 	local barrier = object:appendComponent(c'WarriorBarrier')
 	local skillCaster = object:appendComponent(c'SkillCaster')
 	
@@ -94,6 +96,15 @@ function factory:create(team, name, data)
 		for skillName, count in pairs(data.skills) do
 			skill = SkillRegistry.findSkillByName(skillName)
 			skillCaster:learnSkill(skill, count)
+		end
+	end
+	
+	-- gain item
+	if data.items then
+		local item 
+		for itemName, count in pairs(data.items) do
+			item = ItemRegistry.findItemByName(itemName)
+			parcel:gainItem(item, count)
 		end
 	end
 	
@@ -145,19 +156,17 @@ function factory:create(team, name, data)
 		end
 	end)
 	
-	-- 死亡自动销毁
-	-- warrior:addPropertyListener('Dead', function (warrior, pname, prev)
-	-- 	if warrior:isDead() then
-	-- 		-- TODO
-	-- 		local animator = warrior:findPeer(c'AnimatedMesh')
-	-- 		animator:playAnimation(c'die', false)
-	-- 		AsConditionFactory.waitAnimation(animator)
+	warrior:addPropertyListener('Dead', function (warrior, pname, prev)
+		if warrior:isDead() then
+			local animator = warrior:findPeer(c'AnimatedMesh')
+			animator:playAnimation(c'die', false)
+			AsConditionFactory.waitAnimation(animator)
 			
-	-- 		g_scheduler:schedule(function ()
-	-- 			warrior:getHostObject():stop()
-	-- 		end)
-	-- 	end
-	-- end)
+			g_scheduler:schedule(function ()
+				warrior:getHostObject():stop()
+			end)
+		end
+	end)
 	
 	warrior:deactivate()
 	return object

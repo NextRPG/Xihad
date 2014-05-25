@@ -38,7 +38,7 @@ function EffectBindPoint:registerStickyEffect(effect, source)
 end
 
 function EffectBindPoint:unregisterStickyEffect(effect)
-	assert(source ~= nil and effect ~= nil)
+	assert(effect ~= nil)
 	self:_checkEffectUnbinding(effect)
 	self.stickyEffects[effect] = nil
 end

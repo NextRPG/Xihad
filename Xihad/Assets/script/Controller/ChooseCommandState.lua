@@ -22,23 +22,22 @@ function ChooseCommandState:needHover()
 end
 
 function ChooseCommandState:onSelectCommand(command, subcommand)
+	if command == '技能' then
+		self.commandList:setCommand(command, subcommand)
+		return 'next'
+	end
+	
 	if command == '待机' then
 		self.executor:standBy(self.commandList:getSource())
-		return 'done'
-	end
-	
-	if command == '交换' then
+	elseif command == '交换' then
 		-- change parcel
-		return 'done'
-	end
-	
-	if command == '技能' then
-		self.commandList:setCommand(subcommand)
 	elseif command == '道具' then
-		
+		self.executor:useItem(self:_getSource(), subcommand)
 	end	
 	
-	return 'next'
+	if not self:_getSource():isActive() then
+		return 'done'
+	end
 end
 
 function ChooseCommandState:_updateMark(subcommand)

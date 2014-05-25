@@ -4,8 +4,9 @@ local Equiper = {
 Equiper.__index = Equiper
 
 function Equiper.new()
-	local obj = setmetatable({ }, Equiper)
-	return obj
+	return setmetatable({
+			equipments = {},
+		}, Equiper)
 end
 
 function Equiper:getEquipment( etype )
@@ -27,7 +28,7 @@ function Equiper:unequip( etype )
 	local equipment = self.equipments[etype]
 	
 	if equipment then
-		equipment:cancel(self:getHostObject())
+		equipment:cancel(self:findPeer(c'Warrior'))
 		self.equipments[etype] = nil
 	end
 end

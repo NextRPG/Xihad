@@ -59,6 +59,10 @@ function Warrior:_initProperty(pname)
 	self.propertyListeners[pname] = {}
 end
 
+function Warrior:getName()
+	return self:getHostObject():getID()
+end
+
 function Warrior.registerProperty(pname)
 	assert(type(pname) == 'string')
 	
@@ -226,6 +230,10 @@ function Warrior:getHitPoint()
 	return self.hitPoint
 end
 
+function Warrior:isInjured()
+	return self:getMHP() > self.hitPoint
+end
+
 function Warrior:isDead()
 	return self.hitPoint <= 0
 end
@@ -238,6 +246,10 @@ function Warrior:_setHitPoint(newHitPoint)
 	local prev = self:getHitPoint()
 	self.hitPoint = self:_clampHitPoint(newHitPoint)
 	self:_firePropertyChange('HitPoint', prev)
+end
+
+function Warrior:takeRecovery(recovery)
+	print('recovery: ', recovery)
 end
 
 function Warrior:takeDamage(damage)

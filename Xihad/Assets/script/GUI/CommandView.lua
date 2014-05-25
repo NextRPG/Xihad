@@ -25,7 +25,7 @@ function CommandView._createSkillList(skillCaster)
 	for skill, rest in skillCaster:allSkills() do
 		table.insert(list, {
 				name = skill:getName(),
-				value = rest,
+				value= string.format('%2s', rest),
 				disabled = not skillCaster:canCast(skill),
 			})
 	end
@@ -34,17 +34,23 @@ function CommandView._createSkillList(skillCaster)
 end
 
 function CommandView._createItemList(parcel)
-	return {}
-	-- local list = {}
-	-- for item, count in parcel:allItems() do
-	-- 	table.insert(list, {
-	-- 			name = item:getName(),
-	-- 			value = count,
-	-- 			disabled = not parcel:canUse(item),
-	-- 		})
-	-- end
+	local list = {}
+	for item, count in parcel:allItems() do
+		local value
+		if item.isEquiped then
+			value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or ''
+		else
+			value = string.format('%2d', count)
+		end
+		
+		table.insert(list, {
+				name = item:getName(),
+				value= value,
+				disabled = not parcel:canUse(item),
+			})
+	end
 	
-	-- return list
+	return list
 end
 
 function CommandView.hook(playStateMachine)

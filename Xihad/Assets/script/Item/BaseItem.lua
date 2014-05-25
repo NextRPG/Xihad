@@ -4,8 +4,13 @@ local BaseItem = {
 	_desc = nil,
 	_maxOverlay = 99,
 	_occupyRound= true,
+	
+	usages = { 
+		default = '@warrior使用了@item',
+	},
 }
 BaseItem.__index = BaseItem
+local usageMT = { __index = BaseItem.usages }
 
 ---
 -- 装备、技能书、陷阱
@@ -18,10 +23,12 @@ function BaseItem.new(name, icon, desc, maxOverlay, occupyRound)
 			_desc = desc,
 			_maxOverlay = maxOverlay,
 			_occupyRound= occupyRound,
+			
+			usages = setmetatable({}, usageMT),
 		}, BaseItem)
 end
 
-function BaseItem:_occupyRound()
+function BaseItem:occupyRound()
 	return self._occupyRound
 end
 
@@ -51,11 +58,22 @@ function BaseItem:_onUsed(warrior)
 	error('No implementation by default')
 end
 
+function BaseItem:canUse(warrior)
+	return true
+end
+
+function BaseItem:_parseUsage(warrior, raw)
+	local u1 = string.gsub(raw, '@warrior', warrior:getName())
+	return string.gsub(u1, '@item', self._name)
+end
+
 ---
 -- @return used count
 function BaseItem:onUsed(warrior)
-	self:_onUsed(warrior)
-	return 1
+	local usageId, cnt = self:_onUsed(warrior)
+	local usage = self.usages[usageId  or 'default']
+	
+	return self:_parseUsage(warrior, usage), cnt or 1
 end
 
 return BaseItem

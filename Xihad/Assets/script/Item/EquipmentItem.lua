@@ -3,14 +3,24 @@ local EquipmentItem = setmetatable({
 		_maxOverlay = 1,
 		_occupyRound= false,
 		etype = nil,
-		
-		effects = nil,
-	}, BaseItem)
+		effect= nil,
+	}, base)
 EquipmentItem.__index = EquipmentItem
 
-function EquipmentItem.new(name, icon, desc, etype)
+local equipUsageMT = { 
+	__index = {
+		equip 	= '@warrior装备了@item',
+		unequip = '@warrior卸下了@item',
+	}
+}
+
+function EquipmentItem.new(name, icon, desc, etype, effect)
 	local o = setmetatable(base.new(name, icon, desc), EquipmentItem)
 	o.etype = etype
+	o.effect= effect
+	setmetatable(o.usages, equipUsageMT)
+	print(o.usages.equip)
+	
 	return o
 end
 
@@ -27,9 +37,7 @@ function EquipmentItem:isEquiped(equiper)
 end
 
 function EquipmentItem:promote(warrior)
-	for _, effect in ipairs(self.effects) do
-		effect:copy():bindSticky(warrior, self)
-	end
+	self.effect:copy():bindSticky(warrior, self)
 end
 
 function EquipmentItem:cancel(warrior)
@@ -46,18 +54,20 @@ function EquipmentItem:onDiscarded(warrior, count)
 	end
 end
 
-function EquipmentItem:onUsed(warrior)
+function EquipmentItem:_onUsed(warrior)
 	local equiper = equiperOf(warrior)
+	assert(equiper ~= nil)
 	
-	if equiper then
-		if self:isEquiped(equiper) then
-			equiper:unequip(self.etype)
-		else
-			equiper:equip(self)
-		end
+	local usage 
+	if self:isEquiped(equiper) then
+		equiper:unequip(self.etype)
+		usage = 'unequip'
+	else
+		equiper:equip(self)
+		usage = 'equip'
 	end
 	
-	return 0
+	return usage, 0
 end
 
 return EquipmentItem

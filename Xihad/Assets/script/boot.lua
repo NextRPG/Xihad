@@ -76,6 +76,7 @@ local ui = {
 }
 
 local cameraFacade = CameraFacade.new(CameraFactory.createDefault('camera'))
+g_camera = cameraFacade
 
 local painter = Painter.new()
 
@@ -171,7 +172,7 @@ GUISystem.init()
 -- Command View
 CommandView.hook(stateMachine)
 
-local enemyRound = true
+local enemyRound = false
 if not enemyRound then
 	for heroObj in g_scene:objectsWithTag('Hero') do
 		heroObj:findComponent(c'Warrior'):activate()
@@ -180,4 +181,17 @@ else
 	sCoroutine.start(startEnemy)
 end
 
-g_world:setTimeScale(3)
+-- Test Parcel
+local aObject = g_scene:findObject(c'A')
+local aTile = aObject:findComponent(c'Barrier'):getTile()
+
+local InputSimulator = require 'Controller.InputSimulator'
+local simulator = InputSimulator.new(stateMachine)
+simulator:selectWarrior('A')
+simulator:selectTile(aTile)
+-- simulator:selectCommand('道具', '长矛')
+-- simulator:selectCommand('道具', '长矛')
+-- simulator:selectCommand('待机')
+
+
+-- g_world:setTimeScale(3)

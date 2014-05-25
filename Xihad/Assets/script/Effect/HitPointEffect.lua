@@ -16,8 +16,10 @@ function HitPointEffect:_generateUID()
 end
 
 function HitPointEffect:onRoundBegin()
-	-- require camera focus
+	-- TODO remove g_camera
 	local warrior = self:getBinding()
+	g_camera:focus(warrior:getHostObject())
+	
 	local inc = self.inc
 	if inc > 0 then
 		warrior:takeRecovery(inc)

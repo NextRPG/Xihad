@@ -163,7 +163,7 @@ function ECLTactic:_completeOrder(cmdList)
 		cmdList:setCommand('待机')
 	else
 		local cmd, targetLoc = decode(bestCast)
-		cmdList:setCommand(cmd)
+		cmdList:setCommand('技能', cmd)
 		cmdList:setTarget(targetLoc)
 	end
 	

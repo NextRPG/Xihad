@@ -103,12 +103,6 @@ function WarriorHitResult:onHitEnd()
 	local animator = self:_getTargetAnimator()
 	if not self.targetWarrior:isDead() then
 		animator:playAnimation(c'idle')
-	else
-		animator:playAnimation(c'die', false)
-		AsConditionFactory.waitAnimation(animator)
-		g_scheduler:schedule(function ()
-			self.targetWarrior:getHostObject():stop()
-		end)
 	end
 end
 
