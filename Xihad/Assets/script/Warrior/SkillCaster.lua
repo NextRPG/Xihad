@@ -20,12 +20,33 @@ function SkillCaster:castableSkills()
 	return Table.filteredPairs(self.skillRestCount, isCastable)
 end
 
-function SkillCaster:allSkills()
-	return pairs(self.skillRestCount)
+function SkillCaster:hasDrained(skill)
+	if not self:hasLearnedSkill(skill) then
+		error('Non learned skill')
+	end
+	
+	return self:getRestCount(skill) < 1
 end
 
-function SkillCaster:hasDrained(skill)
-	return self:getRestCount(skill) < 1
+function SkillCaster:hasLearnedSkill(skill)
+	return self.skillInitCount[skill] ~= nil
+end
+
+function SkillCaster:allSkills()
+	local function iter(self, prevKey)
+		local skill, init = next(self.skillInitCount, prevKey)
+		return skill, self.skillRestCount[skill], init
+	end
+	
+	return iter, self
+end
+
+function SkillCaster:getRestCount(skill)
+	return self.skillRestCount[skill]
+end
+
+function SkillCaster:getInitCount(skill)
+	return self.skillInitCount[skill]
 end
 
 function SkillCaster:canCast(skill, location)
@@ -37,10 +58,6 @@ function SkillCaster:canCast(skill, location)
 		self:findPeer(c'Warrior'), location)
 	
 	return next(launchables) ~= nil
-end
-
-function SkillCaster:getRestCount(skill)
-	return self.skillRestCount[skill] or 0
 end
 
 --- 

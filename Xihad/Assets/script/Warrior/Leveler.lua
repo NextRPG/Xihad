@@ -1,30 +1,30 @@
-local Level = {
+local Leveler = {
 	exp 	= 0,
 	level 	= 1,
 	grader 	= nil,
 }
-Level.__index = Level
+Leveler.__index = Leveler
 
-function Level.new( level, grader, object )
+function Leveler.new( level, grader, object )
 	assert(grader ~= nil)
 	local obj = setmetatable({
 			level  = level,
 			grader = grader,
-		}, Level)
+		}, Leveler)
 	return obj
 end
 
-function Level:getLevel()
+function Leveler:getLevel()
 	return self.level
 end
 
-function Level:getNextLevelExp()
+function Leveler:getNextLevelExp()
 	return self.grader:getNextLevelExp(self.level)
 end
 
 ---
 -- @return level-up information
-function Level:_obtainExp(exp)
+function Leveler:_obtainExp(exp)
 	local object = self:getHostObject()
 	
 	while exp > 0 do
@@ -43,10 +43,10 @@ function Level:_obtainExp(exp)
 	end
 end
 
-function Level:obtainExp(exp)
+function Leveler:obtainExp(exp)
 	return coroutine.wrap(function()
 			return self:_obtainExp(exp)
 		end)
 end
 
-return Level
+return Leveler
