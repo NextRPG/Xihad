@@ -67,7 +67,7 @@ function EquipmentItem:_onUsed(warrior)
 		usage = 'equip'
 	end
 	
-	return usage, 0
+	return usage, false
 end
 
 return EquipmentItem

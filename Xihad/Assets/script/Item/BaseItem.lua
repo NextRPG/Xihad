@@ -32,7 +32,7 @@ function BaseItem:occupyRound()
 	return self._occupyRound
 end
 
-function BaseItem:getMaxOverlayCount()
+function BaseItem:getMaxOverlay()
 	return self._maxOverlay
 end
 
@@ -51,7 +51,6 @@ end
 ---
 -- Invoked when warrior discard this item or exchange to other
 function BaseItem:onDiscarded(warrior, count)
-	
 end
 
 function BaseItem:_onUsed(warrior)
@@ -70,10 +69,15 @@ end
 ---
 -- @return used count
 function BaseItem:onUsed(warrior)
-	local usageId, cnt = self:_onUsed(warrior)
+	local usageId, loss = self:_onUsed(warrior)
+	
 	local usage = self.usages[usageId  or 'default']
 	
-	return self:_parseUsage(warrior, usage), cnt or 1
+	if loss == nil then 
+		loss = true
+	end
+	
+	return self:_parseUsage(warrior, usage), loss
 end
 
 return BaseItem

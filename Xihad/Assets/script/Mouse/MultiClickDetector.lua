@@ -89,9 +89,8 @@ function MultiClickDetector:_timeout()
 end
 
 function MultiClickDetector:_fireClickEvent(times)
-	local x, y  = self.lastClickX, self.lastClickY
+	local x, y = self.lastClickX, self.lastClickY
 	
-	-- print('MultiClickDetector: ', times)
 	local theListeners = self.listeners[times]
 	if theListeners then
 		for lis, _ in pairs(theListeners) do

@@ -33,12 +33,13 @@ function CommandView._createSkillList(skillCaster)
 	return list
 end
 
-function CommandView._createItemList(parcel)
+function CommandView._createItemList(warrior)
+	local parcel = warrior:findPeer(c'Parcel')
 	local list = {}
-	for item, count in parcel:allItems() do
+	for item, count in parcel:allSlots() do
 		local value
 		if item.isEquiped then
-			value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or ''
+			value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or 'N'
 		else
 			value = string.format('%2d', count)
 		end
@@ -46,7 +47,7 @@ function CommandView._createItemList(parcel)
 		table.insert(list, {
 				name = item:getName(),
 				value= value,
-				disabled = not parcel:canUse(item),
+				disabled = not item:canUse(warrior),
 			})
 	end
 	
@@ -100,7 +101,7 @@ function CommandView.show(warrior, x, y)
 	CommandView.setList(skillEntry, skillList)
 	
 	local itemEntry= CommandView._addEntry(viewData, 'itemEntry')
-	local itemList = CommandView._createItemList(warrior:findPeer(c'Parcel'))
+	local itemList = CommandView._createItemList(warrior)
 	CommandView.setList(itemEntry, itemList)
 	
 	local canExchange = CommandView.canExchange(warrior)

@@ -9,12 +9,10 @@
 namespace xihad { namespace dialogue
 {
 	using namespace ngn;
-	using namespace irr;
 
-	ConversationController::ConversationController(GameScene& scene, irr_ptr<Conversation> conversation)
+	ConversationController::ConversationController(GameScene& scene, xptr<Conversation> conversation)
 		: scene(scene), conversation(conversation), autoUnregister(false)
 	{
-
 	}
 
 	int ConversationController::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
@@ -23,12 +21,12 @@ namespace xihad { namespace dialogue
 		if (!(Status::STARTING>stat || stat<Status::STOPPING))
 			return 0;
 
-		if (event.Key == KEY_RETURN && event.PressedDown)
+		if (event.Key == irr::KEY_RETURN && event.PressedDown)
 		{
 			if (!conversation->nextSpeakPiece())
 				conversation->skipSubtitleAnimation();
 		}
-		else if (event.Key == KEY_SPACE)
+		else if (event.Key == irr::KEY_SPACE)
 		{
 			if (event.PressedDown)
 				conversation->speedUp();
@@ -52,11 +50,8 @@ namespace xihad { namespace dialogue
 			scene.appendChildHandler(this);
 
 		UserEventReceiverStack& stack = scene.getControllerStack();
-		UserEventReceiver* top = stack.popReceiver();
-		stack.pushReceiver(top);
-
-		if (top != this)
-			stack.pushReceiver(this);		
+		if (stack.frontReceiver() != this)
+			stack.pushReceiver(this);
 	}
 
 	void ConversationController::onStart()
@@ -75,7 +70,7 @@ namespace xihad { namespace dialogue
 		if (autoUnregister)
 		{
 			UserEventReceiverStack& stack = scene.getControllerStack();
-			UserEventReceiver* top = stack.popReceiver();
+			UserEventReceiver* top = stack.popReceiver().get();
 			if (top != this)
 				throw std::exception("somebody push UserEventReceiver above ConversationController");
 

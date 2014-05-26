@@ -25,7 +25,9 @@ namespace xihad { namespace ngn
 		 * 
 		 * @return popped receiver, which should be a valid pointer
 		 */
-		virtual UserEventReceiver* popReceiver();
+		virtual xptr<UserEventReceiver> popReceiver();
+
+		UserEventReceiver* frontReceiver() const;
 
 		void setReceiveFrontEventOnly(bool b) { receiveFrontEventOnly = b; }
 
