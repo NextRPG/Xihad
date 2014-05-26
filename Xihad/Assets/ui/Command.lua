@@ -19,7 +19,11 @@ local function addMenuItems(parent, itemList, receiveHover)
 		end
 		
 		if options.value then 
-			text = string.format("%s %2d", text, options.value)
+			if tonumber(options.value) then
+				text = string.format("%s %2d", text, options.value)
+			else 
+				text = string.format("%s  %s", text, options.value)
+			end
 		end
 		item:setProperty("XihadValue", options.value or "")
 		item:setText(text)
@@ -86,7 +90,7 @@ local function explainEvent(e)
 	if item:getPopupMenu() or item:isDisabled() then return end	
 	
 	local name = item:getProperty("XihadName")
-	local value = tonumber(item:getProperty("XihadValue"))
+	-- local value = tonumber(item:getProperty("XihadValue"))
 
 	local parent = item:getOwnerList():getParent()
 	local hasParentMenu = parent:getType() == "Xihad/MenuItem"
@@ -107,7 +111,7 @@ end
 function Command:onSelect(e)
 	local parentName, childName = explainEvent(e)
 	for callback,_ in pairs(self.hoverListeners) do
-		callback(parentName, childName, "Hover")
+		callback(parentName, childName, "Select")
 	end
 end
 

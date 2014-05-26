@@ -11,6 +11,7 @@
 	<LookNFeel filename="Xihad.looknfeel" />	
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 
+	
 	<FalagardMapping windowType="Xihad/MapTileInfo" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/RoundedRectangle" />
 	<FalagardMapping windowType="Xihad/Button" targetType="CEGUI/PushButton" renderer="Core/Button" lookNFeel="Xihad/Button" />
 	
@@ -22,5 +23,10 @@
 	<FalagardMapping windowType="Xihad/Dialog" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Dialog" />
 	<FalagardMapping windowType="Xihad/PopupMenu" targetType="CEGUI/PopupMenu" renderer="Core/PopupMenu" lookNFeel="Xihad/PopupMenu" />
 	<FalagardMapping windowType="Xihad/MenuItem" targetType="CEGUI/MenuItem" renderer="Core/MenuItem" lookNFeel="Xihad/MenuItem" />
+	<FalagardMapping windowType="Xihad/ItemListbox" targetType="CEGUI/ItemListbox" renderer="Core/ItemListbox" lookNFeel="Xihad/ItemListbox" />
+	<FalagardMapping windowType="Xihad/VerticalScrollbar"   targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar" lookNFeel="Xihad/VerticalScrollbar" />
+	<FalagardMapping windowType="Xihad/HorizontalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar" lookNFeel="Xihad/HorizontalScrollbar" />
+	<FalagardMapping windowType="Xihad/VerticalScrollbarThumb"   targetType="CEGUI/Thumb" renderer="Core/Button" lookNFeel="Xihad/VerticalScrollbarThumb" />
+	<FalagardMapping windowType="Xihad/HorizontalScrollbarThumb" targetType="CEGUI/Thumb" renderer="Core/Button" lookNFeel="Xihad/HorizontalScrollbarThumb" />
 </GUIScheme>
 

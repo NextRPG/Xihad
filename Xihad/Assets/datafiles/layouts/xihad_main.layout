@@ -6,41 +6,101 @@
 		<Property name="Size" value="{{0, 80}, {0,37}" />
 		<Property name="Disabled" value="true" />
 		<Property name="Alpha" value="0.0"/>
-		<Window name="Sign" type="Generic/Image">
+		<Window name="Sign" type="Xihad/Image">
 			<Property name="Position" value="{{0, 0}, {0, 0}}" />  
 			<Property name="Size" value="{{0.25,0},{1,0}}" />
 			<Property name="Image" value="RedNumber/-" />            
 		</Window>
-		<Window name="One" type="Generic/Image">
+		<Window name="One" type="Xihad/Image">
 			<Property name="Position" value="{{0.25, 0}, {0, 0}}" />
 			<Property name="Size" value="{{0.25,0},{1,0}}" />
 			<Property name="Image" value="" />            
 		</Window>
-		<Window name="Two" type="Generic/Image">
+		<Window name="Two" type="Xihad/Image">
 			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />     
 			<Property name="Size" value="{{0.25,0},{1,0}}" />
 			<Property name="Image" value="" />            
 		</Window>
-		<Window name="Three" type="Generic/Image">
+		<Window name="Three" type="Xihad/Image">
 			<Property name="Position" value="{{0.75, 0}, {0, 0}}" />
 			<Property name="Size" value="{{0.25,0},{1,0}}" />
 			<Property name="Image" value="" />            
 		</Window>
 	</Window>
+	
 	<Window name="CommandWindow" type="Xihad/PopupMenu">
 		<Property name="AutoCloseNestedPopups" value="true" />
 		<Property name="FadeInTime" value="0.2" />
 		<Property name="FadeOutTime" value="0.2" />
 	</Window>
 	
-	<Window name="testButton" type="Xihad/Button">
-		<Property name="Visible" value="false" />
+	<!-- <Window name="testButton" type="Xihad/Button">
 		<Property name="Font" value="fangzheng-14" />
 		<Property name="Text" value="确定"/>
 		<Property name="Size" value="{{0, 100}, {0, 30}}" />
-	</Window>
+	</Window> -->
 		
-	
+	<Window name="ParcelExchange" type="Xihad/Image">
+		<Property name="Position" value="{{0, 310}, {0, 220}}" />
+		<Property name="Size" value="{{0, 400}, {0, 300}}" />
+		<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />
+		<Property name="FrameRT" value="XihadUI/Parcel/frameRT" />
+		<Property name="FrameLB" value="XihadUI/Parcel/frameLB" />
+		<Property name="FrameRB" value="XihadUI/Parcel/frameRB" />
+		<Property name="FrameL" value="XihadUI/Parcel/frameL" />
+		<Property name="FrameR" value="XihadUI/Parcel/frameR" />
+		<Property name="FrameT" value="XihadUI/Parcel/frameT" />
+		<Property name="FrameB" value="XihadUI/Parcel/frameB" />
+		<Property name="FrameM" value="XihadUI/Parcel/frameM" />
+		<Property name="TextMargin" value="14"/>
+		<Property name="Text" value="物品交换"/>
+		<Property name="VertTextFormat" value="TopAligned"/>
+		<Property name="Image" value="XihadUI/Parcel/back_image"/>
+		<Property name="VertImageFormat" value="BottomAligned"/>
+		<Property name="HorzImageFormat" value="LeftAligned"/>
+		<Window name="LOwnerName" type="Xihad/Image" >
+			<Property name="Text" value="&lt;路飞&gt;" />
+			<Property name="Position" value="{{0, 0}, {0, 0}}" />
+			<Property name="Size" value="{{0.5, 0}, {0, 55}}" />
+			<Property name="VertTextFormat" value="BottomAligned"/>
+			<Property name="EnableTextColor" value="FFFFFFFF"/>
+		</Window>
+		<Window name="ROwnerName" type="Xihad/Image" >
+			<Property name="Text" value="&lt;索隆&gt;" />
+			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
+			<Property name="Size" value="{{0.5, 0}, {0, 55}}" />
+			<Property name="VertTextFormat" value="BottomAligned"/>
+			<Property name="EnableTextColor" value="FFFFFFFF"/>
+		</Window>
+		<Window name="LSlots" type="Xihad/ItemListbox">
+			<Window name="w1" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+			</Window>
+			<Window name="2" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+				<Property name="XihadValue" value="10" />
+			</Window>
+			<Window name="3" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+				<Property name="Icon" value="RedNumber/-" />
+			</Window>
+			<Window name="4" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+			</Window>
+			<Window name="5" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+			</Window>
+		</Window>
+		<Window name="Tidy" type="Xihad/Button">
+			<Property name="Size" value="{{0, 100}, {0, 30}}" />
+			<Property name="Text" value="整理" />
+		</Window>
+		<Window name="Complete" type="Xihad/Button">
+			<Property name="Size" value="{{0, 100}, {0, 30}}" />
+			<Property name="Text" value="完成" />
+		</Window>
+	</Window>
+ 
 	<Window name="MapTileInfo" type="Xihad/MapTileInfo">
 		<Property name="Size" value="{{0, 175}, {0, 73}}" />
 		<Property name="Font" value="fangzheng-14" />
@@ -65,6 +125,8 @@
 		<Property name="Position" value="{{0, 32}, {0, 100}}" />
 		<Property name="Visible" value="false" />
 		<Window name="ImageArea" type="Xihad/Image">
+			<Property name="VertImageFormat" value="BottomAligned"/>
+			<Property name="HorzImageFormat" value="LeftAligned"/>
 			<Property name="Size" value="{{1, 0}, {1, 0}}" />
 		</Window>
 		<Window name="TextArea" type="Xihad/Dialog">
@@ -79,7 +141,8 @@
 		<Property name="Visible" value="false" />
 		<Window name="ImageArea" type="Xihad/Image">
 			<Property name="Size" value="{{1, 0}, {1, 0}}" />
-			<Property name="HorzFormatting" value="RightAligned"/>
+			<Property name="VertImageFormat" value="BottomAligned"/>
+			<Property name="HorzImageFormat" value="RightAligned"/>
 		</Window>
 		<Window name="TextArea" type="Xihad/Dialog">
 			<Property name="Size" value="{{0.9, 0}, {0.3, 0}}" />

@@ -32,7 +32,7 @@
 		</StateImagery>
 		<StateImagery name="Disabled">
 			<Layer>
-			 	<Section section="right" />
+				<Section section="right" />
 				<Section section="left" />
 			</Layer>
 		</StateImagery>
@@ -48,6 +48,10 @@
 		<PropertyDefinition name="TextColor" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
 		<ImagerySection name="frame">
 			<FrameComponent>
+				<Image component="TopLeftCorner" name="XihadUI/Map/frameLT"/>
+				<Image component="TopRightCorner" name="XihadUI/Map/frameRT"/>
+				<Image component="BottomLeftCorner" name="XihadUI/Map/frameLB"/>
+				<Image component="BottomRightCorner" name="XihadUI/Map/frameRB"/>
 				<Image component="TopEdge" name="XihadUI/Map/frameT"/>
 				<Image component="BottomEdge" name="XihadUI/Map/frameB"/>
 			</FrameComponent>
@@ -103,7 +107,6 @@
 		<PropertyDefinition name="TextColor" redrawOnWrite="true" initialValue="FF412502" type="Colour" />
 		<PropertyDefinition name="VertTextFormat" redrawOnWrite="true" initialValue="BottomAligned" type="VerticalTextFormatting" />
 		<PropertyDefinition name="HorzTextFormat" redrawOnWrite="true" initialValue="LeftAligned" type="HorizontalTextFormatting" />
-		<Property name="Font" value="fangzheng-14" />
 		<ImagerySection name="background">
 			<ImageryComponent>
 				<Area>
@@ -176,7 +179,6 @@
 	<WidgetLook name="Xihad/DialogNameCard">
 		<PropertyDefinition name="VertLabelFormatting" initialValue="CentreAligned" redrawOnWrite="true" type="VerticalTextFormatting"/>
 		<PropertyDefinition name="HorzLabelFormatting" initialValue="CentreAligned" redrawOnWrite="true" type="HorizontalTextFormatting"/>
-		<!-- <Property name="Font" value=""> -->
 		<ImagerySection name="leftAlignedLabel">
 			<TextComponent>
 				<Area>
@@ -415,41 +417,108 @@
 	<WidgetLook name="Xihad/Image">
 		<PropertyDefinition redrawOnWrite="true" initialValue="FFFFFFFF" type="ColourRect" name="EnableColor"/>
 		<PropertyDefinition redrawOnWrite="true" initialValue="2D2D2D2D" type="ColourRect" name="DisableColor"/>
-		<PropertyDefinition redrawOnWrite="true" initialValue="BottomAligned" type="VerticalFormatting" name="VertFormatting"/>
-		<PropertyDefinition redrawOnWrite="true" initialValue="LeftAligned" type="HorizontalFormatting" name="HorzFormatting"/>
 		<PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="Image"/>
-		<ImagerySection name="imageSection">
+		
+		<PropertyDefinition redrawOnWrite="true" initialValue="0" type="uint" name="ImageMargin"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="0" type="uint" name="TextMargin"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="VerticalFormatting" name="VertImageFormat"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="HorizontalFormatting" name="HorzImageFormat"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="VerticalFormatting" name="VertTextFormat"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="CentreAligned" type="HorizontalFormatting" name="HorzTextFormat"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="FF412502" type="ColourRect" name="EnableTextColor"/>
+		<PropertyDefinition redrawOnWrite="true" initialValue="FFA39079" type="ColourRect" name="DisableTextColor"/>
+		
+		<PropertyDefinition name="FrameLT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameRT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameLB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameRB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameL" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameR" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="FrameM" initialValue="" redrawOnWrite="true" type="Image"/>
+		
+		<ImagerySection name="background">
+			<FrameComponent>
+				<ImageProperty component="TopLeftCorner" name="FrameLT"/>
+				<ImageProperty component="TopRightCorner" name="FrameRT"/>
+				<ImageProperty component="BottomLeftCorner" name="FrameLB"/>
+				<ImageProperty component="BottomRightCorner" name="FrameRB"/>
+				<ImageProperty component="LeftEdge" name="FrameL"/>
+				<ImageProperty component="RightEdge" name="FrameR"/>
+				<ImageProperty component="TopEdge" name="FrameT"/>
+				<ImageProperty component="BottomEdge" name="FrameB"/>
+				<ImageProperty component="Background" name="FrameM"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="image">
 			<ImageryComponent>
 				<Area>
-					<Dim type="LeftEdge">
-						<AbsoluteDim value="0"/>
-					</Dim>
-					<Dim type="TopEdge">
-						<AbsoluteDim value="0"/>
-					</Dim>
+					<Dim type="LeftEdge"><PropertyDim name="ImageMargin"/></Dim>
+					<Dim type="TopEdge"><PropertyDim name="ImageMargin"/></Dim>
 					<Dim type="RightEdge">
-						<UnifiedDim scale="1.0" type="RightEdge"/>
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1.0" type="RightEdge"/>
+							<PropertyDim name="ImageMargin"/>
+						</OperatorDim>
 					</Dim>
 					<Dim type="BottomEdge">
-						<UnifiedDim scale="1.0" type="BottomEdge"/>
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1.0" type="BottomEdge"/>
+							<PropertyDim name="ImageMargin"/>
+						</OperatorDim>
 					</Dim>
 				</Area>
 				<ImageProperty name="Image"/>
-				<VertFormatProperty name="VertFormatting"/>
-				<HorzFormatProperty name="HorzFormatting"/>
+				<VertFormatProperty name="VertImageFormat"/>
+				<HorzFormatProperty name="HorzImageFormat"/>
 			</ImageryComponent>
+		</ImagerySection>
+		<ImagerySection name="label">
+			<TextComponent>
+				<Area>
+					<Dim type="LeftEdge"><PropertyDim name="TextMargin"/></Dim>
+					<Dim type="TopEdge"><PropertyDim name="TextMargin"/></Dim>
+					<Dim type="RightEdge">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1.0" type="RightEdge"/>
+							<PropertyDim name="TextMargin"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="BottomEdge">
+						<OperatorDim op="Subtract">
+							<UnifiedDim scale="1.0" type="BottomEdge"/>
+							<PropertyDim name="TextMargin"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<VertFormatProperty name="VertTextFormat"/>
+				<HorzFormatProperty name="HorzTextFormat"/>
+			</TextComponent>
 		</ImagerySection>
 		<StateImagery name="Enabled">
 			<Layer>
-				<Section section="imageSection">
+				<Section section="background">
 					<ColourProperty name="EnableColor"/>
+				</Section>
+				<Section section="image">
+					<ColourProperty name="EnableColor"/>
+				</Section>
+				<Section section="label">
+					<ColourProperty name="EnableTextColor"/>
 				</Section>
 			</Layer>
 		</StateImagery>
 		<StateImagery name="Disabled">
 			<Layer>
-				<Section section="imageSection">
+				<Section section="background">
 					<ColourProperty name="DisableColor"/>
+				</Section>
+				<Section section="image">
+					<ColourProperty name="DisableColor"/>
+				</Section>
+				<Section section="label">
+					<ColourProperty name="DisableTextColor"/>
 				</Section>
 			</Layer>
 		</StateImagery>
@@ -523,7 +592,7 @@
 		</StateImagery>
 	</WidgetLook>
 
- 	<!--
+	<!--
 	*****************************************************************
 		Xihad/PopupMenu
 	*****************************************************************
@@ -587,7 +656,6 @@
 		</StateImagery>
 	</WidgetLook>
 
-	
 	<!--
 	*****************************************************************
 		Xihad/MenuItem
@@ -600,6 +668,7 @@
 		<PropertyDefinition name="Icon" initialValue="" redrawOnWrite="true" type="Image"/>
 		<PropertyDefinition name="XihadName" initialValue="" redrawOnWrite="false" type="String"/>
 		<PropertyDefinition name="XihadValue" initialValue="" redrawOnWrite="false" type="String"/>
+		<PropertyDefinition name="HoverFrameColor" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		
 		<PropertyDefinition name="NormalTextColour" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="HoverTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
@@ -607,9 +676,21 @@
 		<PropertyDefinition name="DisabledTextColour" initialValue="FFA39079" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="PushedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="OpenedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
-		<Property name="Font" value="simhei-14"/>
+		
+		<PropertyDefinition name="HoverFrameLT" initialValue="XihadUI/Menu/hover_itemLT" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameRT" initialValue="XihadUI/Menu/hover_itemRT" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameLB" initialValue="XihadUI/Menu/hover_itemLB" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameRB" initialValue="XihadUI/Menu/hover_itemRB" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameL" initialValue="XihadUI/Menu/hover_itemL" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameR" initialValue="XihadUI/Menu/hover_itemR" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameT" initialValue="XihadUI/Menu/hover_itemT" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameB" initialValue="XihadUI/Menu/hover_itemB" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="HoverFrameM" initialValue="XihadUI/Menu/hover_itemM" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="RightIndentation" initialValue="0" redrawOnWrite="true" type="uint"/>
+		
 		<Property name="AutoPopupTimeout" value="0.01"/>
 		<Property name="WantsMultiClickEvents" value="False" />
+		<Property name="MouseInputPropagationEnabled" value="true" />
 		<NamedArea name="ContentSize">
 			<Area>
 				<Dim type="Width">
@@ -686,7 +767,10 @@
 					<Dim type="RightEdge">
 						<OperatorDim op="Subtract">
 							<UnifiedDim scale="1" type="RightEdge" />
-							<PropertyDim name="HorzMargin" />
+							<OperatorDim op="Add">
+								<PropertyDim name="RightIndentation" />
+								<PropertyDim name="HorzMargin" />
+							</OperatorDim>
 						</OperatorDim>
 					</Dim>
 				</Area>
@@ -723,15 +807,15 @@
 		</ImagerySection>
 		<ImagerySection name="hover_frame">
 			<FrameComponent>
-				<Image component="TopLeftCorner" name="XihadUI/Menu/hover_itemLT"/>
-				<Image component="TopRightCorner" name="XihadUI/Menu/hover_itemRT"/>
-				<Image component="BottomLeftCorner" name="XihadUI/Menu/hover_itemLB"/>
-				<Image component="BottomRightCorner" name="XihadUI/Menu/hover_itemRB"/>
-				<Image component="LeftEdge" name="XihadUI/Menu/hover_itemL"/>
-				<Image component="RightEdge" name="XihadUI/Menu/hover_itemR"/>
-				<Image component="TopEdge" name="XihadUI/Menu/hover_itemT"/>
-				<Image component="BottomEdge" name="XihadUI/Menu/hover_itemB"/>
-				<Image component="Background" name="XihadUI/Menu/hover_itemM"/>
+				<ImageProperty component="TopLeftCorner" name="HoverFrameLT"/>
+				<ImageProperty component="TopRightCorner" name="HoverFrameRT"/>
+				<ImageProperty component="BottomLeftCorner" name="HoverFrameLB"/>
+				<ImageProperty component="BottomRightCorner" name="HoverFrameRB"/>
+				<ImageProperty component="LeftEdge" name="HoverFrameL"/>
+				<ImageProperty component="RightEdge" name="HoverFrameR"/>
+				<ImageProperty component="TopEdge" name="HoverFrameT"/>
+				<ImageProperty component="BottomEdge" name="HoverFrameB"/>
+				<ImageProperty component="Background" name="HoverFrameM"/>
 			</FrameComponent>
 		</ImagerySection>
 		<ImagerySection name="popup_close">
@@ -764,7 +848,10 @@
 		</StateImagery>
 		<StateImagery name="EnabledHover">
 			<Layer>
-				<Section section="hover_frame" />
+				<Section section="normal_frame" />
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
 				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
@@ -773,7 +860,10 @@
 		</StateImagery>
 		<StateImagery name="EnabledPushed">
 			<Layer>
-				<Section section="hover_frame"/>
+				<Section section="normal_frame" />
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
 				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
@@ -782,7 +872,10 @@
 		</StateImagery>
 		<StateImagery name="EnabledPopupOpen">
 			<Layer>
-				<Section section="hover_frame"/>
+				<Section section="normal_frame" />
+				<Section section="hover_frame">
+					<ColourProperty name="HoverFrameColor" />
+				</Section>
 				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="HoverTextColour" />
@@ -809,7 +902,7 @@
 		</StateImagery>
 		<StateImagery name="DisabledPushed">
 			<Layer>
-				<Section section="hover_frame"/>
+				<Section section="normal_frame"/>
 				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
@@ -818,7 +911,7 @@
 		</StateImagery>
 		<StateImagery name="DisabledPopupOpen">
 			<Layer>
-				<Section section="hover_frame"/>
+				<Section section="normal_frame"/>
 				<Section section="icon" />
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
@@ -835,6 +928,26 @@
 				<Section section="popup_close" />
 			</Layer>
 		</StateImagery>
+		
+		<AnimationDefinition name="HoverShining" duration="1.8" replayMode="loop">
+			<Affector property="HoverFrameColor" interpolator="ColourRect" applicationMethod="absolute">
+				<KeyFrame position="0.0" value="FFFFFFFF" />
+				<KeyFrame position="0.8" value="88FFFFFF" progression="linear"/>
+				<KeyFrame position="1.0" value="88FFFFFF" progression="linear"/>
+				<KeyFrame position="1.8" value="FFFFFFFF" progression="linear"/>
+			</Affector>
+			<Subscription event="MouseEntersArea" action="Start" />
+			<Subscription event="MouseLeavesArea" action="Stop" />
+		</AnimationDefinition>		
+		
+		<AnimationDefinition name="HoverLeaves" duration="0.3" replayMode="once">
+			<Affector property="HoverFrameColor" interpolator="ColourRect" applicationMethod="absolute">
+				<KeyFrame position="0.0" sourceProperty="HoverFrameColor" />
+				<KeyFrame position="0.3" value="FFFFFFFF" progression="linear"/>
+			</Affector>
+			<Subscription event="MouseLeavesArea" action="Start" />
+			<Subscription event="MouseEntersArea" action="Stop" />
+		</AnimationDefinition>
 	</WidgetLook>
 
 	<!--
@@ -989,16 +1102,366 @@
 			</Layer>
 		</StateImagery>
 		
-		<AnimationDefinition name="HoverShining" duration="1.8" replayMode="loop">
+		<AnimationDefinition name="HoverShining" autoStart="false" duration="1.8" replayMode="loop">
 			<Affector property="HoverFrameColor" interpolator="ColourRect" applicationMethod="absolute">
-				<KeyFrame position="0.0" value="88FFFFFF" />
-				<KeyFrame position="0.8" value="FFFFFFFF" progression="linear"/>
-				<KeyFrame position="1.0" value="FFFFFFFF" progression="linear"/>
-				<KeyFrame position="1.8" value="88FFFFFF" progression="linear"/>
+				<KeyFrame position="0.0" value="FFFFFFFF" />
+				<KeyFrame position="0.8" value="88FFFFFF" progression="linear"/>
+				<KeyFrame position="1.0" value="88FFFFFF" progression="linear"/>
+				<KeyFrame position="1.8" value="FFFFFFFF" progression="linear"/>
 			</Affector>
 			<Subscription event="MouseEntersArea" action="Start" />
 			<Subscription event="MouseLeavesArea" action="Stop" />
 		</AnimationDefinition>		
+	</WidgetLook>
+
+
+	<!--
+	***************************************************
+		Xihad/ItemListbox
+	***************************************************
+	-->
+	<WidgetLook name="Xihad/ItemListbox">
+		<PropertyDefinition name="MinScrollMargin" initialValue="2" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="MaxScrollMargin" initialValue="10" redrawOnWrite="true" type="uint"/>
+		<!-- <Property name="Size" value="{{0, 256}, {0, 256}}" /> -->
+		<NamedArea name="ItemRenderArea">
+			<Area>
+				<Dim type="RightEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge" />
+						<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+					</OperatorDim>
+				</Dim>
+				<Dim type="BottomEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="BottomEdge" />
+						<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+					</OperatorDim>
+				</Dim>
+			</Area>
+		</NamedArea>
+		<NamedArea name="ItemRenderAreaHScroll">
+			<Area>
+				<Dim type="RightEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge" />
+						<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+					</OperatorDim>
+				</Dim>
+				<Dim type="BottomEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="BottomEdge" />
+						<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+					</OperatorDim>
+				</Dim>
+			</Area>
+		</NamedArea>
+		<NamedArea name="ItemRenderAreaVScroll">
+			<Area>
+				<Dim type="RightEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge" />
+						<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+					</OperatorDim>
+				</Dim>
+				<Dim type="BottomEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="BottomEdge" />
+						<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+					</OperatorDim>
+				</Dim>
+			</Area>
+		</NamedArea>
+		<NamedArea name="ItemRenderAreaHVScroll">
+			<Area>
+				<Dim type="RightEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="RightEdge" />
+						<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+					</OperatorDim>
+				</Dim>
+				<Dim type="BottomEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="BottomEdge" />
+						<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+					</OperatorDim>
+				</Dim>
+			</Area>	
+		</NamedArea>
+		<Child  type="Xihad/HorizontalScrollbar" nameSuffix="__auto_hscrollbar__">
+			<Area>
+				<Dim type="TopEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Height" />
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+							<OperatorDim op="Add">
+								<PropertyDim name="MaxScrollMargin" />
+								<OperatorDim value="7" />
+							</OperatorDim>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="Height" ><AbsoluteDim value="7" /></Dim>
+				<Dim type="LeftEdge">
+					<PropertyDim name="MinScrollMargin" />
+				</Dim>
+				<Dim type="RightEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Width" />
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+							<PropertyDim name="MaxScrollMargin" />
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+			</Area>
+			<VertAlignment type="TopAligned" />
+			<HorzAlignment type="CentreAligned" />
+			<Property name="NonClient" value="True" />
+		</Child>
+		<Child  type="Xihad/VerticalScrollbar" nameSuffix="__auto_vscrollbar__">
+			<Area>
+				<Dim type="LeftEdge">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Width" />
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Menu/frameR" dimension="Width" />
+							<OperatorDim op="Add">
+								<PropertyDim name="MaxScrollMargin" />
+								<OperatorDim value="7" />
+							</OperatorDim>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="Width" ><AbsoluteDim value="7" /></Dim>
+				<Dim type="TopEdge">
+					<PropertyDim name="MinScrollMargin" />
+				</Dim>
+				<Dim type="BottomEdge" >
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Height" />
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Menu/frameB" dimension="Height" />
+							<PropertyDim name="MinScrollMargin" />
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+			</Area>
+			<HorzAlignment type="LeftAligned" />
+			<Property name="NonClient" value="True" />
+		</Child>
+		<ImagerySection name="main">
+			<FrameComponent>
+				<Image component="BottomLeftCorner" name="XihadUI/Menu/frameLB" />
+				<Image component="BottomRightCorner" name="XihadUI/Menu/frameRB" />
+				<Image component="TopRightCorner" name="XihadUI/Menu/frameRT" />
+				<Image component="RightEdge" name="XihadUI/Menu/frameR" />
+				<Image component="BottomEdge" name="XihadUI/Menu/frameB" />
+			</FrameComponent>
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="main" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="main" />
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+	
+	<!--
+	***************************************************
+		Xihad/HorizontalScrollbarThumb
+	***************************************************
+	-->
+	<WidgetLook name="Xihad/HorizontalScrollbarThumb">
+		<Property name="HorzFree" value="True" />
+		<Property name="MouseInputPropagationEnabled" value="True" />
+		<Property name="Size" value="{{0, 48}, {0, 16}}" />
+		<ImagerySection name="normal">
+			<FrameComponent>
+				<Image component="LeftEdge" name="XihadUI/HorzScrollThumbNormalL" />
+				<Image component="Background" name="XihadUI/HorzScrollThumbNormalM" />
+				<Image component="RightEdge" name="XihadUI/HorzScrollThumbNormalR" />
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="hover">
+			<FrameComponent>
+				<Image component="LeftEdge" name="XihadUI/HorzScrollThumbHoverL" />
+				<Image component="Background" name="XihadUI/HorzScrollThumbHoverM" />
+				<Image component="RightEdge" name="XihadUI/HorzScrollThumbHoverR" />
+			</FrameComponent>
+		</ImagerySection>
+		<StateImagery name="Normal">
+			<Layer>
+				<Section section="normal" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Hover">
+			<Layer>
+				<Section section="hover" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Pushed">
+			<Layer>
+				<Section section="hover" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="normal">
+					<Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+	<!--
+	***************************************************
+		Xihad/HorizontalScrollbar
+	***************************************************
+	-->
+	<WidgetLook name="Xihad/HorizontalScrollbar">
+		<Property name="Size" value="{{1, 0}, {0, 16}}" />
+		<NamedArea name="ThumbTrackArea">
+			<Area>
+			</Area>
+		</NamedArea>
+		<Child  type="Xihad/ImageButton" nameSuffix="__auto_incbtn__">
+			<Area>
+				<Dim type="Width" ><AbsoluteDim value="0" /></Dim>
+			</Area>
+			<Property name="Visible" value="false"/>
+		</Child>
+		<Child  type="Xihad/ImageButton" nameSuffix="__auto_decbtn__">
+			<Area>
+				<Dim type="Width" ><AbsoluteDim value="0" /></Dim>
+			</Area>
+			<Property name="Visible" value="false"/>
+		</Child>
+		<Child  type="Xihad/HorizontalScrollbarThumb" nameSuffix="__auto_thumb__">
+			<Area>
+				<Dim type="Width" ><UnifiedDim scale="0.2" type="Width" /></Dim>
+			</Area>
+			<Property name="MinSize" value="{{0,21},{0,7}}" />
+		</Child>
+		<ImagerySection name="main">
+			<FrameComponent>
+				<Image component="LeftEdge" name="XihadUI/HorzScrollBarL" />
+				<Image component="Background" name="XihadUI/HorzScrollBarM" />
+				<Image component="RightEdge" name="XihadUI/HorzScrollBarR" />
+			</FrameComponent>	
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="main" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="main">
+					<Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+	<!--
+	***************************************************
+		Xihad/VerticalScrollbarThumb
+	***************************************************
+	-->
+	<WidgetLook name="Xihad/VerticalScrollbarThumb">
+		<Property name="VertFree" value="True" />
+		<Property name="MouseInputPropagationEnabled" value="True" />
+		<ImagerySection name="normal">
+			<FrameComponent>
+				<Image component="TopEdge" name="XihadUI/VertScrollThumbNormalT" />
+				<Image component="Background" name="XihadUI/VertScrollThumbNormalM" />
+				<Image component="BottomEdge" name="XihadUI/VertScrollThumbNormalB" />
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="hover">
+			<FrameComponent>
+				<Image component="TopEdge" name="XihadUI/VertScrollThumbHoverT" />
+				<Image component="Background" name="XihadUI/VertScrollThumbHoverM" />
+				<Image component="BottomEdge" name="XihadUI/VertScrollThumbHoverB" />
+			</FrameComponent>
+		</ImagerySection>
+		<StateImagery name="Normal">
+			<Layer>
+				<Section section="normal" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Hover">
+			<Layer>
+				<Section section="hover" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Pushed">
+			<Layer>
+				<Section section="hover" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="normal">
+					<Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+
+	<!--
+	***************************************************
+		Xihad/VerticalScrollbar
+	***************************************************
+	-->
+	<WidgetLook name="Xihad/VerticalScrollbar">
+		<Property name="VerticalScrollbar" value="True" />
+		<NamedArea name="ThumbTrackArea">
+		</NamedArea>
+		<Child  type="Xihad/ImageButton" nameSuffix="__auto_incbtn__">
+			<Area>
+				<Dim type="Height" ><AbsoluteDim value="0" /></Dim>
+			</Area>
+			<Property name="Visible" value="false" />
+		</Child>
+		<Child  type="Xihad/ImageButton" nameSuffix="__auto_decbtn__">
+			<Area>
+				<Dim type="Height" ><AbsoluteDim value="0" /></Dim>
+			</Area>
+			<Property name="Visible" value="false" />
+		</Child>
+		<Child  type="Xihad/VerticalScrollbarThumb" nameSuffix="__auto_thumb__">
+			<Area>
+				<Dim type="Height" ><UnifiedDim scale="0.2" type="Height" /></Dim>
+			</Area>
+			<Property name="MinSize" value="{{0,7},{0,21}}" />
+		</Child>
+		
+		<ImagerySection name="main">
+			<FrameComponent>
+                <Image component="TopEdge" name="XihadUI/VertScrollBarT" />
+                <Image component="Background" name="XihadUI/VertScrollBarM" />
+                <Image component="BottomEdge" name="XihadUI/VertScrollBarB" />
+			</FrameComponent>	
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="main" />
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="main">
+					<Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+				</Section>
+			</Layer>
+		</StateImagery>
 	</WidgetLook>
 
 </Falagard>
