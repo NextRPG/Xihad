@@ -6,7 +6,22 @@ Parcel.__index = Parcel
 Parcel.__base = 'BaseParcel'
 
 function Parcel.new()
-	return setmetatable({base.new() }, Parcel)
+	return setmetatable(base.new(), Parcel)
+end
+
+function Parcel:onDropItem(item, count)
+	item:onDiscarded(self:findPeer(c'Warrior'), count)
+end
+
+function Parcel:dropItemAt(itemIndex, delta)
+	local item = self:getItemAt(itemIndex)
+	base.dropItemAt(self, itemIndex, delta)
+	self:onDropItem(item, delta)
+end
+
+function Parcel:dropItem(item, delta)
+	base.dropItem(item, delta)
+	self:onDropItem(item, delta)
 end
 
 function Parcel:getTotalSlotCount()

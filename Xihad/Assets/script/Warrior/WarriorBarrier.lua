@@ -17,8 +17,11 @@ function WarriorBarrier.getOptUniqueKey()
 	return 'WarriorBarrier'
 end
 
+---
+-- We should invoke other:isLeagueWith(self), not self:isLeagueWith(other), 
+-- for support route cheat
 function WarriorBarrier:isLeagueWith(other)
-	return self:findPeer(c'Warrior'):isLeagueWith(other)
+	return other:isLeagueWith(self:findPeer(c'Warrior'))
 end
 
 function WarriorBarrier:canPass( warrior )

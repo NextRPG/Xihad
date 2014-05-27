@@ -9,6 +9,10 @@ function functional.passby(f, ...)
 	return ...
 end
 
+function functional.return_(...)
+	return ...
+end
+
 function functional.invoke(target, fnameOrParam, ...)
 	if type(target) == "function" then
 		local param = fnameOrParam
@@ -51,6 +55,13 @@ function functional.bind2(f, _1, _2)
 	assert(f)
 	return function (...)
 		return f(_1, _2, ...)
+	end
+end
+
+function functional.bind3(f, _1, _2, _3)
+	assert(f)
+	return function (...)
+		return f(_1, _2, _3, ...)
 	end
 end
 

@@ -110,12 +110,11 @@ function factory:create(team, name, data)
 	
 	-- TODO FIXME
 	if team == 'Enemy' then
+		local Location = require 'route.Location'
+		local Approaching = require 'Tactic.Approaching'
+		local EnemyGrader = require 'Tactic.EnemyGrader'
 		object:appendComponent(c'ECLTactic', {
-				enemy = function (warrior, enemy) 
-					local dist = enemy:getLocation():distance(warrior:getLocation())
-					local enough = (dist == 1)
-					return 100 - dist, enough
-				end,
+				enemy = EnemyGrader.nearest(),
 				
 				cast = function (warrior, enemy, cast)
 					return 1, true
@@ -124,6 +123,9 @@ function factory:create(team, name, data)
 				location = function (warrior, enemy, cast, location)
 					return 1, true
 				end,
+				
+				approaching = Approaching.fixedTarget(Location.new(4, 1))
+				-- approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
 			})
 	end
 	
