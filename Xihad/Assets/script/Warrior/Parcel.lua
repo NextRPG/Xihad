@@ -1,34 +1,51 @@
-local Parcel = {
-	items = nil,	-- { Item -> count }
-}
+local base = require 'BaseParcel'
+local Parcel = setmetatable({
+		sMaxSlot = 5,
+	}, base)
 Parcel.__index = Parcel
+Parcel.__base = 'BaseParcel'
 
 function Parcel.new()
-	local o  = setmetatable({
-			items = {},
-		}, Parcel)
-	
-	return o
+	return setmetatable({base.new() }, Parcel)
 end
 
-function Parcel:gainItem(item, count)
-	
+function Parcel:getTotalSlotCount()
+	return Parcel.sMaxSlot
 end
 
+function Parcel:useItemAt(itemIndex)
+	local item = self:_check_item_at(itemIndex)
+	local usage, loss = item:onUsed(self:findPeer(c'Warrior'))
+	if loss then
+		self:dropItemAt(itemIndex, 1)
+	end
+	
+	return usage
+end
+
+function Parcel:getValue(itemIndex)
+	local item = self:getItemAt(itemIndex)
+	assert(item ~= nil)
+	
+	local value
+	if type(item.isEquiped) == 'function' then
+		value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or 'N'
+	else
+		value = string.format('%2d', count)
+	end
+	
+	return value
+end
+
+---
+-- @Deprecated invoke useItemAt() instead
 function Parcel:useItem(item)
+	local pos = self:_last_pos(item)
+	if not pos then
+		error('no such a item')
+	end
 	
-end
-
-function Parcel:canUse(item)
-	
-end
-
-function Parcel:allItems()
-	
-end
-
-function Parcel:hasItem()
-	return #self.items >= 1
+	return self:useItemAt(pos)
 end
 
 return Parcel
