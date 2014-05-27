@@ -234,7 +234,9 @@ end
 function BaseParcel:allSlots()
 	local function iter(self, idx)
 		idx = idx + 1
-		return idx, self.slots[idx], self.count[idx]
+		local item = self.slots[idx]
+		if not item then idx = nil end
+		return idx, item, self.count[idx]
 	end
 	
 	return iter, self, 0

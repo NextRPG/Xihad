@@ -1,7 +1,7 @@
 local GUIController = {
 	Command = require "assets.ui.Command",
 	MapTileInfo = require "assets.ui.MapTileInfo",
-	ParcelExchange = require "assets.ui.ParcelExchange",
+	-- ParcelExchange = require "assets.ui.ParcelExchange",
 }
 
 G_CEGUISubscriberSlot = {

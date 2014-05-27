@@ -29,9 +29,9 @@ function Parcel:getValue(itemIndex)
 	
 	local value
 	if type(item.isEquiped) == 'function' then
-		value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or 'N'
+		value = item:isEquiped(self:findPeer(c'Equiper')) and 'E' or 'N'
 	else
-		value = string.format('%2d', count)
+		value = string.format('%2d', self:getCountAt(itemIndex))
 	end
 	
 	return value

@@ -191,7 +191,8 @@ end
 
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('B')
+simulator:selectWarrior('A')
+simulator:selectTile(aTile)
 -- simulator:selectTileAt(8, 6)
 -- simulator:selectCommand('技能', 'Fire')
 -- simulator:selectTile(aTile)
