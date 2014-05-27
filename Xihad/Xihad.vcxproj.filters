@@ -19,11 +19,13 @@
     <ClCompile Include="..\src\Xihad\ScriptLauncher.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Xihad\GUITest.cpp" />
     <ClCompile Include="..\src\Xihad\RenderTargetTest.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Xihad\Xihad.cpp" />
+    <ClCompile Include="..\src\Xihad\GUITest.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Xihad\CreateDevice.h">

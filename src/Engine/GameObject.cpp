@@ -440,7 +440,7 @@ namespace xihad { namespace ngn
 		// Let self start first. Order is reserved
 		CompositeUpdateHandler::onStart();
 
-		if (mImpl->hasChildHandler())
+		if (mImpl->childrenList)
 			mImpl->childrenList->start();
 	}
 
@@ -457,7 +457,7 @@ namespace xihad { namespace ngn
 	void GameObject::onStop()
 	{
 		// Order is reserved
-		if (mImpl->hasChildHandler())
+		if (mImpl->childrenList)
 			mImpl->childrenList->stop();
 
 		CompositeUpdateHandler::onStop();
@@ -466,7 +466,7 @@ namespace xihad { namespace ngn
 	void GameObject::onDestroy()
 	{
 		// Order is reserved
-		if (mImpl->hasChildHandler() && !mImpl->childrenList->destroy())
+		if (mImpl->childrenList && !mImpl->childrenList->destroy())
 			cerr << "GameObject children list destroy failed" << endl;
 
 		mImpl->childrenList = 0;

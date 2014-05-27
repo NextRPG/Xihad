@@ -16,8 +16,6 @@
 #include "CDialogueContext.h"
 #include "CTickAll.h"
 
-
-
 namespace xihad { namespace dialogue
 {
 	using namespace CEGUI;
@@ -29,7 +27,12 @@ namespace xihad { namespace dialogue
 		mLineSpacing(lineSpacing), mParagrahPadding(paragrahPadding), 
 		selector(startFromLeft), currentSubtitle(nullptr)
 	{
+		XIHAD_MLD_NEW_OBJECT;
+	}
 
+	Conversation::~Conversation()
+	{
+		XIHAD_MLD_DEL_OBJECT;
 	}
 
 	void Conversation::speak( const String& name, const String& content )

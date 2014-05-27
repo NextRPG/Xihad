@@ -19,11 +19,16 @@ namespace xihad { namespace ngn
 		if (recv) receivers.push_front(recv);
 	}
 
-	UserEventReceiver* UserEventReceiverStack::popReceiver()
+	xptr<UserEventReceiver> UserEventReceiverStack::popReceiver()
 	{
-		UserEventReceiver* first = receivers.front().get();
+		xptr<UserEventReceiver> first = receivers.front().get();
 		receivers.pop_front();
 		return first;
+	}
+
+	UserEventReceiver* UserEventReceiverStack::frontReceiver() const
+	{
+		return this->receivers.front().get();
 	}
 
 	int UserEventReceiverStack::onKeyEvent( const KeyEvent& event, int argFromPreviousReceiver )
@@ -33,11 +38,8 @@ namespace xihad { namespace ngn
 
 		int arg = argFromPreviousReceiver;
 		for (xptr<UserEventReceiver> recv : receivers)
-		{
-			arg = recv->onKeyEvent(event, arg);
-
-			if (arg == 0) break;
-		}
+			if ((arg = recv->onKeyEvent(event, arg)) == 0)
+				break;
 
 		return arg;
 	}

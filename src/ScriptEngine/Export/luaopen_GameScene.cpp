@@ -134,15 +134,20 @@ namespace xihad { namespace script
 		{
 			LuaRef tref = LuaRef::fromIndex(L, 2);
 			receiver = new LuaEventReceiver(tref);
+			lua_pushvalue(L, 2);
 		}
 		
 		scene->getControllerStack().pushReceiver(receiver);
-		return 0;
+		return 1;
 	}
 
 	luaT_static UserEventReceiver* popController(GameScene* scene)
 	{
-		return scene->getControllerStack().popReceiver();
+		auto ptr = scene->getControllerStack().popReceiver();
+		if (ptr->getReferenceCount() == 1) 
+			return 0;
+		else
+			return ptr.get();
 	}}
 
 	int luaopen_GameScene( lua_State* L )

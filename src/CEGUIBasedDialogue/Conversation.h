@@ -1,9 +1,8 @@
 #pragma once
 #include <CEGUI\String.h>
 #include <Engine\dimension2d.h>
-#include <Engine\irr_ptr.h>
-#include <irrlicht\IReferenceCounted.h>
-
+#include <Engine\xptr.h>
+#include <CppBase\ReferenceCounted.h>
 #include <map>
 #include <queue>
 
@@ -19,7 +18,7 @@ namespace xihad { namespace dialogue
 	using CEGUI::String;
 	class IDialogue;
 	class IDialogueBuilder;
-	class Conversation : public irr::IReferenceCounted
+	class Conversation : public virtual ReferenceCounted
 	{
 	public:
 		Conversation(
@@ -28,7 +27,7 @@ namespace xihad { namespace dialogue
 			const ngn::dimension2di& paragrahPadding = ngn::dimension2di(),
 			bool startFromLeft = true);
 		
-		virtual ~Conversation() {}
+		virtual ~Conversation();
 
 		void speak(const String& name, const String& content, const String& image);
 
@@ -58,7 +57,7 @@ namespace xihad { namespace dialogue
 		bool isFinished();
 
 	private:
-		struct SpeakPiece : public irr::IReferenceCounted
+		struct SpeakPiece : public virtual ReferenceCounted
 		{
 			SpeakPiece(const String& pname, const String& pcontent, const String& pimage)
 				: name(pname), content(pcontent), image(pimage)
@@ -90,6 +89,6 @@ namespace xihad { namespace dialogue
 		
 		IDialogue* currentSubtitle;
 
-		std::queue<irr_ptr<SpeakPiece>> mPieces;
+		std::queue<xptr<SpeakPiece>> mPieces;
 	};
 }}

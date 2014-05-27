@@ -18,6 +18,12 @@ return
  		{
  			['Fire'] = 10, 
  		},
+ 		items = 
+ 		{
+ 			['伤药'] = 3,
+ 			['长矛'] = 1,
+ 		},
+ 		
  		level = 1,
  		currentexP = 0,
  		name = 1,
