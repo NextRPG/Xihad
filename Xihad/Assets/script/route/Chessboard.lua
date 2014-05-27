@@ -1,4 +1,4 @@
-require 'ArtIn'
+require 'ArtIn' -- Load ArtIn module for once
 
 local Array = require 'std.Array'
 local MapTile  = require 'route.MapTile'
