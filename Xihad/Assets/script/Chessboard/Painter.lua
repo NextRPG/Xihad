@@ -4,6 +4,7 @@ local defaultColorTable = {
 	Destination = Color.cyan,
 	Attack      = Color.orange,
 	Castable    = Color.magenta,
+	Impact 		= Color.orange,
 }
 defaultColorTable.__index = defaultColorTable
 

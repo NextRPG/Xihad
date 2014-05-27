@@ -1,7 +1,10 @@
 local base = require 'Controller.PlayerState'
 local SkillQuery = require 'Skill.SkillQuery'
+local SkillRegistry = require 'Skill.SkillRegistry'
 
 local ChooseTargetState = setmetatable({
+	hoveringTile = nil,
+	impactHanlde = nil,
 	castableHandle = nil,
 }, base)
 ChooseTargetState.__index = ChooseTargetState
@@ -14,7 +17,12 @@ function ChooseTargetState:_getWC()
 	local command, subcommand = self.commandList:getCommand()
 	assert(command == '技能', command)
 	return 	self:_getSource(), subcommand
-			
+end
+
+function ChooseTargetState:_getSkill()
+	local command, subcommand = self.commandList:getCommand()
+	assert(command == '技能', command)
+	return SkillRegistry.findSkillByName(subcommand)
 end
 
 function ChooseTargetState:_getLaunchableTiles(array)
@@ -46,6 +54,7 @@ function ChooseTargetState:onTileSelected(tile)
 		print('not castable', tostring(tile:getLocation()))
 	else
 		self:_safeClear('castableHandle')
+		self:_safeClear('impactHanlde')
 		
 		self.commandList:setTarget(tile:getLocation())
 		local source, skill = self:_getWC()
@@ -54,11 +63,30 @@ function ChooseTargetState:onTileSelected(tile)
 	end
 end
 
+function ChooseTargetState:_showImpactTiles()
+	local skill = self:_getSkill()
+	local center= self.hoveringTile:getLocation()
+	local range = skill:getImpactTiles(g_chessboard, center)
+	self:_markRange(range, 'Impact', 'impactHanlde')
+end
+
+function ChooseTargetState:_showHitPointEstimate()
+	
+end
+
+function ChooseTargetState:_updateHover()
+	self:_safeClear('impactHanlde')
+	
+	if self.hoveringTile then
+		self:_showImpactTiles()
+	end
+end
+
 function ChooseTargetState:onTileHovered(tile)
-	-- local source, command = self:_getWC()
-	-- local caster = source:findPeer(c'SkillCaster')
-	-- local skill = SkillRegistry.findSkillByName(command)
-	-- local result = caster:castSkill(skill, tile:getLocation(), g_chessboard)
+	if self.hoveringTile ~= tile then
+		self.hoveringTile = tile
+		self:_updateHover()
+	end
 end
 
 return ChooseTargetState

@@ -64,6 +64,7 @@ local ui = {
 	
 	showTileInfo = function (self, tile)
 		if tile then
+			print(tostring(tile:getLocation()))
 			TileInfoView.show(tile)
 		else
 			TileInfoView.hide()
@@ -183,12 +184,17 @@ end
 
 -- Test Parcel
 local aObject = g_scene:findObject(c'A')
-local aTile = aObject:findComponent(c'Barrier'):getTile()
+local aTile
+if aObject then
+	aTile = aObject:findComponent(c'Barrier'):getTile()
+end
 
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('A')
-simulator:selectTile(aTile)
+simulator:selectWarrior('B')
+-- simulator:selectTileAt(8, 6)
+-- simulator:selectCommand('技能', 'Fire')
+-- simulator:selectTile(aTile)
 -- simulator:selectCommand('道具', '长矛')
 -- simulator:selectCommand('道具', '长矛')
 -- simulator:selectCommand('待机')

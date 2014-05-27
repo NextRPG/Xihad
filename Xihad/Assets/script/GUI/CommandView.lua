@@ -37,17 +37,10 @@ end
 function CommandView._createItemList(warrior)
 	local parcel = warrior:findPeer(c'Parcel')
 	local list = {}
-	for item, count in parcel:allSlots() do
-		local value
-		if item.isEquiped then
-			value = item:isEquiped(parcel:findPeer(c'Equiper')) and 'E' or 'N'
-		else
-			value = string.format('%2d', count)
-		end
-		
+	for index, item, count in parcel:allSlots() do
 		table.insert(list, {
 				name = item:getName(),
-				value= value,
+				value= parcel:getValue(index),
 				disabled = not item:canUse(warrior),
 			})
 	end

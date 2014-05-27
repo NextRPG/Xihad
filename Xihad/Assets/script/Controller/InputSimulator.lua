@@ -1,3 +1,4 @@
+local Location = require 'route.Location'
 local InputSimulator = {
 	playerStateMachine = nil,
 }
@@ -21,7 +22,7 @@ function InputSimulator:selectTile(tile)
 end
 
 function InputSimulator:selectTileAt(x, y)
-	local tile = g_chessboard:getTile(x, y)
+	local tile = g_chessboard:getTile(Location.new(x, y))
 	self:selectTile(tile)
 end
 

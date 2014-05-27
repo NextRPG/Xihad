@@ -91,13 +91,12 @@ function ECLTactic:_completeOrder(cmdList)
 			local launchables = skill:getLaunchableTiles(g_chessboard, warrior, launcherCenter)
 			for impactCenterTile, _ in pairs(launchables) do 
 				local impactCenterLoc = impactCenterTile:getLocation()
-				local skillRange = skill:getRange()
-				skillRange:traverseImpactLocations(impactCenterLoc, function (impactLocation)
-					local impactTile = g_chessboard:getTile(impactLocation)
-					log('\t\t\timpact: %s\t', tostring(impactLocation))
-					if not impactTile or not impactTile:hasWarrior() then
+				local tiles = skill:getImpactTiles(g_chessboard, impactCenterLoc)
+				for _, impactTile in ipairs(tiles) do
+				repeat
+					if not impactTile:hasWarrior() then
 						log('noWarrior\n')
-						return
+						break
 					end
 					
 					log('hasWarrior\t')
@@ -108,7 +107,8 @@ function ECLTactic:_completeOrder(cmdList)
 					else
 						log('isNotEnemy\n')
 					end
-				end)
+				until true
+				end
 			end
 		until true
 		end

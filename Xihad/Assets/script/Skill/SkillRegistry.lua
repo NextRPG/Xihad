@@ -30,7 +30,12 @@ function SkillRegistry.newSkill(name, range, filter, effecFile, magicAnim)
 	return skill
 end
 
-function SkillRegistry.toRange(minDst, maxDst, mask)
+local function addRow(mask, row)
+	mask = mask and mask..'\n' or ''
+	return mask..row
+end
+
+local function toRange(minDst, maxDst, mask)
 	local range = CastableRange.new(minDst, maxDst)
 	for x, y in SkillRegistry.parser:parse(mask) do
 		range:addRelativeImpactLocation(Location.new(x, y))
@@ -39,44 +44,48 @@ function SkillRegistry.toRange(minDst, maxDst, mask)
 	return range
 end
 
+local function addEffectResolver(skill, effect, probability)
+	skill:addResolver(EffectResolver.new(effect, probability))
+end
 
-local toRange = SkillRegistry.toRange
-local range = toRange(2, 2, '@')
+local function addSleepEffect(skill, round, probability)
+	local effect = SleepEffect.new(RoundRecycler.new(round))
+	addEffectResolver(skill, effect, probability)
+end
 
-local enemyOnly = { toEnemy = true, }
+local function addPoisonEffect(skill, incr, round, probability)
+	local effect = HitPointEffect.new(incr, RoundRecycler.new(round))
+	addEffectResolver(skill, effect, probability)
+end
+
+local function addBuffEffect(skill, field, eq, round, probability)
+	local effect = BuffEffect.new(field, eq, RoundRecycler.new(round))
+	addEffectResolver(skill, effect, probability)
+end
+
+local function addOffsetBuff(skill, field, offset, round, probability)
+	local eq = Equation.new(offset)
+	addBuffEffect(skill, field, eq, round, probability)
+end
+
+local function addPowerBuff(skill, field, power, round, probability)
+	local eq = Equation.new(0, power)
+	addBuffEffect(skill, field, eq, round, probability)
+end
+
+local function addHitPointResolver(skill, nature, incr)
+	skill:addResolver(HitPointResolver.new(nature, incr))
+end
+
+local mask = nil
+mask = addRow(mask, 'xox')
+mask = addRow(mask, 'o@o')
+mask = addRow(mask, 'xox')
+local range = toRange(1, 1, mask)
+local enemyOnly = { toEnemy = true, toVacancy = true, }
 local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'effect.tornado')
-
-fireSkill:addResolver(HitPointResolver.new('fire', -30))
-
-fireSkill:addResolver(
-	EffectResolver.new(
-		BuffEffect.new(
-			'ATK', 
-			Equation.new(-10), 
-			RoundRecycler.new(2)), 
-		1.0)
-	)
-
--- fireSkill:addResolver(
--- 	EffectResolver.new(
--- 		HitPointEffect.new(
--- 			-10,
--- 			RoundRecycler.new(3)),
--- 		1.0)
--- 	)
-
--- fireSkill:addResolver(
--- 	EffectResolver.new(
--- 		SleepEffect.new(
--- 			RoundRecycler.new(2)),
--- 		1.0)
--- 	)
-
-SkillRegistry.allSkills['skill1'] = Skill.new('skill1', range, enemyOnly)
-SkillRegistry.allSkills['skill2'] = Skill.new('skill2', range, enemyOnly)
-SkillRegistry.allSkills['skill3'] = Skill.new('skill3', range, enemyOnly)
-SkillRegistry.allSkills['skill4'] = Skill.new('skill4', range, enemyOnly)
-SkillRegistry.allSkills['skill5'] = Skill.new('skill5', range, enemyOnly)
+addHitPointResolver(fireSkill, 'fire', -30)
+addOffsetBuff(fireSkill, 'ATK',  -10, 2, 1.0)
 
 function SkillRegistry.findSkillByName(name)
 	return SkillRegistry.allSkills[name]

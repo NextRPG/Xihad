@@ -85,6 +85,18 @@ function Skill:getName()
 	return self.name
 end
 
+function Skill:getImpactTiles(chessboard, impactCenter)
+	local array = {}
+	self.range:traverseImpactLocations(impactCenter, function (loc)
+		local tile = chessboard:getTile(loc)
+		if tile then
+			table.insert(array, tile)
+		end
+	end)
+	
+	return array
+end
+
 function Skill:getAllImpactTiles(chessboard, launcherLocation, set)
 	set = set or {}
 	

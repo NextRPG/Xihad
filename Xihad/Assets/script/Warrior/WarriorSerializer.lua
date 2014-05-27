@@ -30,7 +30,7 @@ function WarriorSerializer:createSerializable()
 	end
 	
 	parcel:tidy()
-	for item, count in parcel:allSlots() do
+	for index, item, count in parcel:allSlots() do
 		items[item:getName()] = count
 	end
 	
