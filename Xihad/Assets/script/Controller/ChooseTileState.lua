@@ -44,6 +44,8 @@ function ChooseTileState:onStateExit()
 	self:_safeClear('reachableHandle')
 	self:_safeClear('attackableHandle')
 	self:_safeClear('selectedHandle')
+	
+	self:_showTileInfo(nil)
 end
 
 function ChooseTileState:onBack()
@@ -135,6 +137,8 @@ function ChooseTileState:_updatePromote(tile)
 	
 	if self:_canReachTile(tile) then
 		self:_makePromote(tile)
+	else
+		self:_showTileInfo(nil)
 	end
 end
 

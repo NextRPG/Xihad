@@ -19,12 +19,9 @@ local function addMenuItems(parent, itemList, receiveHover)
 		end
 		
 		if options.value then 
-			if tonumber(options.value) then
-				text = string.format("%s %2d", text, options.value)
-			else 
-				text = string.format("%s  %s", text, options.value)
-			end
+			text = string.format("%s  %s", text, options.value)
 		end
+		
 		item:setProperty("XihadValue", options.value or "")
 		item:setText(text)
 		

@@ -4,6 +4,7 @@ local Trigonometry = require 'math.Trigonometry'
 local ActionAdapter= require 'Action.ActionAdapter'
 local SpanVariable = require 'Action.SpanVariable'	
 local ActionAdapter= require 'Action.ActionAdapter'
+local ItemRegistry = require 'Item.ItemRegistry'
 local SkillRegistry= require 'Skill.SkillRegistry'
 local ConcurrentJobs = require 'std.ConcurrentJobs'
 local WarriorMovement = require 'HighAction.WarriorMovement'
@@ -98,12 +99,12 @@ function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
 	return caster:castSkill(skill, targetLocation, g_chessboard)
 end
 
-function CommandExecutor:cast(warrior, targetLocation, skill)
+function CommandExecutor:cast(warrior, targetLocation, skillName)
 	print(string.format('%s cast %s @%s', 
-		warrior:getHostObject():getID(), skill:getName(), tostring(targetLocation)))
+		warrior:getHostObject():getID(), skillName, tostring(targetLocation)))
 	
-	-- local skill  = SkillRegistry.findSkillByName(skillName)
-	local results= self:_getBattleResults(warrior, skill, targetLocation)
+	local skill = SkillRegistry.findSkillByName(skillName)
+	local results = self:_getBattleResults(warrior, skill, targetLocation)
 	local targetTile = g_chessboard:getTile(targetLocation)
 	
 	self:_faceToTarget(warrior, targetTile)
@@ -125,16 +126,27 @@ function CommandExecutor:cast(warrior, targetLocation, skill)
 	warrior:deactivate()
 end
 
+function CommandExecutor:useItem(warrior, itemName)
+	local item = ItemRegistry.findItemByName(itemName)
+	local usage= warrior:findPeer(c'Parcel'):useItem(item)
+	
+	print(usage)
+	AsConditionFactory.waitTimer(0.5)
+	if item:occupyRound() then
+		warrior:deactivate()
+	end
+end
+
 function CommandExecutor:standBy(warrior)
 	warrior:deactivate()
 end
 
 function CommandExecutor:execute(cmdList)
 	local warrior= cmdList:getSource()
-	
 	local object = warrior:getHostObject()
+	local command, subCommand = cmdList:getCommand()
 	
-	if cmdList:getLocation() == warrior:getLocation() and cmdList:getCommand() == '待机' then
+	if cmdList:getLocation() == warrior:getLocation() and command == '待机' then
 		self:standBy(warrior)
 		-- TODO Don't wait fade out
 		return
@@ -144,10 +156,12 @@ function CommandExecutor:execute(cmdList)
 	
 	self:move(object, cmdList:getLocation())
 	
-	if cmdList:getCommand() == '待机' then
+	if command == '待机' then
 		self:standBy(warrior)
-	else
-		self:cast(warrior, cmdList:getTarget(), cmdList:getAsCastable())
+	elseif command == '技能' then
+		self:cast(warrior, cmdList:getTarget(), subCommand)
+	elseif command == '道具' then
+		self:useItem(warrior, subCommand)
 	end
 	
 	-- TODO Wait fade out

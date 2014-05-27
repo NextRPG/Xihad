@@ -19,4 +19,11 @@ function StaticUtils.followMouse(window)
 	window:setPosition(StaticUtils.vector2fToUVector(position))
 end
 
+function StaticUtils.newUDim(scale, offset)
+	local udim = CEGUI.UDim:new()
+	udim.scale = scale or 0
+	udim.offset = offset or 0
+	return udim
+end
+
 return StaticUtils

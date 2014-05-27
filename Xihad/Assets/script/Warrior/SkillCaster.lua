@@ -1,29 +1,27 @@
 local Table = require 'std.Table'
 local SkillCaster = {
-	skills = nil,
+	skillRestCount = nil,
+	skillInitCount = nil,
 }
 SkillCaster.__index = SkillCaster
 
 function SkillCaster.new()
 	return setmetatable({
-			skills = {},	-- skill -> time
+			skillRestCount = {},	-- skill -> rest
+			skillInitCount = {},	-- skill -> init
 		}, SkillCaster)
 end
 
+local function isCastable(skill, time)
+	return time >= 1
+end
+
 function SkillCaster:castableSkills()
-	return function(t, lastKey) 
-		local skill, time
-		
-		repeat
-			skill, time = next(t, lastKey)
-		until not skill or time > 0
-			
-		return skill
-	end, self.skills
+	return Table.filteredPairs(self.skillRestCount, isCastable)
 end
 
 function SkillCaster:allSkills()
-	return pairs(self.skills)
+	return pairs(self.skillRestCount)
 end
 
 function SkillCaster:hasDrained(skill)
@@ -42,28 +40,47 @@ function SkillCaster:canCast(skill, location)
 end
 
 function SkillCaster:getRestCount(skill)
-	return self.skills[skill] or 0
+	return self.skillRestCount[skill] or 0
 end
 
 --- 
 -- @return BattleResult
 function SkillCaster:castSkill(skill, targetLocation, chessboard)
-	local restCount = self.skills[skill]
+	local restCount = self.skillRestCount[skill]
 	assert(restCount and restCount > 0, 
 		string.format("Can't cast the specified skill: %s", skill:getName()))
 	
-	self.skills[skill] = restCount - 1
+	self.skillRestCount[skill] = restCount - 1
 	
 	return skill:resolve(self:findPeer(c'Warrior'), targetLocation, chessboard)
 end
 
+function SkillCaster:recover()
+	local init, rest = self.skillInitCount, self.skillRestCount
+	for skill, _ in pairs(self.skillRestCount) do
+		rest[skill] = init[skill]
+	end
+end
+
 function SkillCaster:learnSkill(skill, initialCount)
 	assert(type(initialCount) == 'number' and initialCount > 0)
-	self.skills[skill] = initialCount
+	if not self.skillInitCount[skill] then
+		self.skillRestCount[skill] = initialCount
+	else
+		local delta = initialCount - self.skillInitCount[skill]
+		if delta > 0 then
+			local prev = self.skillRestCount[skill]
+			local curr = math.max(initialCount, prev + delta)
+			self.skillRestCount[skill] = curr
+		end
+	end
+	
+	self.skillInitCount[skill] = initialCount
 end
 
 function SkillCaster:forgetSkill(skill)
-	self.skills[skill] = nil
+	self.skillRestCount[skill] = nil
+	self.skillInitCount[skill] = nil
 end
 
 function SkillCaster:_getLocation(startLoc)
@@ -74,10 +91,8 @@ function SkillCaster:getCastableTiles(startLoc)
 	startLoc = self:_getLocation(startLoc)
 	
 	local tiles = {}
-	for skill, restTimes in pairs(self.skills) do
-		if restTimes > 0 then
-			skill:getAllImpactTiles(g_chessboard, startLoc, tiles)
-		end
+	for skill, _ in self:castableSkills() do
+		skill:getAllImpactTiles(g_chessboard, startLoc, tiles)
 	end
 	
 	return Table.extractKeys(tiles)

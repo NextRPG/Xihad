@@ -13,8 +13,6 @@ function Factory.createDefault(id, translate, target)
 	cameraObject:resetTranslate(translate)
 	cameraControl:setUpVector(math3d.vector(0, 1, 0))
 	
-	-- TODO DELETE
-	-- o.cameraControl:setLookDirection(math3d.vector(0, 0, 1))
 	cameraControl:setTarget(target)
 	
 	return cameraObject

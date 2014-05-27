@@ -25,7 +25,7 @@ function CommandView._createSkillList(skillCaster)
 	for skill, rest in skillCaster:allSkills() do
 		table.insert(list, {
 				name = skill:getName(),
-				value = rest,
+				value= string.format('%2s', rest),
 				disabled = not skillCaster:canCast(skill),
 			})
 	end
@@ -33,18 +33,22 @@ function CommandView._createSkillList(skillCaster)
 	return list
 end
 
-function CommandView._createItemList(parcel)
-	return {}
-	-- local list = {}
-	-- for item, count in parcel:allItems() do
-	-- 	table.insert(list, {
-	-- 			name = item:getName(),
-	-- 			value = count,
-	-- 			disabled = not parcel:canUse(item),
-	-- 		})
-	-- end
+function CommandView._createItemList(warrior)
+	local parcel = warrior:findPeer(c'Parcel')
+	local list = {}
 	
-	-- return list
+	local index = 0
+	for item, count in parcel:allSlots() do
+		index = index + 1
+
+		table.insert(list, {
+				name = item:getName(),
+				value= parcel:getValue(index),
+				disabled = not item:canUse(warrior),
+			})
+	end
+	
+	return list
 end
 
 function CommandView.hook(playStateMachine)
@@ -74,10 +78,10 @@ function CommandView.setSelectListener(selectListener)
 end
 
 function CommandView.setList(entry, list)
-	entry.list = list
-	
 	if #list == 0 then
 		entry.disabled = true
+	else
+		entry.list = list
 	end
 end
 
@@ -94,7 +98,7 @@ function CommandView.show(warrior, x, y)
 	CommandView.setList(skillEntry, skillList)
 	
 	local itemEntry= CommandView._addEntry(viewData, 'itemEntry')
-	local itemList = CommandView._createItemList(warrior:findPeer(c'Parcel'))
+	local itemList = CommandView._createItemList(warrior)
 	CommandView.setList(itemEntry, itemList)
 	
 	local canExchange = CommandView.canExchange(warrior)

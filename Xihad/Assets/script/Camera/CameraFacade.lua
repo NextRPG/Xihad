@@ -1,3 +1,4 @@
+local Vector = require 'math.Vector'
 local functional   = require 'std.functional'
 local EaseFunction = require 'Ease.EaseFunction'
 local SpanVariable = require 'Action.SpanVariable'
@@ -10,7 +11,8 @@ local ModifierFactory = require 'Modifier.TargetModifierFactory'
 local AsConditionFactory= require 'Async.AsConditionFactory'
 local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
-	offsetSourceVec= math3d.vector(8, 15, 12),
+	offsetSourceVec= math3d.vector(8, 18, 12),
+	lookHeightRatio= 0.5,
 	translateSpeed = 90, 
 	slideSpeed = 45,
 	slideEase  = EaseFunction.wrapInOut(EaseFunction[3]),
@@ -23,6 +25,8 @@ local CameraFacade = {
 	focusedObject = nil,
 	spanTranslate = nil,
 	spanLookDir   = nil,
+	
+	autoRestListener = nil,
 }
 CameraFacade.__index = CameraFacade
 
@@ -40,6 +44,11 @@ function CameraFacade.new(cameraObject)
 		}, CameraFacade)
 	
 	o.followControl:setFollowing(following)
+	o.autoRestListener = function (warrior, pname, prev)
+		if warrior:isDead() then
+			o:focus(nil)
+		end
+	end
 	
 	ModifierAdapter.fit(cameraObject, o.cameraAvoid)
 	ModifierAdapter.fit(cameraObject, o.followControl)
@@ -48,11 +57,28 @@ function CameraFacade.new(cameraObject)
 	return o
 end
 
+function CameraFacade:_listenObject(object, add)
+	if not object then return end
+	
+	local warrior = object:findComponent(c'Warrior')
+	if not warrior then return end
+	
+	if add then
+		warrior:addPropertyListener('Dead', self.autoRestListener)
+	else
+		warrior:removePropertyListener('Dead', self.autoRestListener)
+	end
+end
+
 function CameraFacade:focus(object)
 	if self.focusedObject ~= object then
+		self:_listenObject(self.focusedObject, false)
+		
 		self.focusedObject = object
 		self.aimingControl:setAim(object)
 		AsConditionFactory.waitCameraAim(self.aimingControl)
+		
+		self:_listenObject(object, true)
 	end
 end
 
@@ -100,7 +126,7 @@ function CameraFacade:descendIntoBattle(targetTile)
 	local tileCenter = targetTile:getCenterVector() -- + math3d.vector(0, 5, 0)
 	local newTranslate = self:_calculateTranslate(tileCenter)
 	local newLookDir = tileCenter - newTranslate
-	newLookDir:set(nil, 0, nil)
+	newLookDir:set(nil, Vector.getY(newLookDir)*self.lookHeightRatio, nil)
 	
 	self.spanTranslate = SpanVariable.new(nil, newTranslate)
 	self.spanLookDir = SpanVariable.new(nil, newLookDir)

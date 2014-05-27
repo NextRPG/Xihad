@@ -100,7 +100,7 @@
     <Image height="16" name="Parcel/frameL" width="12" xPos="292" yPos="105" />
     <Image height="16" name="Parcel/frameM" width="12" xPos="307" yPos="105" />
     <Image height="16" name="Parcel/frameR" width="12" xPos="336" yPos="105" />
-    <Image height="175" name="Parcel/back_image" width="186" xPos="0" yPos="225" />
+    <Image height="209" name="Parcel/back_image" width="277" xPos="0" yPos="191" />
     <Image height="36" name="Map/frameRT" width="37" xPos="397" yPos="4" />
     <Image height="39" name="Map/frameRB" width="37" xPos="397" yPos="40" />
     <Image height="36" name="Map/frameT" width="34" xPos="299" yPos="4" />

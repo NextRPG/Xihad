@@ -2,6 +2,7 @@ local TerrainRegistry = {
 	passable = {},
 	stayable = {},
 	apcost = {},
+	names = {}
 }
 
 local function getFiled(forID, field)
@@ -23,6 +24,8 @@ local function loadTerrain(data)
 	
 	local apcost =  getFiled(data.id, 'apcost')
 	apcost['*'] = data.APcost
+	
+	TerrainRegistry.names[data.id] = data.name
 end
 
 loadTerrain{

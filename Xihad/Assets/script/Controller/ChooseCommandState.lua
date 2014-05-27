@@ -22,41 +22,47 @@ function ChooseCommandState:needHover()
 end
 
 function ChooseCommandState:onSelectCommand(command, subcommand)
+	if command == '技能' then
+		self.commandList:setCommand(command, subcommand)
+		return 'next'
+	end
+	
 	if command == '待机' then
 		self.executor:standBy(self.commandList:getSource())
-		return 'done'
-	end
-	
-	if command == '交换' then
+	elseif command == '交换' then
 		-- change parcel
-		return 'done'
-	end
-	
-	if command == '技能' then
-		self.commandList:setCommand(subcommand)
 	elseif command == '道具' then
-		
+		self.executor:useItem(self:_getSource(), subcommand)
 	end	
 	
-	return 'next'
+	if not self:_getSource():isActive() then
+		return 'done'
+	end
+end
+
+function ChooseCommandState:_updateMark(subcommand)
+	local range = SkillQuery.getLaunchableTiles(
+					self:_getSource(), subcommand, true)
+	
+	if #range == 0 then
+		io.err:write('Hover a non-launchable tile')
+	else
+		self:_markRange(range, 'Castable', 'commandRange')
+	end
 end
 
 function ChooseCommandState:onHoverCommand(command, subcommand)
+	self:_safeClear('commandRange')
+	
 	if command == '技能' then
-		print('mark skill range')
-		local range = SkillQuery.getLaunchableTiles(
-						self:_getSource(), subcommand, true)
-		
-		if #range == 0 then
-			io.err:write('Hover a non-launchable tile')
-		else
-			self:_safeClear('commandRange')
-			self:_markRange(range, 'Castable', 'commandRange')
+		if subcommand ~= nil then
+			self:_updateMark(subcommand)
 		end
 	end
 end
 
 function ChooseCommandState:onUICommand(command, subcommand, type)
+	print(command, subcommand, type)
 	if type == 'Select' then
 		return self:onSelectCommand(command, subcommand)
 	elseif type == 'Hover' then

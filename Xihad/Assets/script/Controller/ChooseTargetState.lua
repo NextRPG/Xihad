@@ -11,7 +11,9 @@ function ChooseTargetState.new(...)
 end
 
 function ChooseTargetState:_getWC()
-	return 	self:_getSource(), self.commandList:getCommand()
+	local command, subcommand = self.commandList:getCommand()
+	assert(command == '技能', command)
+	return 	self:_getSource(), subcommand
 			
 end
 
@@ -46,9 +48,7 @@ function ChooseTargetState:onTileSelected(tile)
 		self:_safeClear('castableHandle')
 		
 		self.commandList:setTarget(tile:getLocation())
-		local source = self:_getSource()
-		local skill = self.commandList:getAsCastable()
-		assert(skill ~= nil)
+		local source, skill = self:_getWC()
 		self.executor:cast(source, self.commandList:getTarget(), skill)
 		return 'next'
 	end

@@ -2,7 +2,8 @@ local SkillRegistry = require 'Skill.SkillRegistry'
 local CommandList = {
 	source = nil,		-- warrior
 	destination = nil,	-- location
-	command = nil,		-- string?
+	mainCommand = nil,	-- string
+	subCommand  = nil,	-- string
 	target  = nil,		-- location
 }
 CommandList.__index = CommandList
@@ -16,17 +17,19 @@ function CommandList:__tostring()
 		return 'CommandList: no destination'
 	end
 	
-	if not self.command then 
+	if not self.mainCommand then 
 		return 'CommandList: no command'
 	end
 	
 	local sourceName = self.source:getHostObject():getID()
 	local prefix = sourceName..'到达'..tostring(self.destination)
-	if not self.target then
-		return prefix..self.command
-	else
-		return prefix..'朝向'..tostring(self.target)..'使用'..self.command
+	if not self.subCommand then
+		return prefix..self.mainCommand
+	elseif self.target then
+		prefix = prefix..'朝向'..tostring(self.target)
 	end
+	
+	return prefix..'使用'..self.subCommand
 end
 
 function CommandList.new()
@@ -49,26 +52,25 @@ function CommandList:getLocation()
 	return self.destination:copy()
 end
 
-function CommandList:setCommand(cmd)
-	self.command = cmd
+function CommandList:setCommand(mainCommand, subCommand)
+	self.mainCommand = mainCommand
+	self.subCommand  = subCommand
 end
 
 function CommandList:getCommand()
-	return self.command
+	return self.mainCommand, self.subCommand
 end
 
-function CommandList:getAsCastable()
-	local cmd = self.command
-	if cmd == '待机' or cmd == '交换' then
-		error('Can not getAsCastable')
+function CommandList:checkSkill()
+	if self.mainCommand ~= '技能' then
+		error('Can not checkSkill')
 	end
 	
-	local skill = SkillRegistry.findSkillByName(cmd)
-	if skill then
-		return skill
-	end
+	return SkillRegistry.findSkillByName(self.subCommand)
+end
+
+function CommandList:checkItem()
 	
-	-- as item ?
 end
 
 function CommandList:setTarget(targetLocation)

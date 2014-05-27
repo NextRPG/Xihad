@@ -43,13 +43,11 @@ function sm:removeStateListener(state, listener)
 end
 
 function sm:setTransition(fromState, msg, nextState)
-	if fromState ~= nextState then 
-		if not self.transitions[fromState] then
-			self.transitions[fromState] = {}
-		end
-		
-		self.transitions[fromState][msg] = nextState
+	if not self.transitions[fromState] then
+		self.transitions[fromState] = {}
 	end
+	
+	self.transitions[fromState][msg] = nextState
 end
 
 local function fireStateEnter(listeners, currentState, prevState)
@@ -71,8 +69,6 @@ local function fireStateExit(listeners, currentState, nextStateName)
 end
 
 function sm:setCurrentState(nextState)
-	if nextState == self.current then return false end
-	
 	local prevState = self.current
 	fireStateExit(self.listeners[prevState], self.current, nextState)
 	self.current = nextState

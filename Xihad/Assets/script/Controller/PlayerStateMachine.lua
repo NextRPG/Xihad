@@ -1,4 +1,5 @@
 local Class = require 'std.Class'
+local Array = require 'std.Array'
 local sCoroutine = require 'std.sCoroutine'
 local CommandList = require 'Command.CommandList'
 local StateMachine = require 'std.StateMachine'
@@ -14,6 +15,9 @@ local PlayStateMachine = {
 	cmdList= nil,
 	runner = nil,
 	stateControllers = nil,
+	inputBlockListener = nil,
+	
+	postCommands = nil,
 	
 	touchDispatcher = nil,
 	hoverDispatcher = nil,
@@ -25,6 +29,7 @@ function PlayStateMachine.new(...)
 			sm = StateMachine.new('ChooseHero'),
 			cmdList = CommandList.new(),
 			stateControllers = {},
+			postCommands = {},
 		}, PlayStateMachine)
 	
 	obj:_initTransitions()	
@@ -103,13 +108,41 @@ function PlayStateMachine:_process(cmd, ...)
 	end
 end
 
-function PlayStateMachine:_onCommand(cmd, ...)
+function PlayStateMachine:setBlockListener(blockListener)
+	self.inputBlockListener = blockListener
+end
+
+function PlayStateMachine:_setRunner(runner)
+	self.runner = runner
+	
+	if self.inputBlockListener then
+		local blocked = (runner ~= nil)
+		self.inputBlockListener:onBlocked(self, blocked)
+	end
+	
+	if not self.runner and not Array.empty(self.postCommands) then
+		local cmd = Array.removeElementAt(self.postCommands, 1)
+		g_scheduler:schedule(function()
+				self:onCommand(unpack(cmd))
+			end)
+	end
+end
+
+function PlayStateMachine:postCommand(...)
+	if self.runner then		
+		table.insert(self.postCommands, {...})
+	else
+		self:onCommand(...)
+	end
+end
+
+function PlayStateMachine:onCommand(cmd, ...)
 	if self.runner then return end
 	
-	self.runner = coroutine.create(function (...)
+	self:_setRunner(coroutine.create(function (...)
 		self:_process(cmd, ...)
-		self.runner = nil
-	end)
+		self:_setRunner(nil)
+	end))
 	
 	sCoroutine.resume(self.runner, ...)
 end
@@ -152,19 +185,19 @@ function PlayStateMachine:needCDWhenTouch()
 end
 
 function PlayStateMachine:onWarriorSelected(obj, times)
-	return self:_onCommand('onWarriorSelected', obj, times)
+	return self:onCommand('onWarriorSelected', obj, times)
 end
 
 function PlayStateMachine:onTileSelected(tile, times)
-	return self:_onCommand('onTileSelected', tile, times)
+	return self:onCommand('onTileSelected', tile, times)
 end
 
 function PlayStateMachine:onBack()
-	return self:_onCommand('onBack')
+	return self:onCommand('onBack')
 end
 
 function PlayStateMachine:onUICommand(...)
-	return self:_onCommand('onUICommand', ...)
+	return self:onCommand('onUICommand', ...)
 end
 
 function PlayStateMachine:nextHero()

@@ -16,7 +16,7 @@ g_scene:requireSystem(c'Render')
 g_cursor:setVisible(false)
 local guiUpdater = createCEGUIUpdateHandler(g_engine:getWindow())
 g_scene:appendUpdateHandler(guiUpdater)
-g_scene:pushController({
+local controller = g_scene:pushController({
 		onMouseEvent = function(self, event, arg)
 			-- print (event.type)
 			if event.type == "lDoubleClick" then
@@ -30,7 +30,7 @@ g_scene:pushController({
 			return 1
 		end
 	})
-
+controller:drop()
 
 g_scene:pushController(guiUpdater:getEventReceiver())
 
@@ -48,13 +48,18 @@ context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 -- load animation
 require "assets.ui.Animations"
 
+
 -- ont only for test but an example for you.
-local controller = require("assets.ui.GUIController")
-g_scene:pushController({
+local BaseItem = require "Item.BaseItem"
+local BaseParcel = require "BaseParcel"
+local EquipmentItem = require "Item.EquipmentItem"
+
+local GUIController = require("assets.ui.GUIController")
+local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
 		if e.key == "C" then
-			controller:showWindow("Command",
+			GUIController:showWindow("Command",
 				{ 	
 				[1] = { name = "技能", 
 						hover = true,
@@ -72,7 +77,7 @@ g_scene:pushController({
 				local result = math.random(-3, 3)
 				return result
 			end
- 			controller:showWindow("MapTileInfo",
+ 			GUIController:showWindow("MapTileInfo",
  			{
  				name = "草地",
 				effects = {
@@ -82,11 +87,54 @@ g_scene:pushController({
 				}
  			})
 		elseif e.key == "Q" then
-			controller:hideWindow("Command")
-			controller:hideWindow("MapTileInfo")
+			GUIController:hideWindow("Command")
+			GUIController:hideWindow("MapTileInfo")
 		elseif e.key == "I" then
+			local aItem = BaseItem.new("伤药", "RedNumber/-", nil, 5)
+			local bItem = BaseItem.new("解毒药", "RedNumber/1", nil, 3)
+			local cItem = EquipmentItem.new("大锤", "RedNumber/2")
+			local dItem = EquipmentItem.new("长矛", "RedNumber/2")
+			local eItem = BaseItem.new("陷阱", "RedNumber/3", nil, 2)
+			
+			local pL = BaseParcel.new()
+			function pL:getTotalSlotCount() return 5 end
+			pL:gainItem(aItem, 6)
+			pL:gainItem(cItem, 1)
+			pL:gainItem(eItem, 1)
+			
+			local pR = BaseParcel.new()
+			function pR:getTotalSlotCount() return 5 end
+			pR:gainItem(dItem, 1)
+			pR:gainItem(aItem, 3)
+			pR:gainItem(bItem, 4)
+
+			local model = {}
+			function model:getMaster() 
+				local warrior = {}
+				function warrior:getName()
+					return "路飞"
+				end
+				function warrior:getParcel()
+					return pL
+				end
+				return warrior
+			end
+			
+			function model:getGuest()
+				local warrior = {}
+				function warrior:getName()
+					return "索隆"
+				end
+				function warrior:getParcel()
+					return pR
+				end
+				return warrior
+			end
+			
+			
+			GUIController:showWindow("ParcelExchange", model)
 			-- damageNumber = damageNumber or 0
-			-- controller:showWindow("AttackDamage", { damage = damageNumber})
+			-- GUIController:showWindow("AttackDamage", { damage = damageNumber})
 			-- damageNumber = (damageNumber + 5)%1000	
 		else
 			handled = 1
@@ -103,17 +151,17 @@ g_scene:pushController({
 		return 1
 	end
 })
+controller:drop()
+
 local function hoverListener(parent, child, eventType)
 	print(parent, child, eventType)
 end
 
 local function selectListener(parent, child, eventType)
-	controller:unsubscribeEvent("Command.Hover", hoverListener)
+	GUIController:unsubscribeEvent("Command.Hover", hoverListener)
 	print(parent, child, eventType)
 end
 
-controller:subscribeEvent("Command.Select", selectListener)
-controller:subscribeEvent("Command.Hover", hoverListener)
+GUIController:subscribeEvent("Command.Select", selectListener)
+GUIController:subscribeEvent("Command.Hover", hoverListener)
 
-local u = require "Assets.ui.StaticUtils"
-CEGUI.toItemListBase(u.findWindow("ParcelExchange/LSlots")):sizeToContent()

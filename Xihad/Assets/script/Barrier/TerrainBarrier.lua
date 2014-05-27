@@ -1,14 +1,15 @@
 local Color = require 'Color'
+local Class = require 'std.Class'
 local Array = require 'std.Array'
 local Barrier = require 'Barrier'
 local WarriorBarrier = require 'WarriorBarrier'
 local TerrainRegistry= require 'TerrainRegistry'
+local CompositeEffect= require 'Effect.CompositeEffect'
 
 local TerrainBarrier = {
 	type = nil,
 	colors = nil,
-	effects= nil,
-	attached = nil,
+	effect = nil,
 }
 TerrainBarrier.__index = TerrainBarrier
 TerrainBarrier.__base = 'Barrier'
@@ -20,22 +21,35 @@ function TerrainBarrier.new(type, object)
 	assert(type and TerrainRegistry.passable[type])
 	o.type = type
 	o.colors = {}
-	o.effects= {}
-	o.attached = {}
+	o.effect = CompositeEffect.new()
+	
+	-- TODO REMOVE
+	-- local Equation = require 'Warrior.Equation'
+	-- local BuffEffect = require 'Effect.BuffEffect'
+	-- local HitPointEffect = require 'Effect.HitPointEffect'
+	-- o:addEffect(BuffEffect.new('ATK', Equation.new(-10)))
+	-- o:addEffect(BuffEffect.new('DFS', Equation.new(10)))
+	-- if o.type == 1 then
+	-- 	o:addEffect(HitPointEffect.new(-25))
+	-- end
 	
 	-- TODO FIX
-	local mat = object:findComponent(c'Render'):getMaterial(0)
-	mat:setColorMaterial('none')
-	-- mat:setBlend('src.alpha', '1-src.alpha', 'add')
-	-- mat:setMaterialType('trans_alphach')
-	-- mat:setZWriteEnable(false)
+	for _, mat in object:findComponent(c'Render'):materials() do
+		mat:setColorMaterial('none')
+		-- mat:setBlend('src.alpha', '1-src.alpha', 'add')
+		-- mat:setMaterialType('trans_alphach')
+		-- mat:setZWriteEnable(false)
+	end
 	
+	local colorTable = { Color.green, Color.blue, Color.red }
+	table.insert(o.colors, Color.new(colorTable[o.type]))
 	return o
 end
 
+Class.delegate(TerrainBarrier, 'addEffect', 'effect')
+
 function TerrainBarrier:onStart()
-	local colorTable = { Color.green, Color.blue, Color.red }
-	self:pushColor(Color.new(colorTable[self.type]))
+	self:_updateColor()
 end
 
 function TerrainBarrier.getOptUniqueKey()
@@ -50,6 +64,10 @@ local function selectResult(field, type, warrior)
 	else
 		return TerrainRegistry[field][type]['*']
 	end
+end
+
+function TerrainBarrier:getName()
+	return TerrainRegistry.names[self.type]
 end
 
 function TerrainBarrier:keepVacancy()
@@ -126,21 +144,14 @@ end
 function TerrainBarrier:inhabitWith(other, optKey)
 	local warrior = other:findPeer(c'Warrior')
 	if warrior then
-		self.attached = {}
-		for _, effect in ipairs(self.effects) do
-			local copy = effect:copy()
-			copy:bind(warrior, 'terrain')
-			table.insert(self.attached, copy)
-		end
+		self.effect:copy():bindSticky(warrior, self)
 	end
 end
 
 function TerrainBarrier:leaveFrom(other, optKey)
 	local warrior = other:findPeer(c'Warrior')
 	if warrior then
-		for _, effect in ipairs(self.attached) do
-			effect:unbind()
-		end
+		warrior:unbindStickyEffects(self)
 	end
 end
 

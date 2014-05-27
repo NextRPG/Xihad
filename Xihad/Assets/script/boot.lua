@@ -10,6 +10,7 @@ local Painter = require 'Chessboard.Painter'
 local GUISystem   = require 'GUI.GUISystem'
 local functional  = require 'std.functional'
 local sCoroutine  = require 'std.sCoroutine'
+local TileInfoView= require 'GUI.TileInfoView'
 local CommandView = require 'GUI.CommandView'
 local TaskScheduler = require 'Scheduler.TaskScheduler'
 local LevelFactory 	= require 'Level.XihadLevelFactory'
@@ -34,6 +35,13 @@ local lightControl = sun:appendComponent(c'Light')
 lightControl:castShadow(false)
 lightControl:setType 'direction'
 sun:concatTranslate(math3d.vector(0, 30, 0))
+-- local SpanColor = require 'Action.SpanColor'
+-- local ActionAdapter= require 'Action.ActionAdapter'
+-- local LightAction = require 'HighAction.LightAction'
+
+-- local spanColor = SpanColor.new(Color.new(0), Color.new(0xffffffff))
+-- local action = LightAction.diffuse(lightControl, spanColor, 1)
+-- ActionAdapter.fit(sun, action)
 
 -- create g_scheduler
 g_scheduler = TaskScheduler.new()
@@ -55,7 +63,11 @@ local ui = {
 	end,
 	
 	showTileInfo = function (self, tile)
-		print('ui info: ', tile:getTerrain().type)
+		if tile then
+			TileInfoView.show(tile)
+		else
+			TileInfoView.hide()
+		end
 	end,
 	
 	warning = function (self, msg)
@@ -64,6 +76,7 @@ local ui = {
 }
 
 local cameraFacade = CameraFacade.new(CameraFactory.createDefault('camera'))
+g_camera = cameraFacade
 
 local painter = Painter.new()
 
@@ -74,8 +87,30 @@ local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
 g_scene:pushController(controller)
 controller:drop()
 
+stateMachine:setBlockListener({
+		onBlocked = function(self, sm, blocked)
+			local guiCursor = require 'GUI.GUICursor'
+			guiCursor:setVisible(not blocked)
+		end
+	})
+
+local function showRoundInfo( )
+	-- local AsConditionFactory = require 'Async.AsConditionFactory'
+	-- local spanColor = SpanColor.new(nil, Color.new(0xff2b2b2b))
+	-- local action = LightAction.diffuse(lightControl, spanColor, 1)
+	-- ActionAdapter.fit(sun, action)
+	-- AsConditionFactory.waitAction(action)
+	
+	-- spanColor:flip()
+	-- local action = LightAction.diffuse(lightControl, spanColor, 1)
+	-- ActionAdapter.fit(sun, action)
+	-- AsConditionFactory.waitAction(action)
+end
+
 local function startEnemy()
+	showRoundInfo()
 	print('player round over')
+	
 	for object in g_scene:objectsWithTag('Enemy') do
 		local warrior = object:findComponent(c'Warrior')
 		warrior:activate()
@@ -88,7 +123,9 @@ local function startEnemy()
 		cmdExecutor:execute(cmdList)
 	end
 	
+	showRoundInfo()
 	print('player round begin')
+	
 	for object in g_scene:objectsWithTag('Hero') do
 		local warrior = object:findComponent(c'Warrior')
 		warrior:activate()
@@ -144,4 +181,17 @@ else
 	sCoroutine.start(startEnemy)
 end
 
--- g_world:setTimeScale(0.3)
+-- Test Parcel
+local aObject = g_scene:findObject(c'A')
+local aTile = aObject:findComponent(c'Barrier'):getTile()
+
+local InputSimulator = require 'Controller.InputSimulator'
+local simulator = InputSimulator.new(stateMachine)
+simulator:selectWarrior('A')
+simulator:selectTile(aTile)
+-- simulator:selectCommand('道具', '长矛')
+-- simulator:selectCommand('道具', '长矛')
+-- simulator:selectCommand('待机')
+
+
+-- g_world:setTimeScale(3)

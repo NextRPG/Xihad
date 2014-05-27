@@ -41,8 +41,7 @@
 	</Window> -->
 		
 	<Window name="ParcelExchange" type="Xihad/Image">
-		<Property name="Position" value="{{0, 310}, {0, 220}}" />
-		<Property name="Size" value="{{0, 400}, {0, 300}}" />
+		<Property name="Size" value="{{0, 380}, {0, 270}}" />
 		<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />
 		<Property name="FrameRT" value="XihadUI/Parcel/frameRT" />
 		<Property name="FrameLB" value="XihadUI/Parcel/frameLB" />
@@ -58,21 +57,41 @@
 		<Property name="Image" value="XihadUI/Parcel/back_image"/>
 		<Property name="VertImageFormat" value="BottomAligned"/>
 		<Property name="HorzImageFormat" value="LeftAligned"/>
-		<Window name="LOwnerName" type="Xihad/Image" >
+		<Window name="MasterName" type="Xihad/Image" >
 			<Property name="Text" value="&lt;路飞&gt;" />
 			<Property name="Position" value="{{0, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.5, 0}, {0, 55}}" />
+			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
 			<Property name="VertTextFormat" value="BottomAligned"/>
 			<Property name="EnableTextColor" value="FFFFFFFF"/>
 		</Window>
-		<Window name="ROwnerName" type="Xihad/Image" >
+		<Window name="GuestName" type="Xihad/Image" >
 			<Property name="Text" value="&lt;索隆&gt;" />
 			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.5, 0}, {0, 55}}" />
+			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
 			<Property name="VertTextFormat" value="BottomAligned"/>
 			<Property name="EnableTextColor" value="FFFFFFFF"/>
 		</Window>
-		<Window name="LSlots" type="Xihad/ItemListbox">
+		<Window name="MasterSlots" type="Xihad/ItemListbox">
+			<Window name="w1" type="Xihad/MenuItem">
+				<Property name="Text" value="技能书   10" />
+				<Property name="XihadName" value="技能书" />
+			</Window>
+			<Window name="2" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+				<Property name="XihadValue" value="10" />
+			</Window>
+			<Window name="3" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+				<Property name="Icon" value="RedNumber/-" />
+			</Window>
+			<Window name="4" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+			</Window>
+			<Window name="5" type="Xihad/MenuItem">
+				<Property name="XihadName" value="技能书" />
+			</Window>
+		</Window>
+		<Window name="GuestSlots" type="Xihad/ItemListbox">
 			<Window name="w1" type="Xihad/MenuItem">
 				<Property name="XihadName" value="技能书" />
 			</Window>
