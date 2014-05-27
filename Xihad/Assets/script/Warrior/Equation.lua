@@ -7,9 +7,11 @@ local Equation = {
 }
 Equation.__index = Equation
 
-function Equation.new(defaultOffset)
+function Equation.new(defaultOffset, power, fixed)
 	return setmetatable({
-			_offset = defaultOffset
+			_offset= defaultOffset,
+			_power = power,
+			_fixed = fixed,
 		}, Equation)
 end
 

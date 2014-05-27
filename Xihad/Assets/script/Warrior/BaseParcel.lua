@@ -228,17 +228,16 @@ function BaseParcel:getCountAt(itemIndex)
 end
 
 ---
--- for item, count in parcel:allSlots() do
+-- for index, item, count in parcel:allSlots() do
 -- 	...
 -- end
 function BaseParcel:allSlots()
-	local idx = 0
-	local function iter(self)
+	local function iter(self, idx)
 		idx = idx + 1
-		return self.slots[idx], self.count[idx]
+		return idx, self.slots[idx], self.count[idx]
 	end
 	
-	return iter, self
+	return iter, self, 0
 end
 
 function BaseParcel:hasItem(item)

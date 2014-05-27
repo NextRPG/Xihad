@@ -1,4 +1,5 @@
 local Table = require 'std.Table'
+local Algorithm = require 'std.Algorithm'
 local SkillCaster = {
 	skillRestCount = nil,
 	skillInitCount = nil,
@@ -20,12 +21,33 @@ function SkillCaster:castableSkills()
 	return Table.filteredPairs(self.skillRestCount, isCastable)
 end
 
-function SkillCaster:allSkills()
-	return pairs(self.skillRestCount)
+function SkillCaster:hasDrained(skill)
+	if not self:hasLearnedSkill(skill) then
+		error('Non learned skill')
+	end
+	
+	return self:getRestCount(skill) < 1
 end
 
-function SkillCaster:hasDrained(skill)
-	return self:getRestCount(skill) < 1
+function SkillCaster:hasLearnedSkill(skill)
+	return self.skillInitCount[skill] ~= nil
+end
+
+function SkillCaster:allSkills()
+	local function iter(self, prevKey)
+		local skill, init = next(self.skillInitCount, prevKey)
+		return skill, self.skillRestCount[skill], init
+	end
+	
+	return iter, self
+end
+
+function SkillCaster:getRestCount(skill)
+	return self.skillRestCount[skill]
+end
+
+function SkillCaster:getInitCount(skill)
+	return self.skillInitCount[skill]
 end
 
 function SkillCaster:canCast(skill, location)
@@ -37,10 +59,6 @@ function SkillCaster:canCast(skill, location)
 		self:findPeer(c'Warrior'), location)
 	
 	return next(launchables) ~= nil
-end
-
-function SkillCaster:getRestCount(skill)
-	return self.skillRestCount[skill] or 0
 end
 
 --- 
@@ -55,10 +73,18 @@ function SkillCaster:castSkill(skill, targetLocation, chessboard)
 	return skill:resolve(self:findPeer(c'Warrior'), targetLocation, chessboard)
 end
 
-function SkillCaster:recover()
+function SkillCaster:setRest(skill, newValue)
+	assert(self:hasLearnedSkill(skill))
+	
+	local max = self.skillInitCount[skill]
+	self.skillRestCount[skill] = Algorithm.clamp(newValue, 0, max)
+end
+
+function SkillCaster:recover(percentage)
 	local init, rest = self.skillInitCount, self.skillRestCount
-	for skill, _ in pairs(self.skillRestCount) do
-		rest[skill] = init[skill]
+	for skill, rest in pairs(self.skillRestCount) do
+		local toAdd = self.skillInitCount[skill] * percentage
+		self:setRest(skill, math.floor(rest + toAdd))
 	end
 end
 

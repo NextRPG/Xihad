@@ -198,6 +198,10 @@ function Warrior:_firePropertyChange(pname, prev)
 	end
 end
 
+function Warrior:allProperties() 
+	return pairs(self.properties)
+end
+
 function Warrior:_getProperty(pname)
 	if not self.properties[pname] then
 		error('no such property', pname)

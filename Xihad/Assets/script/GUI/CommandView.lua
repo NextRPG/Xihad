@@ -22,7 +22,8 @@ end
 
 function CommandView._createSkillList(skillCaster)
 	local list = {}
-	for skill, rest in skillCaster:allSkills() do
+	for skill, rest, total in skillCaster:allSkills() do
+		-- TODO show total?
 		table.insert(list, {
 				name = skill:getName(),
 				value= string.format('%2s', rest),
@@ -36,11 +37,8 @@ end
 function CommandView._createItemList(warrior)
 	local parcel = warrior:findPeer(c'Parcel')
 	local list = {}
-	
-	local index = 0
-	for item, count in parcel:allSlots() do
-		index = index + 1
 
+	for index, item, count in parcel:allSlots() do
 		table.insert(list, {
 				name = item:getName(),
 				value= parcel:getValue(index),
