@@ -175,7 +175,6 @@ function PlayStateMachine:onTouch(x, y, times)
 	if self.runner then return end
 		
 	if self:_getCurrentStateController():needTouch() then
-		print(times)
 		self.touchDispatcher:dispatch(x, y, times)
 	end
 end

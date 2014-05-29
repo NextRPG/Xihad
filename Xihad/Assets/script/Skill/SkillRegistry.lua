@@ -6,7 +6,8 @@ local SleepEffect = require 'Effect.SleepEffect'
 local HitPointEffect= require 'Effect.HitPointEffect'
 local RoundRecycler = require 'Effect.RoundRecycler'
 local CastableRange = require 'route.CastableRange'
-local EffectResolver  = require 'Skill.EffectResolver'
+local EffectResolver= require 'Skill.EffectResolver'
+local RepelResolver = require 'Skill.RepelResolver'
 local HitPointResolver = require 'Skill.HitPointResolver'
 local RelativeLocationParser   = require 'Skill.RelativeLocationParser'
 local P2PParticleSkillAnimator = require 'Skill.P2PParticleSkillAnimator'
@@ -86,6 +87,7 @@ local enemyOnly = { toEnemy = true, toVacancy = true, }
 local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'effect.tornado')
 addHitPointResolver(fireSkill, 'fire', -30)
 addOffsetBuff(fireSkill, 'ATK',  -10, 2, 1.0)
+fireSkill:addResolver(RepelResolver.new(false, 3))
 
 function SkillRegistry.findSkillByName(name)
 	return SkillRegistry.allSkills[name]

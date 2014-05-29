@@ -4,6 +4,9 @@ function functional.notNil(p)
 	return p ~= nil
 end
 
+function functional.idle()
+end
+
 function functional.passby(f, ...)
 	f()
 	return ...

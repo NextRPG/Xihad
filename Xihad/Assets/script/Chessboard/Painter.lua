@@ -24,7 +24,10 @@ end
 function Painter:mark(tiles, type)
 	if not tiles then return end
 	
-	local color = Color.new(self.colorTable[type])
+	local colorValue = self.colorTable[type]
+	assert(colorValue, 'No such type to paint' .. type)
+	
+	local color = Color.new(colorValue)
 	
 	local handle = {}
 	for _, tile in ipairs(tiles) do

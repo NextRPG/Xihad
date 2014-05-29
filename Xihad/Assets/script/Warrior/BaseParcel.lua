@@ -12,7 +12,7 @@ function BaseParcel.new()
 		}, BaseParcel)
 end
 
---------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Slot operations begin
 function BaseParcel:_new_slot(item)
 	if self:getFreeSlotCount() < 1 then
@@ -35,7 +35,7 @@ function BaseParcel:_clear_slot(pos)
 	Array.fastRemoveElementAt(self.count, pos)
 end
 -- Slot operations end
---------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 
 function BaseParcel:_is_item_at(pos, item)
@@ -56,7 +56,7 @@ function BaseParcel:_get_total(item, last)
 end
 
 
-----------------------------------------------------
+------------------------------------------------------------------------------
 -- Position iterators begin
 function BaseParcel:_last_pos(item)
 	return self:_previous_pos(item, #self.slots+1)
@@ -90,7 +90,7 @@ function BaseParcel:_checked_set(pos, count)
 	end
 end
 -- Position iterators end
-----------------------------------------------------
+------------------------------------------------------------------------------
 
 
 ---

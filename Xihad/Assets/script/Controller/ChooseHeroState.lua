@@ -2,6 +2,7 @@ local base = require 'Controller.PlayerState'
 local Table= require 'std.Table'
 local ChooseHeroState = setmetatable({
 		visited = nil,
+		enemyHandle = nil,
 	}, base)
 ChooseHeroState.__index = ChooseHeroState
 
@@ -65,9 +66,26 @@ function ChooseHeroState:onVacancySelected(tile)
 	end)
 end
 
+function ChooseHeroState:_showEnemyAttackRange(warrior)
+	local skillCaster = warrior:findPeer(c'SkillCaster')
+	local set = {}
+	for _, tile in ipairs(g_chessboard:getReachableTiles(warrior)) do
+		skillCaster:getCastableTiles(tile:getLocation(), set)
+	end
+	
+	self:_markRange(Table.extractKeys(set), 'Attack', 'enemyHandle')
+end
+
 function ChooseHeroState:_promoteWarrior(warrior)
+	self:_safeClear('enemyHandle')
+	
 	self:_showTileInfo(warrior:findPeer(c'Barrier'):getTile())
 	self:_showWarriorInfo(warrior)
+end
+
+function ChooseHeroState:_promoteEnemy(warrior)
+	self:_promoteWarrior(warrior)
+	self:_showEnemyAttackRange(warrior)
 end
 
 function ChooseHeroState:onHeroSelected(heroObject)
@@ -84,14 +102,12 @@ end
 
 function ChooseHeroState:onEnemySelected(enemyObject)
 	-- mark range
-	self:_promoteWarrior(enemyObject:findComponent(c'Warrior'))
+	self:_safeClear('enemyHandle')
+	self:_promoteEnemy(enemyObject:findComponent(c'Warrior'))
 	
 	self:_fastenCursorWhen(function ()
 		self:_focusObject(enemyObject)
 	end)
-	
-	-- TODO
-	-- self.painter:showRange(enemyObject)
 end
 
 return ChooseHeroState

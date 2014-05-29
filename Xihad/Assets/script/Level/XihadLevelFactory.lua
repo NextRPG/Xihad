@@ -1,7 +1,7 @@
 local base = require 'Level.BaseLevelFactory'
-local TerrainBarrier = require 'Barrier.TerrainBarrier'
 local Chessboard = require 'route.Chessboard'
 local XihadMapTile = require 'Chessboard.XihadMapTile'
+local TerrainBarrier = require 'TerrainBarrier'
 local WarriorFactory = require 'Warrior.WarriorFactory'
 
 local XLoader = {

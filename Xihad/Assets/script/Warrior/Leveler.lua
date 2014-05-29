@@ -43,10 +43,14 @@ function Leveler:_obtainExp(exp)
 	end
 end
 
-function Leveler:obtainExp(exp)
-	return coroutine.wrap(function()
+function Leveler:obtainExp(exp, callback)
+	local co = coroutine.wrap(function()
 			return self:_obtainExp(exp)
 		end)
+	
+	for usedExp, levelUpInfo in co() do
+		callback(usedExp, levelUpInfo)
+	end
 end
 
 return Leveler

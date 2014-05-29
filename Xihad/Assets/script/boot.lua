@@ -17,6 +17,7 @@ local LevelFactory 	= require 'Level.XihadLevelFactory'
 local WarriorFactory= require 'Warrior.WarriorFactory'
 local CameraFactory = require 'Camera.SimpleCameraFactory'
 local CameraFacade  = require 'Camera.CameraFacade'
+local ExpCalculator = require 'Warrior.ExpCalculator'
 local CommandExecutor = require 'Command.CommandExecutor'
 local PCInputTransformer = require 'Controller.PCInputTransformer'
 local PlayerStateMachine = require 'Controller.PlayerStateMachine'
@@ -81,7 +82,7 @@ g_camera = cameraFacade
 
 local painter = Painter.new()
 
-local cmdExecutor = CommandExecutor.new(cameraFacade)
+local cmdExecutor = CommandExecutor.new(cameraFacade, ExpCalculator.new())
 
 local stateMachine= PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
 local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
@@ -191,10 +192,11 @@ end
 
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('A')
+simulator:selectWarrior('B')
 -- simulator:selectTile(aTile)
-simulator:selectTileAt(4, 1)
+-- simulator:selectTileAt(4, 2)
 -- simulator:selectCommand('技能', 'Fire')
+-- simulator:selectTileAt(4, 7)
 -- simulator:selectTile(aTile)
 -- simulator:selectCommand('道具', '长矛')
 -- simulator:selectCommand('道具', '长矛')

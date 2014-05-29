@@ -86,18 +86,22 @@ function TerrainBarrier:getActionPointCost( warrior )
 	return selectResult('apcost', self.type, warrior)
 end
 
-function TerrainBarrier:setTile( tile ) 
-	if not self.tile then
-		Barrier.setTile(self, tile)
-		local aabb = self:findPeer(c'Render'):getAABB()
-		local _, height, _ = aabb:extent():xyz()
-		local center = tile:getCenterVector()
-		center:set(nil, -height, nil)
-		self:getHostObject():resetTranslate(center)
-	else
-		-- error("Attempt to change the MapTile of a TerrainBarrier")
-	end
+function TerrainBarrier:synchronizeTranslate()
+	local aabb = self:findPeer(c'Render'):getAABB()
+	local _, height, _ = aabb:extent():xyz()
+	local center = self:getTile():getCenterVector()
+	center:set(nil, -height, nil)
+	self:getHostObject():resetTranslate(center)
 end
+
+-- function TerrainBarrier:setTile( tile ) 
+-- 	if not self.tile then
+-- 		Barrier.setTile(self, tile)
+		
+-- 	else
+-- 		-- error("Attempt to change the MapTile of a TerrainBarrier")
+-- 	end
+-- end
 
 function TerrainBarrier:_updateColor()
 	local color = Array.getBack(self.colors)

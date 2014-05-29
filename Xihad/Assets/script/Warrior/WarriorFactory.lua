@@ -79,7 +79,7 @@ function factory:create(team, name, data)
 
 	local parcel = object:appendComponent(c'Parcel')
 	local equiper= object:appendComponent(c'Equiper')
-	local barrier = object:appendComponent(c'WarriorBarrier')
+	local barrier= object:appendComponent(c'WarriorBarrier')
 	local skillCaster = object:appendComponent(c'SkillCaster')
 	
 	-- TODO remove
@@ -113,19 +113,18 @@ function factory:create(team, name, data)
 		local Location = require 'route.Location'
 		local Approaching = require 'Tactic.Approaching'
 		local EnemyGrader = require 'Tactic.EnemyGrader'
+		local CastGrader  = require 'Tactic.CastGrader'
 		object:appendComponent(c'ECLTactic', {
 				enemy = EnemyGrader.nearest(),
 				
-				cast = function (warrior, enemy, cast)
-					return 1, true
-				end,
+				cast = CastGrader.maxDamage(),
 				
 				location = function (warrior, enemy, cast, location)
 					return 1, true
 				end,
 				
-				approaching = Approaching.fixedTarget(Location.new(4, 1))
-				-- approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
+				-- approaching = Approaching.fixedTarget(Location.new(4, 1))
+				approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
 			})
 	end
 	
@@ -165,6 +164,7 @@ function factory:create(team, name, data)
 			AsConditionFactory.waitAnimation(animator)
 			
 			g_scheduler:schedule(function ()
+				-- TODO remove this evil code 
 				warrior:getHostObject():stop()
 			end)
 		end

@@ -1,3 +1,4 @@
+local Table= require 'std.Table'
 local base = require 'Controller.PlayerState'
 local ChooseTileState = setmetatable({
 	selectedHandle	= nil,
@@ -15,29 +16,34 @@ function ChooseTileState.new(...)
 	return setmetatable(base.new(...), ChooseTileState)
 end
 
-function ChooseTileState:_getSourceReachables()
+function ChooseTileState:_getReachables()
 	return g_chessboard:getReachableTiles(self:_getSource())
 end
 
+function ChooseTileState:_restoreState()
+	assert(self.prevSourceTile)
+	self:_getSourceBarrier():setTile(self.prevSourceTile)
+	self:_getSourceBarrier():synchronizeTranslate()
+	
+	assert(self.prevRotation)
+	self:_getSourceObject():resetRotation(self.prevRotation)
+end
+
 function ChooseTileState:onStateEnter(state, prev)
-	if prev == 'ChooseCommand' then
-		self:_getSourceBarrier():setTile(self.prevSourceTile)
-		assert(self.prevSourceTile)
-	end
-	
-	self.prevSourceTile = nil
-	self.selectedTile = nil
-	
-	local reachable = self:_getSourceReachables()
-	self:_markRange(reachable, 'Reachable', 'reachableHandle')
+	self:_markRange(self:_getReachables(), 'Reachable', 'reachableHandle')
 	
 	if prev == 'ChooseCommand' then
+		self:_restoreState()
 		self:_focusObject(self:_getSourceObject())
 	else
 		self:_fastenCursorWhen(function ()
 			self:_focusObject(self:_getSourceObject())
 		end)
 	end
+	
+	self.prevRotation = nil
+	self.prevSourceTile = nil
+	self.selectedTile = nil
 end
 
 function ChooseTileState:onStateExit()
@@ -89,6 +95,7 @@ end
 function ChooseTileState:_confirmTile(tile)
 	-- double click or confirm click
 	self.prevSourceTile = self:_getSourceTile()
+	self.prevRotation = self:_getSourceObject():getRotation()
 	
 	local destHandle = self:_markTile(tile, 'Destination')
 	self:_fastenCursorWhen(function ()
@@ -105,7 +112,6 @@ function ChooseTileState:onTileSelected(tile, times)
 	self:_safeClear('selectedHandle')
 	
 	
-	-- print('onTileSelected', tile, times, self.selectedTile)
 	if not tile:canStay(self:_getSource()) then
 		self.ui:warning('not stayable')
 	elseif not self:_canReachTile(tile) then
@@ -122,7 +128,7 @@ function ChooseTileState:_showAttackRange(tile)
 	local skillCaster = self:_getSourceCaster()
 	local attackRange = skillCaster:getCastableTiles(tile:getLocation())
 	
-	self:_markRange(attackRange, 'Attack', 'attackableHandle')
+	self:_markRange(Table.extractKeys(attackRange), 'Attack', 'attackableHandle')
 	self.promotingTile = tile
 end
 

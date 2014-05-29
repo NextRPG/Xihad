@@ -23,6 +23,20 @@ function class.delegateClosure(type, delegated, object, delegating)
 	end
 end
 
+function class.copy(object)
+	local mt = {}
+	if type(object.__ud) == 'userdata' then
+		-- This ensures luaT::checkArg<CLASS*>() cast delegate to CLASS*
+		setmetatable(mt, getmetatable(object))
+	end
+	
+	-- This ensures delegate copy function and field from object
+	mt.__index = object
+	
+	-- Take all into effect
+	return setmetatable({}, mt)
+end
+
 if select('#', ...) == 0 then 
 	local t1 = {}
 	local t2 = {

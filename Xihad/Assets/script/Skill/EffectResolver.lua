@@ -16,7 +16,7 @@ function EffectResolver.new(boundEffect, probability)
 end
 
 function EffectResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
-	result:addSkillEffect(self.boundEffect:copy(), self.probability)
+	result:addSkillEffect(self.boundEffect, self.probability)
 end
 
 return EffectResolver

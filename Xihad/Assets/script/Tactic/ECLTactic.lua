@@ -15,7 +15,7 @@
 --
 local base = require 'Tactic'
 local Array= require 'std.Array'
-local Location = require 'route.Location'
+local Table= require 'std.Table'
 local functional = require 'std.functional'
 local GradeSelector = require 'Tactic.GradeSelector'
 
@@ -41,31 +41,12 @@ function ECLTactic.new(graders)
 	return setmetatable(o, ECLTactic)
 end
 
-local function encode(skill, impactCenter)
-	return skill:getName()..'@'..tostring(impactCenter)
-end
-
-local function decode(castID)
-	local f, s, var = string.gmatch(castID, '[^@]+')
-	local skillName = f(s, var)
-	local locationStr = f(s, skillName)
+function ECLTactic:insert(map, enemy, skill, impactCenter, launcherLoc)
+	local castID = self:_encode(skill, impactCenter)
 	
-	f, s, var = string.gmatch(locationStr, '[%d]+')
-	local x = f(s, var)
-	local y = f(s, x)
-	return skillName, Location.new(tonumber(x), tonumber(y))
-end
-
-local function insert(map, enemy, skill, impactCenter, launcherLoc)
-	local castID = encode(skill, impactCenter)
-	
-	local toEnemy = map[enemy] or {}
-	local castToEnemy = toEnemy[castID] or {}
+	local toEnemy = Table.get_or_new_table(map, enemy)
+	local castToEnemy = Table.get_or_new_table(toEnemy, castID)
 	table.insert(castToEnemy, launcherLoc)
-	
-	-- write back
-	toEnemy[castID] = castToEnemy
-	map[enemy] = toEnemy
 end
 
 local log = function () end
@@ -91,7 +72,7 @@ function ECLTactic:_cast_on_tile(warrior, launcherLoc, skill, centerLoc, map)
 	for _, impactTile in ipairs(tiles) do
 		local affectWarrior = self:_get_enemy(impactTile, warrior)
 		if affectWarrior then
-			insert(map, affectWarrior, skill, centerLoc, launcherLoc)
+			self:insert(map, affectWarrior, skill, centerLoc, launcherLoc)
 		end
 	end
 end
@@ -113,7 +94,7 @@ function ECLTactic:_test_skill(warrior, launcherLoc, skill, map)
 	end
 end
 
-function ECLTactic:_build_mapping(warrior, reachables)
+function ECLTactic:_build_map(warrior, reachables)
 	local skillCaster = warrior:findPeer(c'SkillCaster')
 	
 	log('ECLTactic for: %s\n', warrior:getHostObject():getID())
@@ -141,7 +122,9 @@ function ECLTactic:_select_best(warrior, map)
 	
 	bestCast = GradeSelector.select(
 		functional.bind1(pairs, map[bestEnemy]), 
-		functional.bind2(self.castGrader, warrior, bestEnemy))
+		function (cast)
+			return self.castGrader(warrior, bestEnemy, cast:decode())
+		end)
 	
 	if not bestCast then return bestEnemy end
 	
@@ -152,81 +135,17 @@ function ECLTactic:_select_best(warrior, map)
 	return bestEnemy, bestCast, bestLocation
 end
 
-function ECLTactic:_try_the_best_to_approach(warrior, location)
-	-- This ensures luaT::checkArg<Component*>() cast delegate to Component*
-	local mt = setmetatable({}, getmetatable(warrior))
-	
-	-- This ensures delegate copy function and field from warrior
-	mt.__index = warrior
-	
-	-- Take all in effect
-	local delegate = setmetatable({}, mt)
-	
-	-- Overerite this function to ignore every enemy to reach the location
-	delegate.isLeagueWith = functional.bind1(functional.return_, true)
-	
-	return g_chessboard:routeRev(delegate, location)
-end
-
 function ECLTactic:_select_approaching(warrior, bestEnemy, reachables)
-	local standing = warrior:getLocation()
-	if not self.approaching then
-		return standing
+	local expected = nil
+	if self.approaching then
+		expected = self.approaching(warrior, bestEnemy)
 	end
 	
-	local expectedLocation = self.approaching(warrior, bestEnemy)
-	if not expectedLocation then
-		return standing
-	end
-	
-	local revPath, _ = g_chessboard:routeRev(warrior, expectedLocation)
-	if not revPath then
-		revPath = self:_try_the_best_to_approach(warrior, expectedLocation)
-	end
-	
-	if not revPath then
-		return standing -- can not reach expected tile
-	end
-	
-	for _, location in ipairs(revPath) do
-		local tile = g_chessboard:getTile(location)
-		if reachables[tile] then
-			return location
-		end
-	end
-	
-	return standing
+	return self:_approach(warrior, expected, reachables)
 end
 
-function ECLTactic:_get_reachables(warrior)
-	local array = g_chessboard:getReachableTiles(warrior)
-	local set = {}
-	for _, e in ipairs(array) do
-		set[e] = true
-	end
-	
-	return set
-end
-
-function ECLTactic:_completeOrder(cmdList)
-	local warrior = cmdList:getSource()
-	local reachables = self:_get_reachables(warrior)
-	local map = self:_build_mapping(warrior, reachables)
-	
-	local enemy, cast, location = self:_select_best(warrior, map)
-	if not location then
-		location = self:_select_approaching(warrior, enemy, reachables)
-		
-		cmdList:setCommand('待机')
-	else
-		assert(enemy ~= nil and cast ~= nil)
-		local cmd, targetLoc = decode(cast)
-		cmdList:setCommand('技能', cmd)
-		cmdList:setTarget(targetLoc)
-	end
-	
-	assert(location ~= nil)
-	cmdList:setLocation(location)
+function ECLTactic:_completeOrder(warrior, reachables)
+	return self:_select_best(warrior, self:_build_map(warrior, reachables))
 end
 
 return ECLTactic

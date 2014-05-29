@@ -43,8 +43,12 @@ v123:normalize(); assert(v123:length() == 1); v123:set(1, 2, 3) -- normal self
 
 -- rotate(axis, angle[, center])
 local v001 = m3d.vector(0, 0, 1)
-local axis = "y"; 				v001:rotate(axis, 90)	-- 以原点为旋转中心，绕y轴旋转90度
-local axis = m3d.vector(0,1,0); v001:rotate(axis, 90, m3d.vector(0, 0, -1)) -- 以(0,0,-1)为旋转中心，绕(0,1,0)旋转90度
+
+-- 以原点为旋转中心，绕y轴旋转90度
+local axis = "y"; 				v001:rotate(axis, 90)	
+
+-- 以(0,0,-1)为旋转中心，绕(0,1,0)旋转90度
+local axis = m3d.vector(0,1,0); v001:rotate(axis, 90, m3d.vector(0, 0, -1)) 
 
 local dirToTarget = m3d.vector(1, 1, 0)
 -- get the euler angle which will rotate (0, 0, 1) vector to face the target dir

@@ -28,6 +28,7 @@ end
 
 function BaseFactory:setBarrierTile(barrier, tile)
 	barrier:setTile(tile)
+	barrier:synchronizeTranslate()
 end
 
 function BaseFactory:initWarrior(board, object, loc)

@@ -7,19 +7,20 @@ local ActionAdapter= require 'Action.ActionAdapter'
 local ItemRegistry = require 'Item.ItemRegistry'
 local SkillRegistry= require 'Skill.SkillRegistry'
 local ConcurrentJobs = require 'std.ConcurrentJobs'
-local WarriorMovement = require 'HighAction.WarriorMovement'
+local WarriorMovement= require 'HighAction.WarriorMovement'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
 	cameraFacade = nil,
-	expCaculator = nil,
+	expCalculator= nil,
 	ui = nil,
 }
 CommandExecutor.__index = CommandExecutor
 
-function CommandExecutor.new(cameraFacade)
+function CommandExecutor.new(cameraFacade, expCalculator)
 	return setmetatable({
-			cameraFacade = cameraFacade
+			cameraFacade = cameraFacade,
+			expCalculator= expCalculator,
 		}, CommandExecutor)
 end
 
@@ -41,23 +42,43 @@ local function getRotationFromSightLine(sightLine)
 	return Trigonometry.toDegree(math.atan2(x, z)) 
 end
 
-function CommandExecutor:_faceToTarget(warrior, targetTile)
-	local object = warrior:getHostObject()
-	local sightLine = targetTile:getCenterVector() - object:getTranslate()
-	local rotation = getRotationFromSightLine(sightLine)
-	
-	local action = ObjectAction.rotateY(object, SpanVariable.new(nil, rotation), 90/0.1)
+local function attachRotateAction(object, targetVector)
+	local sightLine = targetVector - object:getTranslate()
+	local var = SpanVariable.new(nil, getRotationFromSightLine(sightLine))
+	local action = ObjectAction.rotateY(object, var, 90/0.1)
 	ActionAdapter.fit(object, action)
-	AsConditionFactory.waitAction(action)
+	return action
+end
+
+local function waitRotate(object, targetVector, jobs)
+	local action = attachRotateAction(object, targetVector)
+	jobs:addJob(function ()
+		AsConditionFactory.waitAction(action)
+	end)
+end
+
+function CommandExecutor:_faceToTarget(warrior, targetTile, results)
+	local jobs = ConcurrentJobs.new()
+	local object = warrior:getHostObject()
+	waitRotate(object, targetTile:getCenterVector(), jobs)
+	
+	local faceTo = object:getTranslate()
+	for barrier, result in pairs(results) do
+		if barrier:findPeer(c'Warrior') then
+			waitRotate(barrier:getHostObject(), faceTo, jobs)
+		end
+	end
+	
+	jobs:join()
 end
 
 function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results)
-	local current= coroutine.running()
+	local current = coroutine.running()
 	
 	skill:playAnimation(warrior, targetTile, {
 			onAttackBegin = function() 
-				for _, result in pairs(results) do
-					result:onHitBegin()
+				for target, result in pairs(results) do
+					result:onHitBegin(warrior, target)
 				end
 			end,
 			
@@ -69,29 +90,27 @@ function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results
 	coroutine.yield()	-- wait until onAttackEnd
 end
 
-function CommandExecutor:_applyBattleResults(results)
-	local jobs = ConcurrentJobs.new()
-	for _, result in ipairs(results) do
+function CommandExecutor:_applyBattleResults(source, results, lis)
+	local jobs= ConcurrentJobs.new()
+	for target, result in pairs(results) do
 		jobs:addJob(function ()
-			result:apply()
-			result:onHitEnd()
+			result:apply(source, target, lis)
+			lis:complete(target)
+			
+			result:onHitEnd(source, target)
 		end)
 	end
 	
 	jobs:join()
 end
 
-function CommandExecutor:_gainExp(warrior, exp)
-	-- local level = warrior:findPeer(c'Level')
-	-- for usedExp, levelUpInfo in level:obtainExp(exp) do
-	-- 	-- wait for some a seconds
-	-- 	self.ui:showExpGauge() 
-		
-	-- 	if levelUpInfo then
-	-- 		-- wait for user interactive
-	-- 		self.ui:showLevelUpPanel(levelUpInfo)
-	-- 	end
-	-- end
+function CommandExecutor:_gainExp(warrior)
+	local leveler = warrior:findPeer(c'Leveler')
+	if not leveler then return end
+	
+	local exp = self.expCalculator:getResult()
+	print(warrior:getHostObject():getID(), 'gain exp', exp)
+	-- leveler:obtainExp(exp, callback)
 end
 
 function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
@@ -107,20 +126,26 @@ function CommandExecutor:cast(warrior, targetLocation, skillName)
 	local results = self:_getBattleResults(warrior, skill, targetLocation)
 	local targetTile = g_chessboard:getTile(targetLocation)
 	
-	self:_faceToTarget(warrior, targetTile)
+	-- Done
+	self:_faceToTarget(warrior, targetTile, results)
 	
+	-- Done
 	self.cameraFacade:descendIntoBattle(targetTile)
 	
+	-- Done
 	self:_playSkillAnimation(warrior, skill, targetTile, results)
 	
-	self:_applyBattleResults(results)
+	-- Done
+	self.expCalculator:clear()
+	self:_applyBattleResults(warrior, results, self.expCalculator)
 	
-	-- self:_gainExp(warrior, self.expCaculator:calculate())
+	-- Need UI
+	self:_gainExp(warrior)
 	
 	-- TODO gain item
-	
 	AsConditionFactory.waitTimer(0.5)
 	
+	-- Done
 	self.cameraFacade:ascendAwayBattle()
 	
 	warrior:deactivate()
@@ -130,7 +155,9 @@ function CommandExecutor:useItem(warrior, itemName)
 	local item = ItemRegistry.findItemByName(itemName)
 	local usage= warrior:findPeer(c'Parcel'):useItem(item)
 	
+	-- TODO
 	print(usage)
+	
 	AsConditionFactory.waitTimer(0.5)
 	if item:occupyRound() then
 		warrior:deactivate()

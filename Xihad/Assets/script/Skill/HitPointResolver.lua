@@ -21,15 +21,30 @@ end
 
 function HitPointResolver.registerAddition(skillNature, warriorNature, addition)
 	assert(type(addition) == 'number')
+	local t = HitPointResolver.sNaturePromote[skillNature]
+	if not t then
+		t = {}
+		HitPointResolver.sNaturePromote[skillNature] = t
+	end
+	
+	t[warriorNature] = addition
  end
 
 function HitPointResolver.getAddition(skillNature, warriorNature)
 	local t = HitPointResolver.sNaturePromote[skillNature]
 	
-	return t and t[warriorNature] or 1
+	if t then
+		local addition = t[warriorNature]
+		if addition then
+			return addition
+		end
+	end
+	
+	return 1
 end
 
-function HitPointResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
+function HitPointResolver:_resolve(
+		sourceWarrior, targetWarrior, relativeLoc, result)
 	local distance = relativeLoc:distance(Location.new())
 	local ratio = math.max(0, 1 - distance * self.attenuation)
 		
@@ -40,7 +55,8 @@ function HitPointResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, re
 		local dfs = targetWarrior:getDFS()
 		hitPointIncr = -math.max(0, (atk - dfs)) + hitPointIncr
 		
-		local addition = HitPointResolver.getAddition(self.nature, targetWarrior:getNature())
+		local targetNature = targetWarrior:getNature()
+		local addition = HitPointResolver.getAddition(self.nature, targetNature)
 		hitPointIncr = hitPointIncr * addition
 	end
 	

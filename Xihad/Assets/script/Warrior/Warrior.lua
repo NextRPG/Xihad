@@ -246,26 +246,34 @@ function Warrior:_clampHitPoint(hp)
 	return Algorithm.clamp(hp, 0, self:getMHP())
 end
 
+function Warrior:_check_alive()
+	if self:isDead() then
+		error('The warrior has already died')
+	end
+end
+
 function Warrior:_setHitPoint(newHitPoint)
 	local prev = self:getHitPoint()
 	self.hitPoint = self:_clampHitPoint(newHitPoint)
 	self:_firePropertyChange('HitPoint', prev)
+	return self.hitPoint - prev
 end
 
 function Warrior:takeRecovery(recovery)
-	print('recovery: ', recovery)
+	assert(recovery >= 0)
+	self:_check_alive(recovery)
+	return self:_setHitPoint(self:getHitPoint() + recovery)
 end
 
 function Warrior:takeDamage(damage)
 	assert(damage >= 0)
-	if self:isDead() then
-		error('The warrior has already died')
-	end
-	
-	self:_setHitPoint(self:getHitPoint() - damage)
+	self:_check_alive()
+	local delta = self:_setHitPoint(self:getHitPoint() - damage)
 	if self:isDead() then
 		self:_firePropertyChange('Dead', true)
 	end
+	
+	return -delta
 end
 
 return Warrior

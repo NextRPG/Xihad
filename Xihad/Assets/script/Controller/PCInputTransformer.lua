@@ -27,14 +27,12 @@ end
 
 function PCInputTransformer:onRightClick(detector, times, x, y)
 	assert(detector == self.rightDetector and times == 1)
-	print('on right click', times)
 	self.receiver:onBack()
 end
 
 function PCInputTransformer:onLeftClick(detector, times, x, y)
 	assert(detector == self.leftDetector)
 	assert(times == 1 or times == 2)
-	print('on left click: ', times)
 	self.receiver:onTouch(x, y, times)
 end
 

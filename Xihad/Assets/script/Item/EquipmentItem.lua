@@ -19,7 +19,6 @@ function EquipmentItem.new(name, icon, desc, etype, effect)
 	o.etype = etype
 	o.effect= effect
 	setmetatable(o.usages, equipUsageMT)
-	print(o.usages.equip)
 	
 	return o
 end

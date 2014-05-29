@@ -56,8 +56,8 @@ return
 		properties =  
 		{
 			MHP = 100,
-			DFS = 60,
 			ATK = 5,
+			DFS = 200,
 			MTK = 5,
 			MAP = 8,
 			MDF = 10,

@@ -15,11 +15,11 @@ function RepelResolver.new(centerOnly, distance)
 end
 
 function RepelResolver:_resolve(sourceWarrior, targetWarrior, relativeLoc, result)
-	if relativeLoc ~= Location.new() and not self.centerOnly then
+	if relativeLoc ~= Location.new() and self.centerOnly then
 		return 
 	end
 	
-	result.repelDst = self.repelDistance
+	result:addRepel(self.repelDistance)
 end
 
 return RepelResolver
