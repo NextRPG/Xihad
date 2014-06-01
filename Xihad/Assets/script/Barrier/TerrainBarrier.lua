@@ -41,7 +41,7 @@ function TerrainBarrier.new(type, object)
 		-- mat:setZWriteEnable(false)
 	end
 	
-	local colorTable = { Color.green, Color.blue, Color.red }
+	local colorTable = { Color.green, Color.blue, Color.orange }
 	table.insert(o.colors, Color.new(colorTable[o.type]))
 	return o
 end

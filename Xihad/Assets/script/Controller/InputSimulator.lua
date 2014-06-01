@@ -12,7 +12,7 @@ end
 
 function InputSimulator:selectWarrior(name)
 	local object = g_scene:findObject(c(name))
-	assert(object)
+	assert(object, string.format('No such a object named %q', name))
 	self.playerStateMachine:postCommand('onWarriorSelected', object, 1)
 end
 
@@ -23,6 +23,8 @@ end
 
 function InputSimulator:selectTileAt(x, y)
 	local tile = g_chessboard:getTile(Location.new(x, y))
+	
+	assert(tile, string.format('No tile found at [%d, %d]', x, y))
 	self:selectTile(tile)
 end
 

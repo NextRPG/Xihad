@@ -15,8 +15,8 @@ function sCoroutine.resume(co, ...)
 	end
 end
 
-function sCoroutine.start(run)
-	sCoroutine.resume(coroutine.create(run))
+function sCoroutine.start(run, ...)
+	sCoroutine.resume(coroutine.create(run), ...)
 end
 
 return sCoroutine

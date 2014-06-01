@@ -9,7 +9,7 @@ local robber =
 	},
 	properties = {
 		MHP = 50,
-		ATK = 25,
+		ATK = 225,
 		DFS = 5,
 		MTK = 5,
 		MDF = 10,
@@ -28,7 +28,7 @@ local robberLocations =
 
 local heroLocations = 
 {
-	-- { x = 4, y = 2, prefab = 'A', rotation = 0, },
+	{ x = 4, y = 2, prefab = 'A', rotation = 0, },
 	{ x = 6, y = 2, prefab = 'B', rotation = 0, },
 	{ x = 8, y = 2, prefab = 'D', rotation = 0, },
 }

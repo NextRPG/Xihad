@@ -26,8 +26,10 @@ function functional.invoke(target, fnameOrParam, ...)
 	end
 end
 
-function functional.cascade(f1, f2, ...)
-	return f1(f2(...))
+function functional.cascade(f1, f2)
+	return function(...) 
+		return f1(f2(...)) 
+	end
 end
 
 function functional.cascadeN(fs, ...)
@@ -39,6 +41,12 @@ function functional.cascadeN(fs, ...)
 		return nxt(top(...))
 	else
 		return top(...)
+	end
+end
+
+function functional.asself(field)
+	return function (object, ...)
+		return object[field](object, ...)
 	end
 end
 

@@ -2,9 +2,9 @@ local defaultColorTable = {
 	Reachable   = Color.white, 
 	Selected 	= Color.black,
 	Destination = Color.cyan,
-	Attack      = Color.orange,
+	Attack      = Color.red,
 	Castable    = Color.magenta,
-	Impact 		= Color.orange,
+	Impact 		= Color.red,
 }
 defaultColorTable.__index = defaultColorTable
 
