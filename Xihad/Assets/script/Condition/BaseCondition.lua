@@ -10,12 +10,18 @@ function BaseCondition.new(listener)
 		}, BaseCondition)
 end
 
-function BaseCondition:updateCondition()
+function BaseCondition:_updateCondition()
 	error('no implementation by default')
 end
 
+function BaseCondition:checkCondition()
+	if not self.satisfied then
+		self:_updateCondition()
+	end
+end
+
 function BaseCondition:setSatisfiedListener(listener)
-	if self.listener then
+	if self.listener and listener ~= nil then
 		error('Already owns a listener')
 	end
 	

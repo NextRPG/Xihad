@@ -1,8 +1,10 @@
+local exceptional = require 'std.exceptional'
+local BattleManager = require 'GameFlow.BattleManager'
 local PlayerController = {
 	playerStateMachine = nil,
 	controllingTeam= nil,
-	victoryChecker = nil,
 	endCallback = nil,
+	checker = nil,
 }
 PlayerController.__index = PlayerController
 
@@ -12,7 +14,7 @@ function PlayerController.new(playerStateMachine)
 	local obj = setmetatable({
 			playerStateMachine = playerStateMachine,
 			controllingTeam= nil,
-			victoryChecker = nil,
+			checker = nil,
 		}, PlayerController)
 	playerStateMachine:addStateListener('Finish', obj)
 	playerStateMachine:setBlocked(true)
@@ -32,8 +34,8 @@ function PlayerController:start(team, endCallback, checker)
 	self.playerStateMachine:setBlocked(false)
 	
 	self.controllingTeam= team
-	self.victoryChecker = checker
 	self.endCallback = endCallback
+	self.checker = checker
 	
 	self:_continue()
 end
@@ -53,7 +55,7 @@ function PlayerController:_release_control()
 	
 	self.playerStateMachine:setBlocked(true)
 	self.controllingTeam= nil
-	self.victoryChecker = nil
+	self.checker = nil
 	self.endCallback = nil
 end
 
@@ -63,7 +65,7 @@ function PlayerController:onStateEnter(state, prev)
 	self:_check_running()
 	assert(state == 'Finish', state)
 	
-	if self.victoryChecker:onCheckPoint() then
+	if self.checker:onCheckPoint() == 'stop' then
 		self:_release_control()
 	else
 		self:_continue()

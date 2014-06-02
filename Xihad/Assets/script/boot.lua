@@ -111,12 +111,12 @@ battleManager:addTeam(heroTeam)
 battleManager:addTeam(enemyTeam)
 battleManager:startBattle()
 
-local VictoryConditionFactory = require 'Victory.VictoryConditionFactory'
+local ConditionFactory = require 'Condition.ConditionFactory'
 battleManager:addVictoryCondition(
-	VictoryConditionFactory.beatWarriorsWithTag('Enemy'), 'Hero')
+	ConditionFactory.beatWarriorsWithTag('Enemy'), 'Hero')
 
 battleManager:addVictoryCondition(
-	VictoryConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
+	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
 
 -- Command View
 CommandView.hook(stateMachine)

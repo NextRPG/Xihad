@@ -25,24 +25,19 @@ end
 
 function BaseChecker:onConditionSatisfied(condition)
 	local userdata = self.conditions[condition]
-	if userdata == nil then
-		return false
+	if userdata == nil then 
+		error("Checker shouldn't be notified by other conditions")
 	end
 	
-	if not self._listener:onChecked(userdata) then
-		return false
-	end
-	
-	return true
+	self:removeCondition(condition)
+	self._listener:onChecked(userdata)
 end
 
 function BaseChecker:onCheckPoint()
 	for condition, _ in pairs(self.conditions) do
 		assert(condition:getSatisfiedListener() == self)
-		condition:updateCondition()
+		condition:checkCondition()
 	end
-	
-	return false
 end
 
 

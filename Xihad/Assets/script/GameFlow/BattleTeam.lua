@@ -30,7 +30,7 @@ function BattleTeam:takeAction(endCallback, checker)
 		warrior:activate()
 	end
 	
-	if not checker:onCheckPoint() then
+	if checker:onCheckPoint() ~= 'stop' then
 		self.warriorController:start(self, endCallback, checker)
 	end
 end

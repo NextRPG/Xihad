@@ -1,7 +1,7 @@
 local sCoroutine = {}
 
 local function outputErrorMsg(msg)
-	io.stderr:write("coroutine resume failed\r\n\t", msg, '\n')
+	io.stderr:write("coroutine resume failed\r\n\t", tostring(msg), '\n')
 	io.stderr:flush()
 end
 

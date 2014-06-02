@@ -23,6 +23,8 @@ function functional.invoke(target, fnameOrParam, ...)
 	elseif type(target) == "table" then
 		local fname = fnameOrParam
 		return target[fname](target, ...)
+	else
+		error('Non-invokable')
 	end
 end
 
@@ -73,6 +75,13 @@ function functional.bind3(f, _1, _2, _3)
 	assert(f)
 	return function (...)
 		return f(_1, _2, _3, ...)
+	end
+end
+
+function functional.bindall(f, ...)
+	local t = { ... }
+	return function ()
+		return f(unpack(t))
 	end
 end
 

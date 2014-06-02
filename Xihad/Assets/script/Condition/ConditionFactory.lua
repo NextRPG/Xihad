@@ -5,7 +5,7 @@ local ConditionFactory = {}
 -- Move
 -- function ConditionFactory.transferWarriorsWithTag(tag, isValidLoc)
 -- 	local cond = BaseCondition.new()
--- 	function cond:updateCondition()
+-- 	function cond:_updateCondition()
 -- 		for object in g_scene:objectsWithTag(tag) do
 -- 			local warrior = object:findComponent(c'Warrior')
 -- 			if warrior and isValidLoc(warrior:getLocation()) then
@@ -20,7 +20,7 @@ local ConditionFactory = {}
 
 -- function ConditionFactory.transferAllWarriorsWithTag(tag, isValidLoc)
 -- 	local cond = BaseCondition.new()
--- 	function cond:updateCondition()
+-- 	function cond:_updateCondition()
 -- 		for object in g_scene:objectsWithTag(tag) do
 -- 			local warrior = object:findComponent(c'Warrior')
 -- 			if warrior and not isValidLoc(warrior:getLocation()) then
@@ -37,7 +37,7 @@ local ConditionFactory = {}
 -- Dead
 function ConditionFactory.beatWarriorsWithTag(tag)
 	local cond = BaseCondition.new()
-	function cond:updateCondition()
+	function cond:_updateCondition()
 		for object in g_scene:objectsWithTag(tag) do
 			local warrior = object:findComponent(c'Warrior')
 			if warrior and not warrior:isDead() then
@@ -64,9 +64,9 @@ end
 function ConditionFactory.allOf(...)
 	local andCondition = BaseCondition.new()
 	local conditionArray = { ... }
-	function andCondition:updateCondition()
+	function andCondition:_updateCondition()
 		for _, cond in ipairs(conditionArray) do
-			cond:updateCondition()
+			cond:_updateCondition()
 		end
 	end
 	
