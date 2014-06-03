@@ -29,8 +29,12 @@ namespace xihad { namespace cegui
 
 	void CEGUIUpdateHandler::onStop()
 	{
-		ceguiHandle->cleanup();
+
 	}
 
+	void CEGUIUpdateHandler::onDestroy()
+	{
+		ceguiHandle->cleanup();
+	}
 }}
 

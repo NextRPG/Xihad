@@ -21,12 +21,13 @@ namespace xihad { namespace cegui
 	protected:
 		virtual ~CEGUIUpdateHandler();
 
-		virtual void onStart();
+		virtual void onStart() override;
 
-		virtual void onUpdate(const ngn::Timeline&);
+		virtual void onUpdate(const ngn::Timeline&) override;
 
-		virtual void onStop();
+		virtual void onStop() override;
 
+		virtual void onDestroy() override;
 	private:
 		CEGUIHandle* ceguiHandle;
 		xptr<ngn::UserEventReceiver> eventReceiver;

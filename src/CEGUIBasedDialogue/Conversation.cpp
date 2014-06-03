@@ -1,166 +1,86 @@
 #include "Conversation.h"
+#include "SpeakerSupport.h"
 
-#include <Dialogue\IDialogue.hpp>
-#include <Dialogue\CDialogueAlignmenter.hpp>
-#include <Dialogue\CAlignedDialogueBuilder.hpp>
-
-#include <CEGUI\Font.h>
+#include <CEGUI\System.h>
 #include <CEGUI\Window.h>
-#include <CEGUI\ImageManager.h>
-#include <CEGUI\widgets\PushButton.h>
+#include <CEGUI\GUIContext.h>
 
-#include <assert.h>
-
-#include "CPlainTextContent.h"
-#include "CTickByLetter.h"
-#include "CDialogueContext.h"
-#include "CTickAll.h"
+#include <algorithm>
 
 namespace xihad { namespace dialogue
 {
 	using namespace CEGUI;
 
-	Conversation::Conversation( int widthLimit, int lineSpacing /*= 0*/, 
-		const ngn::dimension2di& paragrahPadding /*= ngn::dimension2di()*/,
-		bool startFromLeft /*= true*/ )
-		: mWidthLimit(widthLimit), 
-		mLineSpacing(lineSpacing), mParagrahPadding(paragrahPadding), 
-		selector(startFromLeft), currentSubtitle(nullptr)
+	Conversation::Conversation()
 	{
-		XIHAD_MLD_NEW_OBJECT;
+
 	}
 
 	Conversation::~Conversation()
 	{
-		XIHAD_MLD_DEL_OBJECT;
+
 	}
 
-	void Conversation::speak( const String& name, const String& content )
+	void Conversation::onDestroy()
 	{
-		static const String NULL_IMAGE = "";
-		speak_impl(name, content, NULL_IMAGE);
-	}
-
-	void Conversation::speak( const String& name, const String& content, const String& image )
-	{
-		speak_impl(name, content, image);
-	}
-
-	void Conversation::speak_impl( const String& name, const String& content, const String& image )
-	{
-		SpeakPiece* piece = new SpeakPiece(name, content, image);
-		mPieces.push(piece);
-		piece->drop();
-
-		// TODO ²ð·Öpiece
-	}
-
-	void Conversation::speakPiece(const SpeakPiece& piece)
-	{
-		Window* dialogPane = selector.nextDialog(piece.name, piece.image);
-		Window* container = DialogueSelector::getTextContainer(dialogPane);
-		currentSubtitle = generateDialogue(*container, piece.content);
-	}
-
-	IDialogue* Conversation::generateDialogue(Window& container, const CEGUI::String& text)
-	{
-		const Font* font  = container.getFont();
-		ITextContent* content = new CPlainTextContent(*font, text);
-		CDialogueContext* factory = new CDialogueContext(container);
-		CDialogueAlignmenter* alignmenter = new CDialogueAlignmenter(mWidthLimit);
-
-		alignmenter->setKerningHeight(mLineSpacing);
-		alignmenter->setKerningNewLine(mParagrahPadding);
-		CAlignedDialogueBuilder dialogBuilder(factory, alignmenter);
-		dialogBuilder.addText(content);
-
-		content->drop();
-		factory->drop();
-		alignmenter->drop();
-
-		IDialogue* dialog = dialogBuilder.build();
-		ITickMethod* tickMethod = new CTickByLetter(*dialog, 0.2f);
-		dialog->setTickMethod(tickMethod);
-		tickMethod->drop();
-
-		return dialog;
-	}
-
-	void Conversation::speedUp()
-	{
-		if (currentSubtitle)
-			currentSubtitle->getTickMethod()->setTickSpeed(6);
-	}
-
-	void Conversation::slowDown()
-	{
-		if (currentSubtitle)
-			currentSubtitle->getTickMethod()->setTickSpeed(1);
-	}
-
-	void Conversation::skipSubtitleAnimation()
-	{
-		if (!isSubtitlePlaying())
-			return;
-
-		ITickMethod* all = new CTickAll(*currentSubtitle);
-		currentSubtitle->setTickMethod(all);
-		all->drop();
-	}
-
-	void Conversation::update(float lastElapsed)
-	{
-		if (!currentSubtitle) return;
-
-		if (!isSubtitlePlaying())
+		std::for_each(speakers.begin(), speakers.end(), 
+		[](SpeakerSupport* p)
 		{
-			Window* dialogPane = selector.currentDialog();
-			Window* nextButton = DialogueSelector::getNextButton(dialogPane);
-			nextButton->setVisible(true);
-			return;							// reach end, and no need to update dialogue. 
-		}
+			Window* wnd = p->getWindow();
+			delete p; 
 
-		currentSubtitle->onUpdate(lastElapsed);
+			Window* root = System::getSingleton().
+				getDefaultGUIContext().getRootWindow();
+			root->destroyChild(wnd);
+		});
 	}
 
-	bool Conversation::nextSpeakPiece()
+	SpeakerSupport* Conversation::newSpeaker( const String& name, 
+		ngn::dimension2di paragraphPadding /*= ngn::dimension2di()*/, 
+		int lineSpace /*= 0*/, int width /*= 500*/, int height /*= 500*/ )
 	{
-		if (isSubtitlePlaying())
-			return false;
+		String wndName = name + speakers.size();
+		Window* root = System::getSingleton().getDefaultGUIContext().getRootWindow();
+		
+		Window* baseWnd = root->createChild("DefaultWindow", wndName);
+		baseWnd->setSize(USize(UDim(0, (float) width), UDim(0, (float) height)));
+		baseWnd->setVisible(false);
 
-		delete currentSubtitle;				// delete nullptr is safe.
-		currentSubtitle = nullptr;
-		if (!mPieces.empty()) 
+		Window* iconWnd = baseWnd->createChild(
+			"Xihad/Image", SpeakerSupport::ICON_WINDOW_NAME);
+		iconWnd->setSize(USize(UDim(0.8f, 0), UDim(0.95f, 0)));
+		iconWnd->setProperty("VertImageFormat", "BottomAligned");
+
+		Window* textPanel = baseWnd->createChild("DefaultWindow", "TextPanel");
+		textPanel->setSize(USize(UDim(0.9f, 0), UDim(0.35f, 0)));
+		textPanel->setPosition(UVector2(UDim(0.05f, 0), UDim(0.6f, 0)));
+
+		Window* textWnd = textPanel->createChild(
+			"Xihad/Dialog", SpeakerSupport::TEXT_WINDOW_NAME);
+
+		SpeakerSupport* speaker = new SpeakerSupport(
+			*baseWnd, name, paragraphPadding, lineSpace);
+		
+		speakers.push_back(speaker);
+		return speaker;
+	}
+
+	void Conversation::onStart()
+	{
+	}
+
+	void Conversation::onUpdate( const ngn::Timeline& tl)
+	{
+		std::for_each(speakers.begin(), speakers.end(), 
+		[&](SpeakerSupport* p)
 		{
-			auto& piece = mPieces.front();
-			speakPiece(*piece.get());
-			mPieces.pop();
-			return true;
-		}
-
-		return false;
+			p->updateSubtitle(tl.getLastTimeChange());
+		});
 	}
 
-	bool Conversation::isSubtitlePlaying()
+	void Conversation::onStop()
 	{
-		return currentSubtitle ? 
-			!(currentSubtitle->getVisibility() == currentSubtitle->endVisibility()):
-		false;
-	}
 
-	bool Conversation::isFinished()
-	{
-		return mPieces.empty() && !currentSubtitle;
-	}
-
-	void Conversation::start()
-	{
-		nextSpeakPiece();
-	}
-
-	void Conversation::stop()
-	{
-		selector.close();
 	}
 
 }}

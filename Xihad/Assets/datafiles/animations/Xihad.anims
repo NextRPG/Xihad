@@ -230,7 +230,7 @@
 
 	<AnimationDefinition name="DialogueOpen" duration="0.01" replayMode="once">
 		<Affector property="Visible" interpolator="bool" applicationMethod="absolute">
-			<KeyFrame position="0.00" sourceProperty="true" />
+			<KeyFrame position="0.00" value="true" />
 		</Affector>
 		<Subscription event="DialogueOpen" action="Start" />
 	</AnimationDefinition>	

@@ -20,42 +20,93 @@
 #include "CEGUI/Window.h"
 #include "CEGUIBasedDialogue/Conversation.h"
 #include "CEGUI/WindowManager.h"
-#include "CEGUIBasedDialogue/ConversationController.h"
+#include "CEGUIBasedDialogue/SpeakerSupport.h"
+#include <set>
 
 using namespace irr::scene;
 using namespace xihad;
 using namespace ngn;
 using namespace dialogue;
 
-xihad::dialogue::Conversation* createConversation()
+static SpeakerSupport* speaker1;
+static SpeakerSupport* speaker2;
+Conversation* createConversation()
 {
-	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+	
+	Conversation* conversation = new Conversation();
 	auto& coder = CEGUI::System::getStringTranscoder();
-	xihad::dialogue::Conversation* conversation = new xihad::dialogue::Conversation((int)
-		context.getRootWindow()->getChild("LeftDialog/TextArea/__auto_container__")->getPixelSize().d_width);
-
-	conversation->speak("aaaa", 
-		coder.stringFromStdWString(L"1我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"Character/aaaa_happy");
-
-	conversation->speak("bbbb",
-		coder.stringFromStdWString(L"2我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"Character/bbbb_sad");
-
-	conversation->speak("aaaa",
-		coder.stringFromStdWString(L"3我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"");
-
-	conversation->speak("aaaa", 
-		coder.stringFromStdWString(L"4我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"");
-
-	conversation->speak("bbbb", 
-		coder.stringFromStdWString(L"5我们告诉世界当物体停止移动时允许物体休眠。一个休眠中的物体不需要任何模拟"),
-		"");
+	speaker1 = conversation->newSpeaker(coder.stringFromStdWString(L"路飞"));
+	speaker1->setIcon("Character/aaaa_happy");
+	speaker1->setIConRelativeX(0.2f);
+	speaker1->setDialoguePosition(10, -10);
+	speaker2 = conversation->newSpeaker(coder.stringFromStdWString(L"路飞"));
+	speaker2->setIcon("Character/bbbb_sad");
+	speaker2->setIConRelativeX(0.8f);
+	speaker2->setDialoguePosition(-10, -10);
 
 	return conversation;
 }
+
+	class DialogueController: public UserEventReceiver
+	{
+	public:
+		DialogueController(SpeakerSupport* s1, SpeakerSupport* s2) :
+			s1(s1), s2(s2)
+		{
+			auto& coder = CEGUI::System::getStringTranscoder();
+			words.push_back(coder.stringFromStdWString(
+				L"想多角色我的开始， 叫上我，饿多看得我。多角色。"));
+			words.push_back(coder.stringFromStdWString(
+				L"搜救队网段看我呢，的，的， 夹克衫。打开多了的肯德基喇肯定。 的。"));
+			words.push_back(coder.stringFromStdWString(
+				L"快手快脚的卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡卡。说的kd.s看懂了。的老师。 是"));
+		}
+
+		virtual ~DialogueController() {}
+
+		virtual int onKeyEvent(const KeyEvent& event, int argFromPreviousReceiver) 
+		{
+			int index = std::rand() % words.size();
+			if (event.Key == KeyCode::KEY_KEY_O && event.PressedDown)
+			{
+				s1->open();
+			}
+			else if (event.Key == KeyCode::KEY_KEY_A && event.PressedDown)
+			{
+				s1->active();
+				s1->speak(words[index]);
+			}
+			else if (event.Key == KeyCode::KEY_KEY_B && event.PressedDown)
+			{
+				s1->deactive();
+				s2->open();
+				s2->active();
+				s2->speak(words[index]);
+			}
+			else if (event.Key == KeyCode::KEY_SPACE && event.PressedDown)
+			{
+				s1->setSpeed(6);
+				s2->setSpeed(6);
+			}
+			else if (event.Key == KeyCode::KEY_SPACE && !event.PressedDown)
+			{
+				s1->setSpeed(1);
+				s2->setSpeed(1);
+			}
+
+			return 0;
+		}
+
+		virtual int onMouseEvent(const MouseEvent& event, int argFromPreviousReceiver)
+		{
+			return 1;
+		}
+	private:
+		std::vector<String> words;
+		SpeakerSupport* s1;
+		SpeakerSupport* s2;
+	};
+
 
 int cegui_test(int argc, const char** argv)
 {
@@ -67,9 +118,9 @@ int cegui_test(int argc, const char** argv)
 	if (GameScene* scene = createScene("Assets/test/boot_cegui.lua"))
 	{
 		Conversation* conversation = createConversation();
-		ConversationController* controller = new ConversationController(*scene, conversation);
-		conversation->drop();
-		controller->registerToScene();
+		scene->appendChildHandler(conversation);
+		scene->getControllerStack().pushReceiver(new DialogueController(speaker1, speaker2));
+		// scene->destroyChildHandler(conversation);
 		///////////////////////////////////////
 
 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);
