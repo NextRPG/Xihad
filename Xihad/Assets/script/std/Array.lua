@@ -128,6 +128,15 @@ function Array.reverse(t)
 	return t
 end
 
+function Array.copy(src)
+	local dst = {}
+	for _, v in ipairs(src) do
+		table.insert(dst, v)
+	end
+	
+	return dst
+end
+
 if select('#', ...) == 0 then 
 	local arr = { 12, 87, 123, 53, 58, 992, 100 }
 	

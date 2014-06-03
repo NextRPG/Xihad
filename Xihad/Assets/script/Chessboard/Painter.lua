@@ -5,6 +5,7 @@ local defaultColorTable = {
 	Attack      = Color.red,
 	Castable    = Color.magenta,
 	Impact 		= Color.red,
+	Tradable	= 0xff798371,
 }
 defaultColorTable.__index = defaultColorTable
 
@@ -25,7 +26,7 @@ function Painter:mark(tiles, type)
 	if not tiles then return end
 	
 	local colorValue = self.colorTable[type]
-	assert(colorValue, 'No such type to paint' .. type)
+	assert(colorValue, 'No such type to paint ' .. type)
 	
 	local color = Color.new(colorValue)
 	

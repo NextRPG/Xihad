@@ -137,7 +137,7 @@ function PlayerState:onBack()
 	return 'back'
 end
 
-function PlayerState:onUICommand(command, subcommand)
+function PlayerState:onUICommand(command, subcommand, type)
 end
 
 function PlayerState:_onTile(tile, times, warriorFunc, vacancyFunc)

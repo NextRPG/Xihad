@@ -22,19 +22,20 @@ local ParcelExchange = {
 function ParcelExchange:show(model)
 	self._model = model
 	local master, guest = self.master, self.guest
-	master:setModel(model:getMaster())
-	guest:setModel(model:getGuest())
+	master:setModel(model.masterName, model.masterParcel)
+	guest:setModel(model.guestName, model.guestParcel)
 	
 	local adjustedWidth = math.max(master.listbox:getPixelSize().width,
 		guest.listbox:getPixelSize().width)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
 	
+	self.FrameWindow:setVisible(true)
 	return self.FrameWindow
 end
 
 function ParcelExchange:close()
-	
+	self.FrameWindow:setVisible(false)
 end
 
 function ParcelExchange:onItemClick(e)

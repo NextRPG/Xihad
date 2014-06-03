@@ -54,7 +54,8 @@ local BaseItem = require "Item.BaseItem"
 local BaseParcel = require "BaseParcel"
 local EquipmentItem = require "Item.EquipmentItem"
 
-local GUIController = require("assets.ui.GUIController")
+local GUIController = require("ui.GUIController")
+GUIController:init()
 local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
@@ -114,30 +115,12 @@ local controller = g_scene:pushController({
 				return string.format('%2d', self:getCountAt(index))
 			end
 
-			local model = {}
-			function model:getMaster() 
-				local warrior = {}
-				function warrior:getName()
-					return "路飞"
-				end
-				function warrior:getParcel()
-					return pL
-				end
-				return warrior
-			end
-			
-			function model:getGuest()
-				local warrior = {}
-				function warrior:getName()
-					return "索隆"
-				end
-				function warrior:getParcel()
-					return pR
-				end
-				return warrior
-			end
-			
-			
+			local model = {
+				masterName = '110',
+				masterParcel = pL,
+				guestName = '112',
+				guestParcel = pR,
+			}
 			GUIController:showWindow("ParcelExchange", model)
 			-- damageNumber = damageNumber or 0
 			-- GUIController:showWindow("AttackDamage", { damage = damageNumber})

@@ -1,4 +1,5 @@
 local base = require 'BaseParcel'
+local Array = require 'std.Array'
 local Parcel = setmetatable({
 		sMaxSlot = 5,
 	}, base)
@@ -7,6 +8,64 @@ Parcel.__base = 'BaseParcel'
 
 function Parcel.new()
 	return setmetatable(base.new(), Parcel)
+end
+
+function Parcel:createView()
+	local view = base.new()
+	function view.getTotalSlotCount(view) 
+		return self:getTotalSlotCount()
+	end
+	
+	function view:getValue(index)
+		return string.format('%2d', self:getCountAt(index))
+	end
+	
+	view.slots = Array.copy(self.slots)
+	view.count = Array.copy(self.count)
+	return view
+end
+
+local function allItemsOfTidiedParcel(parcel)
+	
+end
+
+function Parcel:_drop_redundants_to(view)
+	local prevItem = nil
+	for idx, item, count in self:allSlots() do 
+		if prevItem ~= item then
+			local totalCount = view:getTotalOf(item)
+			local delta = totalCount - self:getTotalOf(item)
+			if delta < 0 then
+				self:dropItem(item, -delta)
+			end
+			
+			prevItem = item
+		end
+	end
+end
+
+function Parcel:_gain_rest_of(view)
+	local prevItem = nil
+	for idx, item, count in view:allSlots() do 
+		if prevItem ~= item then
+			local totalCount = view:getTotalOf(item)
+			local delta = totalCount - self:getTotalOf(item)
+			assert(delta >= 0)
+			if delta > 0 then
+				self:gainItem(item, delta)
+			end
+			
+			prevItem = item
+		end
+	end
+end
+
+function Parcel:restoreView(view)
+	self:tidy()
+	view:tidy()
+	
+	self:_drop_redundants_to(view)
+	self:_gain_rest_of(view)
 end
 
 function Parcel:onDropItem(item, count)
@@ -20,7 +79,7 @@ function Parcel:dropItemAt(itemIndex, delta)
 end
 
 function Parcel:dropItem(item, delta)
-	base.dropItem(item, delta)
+	base.dropItem(self, item, delta)
 	self:onDropItem(item, delta)
 end
 

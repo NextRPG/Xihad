@@ -101,9 +101,9 @@ function ParcelView:tidyParcel()
 	self:_notifyDataChange()
 end
 
-function ParcelView:setModel(warrior)
-	self.label:setText(string.format("<%s>", warrior:getName()))
-	self.parcel = warrior:getParcel()
+function ParcelView:setModel(warriorName, parcel)
+	self.label:setText(string.format("<%s>", warriorName))
+	self.parcel = parcel
 	self:_notifyDataChange()
 	self.listbox:sizeToContent()
 end

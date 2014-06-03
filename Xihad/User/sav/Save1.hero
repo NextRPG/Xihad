@@ -46,6 +46,11 @@ return
  		{ 
  			['Fire'] = 4, 
  		},
+ 		items = 
+ 		{
+ 			['伤药'] = 3,
+ 			['长矛'] = 1,
+ 		},
 		level = 1,
 		currentEXP = 0,
 	},
@@ -66,6 +71,11 @@ return
 		skills = 
  		{ 
  			['Fire'] = 4, 
+ 		},
+ 		items = 
+ 		{
+ 			['伤药'] = 3,
+ 			['长矛'] = 1,
  		},
 		level = 1,
 		currentEXP = 0,

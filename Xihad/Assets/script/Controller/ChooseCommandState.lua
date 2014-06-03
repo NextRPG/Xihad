@@ -9,8 +9,13 @@ function ChooseCommandState.new(...)
 	return setmetatable(base.new(...), ChooseCommandState)
 end
 
+function ChooseCommandState:onStateEnter()
+	self.ui:showCommandView(self:_getSource())
+end
+
 function ChooseCommandState:onStateExit()
 	self:_safeClear('commandRange')
+	self.ui:closeCommandView()
 end
 
 function ChooseCommandState:needTouch()
@@ -25,17 +30,19 @@ function ChooseCommandState:onSelectCommand(command, subcommand)
 	if command == '技能' then
 		self.commandList:setCommand(command, subcommand)
 		return 'next'
+	elseif command == '交换' then
+		return 'trade'
 	end
 	
 	if command == '待机' then
 		self.executor:standBy(self.commandList:getSource())
-	elseif command == '交换' then
-		-- change parcel
 	elseif command == '道具' then
 		self.executor:useItem(self:_getSource(), subcommand)
 	end	
 	
-	if not self:_getSource():isActive() then
+	if self:_getSource():isActive() then
+		self.ui:updateCommandView(self:_getSource())
+	else
 		return 'done'
 	end
 end

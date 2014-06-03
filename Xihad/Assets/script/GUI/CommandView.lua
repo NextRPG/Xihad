@@ -49,22 +49,9 @@ function CommandView._createItemList(warrior)
 	return list
 end
 
-function CommandView.hook(playStateMachine)
-	local listener = functional.bindself(playStateMachine, 'onUICommand')
+function CommandView.hook(listener)
 	CommandView.setHoverListener(listener)
 	CommandView.setSelectListener(listener)
-	
-	playStateMachine:addStateListener('ChooseCommand', {
-			onStateEnter = function() 
-				local cmdList = playStateMachine:getCommandList()
-				local w, h = g_window:getScreenSize()
-				CommandView.show(cmdList:getSource(), w/2+50, h/2-80)
-			end,
-			
-			onStateExit = function ()
-				CommandView.close()
-			end
-		})
 end
 
 function CommandView.setHoverListener(hoverListener)
@@ -88,7 +75,7 @@ function CommandView.canExchange(warrior)
 	return next(set) ~= nil
 end
 
-function CommandView.show(warrior, x, y)
+function CommandView.show(warrior)
 	local viewData = {}
 	
 	local skillEntry= CommandView._addEntry(viewData, 'skillEntry', true)
@@ -104,7 +91,9 @@ function CommandView.show(warrior, x, y)
 	CommandView._addEntry(viewData, 'stdbyEntry')
 	
 	local wnd = GUIController:showWindow('Command', viewData)
-	Window.setPosition(wnd, x, y)
+	local w, h = g_window:getScreenSize()
+	Window.setPosition(wnd, w/2+50, h/2-80)
+	
 	return wnd
 end
 

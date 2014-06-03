@@ -264,7 +264,7 @@ end
 
 function BaseParcel:hasItem(item)
 	if item then
-		return self:_first_pos() ~= nil
+		return self:_first_pos(item) ~= nil
 	else
 		return #self.slots > 0
 	end
