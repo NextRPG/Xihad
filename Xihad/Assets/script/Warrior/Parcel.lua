@@ -26,38 +26,58 @@ function Parcel:createView()
 end
 
 local function allItemsOfTidiedParcel(parcel)
+	local function iter(parcel, idx)
+		local prevItem
+		if not idx then
+			idx = 0
+		else
+			prevItem = parcel:getItemAt(idx)
+		end
+		
+		local item = nil
+		repeat
+			idx = idx + 1
+			item = parcel:getItemAt(idx)
+			
+			if not item then
+				return nil
+			end
+		until item ~= prevItem
+		
+		return idx, item, parcel:getTotalOf(item)
+	end
 	
+	return iter, parcel, nil
+end
+
+function Parcel:_apply_change_list(method, changeList)
+	for item, delta in pairs(changeList) do
+		self[method](self, item, delta)
+	end
 end
 
 function Parcel:_drop_redundants_to(view)
-	local prevItem = nil
-	for idx, item, count in self:allSlots() do 
-		if prevItem ~= item then
-			local totalCount = view:getTotalOf(item)
-			local delta = totalCount - self:getTotalOf(item)
-			if delta < 0 then
-				self:dropItem(item, -delta)
-			end
-			
-			prevItem = item
+	local changeList = {}
+	for _, item, count in allItemsOfTidiedParcel(self) do
+		local totalCount = view:getTotalOf(item)
+		if totalCount < count then
+			changeList[item] = count - totalCount
 		end
 	end
+	
+	self:_apply_change_list('dropItem', changeList)
 end
 
 function Parcel:_gain_rest_of(view)
-	local prevItem = nil
-	for idx, item, count in view:allSlots() do 
-		if prevItem ~= item then
-			local totalCount = view:getTotalOf(item)
-			local delta = totalCount - self:getTotalOf(item)
-			assert(delta >= 0)
-			if delta > 0 then
-				self:gainItem(item, delta)
-			end
-			
-			prevItem = item
+	local changeList = {}
+	for _, item, totalCount in allItemsOfTidiedParcel(view) do
+		local myCount = self:getTotalOf(item)
+		if totalCount > myCount then
+			changeList[item] = totalCount - myCount
 		end
 	end
+	
+	self:_apply_change_list('gainItem', changeList)
 end
 
 function Parcel:restoreView(view)
@@ -66,6 +86,14 @@ function Parcel:restoreView(view)
 	
 	self:_drop_redundants_to(view)
 	self:_gain_rest_of(view)
+	
+	for _, item, count in allItemsOfTidiedParcel(view) do
+		assert(self:getTotalOf(item) == count)
+	end
+	
+	for _, item, count in allItemsOfTidiedParcel(self) do
+		assert(view:getTotalOf(item) == count)
+	end
 end
 
 function Parcel:onDropItem(item, count)

@@ -81,6 +81,7 @@ function PlayStateMachine:_initTransitions()
 	sm:setTransition('ChooseTarget', 'next', 'Finish')
 	sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
 	
+	sm:setTransition('Transaction', 'back', 'ChooseCommand')
 	sm:setTransition('Transaction', 'done', 'Finish')
 	
 	---

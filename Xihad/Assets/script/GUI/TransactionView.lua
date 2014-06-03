@@ -19,7 +19,10 @@ function TransactionView.show(srcWarrior, dstWarrior)
 		guestParcel = copyParcel(dstWarrior),
 	}
 	
-	GUIController:showWindow("ParcelExchange", model)
+	local wnd = GUIController:showWindow("ParcelExchange", model)
+	local screenWidth = g_window:getScreenSize()
+	local size= wnd:getPixelSize()
+	Window.setPosition(wnd, (screenWidth - size.width) / 2, 50)
 end
 
 function TransactionView.close()

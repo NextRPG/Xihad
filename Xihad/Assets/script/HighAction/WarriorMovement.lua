@@ -1,4 +1,3 @@
-local ObjectAction = require 'HighAction.ObjectAction'
 local SpanVariable = require 'Action.SpanVariable'
 local ActionFactory= require 'Action.ActionFactory'
 local MovementBuilder = require 'HighAction.MovementBuilder'

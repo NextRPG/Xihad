@@ -1,7 +1,8 @@
 local sCoroutine = require 'std.sCoroutine'
 local ObjectAction = require 'HighAction.ObjectAction'
-local Trigonometry = require 'math.Trigonometry'
+local ActionFactory= require 'Action.ActionFactory'
 local ActionAdapter= require 'Action.ActionAdapter'
+local Trigonometry = require 'math.Trigonometry'
 local SpanVariable = require 'Action.SpanVariable'	
 local ActionAdapter= require 'Action.ActionAdapter'
 local ItemRegistry = require 'Item.ItemRegistry'
@@ -35,41 +36,30 @@ function CommandExecutor:move(object, destination)
 	end
 end
 
-local function getRotationFromSightLine(sightLine)
-	local x, _, z = sightLine:xyz()
-	
-	-- x is the logic y, z is the logic x
-	return Trigonometry.toDegree(math.atan2(x, z)) 
+local function createRotate(object, targetVector)
+	return ObjectAction.rotateYTo(object, targetVector, 90/0.2)
 end
 
-local function attachRotateAction(object, targetVector)
-	local sightLine = targetVector - object:getTranslate()
-	local var = SpanVariable.new(nil, getRotationFromSightLine(sightLine))
-	local action = ObjectAction.rotateY(object, var, 90/0.1)
-	ActionAdapter.fit(object, action)
-	return action
-end
-
-local function waitRotate(object, targetVector, jobs)
-	local action = attachRotateAction(object, targetVector)
-	jobs:addJob(function ()
-		AsConditionFactory.waitAction(action)
-	end)
+local function addRotate(actions, object, targetVector)
+	table.insert(actions, createRotate(object, targetVector))
 end
 
 function CommandExecutor:_faceToTarget(warrior, targetTile, results)
-	local jobs = ConcurrentJobs.new()
+	local actions = {}
+	
 	local object = warrior:getHostObject()
-	waitRotate(object, targetTile:getCenterVector(), jobs)
+	addRotate(actions, object, targetTile:getCenterVector())
 	
 	local faceTo = object:getTranslate()
 	for barrier, result in pairs(results) do
 		if barrier:findPeer(c'Warrior') then
-			waitRotate(barrier:getHostObject(), faceTo, jobs)
+			addRotate(actions, barrier:getHostObject(), faceTo)
 		end
 	end
 	
-	jobs:join()
+	local parallel = ActionFactory.parallel(actions)
+	ActionAdapter.fit(object, parallel)
+	-- AsConditionFactory.waitAction(parallel)
 end
 
 function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results)
@@ -146,7 +136,7 @@ function CommandExecutor:cast(warrior, targetLocation, skillName)
 	AsConditionFactory.waitTimer(0.5)
 	
 	-- Done
-	self.cameraFacade:ascendAwayBattle()
+	self.cameraFacade:ascendBack()
 	
 	warrior:deactivate()
 end
@@ -162,6 +152,16 @@ function CommandExecutor:useItem(warrior, itemName)
 	if item:occupyRound() then
 		warrior:deactivate()
 	end
+end
+
+function CommandExecutor:_apply_warrior(warrior, parcelView)
+	warrior:findPeer(c'Parcel'):restoreView(parcelView)
+end
+
+function CommandExecutor:transact(master, guest, masterView, guestView)
+	self:_apply_warrior(master, masterView)
+	self:_apply_warrior(guest, guestView)
+	master:deactivate()
 end
 
 function CommandExecutor:standBy(warrior)

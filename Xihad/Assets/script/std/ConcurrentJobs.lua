@@ -1,4 +1,5 @@
 local sCoroutine = require 'std.sCoroutine'
+local functional = require 'std.functional'
 local ConcurrentJobs = {
 	jobs = nil,
 }
@@ -8,6 +9,10 @@ function ConcurrentJobs.new()
 	return setmetatable({
 			jobs = {},
 		}, ConcurrentJobs)
+end
+
+function ConcurrentJobs:addCondition(condition)
+	self:addJob(functional.bindself(condition, 'wait'))
 end
 
 function ConcurrentJobs:addJob(f)

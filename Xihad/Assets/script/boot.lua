@@ -126,12 +126,12 @@ battleManager:addVictoryCondition(
 -- Test script
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('B')
+simulator:selectWarrior('A')
 -- -- simulator:selectTile(aTile)
-simulator:selectTileAt(7, 2)
-simulator:selectCommand('交换')
+-- simulator:selectTileAt(8, 1)
+-- simulator:selectCommand('交换')
 -- simulator:selectCommand('技能', 'Fire')
--- simulator:selectTileAt(3, 7)
+-- simulator:selectTileAt(8, 2)
 -- -- simulator:selectTile(aTile)
 -- -- simulator:selectCommand('道具', '长矛')
 -- -- simulator:selectCommand('道具', '长矛')

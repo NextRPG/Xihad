@@ -30,8 +30,6 @@ function ChooseTileState:_restoreState()
 end
 
 function ChooseTileState:onStateEnter(state, prev)
-	self:_markRange(self:_getReachables(), 'Reachable', 'reachableHandle')
-	
 	if prev == 'ChooseCommand' then
 		self:_restoreState()
 		self:_focusObject(self:_getSourceObject())
@@ -41,6 +39,7 @@ function ChooseTileState:onStateEnter(state, prev)
 		end)
 	end
 	
+	self:_markRange(self:_getReachables(), 'Reachable', 'reachableHandle')
 	self.prevRotation = nil
 	self.prevSourceTile = nil
 	self.selectedTile = nil
@@ -110,7 +109,6 @@ function ChooseTileState:onTileSelected(tile, times)
 	-- show tile info
 	self:_updatePromote(tile)
 	self:_safeClear('selectedHandle')
-	
 	
 	if not tile:canStay(self:_getSource()) then
 		self.ui:showWarning('not stayable')

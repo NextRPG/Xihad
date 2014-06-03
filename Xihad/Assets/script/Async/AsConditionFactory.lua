@@ -3,7 +3,10 @@ local AsyncCondition = require 'std.AsyncCondition'
 local cond = {}
 
 local function waitOrReturn(condition, wait)
-	wait = wait or true
+	if wait == nil then
+		wait = true
+	end
+	
 	if wait then 
 		condition:wait()
 	else

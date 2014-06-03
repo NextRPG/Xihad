@@ -1,5 +1,6 @@
 local Trigonometry = require 'math.Trigonometry'
 local SpanAction   = require 'Action.SpanVariableAction'
+local SpanVariable = require 'Action.SpanVariable'
 local functional   = require 'std.functional'
 
 local ObjectAction = {}
@@ -27,6 +28,17 @@ function ObjectAction.rotateY(object, spanY, rotSpeed, lerp)
 	end
 	
 	return SpanAction.new(spanY, sync, math.abs(delta) / rotSpeed, lerp)
+end
+
+local function getRotationFromSightLine(sight)
+	local x, _, z = sight:xyz()
+	return Trigonometry.toDegree(math.atan2(x, z))
+end
+
+function ObjectAction.rotateYTo(object, targetVector, rotSpeed, lerp)
+	local sight = targetVector - object:getTranslate()
+	local var = SpanVariable.new(nil, getRotationFromSightLine(sight))
+	return ObjectAction.rotateY(object, var, rotSpeed, lerp)
 end
 
 return ObjectAction

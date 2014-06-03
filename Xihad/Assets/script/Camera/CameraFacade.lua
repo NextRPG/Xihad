@@ -11,8 +11,11 @@ local ModifierFactory = require 'Modifier.TargetModifierFactory'
 local AsConditionFactory= require 'Async.AsConditionFactory'
 local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
-	offsetSourceVec= math3d.vector(8, 18, 12),
-	lookHeightRatio= 0.5,
+	battleOffset= math3d.vector(8, 18, 12),
+	tradeOffset = math3d.vector(15, 15, 0),
+	battleHeightRatio= 0,
+	tradeHeightRatio = -0.1,
+	
 	translateSpeed = 90, 
 	slideSpeed = 45,
 	slideEase  = EaseFunction.wrapInOut(EaseFunction[3]),
@@ -26,7 +29,7 @@ local CameraFacade = {
 	spanTranslate = nil,
 	spanLookDir   = nil,
 	
-	autoRestListener = nil,
+	autoResetListener = nil,
 }
 CameraFacade.__index = CameraFacade
 
@@ -38,13 +41,13 @@ function CameraFacade.new(cameraObject)
 	
 	local o = setmetatable({
 			cameraObject  = cameraObject,
-			aimingControl = SmoothAiming.new(cameraObject, math3d.vector(0.5, -0.5, 0.5)),
+			aimingControl = SmoothAiming.new(cameraObject),
 			followControl = DirectFollow.new(cameraObject),
 			cameraAvoid   = DirectAvoid.new(cameraObject, following),
 		}, CameraFacade)
 	
 	o.followControl:setFollowing(following)
-	o.autoRestListener = function (warrior, pname, prev)
+	function o.autoResetListener(warrior, pname, prev)
 		if warrior:isDead() then
 			o:focus(nil)
 		end
@@ -64,9 +67,9 @@ function CameraFacade:_listenObject(object, add)
 	if not warrior then return end
 	
 	if add then
-		warrior:addPropertyListener('Dead', self.autoRestListener)
+		warrior:addPropertyListener('Dead', self.autoResetListener)
 	else
-		warrior:removePropertyListener('Dead', self.autoRestListener)
+		warrior:removePropertyListener('Dead', self.autoResetListener)
 	end
 end
 
@@ -88,11 +91,10 @@ function CameraFacade:_setSmartCameraEnabled(b)
 	self.aimingControl:setEnabled(b)
 end
 
-function CameraFacade:_calculateTranslate(newTarget)
+function CameraFacade:_calculateTranslateZ(zDirection, offsetSourceVec)
 	local yDirection = math3d.vector(0, 1, 0)
+	local oldTranslate = self.focusedObject:getTranslate()
 	
-	local oldTarget = self.focusedObject:getTranslate()
-	local zDirection= oldTarget - newTarget
 	zDirection:set(nil, 0, nil)
 	zDirection:normalize()
 	
@@ -100,17 +102,21 @@ function CameraFacade:_calculateTranslate(newTarget)
 	xDirection:normalize()
 	
 	local cameraPosition = self.cameraObject:getTranslate()
-	local toCamera = cameraPosition - oldTarget
-	
-	if toCamera:dot(xDirection) < 0 then
+	if xDirection:dot(cameraPosition - oldTranslate) < 0 then
 		xDirection = -xDirection
 	end
 	
-	local x, y, z = self.offsetSourceVec:xyz()
-	return oldTarget + xDirection*x + yDirection*y + zDirection*z
+	local x, y, z = offsetSourceVec:xyz()
+	return oldTranslate + xDirection*x + yDirection*y + zDirection*z
+end
+
+function CameraFacade:_calculateTranslate(newTarget, offsetSourceVec)
+	return self:_calculateTranslateZ(
+			self.focusedObject:getTranslate() - newTarget, offsetSourceVec)
 end
 
 function CameraFacade:_waitCameraMove()
+	self:_setSmartCameraEnabled(false)
 	local action = CameraMovement.slide(self.cameraObject, 
 		self.spanTranslate, self.spanLookDir, self.slideSpeed, self.slideEase)
 	
@@ -118,22 +124,39 @@ function CameraFacade:_waitCameraMove()
 	AsConditionFactory.waitAction(action)
 end
 
-function CameraFacade:descendIntoBattle(targetTile)
-	assert(self.focusedObject, 'Illegal state to descend into battle')
-	
-	self:_setSmartCameraEnabled(false)
-	
-	local tileCenter = targetTile:getCenterVector() -- + math3d.vector(0, 5, 0)
-	local newTranslate = self:_calculateTranslate(tileCenter)
-	local newLookDir = tileCenter - newTranslate
-	newLookDir:set(nil, Vector.getY(newLookDir)*self.lookHeightRatio, nil)
+function CameraFacade:_descend(newTranslate, targetPos, ratio)
+	local newLookDir = targetPos - newTranslate
+	newLookDir:set(nil, Vector.getY(newLookDir)*ratio, nil)
 	
 	self.spanTranslate = SpanVariable.new(nil, newTranslate)
 	self.spanLookDir = SpanVariable.new(nil, newLookDir)
+	
 	self:_waitCameraMove()
 end
 
-function CameraFacade:ascendAwayBattle()
+function CameraFacade:descendIntoBattle(targetTile)
+	assert(self.focusedObject, 'Illegal state to descend into battle')
+	local targetPos = targetTile:getCenterVector()
+	local newTranslate = self:_calculateTranslate(targetPos, self.battleOffset)
+	
+	self:_descend(newTranslate, targetPos, self.battleHeightRatio)
+end
+
+function CameraFacade:descendIntoTransaction(guestObject)
+	assert(self.focusedObject, 'Illegal state to descend into battle')
+	
+	local guestPos = guestObject:getTranslate()
+	local masterPos= self.focusedObject:getTranslate()
+	local zDirection = masterPos - guestPos
+	local offsetSourceVec = self.tradeOffset:copy()
+	offsetSourceVec:set(nil, nil, -(zDirection:length() / 2))
+	
+	local newTranslate = self:_calculateTranslateZ(zDirection, offsetSourceVec)
+	local targetPos = (masterPos + guestPos) / 2
+	self:_descend(newTranslate, targetPos, self.tradeHeightRatio)
+end
+
+function CameraFacade:ascendBack()
 	assert(self.spanTranslate, 'Illegal state to ascend away battle')
 	
 	self.spanTranslate:flip()
