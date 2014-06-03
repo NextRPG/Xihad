@@ -19,7 +19,8 @@ local Warrior = {
 	
 	bindPoint  = nil,
 	roundListeners= nil,
-	propertyListeners= nil,
+	propertyListeners = nil,
+	exclusiveListener = nil,
 	
 	sAllProperties = {},
 }
@@ -178,8 +179,24 @@ Class.delegate(Warrior, 'unbindStickyEffects', 'bindPoint')
 Class.delegate(Warrior, 'registerStickyEffect', 'bindPoint')
 Class.delegate(Warrior, 'unregisterStickyEffect', 'bindPoint')
 
-Class.delegate(Warrior, 'registerExclusiveEffect', 'bindPoint')
-Class.delegate(Warrior, 'unregisterExclusiveEffect', 'bindPoint')
+function Warrior:setExclusiveEffectListener(lis)
+	self.exclusiveListener = lis
+end
+
+function Warrior:registerExclusiveEffect(effect, exclusiveLock)
+	self.bindPoint:registerExclusiveEffect(effect, exclusiveLock)
+	if self.exclusiveListener then
+		self.exclusiveListener:onEffectBind(self, effect, exclusiveLock)
+	end
+end
+
+function Warrior:unregisterExclusiveEffect(effect, exclusiveLock)
+	if self.bindPoint:unregisterExclusiveEffect(effect, exclusiveLock) then
+		if self.exclusiveListener then
+			self.exclusiveListener:onEffectUnbind(self, effect, exclusiveLock)
+		end
+	end
+end
 
 function Warrior:addPropertyListener(pname, lis)
 	self:_getListeners(pname)[lis] = true
@@ -246,26 +263,34 @@ function Warrior:_clampHitPoint(hp)
 	return Algorithm.clamp(hp, 0, self:getMHP())
 end
 
+function Warrior:_check_alive()
+	if self:isDead() then
+		error('The warrior has already died')
+	end
+end
+
 function Warrior:_setHitPoint(newHitPoint)
 	local prev = self:getHitPoint()
 	self.hitPoint = self:_clampHitPoint(newHitPoint)
 	self:_firePropertyChange('HitPoint', prev)
+	return self.hitPoint - prev
 end
 
 function Warrior:takeRecovery(recovery)
-	print('recovery: ', recovery)
+	assert(recovery >= 0)
+	self:_check_alive(recovery)
+	return self:_setHitPoint(self:getHitPoint() + recovery)
 end
 
 function Warrior:takeDamage(damage)
 	assert(damage >= 0)
-	if self:isDead() then
-		error('The warrior has already died')
-	end
-	
-	self:_setHitPoint(self:getHitPoint() - damage)
+	self:_check_alive()
+	local delta = self:_setHitPoint(self:getHitPoint() - damage)
 	if self:isDead() then
 		self:_firePropertyChange('Dead', true)
 	end
+	
+	return -delta
 end
 
 return Warrior

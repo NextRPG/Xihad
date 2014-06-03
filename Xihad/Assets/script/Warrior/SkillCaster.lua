@@ -113,15 +113,15 @@ function SkillCaster:_getLocation(startLoc)
 	return startLoc or self:findPeer(c'Warrior'):getLocation()
 end
 
-function SkillCaster:getCastableTiles(startLoc)
+function SkillCaster:getCastableTiles(startLoc, set)
 	startLoc = self:_getLocation(startLoc)
+	set = set or {}
 	
-	local tiles = {}
 	for skill, _ in self:castableSkills() do
-		skill:getAllImpactTiles(g_chessboard, startLoc, tiles)
+		skill:getAllImpactTiles(g_chessboard, startLoc, set)
 	end
 	
-	return Table.extractKeys(tiles)
+	return set
 end
 
 return SkillCaster

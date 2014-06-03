@@ -9,6 +9,7 @@ local ChooseTileState = require 'Controller.ChooseTileState'
 local ChooseTargetState = require 'Controller.ChooseTargetState'
 local ChooseCommandState = require 'Controller.ChooseCommandState'
 local CursorEventDispatcher = require 'Controller.CursorEventDispatcher'
+local FinishState = require 'Controller.FinishState'
 
 local PlayStateMachine = {
 	sm = nil,
@@ -26,7 +27,7 @@ PlayStateMachine.__index = PlayStateMachine
 
 function PlayStateMachine.new(...)
 	local obj = setmetatable({
-			sm = StateMachine.new('ChooseHero'),
+			sm = StateMachine.new('Finish'),
 			cmdList = CommandList.new(),
 			stateControllers = {},
 			postCommands = {},
@@ -41,6 +42,7 @@ function PlayStateMachine.new(...)
 	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, cursorFastener, ...)
 	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, cursorFastener, ...)
 	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, cursorFastener, ...)
+	obj.stateControllers['Finish']  = FinishState.new(commandList, cursorFastener, ...)
 	
 	for stateName, state in pairs(obj.stateControllers) do
 		obj.sm:addStateListener(stateName, state)
@@ -77,7 +79,7 @@ function PlayStateMachine:_initTransitions()
 	sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
 	
 	---
-	-- @see nextHero()
+	-- @see waitNextHero()
 	sm:setTransition('Finish', 'continue', 'ChooseHero')
 end
 
@@ -92,9 +94,9 @@ end
 
 function PlayStateMachine:_changeState(msg)
 	if msg ~= nil then
-		print(self:getCurrentState(), msg)
+		-- print(self:getCurrentState(), msg)
 		self.sm:onMessage(msg)
-		print(self:getCurrentState())
+		-- print(self:getCurrentState())
 	end
 end
 
@@ -110,6 +112,19 @@ end
 
 function PlayStateMachine:setBlockListener(blockListener)
 	self.inputBlockListener = blockListener
+end
+
+local force_blocked_runner = {}
+function PlayStateMachine:setBlocked(b)
+	if b then
+		self:_setRunner(force_blocked_runner)
+	elseif self.runner == force_blocked_runner then
+		self:_setRunner(nil)
+	end
+end
+
+function PlayStateMachine:isBlocked()
+	return self.runner ~= nil
 end
 
 function PlayStateMachine:_setRunner(runner)
@@ -141,7 +156,10 @@ function PlayStateMachine:onCommand(cmd, ...)
 	
 	self:_setRunner(coroutine.create(function (...)
 		self:_process(cmd, ...)
-		self:_setRunner(nil)
+		
+		if self.runner ~= force_blocked_runner then
+			self:_setRunner(nil)
+		end
 	end))
 	
 	sCoroutine.resume(self.runner, ...)
@@ -175,7 +193,6 @@ function PlayStateMachine:onTouch(x, y, times)
 	if self.runner then return end
 		
 	if self:_getCurrentStateController():needTouch() then
-		print(times)
 		self.touchDispatcher:dispatch(x, y, times)
 	end
 end
@@ -200,7 +217,7 @@ function PlayStateMachine:onUICommand(...)
 	return self:onCommand('onUICommand', ...)
 end
 
-function PlayStateMachine:nextHero()
+function PlayStateMachine:waitNextHero()
 	self:_changeState('continue')
 end
 

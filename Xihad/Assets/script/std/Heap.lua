@@ -95,6 +95,7 @@ function Heap:insert(t, v)
 	end
 	
 	t[idx] = v
+	return idx
 end
 
 function Heap:find(t, v)

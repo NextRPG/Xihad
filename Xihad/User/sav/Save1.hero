@@ -6,7 +6,7 @@ return
  		properties =  
  		{
  			MHP = 200,
- 			ATK = 105,
+ 			ATK = 55,
  			DFS = 5,
  			MTK = 5,
  			MDF = 10,
@@ -56,8 +56,8 @@ return
 		properties =  
 		{
 			MHP = 100,
-			DFS = 60,
 			ATK = 5,
+			DFS = 200,
 			MTK = 5,
 			MAP = 8,
 			MDF = 10,

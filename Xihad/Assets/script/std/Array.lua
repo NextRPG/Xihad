@@ -124,6 +124,8 @@ function Array.reverse(t)
 		low = low + 1
 		high = high - 1
 	end
+	
+	return t
 end
 
 if select('#', ...) == 0 then 

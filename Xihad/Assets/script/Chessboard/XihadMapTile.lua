@@ -1,8 +1,8 @@
 local base = require 'route.MapTile'
-local TerrainBarrier  = require 'Barrier.TerrainBarrier'
 local Location = require 'route.Location'
 local Rectangle= require 'math.Rectangle' 
 local WarriorBarrier = require 'WarriorBarrier'
+local TerrainBarrier = require 'TerrainBarrier'
 
 local XTile = { 
 	yOffset = 0,
@@ -15,10 +15,7 @@ XTile.__index = XTile
 setmetatable(XTile, base)
 
 function XTile.new(location)
-	local obj = base.new(location)
-	setmetatable(obj, XTile)
-	
-	return obj
+	return setmetatable(base.new(location), XTile)
 end
 
 function XTile.setTileDimension(tileWidth, tileHeight)

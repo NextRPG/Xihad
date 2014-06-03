@@ -34,19 +34,17 @@ function BaseParticleSkillAnimator:animate(sourceObject, targetTile, listener)
 	self:_animateSource(sourceObject)
 	local targetObject = self:_getTargetObject(targetTile)
 	
-	local particleObject = g_scene:createUniqueObject(c'ParticleSystem')
-	local particleSystem = particleObject:appendComponent(c'ParticleSystem')
-	local pnode = particleSystem:getParticleNode()
-	ParticleLoader.load(self.particleFile, pnode:newChild(), sourceObject, targetObject, 
-		function (message)
-			if message == 'attack begin' then
-				listener:onAttackBegin()
-			elseif message == 'attack end' then
-				listener:onAttackEnd()
-			elseif message == 'destroy' then
-				particleObject:stop()
-			end
-		end)
+	local particleObject = 
+		ParticleLoader.create(self.particleFile, sourceObject, targetObject, 
+			function (message)
+				if message == 'attack begin' then
+					listener:onAttackBegin()
+				elseif message == 'attack end' then
+					listener:onAttackEnd()
+				elseif message == 'destroy' then
+					particleObject:stop()
+				end
+			end)
 end
 
 return BaseParticleSkillAnimator

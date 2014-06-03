@@ -18,6 +18,10 @@ function BuffEffect:_generateUID(cause)
 	return string.format('%q, %q', cause, self.field)
 end
 
+function BuffEffect:getFieldEquation()
+	return self.field, self.equation
+end
+
 local function log(...) 
 	print(...)
 end

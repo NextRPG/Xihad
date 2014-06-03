@@ -65,7 +65,6 @@ function RoundRecycler:afterExhausted()
 end
 
 function RoundRecycler:_check()
-	print(self, 'rest round: ', self.restRound)
 	if self.restRound < 0 then
 		self:afterExhausted()
 	elseif self.restRound == 0 then

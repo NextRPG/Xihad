@@ -38,4 +38,33 @@ function Table.clear(t)
 	end
 end
 
+function Table.get_or_set(t, key, default)
+	local ret = t[key]
+	if not ret then
+		ret = default
+		t[key] = default
+	end
+	
+	return ret
+end
+
+function Table.get_or_new_table(t, key)
+	local ret = t[key]
+	if not ret then
+		ret = {}
+		t[key] = ret
+	end
+	
+	return ret
+end
+
+function Table.count(t)
+	local n = 0
+	for k,v in pairs(t) do
+		n = n + 1
+	end
+	
+	return n
+end
+
 return Table

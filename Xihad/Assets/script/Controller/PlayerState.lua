@@ -10,8 +10,10 @@ local PlayerState = {
 }
 PlayerState.__index = PlayerState
 
-function PlayerState.new(sharedCommandList, cursorFastener, ui, camera, painter, executor)
-	local o = setmetatable({
+function PlayerState.new(sharedCommandList, 
+		cursorFastener, ui, camera, painter, executor)
+	assert(sharedCommandList ~= nil)
+	return setmetatable({
 			ui = ui,
 			camera = camera,
 			painter = painter, 
@@ -19,9 +21,6 @@ function PlayerState.new(sharedCommandList, cursorFastener, ui, camera, painter,
 			commandList = sharedCommandList,
 			cursorFastener = cursorFastener,
 		}, PlayerState)
-	assert(sharedCommandList ~= nil)
-	
-	return o
 end
 
 function PlayerState:_getSource()
@@ -153,10 +152,10 @@ end
 function PlayerState:_onWarrior(warriorObj, times, heroFunc, enemyFunc)
 	if warriorObj:hasTag(c'Hero') then
 		return self[heroFunc](self, warriorObj, times)
-	elseif warriorObj:hasTag(c'Enemy') then
+	else --if warriorObj:hasTag(c'Enemy') then
 		return self[enemyFunc](self, warriorObj, times)
-	else
-		print('Non-hero and Non-AI person found')
+	-- else
+	-- 	print('Non-hero and Non-AI person found')
 	end
 end
 

@@ -4,8 +4,15 @@ function functional.notNil(p)
 	return p ~= nil
 end
 
+function functional.idle()
+end
+
 function functional.passby(f, ...)
 	f()
+	return ...
+end
+
+function functional.return_(...)
 	return ...
 end
 
@@ -16,11 +23,15 @@ function functional.invoke(target, fnameOrParam, ...)
 	elseif type(target) == "table" then
 		local fname = fnameOrParam
 		return target[fname](target, ...)
+	else
+		error('Non-invokable')
 	end
 end
 
-function functional.cascade(f1, f2, ...)
-	return f1(f2(...))
+function functional.cascade(f1, f2)
+	return function(...) 
+		return f1(f2(...)) 
+	end
 end
 
 function functional.cascadeN(fs, ...)
@@ -32,6 +43,12 @@ function functional.cascadeN(fs, ...)
 		return nxt(top(...))
 	else
 		return top(...)
+	end
+end
+
+function functional.asself(field)
+	return function (object, ...)
+		return object[field](object, ...)
 	end
 end
 
@@ -51,6 +68,20 @@ function functional.bind2(f, _1, _2)
 	assert(f)
 	return function (...)
 		return f(_1, _2, ...)
+	end
+end
+
+function functional.bind3(f, _1, _2, _3)
+	assert(f)
+	return function (...)
+		return f(_1, _2, _3, ...)
+	end
+end
+
+function functional.bindall(f, ...)
+	local t = { ... }
+	return function ()
+		return f(unpack(t))
 	end
 end
 

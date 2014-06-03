@@ -36,8 +36,13 @@ function ChooseTargetState:onStateEnter()
 	self:_markRange(tiles, 'Castable', 'castableHandle')
 end
 
-function ChooseTargetState:onStateExit()
+function ChooseTargetState:_clearHandle()
 	self:_safeClear('castableHandle')
+	self:_safeClear('impactHanlde')
+end
+
+function ChooseTargetState:onStateExit()
+	self:_clearHandle()
 end
 
 function ChooseTargetState:needCDWhenTouch()
@@ -53,9 +58,7 @@ function ChooseTargetState:onTileSelected(tile)
 	if not tiles[tile] then
 		print('not castable', tostring(tile:getLocation()))
 	else
-		self:_safeClear('castableHandle')
-		self:_safeClear('impactHanlde')
-		
+		self:_clearHandle()
 		self.commandList:setTarget(tile:getLocation())
 		local source, skill = self:_getWC()
 		self.executor:cast(source, self.commandList:getTarget(), skill)
@@ -83,6 +86,10 @@ function ChooseTargetState:_updateHover()
 end
 
 function ChooseTargetState:onTileHovered(tile)
+	if not self:_getLaunchableTiles()[tile] then
+		tile = nil
+	end
+	
 	if self.hoveringTile ~= tile then
 		self.hoveringTile = tile
 		self:_updateHover()

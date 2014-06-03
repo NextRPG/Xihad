@@ -79,7 +79,7 @@ function factory:create(team, name, data)
 
 	local parcel = object:appendComponent(c'Parcel')
 	local equiper= object:appendComponent(c'Equiper')
-	local barrier = object:appendComponent(c'WarriorBarrier')
+	local barrier= object:appendComponent(c'WarriorBarrier')
 	local skillCaster = object:appendComponent(c'SkillCaster')
 	
 	-- TODO remove
@@ -110,21 +110,24 @@ function factory:create(team, name, data)
 	
 	-- TODO FIXME
 	if team == 'Enemy' then
+		local Location = require 'route.Location'
+		local Approaching = require 'Tactic.Approaching'
+		local EnemyGrader = require 'Tactic.EnemyGrader'
+		local CastGrader  = require 'Tactic.CastGrader'
 		object:appendComponent(c'ECLTactic', {
-				enemy = function (warrior, enemy) 
-					local dist = enemy:getLocation():distance(warrior:getLocation())
-					local enough = (dist == 1)
-					return 100 - dist, enough
-				end,
+				enemy = EnemyGrader.nearest(),
 				
-				cast = function (warrior, enemy, cast)
-					return 1, true
-				end,
+				cast = CastGrader.maxDamage(),
 				
 				location = function (warrior, enemy, cast, location)
 					return 1, true
 				end,
+				
+				-- approaching = Approaching.fixedTarget(Location.new(4, 1))
+				approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
 			})
+	else
+		-- object:appendComponent(c'Leveler', ...)
 	end
 	
 	-- hook	
@@ -163,10 +166,44 @@ function factory:create(team, name, data)
 			AsConditionFactory.waitAnimation(animator)
 			
 			g_scheduler:schedule(function ()
+				-- TODO remove this evil code 
 				warrior:getHostObject():stop()
 			end)
 		end
 	end)
+	
+	-- TODO
+	local buffEffects = {}
+	warrior:setExclusiveEffectListener({
+			onEffectBind = function (self, warrior, effect, lock)
+				print('------------- bind effect')
+				if type(effect.getFieldEquation) ~= 'function' then
+					return
+				end
+				local field, eq = effect:getFieldEquation()
+				-- local isPromote = warrior:get
+				-- buffEffects[field]:
+				
+				local ParticleLoader = require 'Particle.ParticleLoader'
+				local host = warrior:getHostObject()
+				local pobject = ParticleLoader.create('effect.ATKBuff', host)
+				pobject:setParent(host)
+				buffEffects[field] = pobject
+			end,
+			
+			onEffectUnbind = function (self, warrior, effect, lock)
+				print('------------- unbind effect')
+				if type(effect.getFieldEquation) ~= 'function' then
+					return
+				end
+				local field, eq = effect:getFieldEquation()
+				
+				if buffEffects[field] ~= nil then
+					buffEffects[field]:stop()
+				end
+			end
+		})
+	
 	
 	warrior:deactivate()
 	return object

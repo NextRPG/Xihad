@@ -80,7 +80,7 @@ namespace xihad { namespace particle { namespace editor
 static ISceneNode* addNinja(ISceneManager* smgr, core::vector3df pos)
 {
 	IAnimatedMeshSceneNode* ninja = smgr->addAnimatedMeshSceneNode(
-		smgr->getMesh("../Xihad/Assets/model/ninja/ninja.b3d"));
+		smgr->getMesh("Assets/model/ninja/ninja.b3d"));
 	ninja->setFrameLoop(182, 204);
 	ninja->setMaterialFlag(video::EMF_LIGHTING, false);
 	ninja->setAnimationSpeed(12);
@@ -97,7 +97,9 @@ int main(int argc, char** argv)
 	ParticleEditorReceiver* receiver = new ParticleEditorReceiver;
 	receiver->scriptPath = argc>1 ? argv[1] : "particle.lua";
 	receiver->smgr = device->getSceneManager();
-	receiver->factory = CParticleSystemScriptFactory::createDefault(receiver->smgr->getParticleSystemFactory());
+	receiver->factory = CParticleSystemScriptFactory::createDefault(
+		receiver->smgr->getParticleSystemFactory());
+
 // 	receiver->factory->Initers["Texture"] = irrptr<IStackPusherFactory>(
 // 		new CTextureIniterStackPusherFactory(*device->getRandomizer(), *device->getVideoDriver()), false);
 	receiver->L = luaL_newstate();

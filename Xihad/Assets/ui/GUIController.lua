@@ -1,8 +1,4 @@
-local GUIController = {
-	Command = require "ui.Command",
-	MapTileInfo = require "ui.MapTileInfo",
-	ParcelExchange = require "ui.ParcelExchange",
-}
+local GUIController = {}
 
 G_CEGUISubscriberSlot = {
 	CommandSelect = function (e) GUIController.Command:onSelect(e) end,
@@ -16,6 +12,12 @@ G_CEGUISubscriberSlot = {
 	ExchangeTidy = function (e) GUIController.ParcelExchange:onTidy(e) end,
 	
 }
+
+function GUIController:init()
+	self.Command = require "ui.Command"
+	self.MapTileInfo = require "ui.MapTileInfo"
+	self.ParcelExchange = require "ui.ParcelExchange"
+end
 
 --[[
 AttackDamage	

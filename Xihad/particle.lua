@@ -1,2 +1,2 @@
-package.path = package.path .. ';Assets/?.lua'
-return require 'attack_buff'
+require 'Assets.script.AllPackages'
+return require 'effect.ice_broken'

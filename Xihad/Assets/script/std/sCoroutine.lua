@@ -1,8 +1,7 @@
 local sCoroutine = {}
 
 local function outputErrorMsg(msg)
-	io.stderr:write("coroutine resume failed\r\n\t", msg, '\n')
-	io.stderr:write(debug.traceback())
+	io.stderr:write("coroutine resume failed\r\n\t", tostring(msg), '\n')
 	io.stderr:flush()
 end
 
@@ -16,8 +15,8 @@ function sCoroutine.resume(co, ...)
 	end
 end
 
-function sCoroutine.start(run)
-	sCoroutine.resume(coroutine.create(run))
+function sCoroutine.start(run, ...)
+	sCoroutine.resume(coroutine.create(run), ...)
 end
 
 return sCoroutine

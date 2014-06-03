@@ -80,14 +80,14 @@ public:
 			{
 				Node adjacent = graph->getAdjacency(tail, i);
 				if (adjacent == tail || adjacent == shortestPath.prev) 
-					continue;	// skip loop back edge
+					continue;		// skip loop back edge
 
 				if (adjacent == nullnode) 
-					continue;	// skip null node
+					continue;		// skip null node
 
 				Cost addition = graph->computeCost(tail, adjacent);
 				if (addition < 0) 
-					continue;	// skip negative edge, or it will cause error
+					continue;		// skip negative edge, or it will cause error                
 
 				Cost adjCost  = shortestPath.cost + addition;
 

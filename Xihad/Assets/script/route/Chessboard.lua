@@ -1,4 +1,4 @@
-require 'ArtIn'
+require 'ArtIn' -- Load ArtIn module for once
 
 local Array = require 'std.Array'
 local MapTile  = require 'route.MapTile'
@@ -28,7 +28,7 @@ function Chessboard.new(width, height, mapTileFactory)
 		computeCost = function(self, x1, y1, x2, y2)
 			local tile = b:getTile(Location.new(x2, y2))
 			if not tile:canPass(self.routingWarrior) then
-				return 10000	-- TODO
+				return -1	-- Negative cost edge will be discarded
 			end
 			
 			local cost = tile:getActionPointCost(self.routingWarrior)
@@ -73,16 +73,15 @@ function Chessboard:_getSource(warrior, startLoc)
 	return Astar.newSinglePointSource(startLoc.x, startLoc.y)
 end
 
-function Chessboard:_transformPath(reversePath)
+function Chessboard:_transformPath(revPath)
 	local locations = {}
-	for i = 1, #reversePath, 2 do
-		locations[math.floor(i/2)+1] = Location.new(reversePath[i], reversePath[i+1])
+	for i = 1, #revPath, 2 do
+		locations[math.floor(i/2)+1] = Location.new(revPath[i], revPath[i+1])
 	end
 	
 	if #locations > 1 then
-		Array.popBack(locations)
+		Array.popBack(locations)	-- pop start location
 	end
-	Array.reverse(locations)
 	
 	return locations
 end
@@ -91,26 +90,32 @@ function Chessboard:_route(warrior, targetLoc, startLoc)
 	local source = self:_getSource(warrior, startLoc)
 	local target = Astar.newSinglePointTarget(targetLoc.x, targetLoc.y)
 	self.delegate.routingWarrior = warrior
-	local reversePath = {}
-	local cost = Astar.route(source, target, self.graph, reversePath)
+	local revXY = {}
+	local cost = Astar.route(source, target, self.graph, revXY)
 	
-	return reversePath, cost
+	if #revXY > 0 then return revXY, cost end
+end
+
+---
+-- if startLoc == targetLoc, return { targetLoc }
+-- if startLoc ~= targetLoc, return path without startLoc or nil
+function Chessboard:routeRev(warrior, targetLoc, startLoc)
+	local revXY, cost = self:_route(warrior, targetLoc, startLoc)
+	if revXY then
+		return self:_transformPath(revXY), cost
+	end
 end
 
 function Chessboard:route(warrior, targetLoc, startLoc)
-	local reversePath, cost = self:_route(warrior, targetLoc, startLoc)
-	
-	if #reversePath == 0 then
-		return nil 	-- no path found
+	local revPath, cost = self:routeRev(warrior, targetLoc, startLoc)
+	if revPath then
+		return Array.reverse(revPath), cost
 	end
-	
-	return self:_transformPath(reversePath), cost
 end
 
 function Chessboard:canReach(warrior, targetLoc, startLoc)
-	local reversePath, cost = g_chessboard:_route(warrior, targetLoc, startLoc)
-	
-	return #reversePath > 0 and cost <= warrior:getActionPoint()
+	local revXY, cost = self:_route(warrior, targetLoc, startLoc)
+	return revXY ~= nil and cost <= warrior:getActionPoint()
 end
 
 function Chessboard:getReachableTiles(warrior, startLoc)

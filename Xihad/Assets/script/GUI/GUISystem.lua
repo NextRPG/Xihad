@@ -19,6 +19,9 @@ function GUISystem.init()
 
 	-- load animation
 	require "ui.Animations"
+	
+	local GUIController = require 'ui.GUIController'
+	GUIController:init()
 end
 
 return GUISystem

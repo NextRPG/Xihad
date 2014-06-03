@@ -4,6 +4,18 @@ local Location = {
 }
 Location.__index = Location
 
+function Location:__mul(n)
+	local cpy = self:copy()
+	cpy:mul(n)
+	return cpy
+end
+
+function Location:__div(n)
+	local cpy = self:copy()
+	cpy:div(n)
+	return cpy
+end
+
 function Location:__sub(b)
 	local cpy = self:copy()
 	cpy:sub(b)
@@ -82,6 +94,16 @@ end
 function Location:add(b)
 	self.x = self.x + b.x
 	self.y = self.y + b.y
+end
+
+function Location:mul(n)
+	self.x = self.x * n
+	self.y = self.y * n
+end
+
+function Location:div(n)
+	self.x = self.x / n
+	self.y = self.y / n
 end
 
 function Location:inv()

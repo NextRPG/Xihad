@@ -27,7 +27,7 @@ end
 
 function EffectBindPoint:unregisterExclusiveEffect(effect, exclusiveLock)
 	self:_checkEffectUnbinding(effect)
-	self.exclusiveEffects:detach(effect, exclusiveLock)
+	return self.exclusiveEffects:detach(effect, exclusiveLock)
 end
 
 function EffectBindPoint:registerStickyEffect(effect, source)

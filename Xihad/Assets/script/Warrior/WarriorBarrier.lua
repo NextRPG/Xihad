@@ -17,8 +17,11 @@ function WarriorBarrier.getOptUniqueKey()
 	return 'WarriorBarrier'
 end
 
+---
+-- We should invoke other:isLeagueWith(self), not self:isLeagueWith(other), 
+-- for support route cheat
 function WarriorBarrier:isLeagueWith(other)
-	return self:findPeer(c'Warrior'):isLeagueWith(other)
+	return other:isLeagueWith(self:findPeer(c'Warrior'))
 end
 
 function WarriorBarrier:canPass( warrior )
@@ -39,16 +42,20 @@ function WarriorBarrier:permitCasting( warrior, skill )
 	end
 end
 
-function WarriorBarrier:setTile( tile ) 
-	if base.setTile(self, tile) then
-		if tile then
-			local object = self:getHostObject()
-			local translate = tile:getCenterVector()
-			object:resetTranslate(translate)
-		else
-			-- TODO
-		end
-	end
+function WarriorBarrier:synchronizeTranslate()
+	local object = self:getHostObject()
+	local translate = self:getTile():getCenterVector()
+	object:resetTranslate(translate)
 end
+
+-- function WarriorBarrier:setTile( tile ) 
+-- 	if base.setTile(self, tile) then
+-- 		if tile then
+			
+-- 		else
+-- 			-- TODO
+-- 		end
+-- 	end
+-- end
 
 return WarriorBarrier

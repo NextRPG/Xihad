@@ -64,7 +64,8 @@ function Skill:resolve(sourceWarrior, impactLocation, chessboard)
 			end
 			
 			if result:isValid() then
-				table.insert(results, result)
+				assert(results[barrier] == nil)
+				results[barrier] = result
 			end
 		until true
 		end

@@ -11,6 +11,7 @@ end
 
 function ExclusiveEffects:attach(effect, exclusiveLock)
 	local detached = self:_detach_initiatively(exclusiveLock)
+	assert(self.datas[exclusiveLock] == nil)
 	
 	self.datas[exclusiveLock] = effect
 	return detached
@@ -20,10 +21,8 @@ function ExclusiveEffects:_detach_initiatively(exclusiveLock)
 	local attached = self.datas[exclusiveLock]
 	
 	if attached then
-		self.datas[exclusiveLock] = nil
-	
+		-- self.datas[exclusiveLock] = nil
 		attached:unbind()
-		
 		return attached
 	end
 end
@@ -41,7 +40,7 @@ function ExclusiveEffects:_detach_passively(exclusiveLock, effect)
 end
 
 function ExclusiveEffects:detach(effect, exclusiveLock)
-	return self:_detach_passively(exclusiveLock, effect)
+	return self:_detach_passively(exclusiveLock, effect) == effect
 end
 
 

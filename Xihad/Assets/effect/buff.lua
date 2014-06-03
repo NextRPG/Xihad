@@ -26,7 +26,8 @@ local function addBuff(pnode, f, color, radius, width, height, pps, img, len, sp
 
 ----------------------------------------------
 -- 1 renderer
-	local r = f:renderer("Billboard")
+	local r = f:renderer("Quad")
+	r:setOrintation(math3d.vector(0, 1, 0), math3d.vector(1, 0, 0))
 	pnode:setRenderer(r)
 	
 	Utils.setMaterial(r:getMaterial())
@@ -47,7 +48,7 @@ return function(pnode, f, env, scale, color)
 ----------------------------------------------	
 	color = color or Color.new(0xffffff)
 	scale = scale or 1
- 	local tar = env:getNode("@target")
+ 	local tar = env:getNode("@source")
 	local extent = env:getAABB(tar):extent()
 	
 	local hw,_,hh = (extent*math3d.vector(0.5, 0.5, 0.5)):xyz()

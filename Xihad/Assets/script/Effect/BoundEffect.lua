@@ -83,7 +83,6 @@ function BoundEffect:unbind()
 	
 	self._state = 'unbinding' -- assert(not self:isBound())
 	
-	print('unbind BoundEffect')
 	local bindPoint = self:getBinding()
 	
 	if self._uid then

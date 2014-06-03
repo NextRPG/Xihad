@@ -2,13 +2,13 @@ local robber =
 {
 	career = '强盗',
 	model = 'reimu',
-	level = 1,
+	-- level = 1,
 	exp = 50,
 	skills = {
 		['Fire'] = 10,
 	},
 	properties = {
-		MHP = 50,
+		MHP = 250,
 		ATK = 25,
 		DFS = 5,
 		MTK = 5,
@@ -19,17 +19,17 @@ local robber =
 
 local robberLocations = 
 {
-	{ x = 7,  y = 7, prefab = 1, rotation = 180, },
-	{ x = 10, y = 9, prefab = 1, rotation = 180, },
-	{ x = 5,  y = 9, prefab = 1, rotation = 180, },
-	{ x = 9,  y = 7, prefab = 1, rotation = 180, },
-	{ x = 4,  y = 7, prefab = 1, rotation = 180, },
+	-- { x = 7,  y = 7, prefab = 1, rotation = 180, },
+	-- { x = 10, y = 9, prefab = 1, rotation = 180, },
+	-- { x = 5,  y = 9, prefab = 1, rotation = 180, },
+	-- { x = 9,  y = 7, prefab = 1, rotation = 180, },
+	{ x = 3,  y = 7, prefab = 1, rotation = 180, },
 }
 
 local heroLocations = 
 {
 	{ x = 4, y = 2, prefab = 'A', rotation = 0, },
-	{ x = 6, y = 2, prefab = 'B', rotation = 0, },
+	-- { x = 6, y = 2, prefab = 'B', rotation = 0, },
 	-- { x = 8, y = 2, prefab = 'D', rotation = 0, },
 }
 
