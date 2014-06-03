@@ -1,4 +1,4 @@
-local Utils = require "assets.ui.StaticUtils"
+local Utils = require "ui.StaticUtils"
 local findWindow = Utils.findWindow
 local followMouse = Utils.followMouse
 
@@ -107,7 +107,7 @@ end
 
 function Command:onSelect(e)
 	local parentName, childName = explainEvent(e)
-	for callback,_ in pairs(self.hoverListeners) do
+	for callback,_ in pairs(self.clickListeners) do
 		callback(parentName, childName, "Select")
 	end
 end
@@ -118,19 +118,22 @@ function Command:onHoverNil(e)
 	end
 end
 
-function Command:addSelectListener(listener)
-	self.clickListeners[listener] = true
+function Command:_changeListeners(listener, eventType, setting)
+	if eventType == "Hover" then
+		self.hoverListeners[listener] = setting
+	elseif eventType == "Select" then
+		self.clickListeners[listener] = setting
+	else
+		return {"Hover", "Select"}
+	end
 end
 
-function Command:addHoverListener(listener)
-	self.hoverListeners[listener] = true
+function Command:addListener(listener, eventType)
+	return self:_changeListeners(listener, eventType, true)
 end
 
-function Command:removeSelectListener(listener)
-	self.clickListeners[listener] = nil
+function Command:removeListener(listener, eventType)
+	return self:_changeListeners(listener, eventType, nil)
 end
 
-function Command:removeHoverListener(listener)
-	self.hoverListeners[listener] = nil
-end
 return Command

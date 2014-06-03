@@ -1,20 +1,20 @@
 local GUIController = {
-	Command = require "assets.ui.Command",
-	MapTileInfo = require "assets.ui.MapTileInfo",
-	-- ParcelExchange = require "assets.ui.ParcelExchange",
+	Command = require "ui.Command",
+	MapTileInfo = require "ui.MapTileInfo",
+	ParcelExchange = require "ui.ParcelExchange",
 }
 
 G_CEGUISubscriberSlot = {
-	CommandSelect = function (e)
-		GUIController.Command:onSelect(e)	
-	end,
-	CommandHover = function (e)
-		GUIController.Command:onHover(e)
-	end,
-	CommandHoverNil = function (e)
-		GUIController.Command:onHoverNil(e)
-	end	
-
+	CommandSelect = function (e) GUIController.Command:onSelect(e) end,
+	CommandHover = function (e) GUIController.Command:onHover(e) end,
+	CommandHoverNil = function (e) GUIController.Command:onHoverNil(e) end,
+	
+	ExchangeItemClick = function (e) GUIController.ParcelExchange:onItemClick(e) end,
+	ExchangeItemHover = function (e) GUIController.ParcelExchange:onItemHover(e) end,
+	ExchangeItemHoverNil = function (e) GUIController.ParcelExchange:onItemHoverNil(e) end,
+	ExchangeComplete = function (e) GUIController.ParcelExchange:onComplete(e) end,
+	ExchangeTidy = function (e) GUIController.ParcelExchange:onTidy(e) end,
+	
 }
 
 --[[
@@ -43,25 +43,24 @@ local function showAttackDamageLabel(args)
 end
 
 --------------------- Exposed Interface ---------------------
+local function checkResult(prefix, result)
+	if result then
+		print(prefix.." event failed, only these event type available for this widget:", unpack(result))
+	end
+end
 
 function GUIController:subscribeEvent(eventName, callback)
 	local idx = string.find(eventName, "%.")
 	local wnd = string.sub(eventName, 1, idx - 1)
-	if string.find(eventName, "Select") then
-		self[wnd]:addSelectListener(callback)
-	elseif string.find(eventName, "Hover") then
-		self[wnd]:addHoverListener(callback)
-	end
+	local result = self[wnd]:addListener(callback, string.sub(eventName, idx + 1))
+	checkResult("Subscribe", result)
 end
 
 function GUIController:unsubscribeEvent(eventName, callback)
 	local idx = string.find(eventName, "%.")
 	local wnd = string.sub(eventName, 1, idx - 1)
-	if string.find(eventName, "Select") then
-		self[wnd]:removeSelectListener(callback)
-	elseif string.find(eventName, "Hover") then
-		self[wnd]:removeHoverListener(callback)
-	end
+	local result = self[wnd]:removeListener(callback, string.sub(eventName, idx + 1))
+	checkResult("Unsubscribe", result)
 end
 
 --[[------------------------------------------------------------------------------

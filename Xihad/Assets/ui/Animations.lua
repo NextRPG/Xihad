@@ -1,4 +1,4 @@
-local Utils = require "assets.ui.StaticUtils"
+local Utils = require "ui.StaticUtils"
 local findWindow = Utils.findWindow
 
 local animMgr = CEGUI.AnimationManager:getSingleton()
@@ -7,24 +7,19 @@ animMgr:loadAnimationsFromXML("Xihad.anims")
 local animations = 	{ 
 						TextFadeIn = { "AttackDamageLabel"},
 						
-						Magnify = { "LeftDialog/TextArea", "RightDialog/TextArea" },
-						Shrink = { "LeftDialog/TextArea", "RightDialog/TextArea" },
-						
-						PortraitLighter = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
-						PortraitDarker = { "LeftDialog/ImageArea", "RightDialog/ImageArea" },
-
-						DialogueClose = { "LeftDialog", "RightDialog" },
-					
 						FrameShow = { "MapTileInfo" },
 						FrameHide = { "MapTileInfo" },
 						
-						["MapEffectUpToOne"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectUpToTwo"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectUpToThree"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectDownToOne"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectDownToTwo"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectDownToThree"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
-						["MapEffectToZero"] = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectUpToThree = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectDownToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectDownToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectDownToThree = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						MapEffectToZero = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
+						
+						L2RArrowAnim = { "ParcelExchange/L2RArrow" },
+						R2LArrowAnim = { "ParcelExchange/R2LArrow" },
 					}
 
 for animName, targetList in pairs(animations) do

@@ -25,11 +25,6 @@ function BaseParcel:_new_slot(item)
 	return pos
 end
 
-function BaseParcel:_swap_slot(from, to)
-	self.slots[from], self.slots[to] = self.slots[to], self.slots[from]
-	self.count[from], self.count[to] = self.count[to], self.count[from]
-end
-
 function BaseParcel:_clear_slot(pos)
 	Array.fastRemoveElementAt(self.slots, pos)
 	Array.fastRemoveElementAt(self.count, pos)
@@ -112,6 +107,8 @@ function BaseParcel:_drop_recursive(item, delta)
 end
 
 function BaseParcel:dropItemAt(itemIndex, delta)
+	delta = delta or self:getCountAt(itemIndex)
+	
 	assert(delta > 0)
 	local newCount = self.count[itemIndex] - delta
 	if newCount < 0 then
@@ -136,7 +133,7 @@ function BaseParcel:_check_can_insert_all(item, total)
 	local mergeCount = total - freeContain
 	if mergeCount > 0 then
 		-- We must check exist ones
-		local existing, usedSlots = self:_get_total(item)
+		local existing, usedSlots = self:_get_total_of(item)
 		if existing + mergeCount > usedSlots*maxOverlay then
 			error('no more slots')
 		end
@@ -184,7 +181,7 @@ function BaseParcel:_tidy_at(startPos)
 		local rest = self:_fill(startPos, self.count[nextPos], maxOverlay)
 		if rest > 0 then
 			self.count[nextPos] = rest
-			self:_swap_slot(nextPos, startPos + 1)
+			self:swapSlot(nextPos, startPos + 1)
 			startPos = startPos + 1
 		else
 			self:_clear_slot(nextPos)
@@ -203,8 +200,12 @@ function BaseParcel:tidy()
 	end
 end
 
+function BaseParcel:_get_total_of(item)
+	return self:_get_total(item, self:_last_pos(item))
+end
+
 function BaseParcel:getTotalOf(item)
-	return (self:_get_total(item, self:_last_pos(item)))
+	return (self:_get_total_of(item))
 end
 
 function BaseParcel:getUsedSlotCount()
@@ -227,6 +228,15 @@ function BaseParcel:getCountAt(itemIndex)
 	return self.count[itemIndex]
 end
 
+function BaseParcel:getSlotAt(itemIndex)
+	return self:getItemAt(itemIndex), self:getCountAt(itemIndex)
+end
+
+function BaseParcel:swapSlot(from, to)
+	self.slots[from], self.slots[to] = self.slots[to], self.slots[from]
+	self.count[from], self.count[to] = self.count[to], self.count[from]
+end
+
 ---
 -- for index, item, count in parcel:allSlots() do
 -- 	...
@@ -240,6 +250,16 @@ function BaseParcel:allSlots()
 	end
 	
 	return iter, self, 0
+end
+
+function BaseParcel:swapWith(other, myIndex, otherIndex)
+	self:_check_item_at(myIndex)
+	other:_check_item_at(otherIndex)
+	self.slots[myIndex], other.slots[otherIndex] = 
+		other.slots[otherIndex], self.slots[myIndex]
+		
+	self.count[myIndex], other.count[otherIndex] = 
+		other.count[otherIndex], self.count[myIndex]
 end
 
 function BaseParcel:hasItem(item)

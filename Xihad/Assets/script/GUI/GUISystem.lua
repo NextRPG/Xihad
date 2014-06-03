@@ -18,7 +18,7 @@ function GUISystem.init()
 	context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
 	-- load animation
-	require "assets.ui.Animations"
+	require "ui.Animations"
 end
 
 return GUISystem

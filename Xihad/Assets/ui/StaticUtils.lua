@@ -26,4 +26,7 @@ function StaticUtils.newUDim(scale, offset)
 	return udim
 end
 
+function StaticUtils.fireEvent(eventName, window)
+	window:fireEvent(eventName, CEGUI.WindowEventArgs:new(window))
+end
 return StaticUtils

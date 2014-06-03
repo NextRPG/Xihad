@@ -105,4 +105,26 @@
     <Image height="39" name="Map/frameRB" width="37" xPos="397" yPos="40" />
     <Image height="36" name="Map/frameT" width="34" xPos="299" yPos="4" />
     <Image height="39" name="Map/frameB" width="34" xPos="299" yPos="40" />
+    <Image height="3" name="Menu/green_select_itemLB" width="3" xPos="133" yPos="135" />
+    <Image height="3" name="Menu/green_select_itemRB" width="3" xPos="223" yPos="135" />
+    <Image height="3" name="Menu/green_select_itemT" width="7" xPos="169" yPos="112" />
+    <Image height="3" name="Menu/green_select_itemRT" width="3" xPos="223" yPos="112" />
+    <Image height="20" name="Menu/green_select_itemR" width="3" xPos="223" yPos="115" />
+    <Image height="3" name="Menu/green_select_itemLT" width="3" xPos="133" yPos="112" />
+    <Image height="20" name="Menu/green_select_itemL" width="3" xPos="133" yPos="115" />
+    <Image height="3" name="Menu/green_select_itemB" width="7" xPos="169" yPos="135" />
+    <Image height="3" name="Menu/red_select_itemRB" width="3" xPos="223" yPos="109" />
+    <Image height="20" name="Menu/red_select_itemR" width="3" xPos="223" yPos="89" />
+    <Image height="3" name="Menu/red_select_itemLB" width="3" xPos="133" yPos="109" />
+    <Image height="3" name="Menu/red_select_itemRT" width="3" xPos="223" yPos="86" />
+    <Image height="3" name="Menu/red_select_itemB" width="7" xPos="169" yPos="109" />
+    <Image height="20" name="Menu/red_select_itemL" width="3" xPos="133" yPos="89" />
+    <Image height="3" name="Menu/red_select_itemT" width="7" xPos="169" yPos="86" />
+    <Image height="3" name="Menu/red_select_itemLT" width="3" xPos="133" yPos="86" />
+    <Image height="22" name="left_arrow_one" width="16" xPos="232" yPos="89" />
+    <Image height="22" name="left_arrow_two" width="32" xPos="248" yPos="89" />
+    <Image height="22" name="left_arrow_three" width="48" xPos="232" yPos="89" />
+    <Image height="22" name="right_arrow_three" width="48" xPos="232" yPos="115" />
+    <Image height="22" name="right_arrow_one" width="16" xPos="232" yPos="115" />
+    <Image height="22" name="right_arrow_two" width="32" xPos="248" yPos="115" />
 </Imageset>
