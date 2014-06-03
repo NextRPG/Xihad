@@ -115,6 +115,30 @@
 		<Subscription event="MapEffectToZero" action="Start" />
 	</AnimationDefinition>
 	
+	<AnimationDefinition name="R2LArrowAnim" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="Image" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="" />
+			<KeyFrame position="0.2" value="XihadUI/left_arrow_one" />
+			<KeyFrame position="0.4" value="XihadUI/left_arrow_two" />
+			<KeyFrame position="0.6" value="XihadUI/left_arrow_three" />
+		</Affector>
+		
+		<Subscription event="ArrowAnimStart" action="Start" />
+		<Subscription event="ArrowAnimStop" action="Stop" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="L2RArrowAnim" autoStart="false" duration="1.0" replayMode="loop">
+		<Affector property="Image" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="" />
+			<KeyFrame position="0.2" value="XihadUI/right_arrow_one" />
+			<KeyFrame position="0.4" value="XihadUI/right_arrow_two" />
+			<KeyFrame position="0.6" value="XihadUI/right_arrow_three" />
+		</Affector>
+		
+		<Subscription event="ArrowAnimStart" action="Start" />
+		<Subscription event="ArrowAnimStop" action="Stop" />
+	</AnimationDefinition>
+	
 	<AnimationDefinition name="TextFadeIn" duration="1.5" replayMode="once">
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
 			<KeyFrame position="0" value="0.0" />
@@ -155,32 +179,32 @@
 	<AnimationDefinition name="Magnify" duration="0.35" replayMode="once">
 		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
 			<KeyFrame position="0.0" value="{{0, 0}, {0, 0}}" />
-			<KeyFrame position="0.3" value="{{0.99, 0}, {0.33, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="0.35" value="{{0.9, 0}, {0.3, 0}}" progression="quadratic decelerating"/>
+			<KeyFrame position="0.3" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.35" value="{{0.9, 0}, {0.9, 0}}" progression="quadratic decelerating"/>
 		</Affector>
 		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="{{0.5, 0}, {0.83, 0}}" />
-			<KeyFrame position="0.3" value="{{0.005, 0}, {0.665, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="0.35" value="{{0.05, 0}, {0.68, 0}}" progression="quadratic decelerating"/>
+			<KeyFrame position="0.0" value="{{0.5, 0}, {0.5, 0}}" />
+			<KeyFrame position="0.3" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.35" value="{{0.05, 0}, {0.05, 0}}" progression="quadratic decelerating"/>
 		</Affector>
 		<Subscription event="Magnify" action="Start" />
 	</AnimationDefinition>
 		
 	<AnimationDefinition name="Shrink" duration="0.35" replayMode="once">
 		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="{{0.9, 0}, {0.3, 0}}" />
-			<KeyFrame position="0.05" value="{{0.99, 0}, {0.33, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.0" value="{{0.9, 0}, {0.9, 0}}" />
+			<KeyFrame position="0.05" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
 			<KeyFrame position="0.35" value="{{0, 0}, {0, 0}}" progression="quadratic decelerating"/>
 		</Affector>
 		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="{{0.05, 0}, {0.68, 0}}" />
-			<KeyFrame position="0.05" value="{{0.005, 0}, {0.665, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="0.35" value="{{0.5, 0}, {0.83, 0}}" progression="quadratic decelerating"/>
+			<KeyFrame position="0.0" value="{{0.05, 0}, {0.05, 0}}" />
+			<KeyFrame position="0.05" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.35" value="{{0.5, 0}, {0.5, 0}}" progression="quadratic decelerating"/>
 		</Affector>
 		<Subscription event="Shrink" action="Start" />
 	</AnimationDefinition>	
 
-	<AnimationDefinition name="PortraitDarker" duration="0.35" replayMode="once">
+	<AnimationDefinition name="Darker" duration="0.35" replayMode="once">
 		<Affector property="EnableColor" interpolator="ColourRect" applicationMethod="absolute">
 			<KeyFrame position="0.00" value="FFFFFFFF" />
 			<KeyFrame position="0.35" value="FF4F4F4F" progression="quadratic decelerating"/>
@@ -188,7 +212,7 @@
 		<Subscription event="Darker" action="Start" />
 	</AnimationDefinition>		
 
-	<AnimationDefinition name="PortraitLighter" duration="0.35" replayMode="once">
+	<AnimationDefinition name="Lighter" duration="0.35" replayMode="once">
 		<Affector property="EnableColor" interpolator="ColourRect" applicationMethod="absolute">
 			<KeyFrame position="0.00" value="FF4F4F4F" />
 			<KeyFrame position="0.35" value="FFFFFFFF" progression="quadratic decelerating"/>
@@ -198,13 +222,17 @@
 
 	<AnimationDefinition name="DialogueClose" duration="0.35" replayMode="once">
 		<Affector property="Visible" interpolator="bool" applicationMethod="absolute">
-			<KeyFrame position="0.00" value="true" />
+			<KeyFrame position="0.00" sourceProperty="Visible" />
 			<KeyFrame position="0.35" value="false" progression="discrete"/>
 		</Affector>
-
-
-		<Subscription event="Close" action="Start" />
+		<Subscription event="DialogueClose" action="Start" />
 	</AnimationDefinition>	
 
+	<AnimationDefinition name="DialogueOpen" duration="0.01" replayMode="once">
+		<Affector property="Visible" interpolator="bool" applicationMethod="absolute">
+			<KeyFrame position="0.00" sourceProperty="true" />
+		</Affector>
+		<Subscription event="DialogueOpen" action="Start" />
+	</AnimationDefinition>	
 </Animations>
 

@@ -300,7 +300,16 @@
 		<PropertyLinkDefinition name="CharacterName" widget="__auto_name_card__" targetProperty="Text" initialValue="？？？" type="String"/>
 		<PropertyLinkDefinition name="NextButtonImage" widget="__auto_next__" targetProperty="Image" initialValue="XihadUI/Dialog/dialog_next_1" type="Image"/>
 		<PropertyLinkDefinition name="NameCardRightAligned" widget="__auto_name_card__" targetProperty="Disabled" initialValue="false" type="bool"/>
-
+		
+		<PropertyDefinition name="XMin" initialValue="0.1" redrawOnWrite="false" type="float"/>
+		<PropertyDefinition name="XMax" initialValue="0.9" redrawOnWrite="false" type="float"/>
+		<PropertyDefinition name="OrginSize" initialValue="0.9" redrawOnWrite="false" type="USize"/>
+		
+		<PropertyDefinition name="LRelativeX" initialValue="0" redrawOnWrite="true" type="float"/>
+		<PropertyDefinition name="RRelativeX" initialValue="0" redrawOnWrite="true" type="float"/>
+		
+		<PropertyDefinition name="TextMargin" initialValue="32" redrawOnWrite="true" type="float"/>
+		
 		<Property name="AlwaysOnTop" value="true"/>
 		<ImagerySection name="background">
 			<FrameComponent>
@@ -320,34 +329,60 @@
 		</ImagerySection>
 		<Child type="Xihad/DialogNameCard" nameSuffix="__auto_name_card__">
 			<Area>
-				<Dim type="LeftEdge"><AbsoluteDim value="40"/></Dim>
+				<Dim type="LeftEdge">
+					<OperatorDim op="Add">
+						<OperatorDim op="Multiply">
+							<PropertyDim name="XMin"/>
+							<UnifiedDim scale="1" type="Width"/>
+						</OperatorDim>
+						<OperatorDim op="Multiply">
+							<PropertyDim name="LRelativeX"/>
+							<OperatorDim op="Multiply">
+								<UnifiedDim scale="1" type="Width"/>
+								<OperatorDim op="Subtract">
+									<PropertyDim name="XMax"/>
+									<PropertyDim name="XMin"/>
+								</OperatorDim>
+							</OperatorDim>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
 				<Dim type="RightEdge">
 					<OperatorDim op="Subtract">
-						<UnifiedDim scale="1" type="RightEdge"/>
-						<AbsoluteDim value="40"/>
+						<OperatorDim op="Multiply">
+							<PropertyDim name="XMax"/>
+							<UnifiedDim scale="1" type="Width"/>
+						</OperatorDim>
+						<OperatorDim op="Multiply">
+							<PropertyDim name="RRelativeX"/>
+							<OperatorDim op="Multiply">
+								<UnifiedDim scale="1" type="Width"/>
+								<OperatorDim op="Subtract">
+									<PropertyDim name="XMax"/>
+									<PropertyDim name="XMin"/>
+								</OperatorDim>
+							</OperatorDim>
+						</OperatorDim>
 					</OperatorDim>
 				</Dim>
 			</Area>
 		</Child> 
 		<Child type="Xihad/Container" nameSuffix="__auto_container__">
 			<Area>
-				<Dim type="LeftEdge"><ImageDim name="XihadUI/Dialog/dialogL" dimension="Width"/></Dim>
+				<Dim type="LeftEdge"><PropertyDim name="TextMargin"/></Dim>
 				<Dim type="RightEdge">
 					<OperatorDim op="Subtract">
 						<UnifiedDim scale="1" type="Width"/>
-						<ImageDim name="XihadUI/Dialog/dialogR" dimension="Width"/>
+						<PropertyDim name="TextMargin"/>
 					</OperatorDim>
 				</Dim>
 				<Dim type="TopEdge">
-					<OperatorDim op="Add">
-						<ImageDim name="XihadUI/Dialog/dialogT" dimension="Height"/>
-						<AbsoluteDim value="10"/>
-					</OperatorDim>
+					<PropertyDim name="TextMargin"/>
 				</Dim>
 				<Dim type="BottomEdge">
 					<OperatorDim op="Subtract">
 						<UnifiedDim scale="1" type="Height"/>
-						<ImageDim name="XihadUI/Dialog/dialogB" dimension="Height"/>
+						<PropertyDim name="TextMargin"/>
 					</OperatorDim>
 				</Dim>
 			</Area>
@@ -674,6 +709,7 @@
 		<PropertyDefinition name="HoverTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="PushedTextColour" initialValue="FFF6E3BA" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="DisabledTextColour" initialValue="FFA39079" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="SelectedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="PushedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		<PropertyDefinition name="OpenedColour" initialValue="FFFFFFFF" redrawOnWrite="true" type="ColourRect"/>
 		
@@ -686,8 +722,20 @@
 		<PropertyDefinition name="HoverFrameT" initialValue="XihadUI/Menu/hover_itemT" redrawOnWrite="true" type="Image"/>
 		<PropertyDefinition name="HoverFrameB" initialValue="XihadUI/Menu/hover_itemB" redrawOnWrite="true" type="Image"/>
 		<PropertyDefinition name="HoverFrameM" initialValue="XihadUI/Menu/hover_itemM" redrawOnWrite="true" type="Image"/>
+		
+		<PropertyDefinition name="SelectFrameLT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameRT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameLB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameRB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameL" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameR" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameT" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameB" initialValue="" redrawOnWrite="true" type="Image"/>
+		<PropertyDefinition name="SelectFrameM" initialValue="" redrawOnWrite="true" type="Image"/>
+		
 		<PropertyDefinition name="RightIndentation" initialValue="0" redrawOnWrite="true" type="uint"/>
 		
+		<Property name="AutoClosedWhenClicked" value="false"/>
 		<Property name="AutoPopupTimeout" value="0.01"/>
 		<Property name="WantsMultiClickEvents" value="False" />
 		<Property name="MouseInputPropagationEnabled" value="true" />
@@ -818,6 +866,18 @@
 				<ImageProperty component="Background" name="HoverFrameM"/>
 			</FrameComponent>
 		</ImagerySection>
+		<!-- <ImagerySection name="selected_frame">
+			<FrameComponent>
+				<ImageProperty component="TopLeftCorner" name="SelectFrameLT"/>
+				<ImageProperty component="TopRightCorner" name="SelectFrameRT"/>
+				<ImageProperty component="BottomLeftCorner" name="SelectFrameLB"/>
+				<ImageProperty component="BottomRightCorner" name="SelectFrameRB"/>
+				<ImageProperty component="LeftEdge" name="SelectFrameL"/>
+				<ImageProperty component="RightEdge" name="SelectFrameR"/>
+				<ImageProperty component="TopEdge" name="SelectFrameT"/>
+				<ImageProperty component="BottomEdge" name="SelectFrameB"/>
+			</FrameComponent>
+		</ImagerySection> -->
 		<ImagerySection name="popup_close">
 			<ImageryComponent>
 				<Area>
@@ -916,6 +976,19 @@
 				<Section section="label">
 					<ColourProperty name="DisabledTextColour" />
 				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="SelectedEnabled">
+			<Layer>
+				<Section section="label">
+					<ColourProperty name="SelectedTextColour" />
+				</Section>
+				<!-- <Section section="selected_frame" /> -->
+			</Layer>
+		</StateImagery>
+		<StateImagery name="SelectedDisabled">
+			<Layer>
+				<!-- <Section section="selected_frame" /> -->
 			</Layer>
 		</StateImagery>
 		<StateImagery name="PopupClosedIcon">

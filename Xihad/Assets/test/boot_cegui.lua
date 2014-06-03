@@ -46,7 +46,7 @@ context:setDefaultFont(CEGUI.FontManager:getSingleton():get("fangzheng-14"))
 context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
 -- load animation
-require "assets.ui.Animations"
+require "ui.Animations"
 
 
 -- ont only for test but an example for you.
@@ -98,6 +98,9 @@ local controller = g_scene:pushController({
 			
 			local pL = BaseParcel.new()
 			function pL:getTotalSlotCount() return 5 end
+			function pL:getValue(index)
+				return string.format('%2d', self:getCountAt(index))
+			end
 			pL:gainItem(aItem, 6)
 			pL:gainItem(cItem, 1)
 			pL:gainItem(eItem, 1)
@@ -106,7 +109,10 @@ local controller = g_scene:pushController({
 			function pR:getTotalSlotCount() return 5 end
 			pR:gainItem(dItem, 1)
 			pR:gainItem(aItem, 3)
-			pR:gainItem(bItem, 4)
+			pR:gainItem(bItem, 7)
+			function pR:getValue(index)
+				return string.format('%2d', self:getCountAt(index))
+			end
 
 			local model = {}
 			function model:getMaster() 

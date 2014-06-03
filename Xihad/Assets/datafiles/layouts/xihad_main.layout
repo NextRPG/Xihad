@@ -41,7 +41,7 @@
 	</Window> -->
 		
 	<Window name="ParcelExchange" type="Xihad/Image">
-		<Property name="Visible" value="false" />
+		<!-- <Property name="Visible" value="false" /> -->
 		<Property name="Size" value="{{0, 380}, {0, 270}}" />
 		<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />
 		<Property name="FrameRT" value="XihadUI/Parcel/frameRT" />
@@ -58,57 +58,68 @@
 		<Property name="Image" value="XihadUI/Parcel/back_image"/>
 		<Property name="VertImageFormat" value="BottomAligned"/>
 		<Property name="HorzImageFormat" value="LeftAligned"/>
+		<Window name="L2RArrow" type="Xihad/Image">
+			<Property name="HorzImageFormat" value="LeftAligned"/>
+			<Property name="Size" value="{{0, 48}, {0, 22}}" />
+		</Window>
+		<Window name="R2LArrow" type="Xihad/Image">
+			<Property name="HorzImageFormat" value="RightAligned"/>
+			<Property name="Size" value="{{0, 48}, {0, 22}}" />
+		</Window>
 		<Window name="MasterName" type="Xihad/Image" >
-			<Property name="Text" value="&lt;路飞&gt;" />
 			<Property name="Position" value="{{0, 0}, {0, 0}}" />
 			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
 			<Property name="VertTextFormat" value="BottomAligned"/>
 			<Property name="EnableTextColor" value="FFFFFFFF"/>
 		</Window>
 		<Window name="GuestName" type="Xihad/Image" >
-			<Property name="Text" value="&lt;索隆&gt;" />
 			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
 			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
 			<Property name="VertTextFormat" value="BottomAligned"/>
 			<Property name="EnableTextColor" value="FFFFFFFF"/>
 		</Window>
 		<Window name="MasterSlots" type="Xihad/ItemListbox">
-			<Window name="w1" type="Xihad/MenuItem">
-				<Property name="Text" value="技能书   10" />
-				<Property name="XihadName" value="技能书" />
+			<Window name="1" type="Xihad/MenuItem">
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ffca3a3a" />
 			</Window>
 			<Window name="2" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
-				<Property name="XihadValue" value="10" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ffca3a3a" />
 			</Window>
 			<Window name="3" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
-				<Property name="Icon" value="RedNumber/-" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ffca3a3a" />
 			</Window>
 			<Window name="4" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ffca3a3a" />
 			</Window>
 			<Window name="5" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ffca3a3a" />
 			</Window>
 		</Window>
 		<Window name="GuestSlots" type="Xihad/ItemListbox">
-			<Window name="w1" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
+			<Window name="1" type="Xihad/MenuItem">
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ff417b20" />
 			</Window>
 			<Window name="2" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
-				<Property name="XihadValue" value="10" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ff417b20" />
 			</Window>
 			<Window name="3" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
-				<Property name="Icon" value="RedNumber/-" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ff417b20" />
 			</Window>
 			<Window name="4" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ff417b20" />
 			</Window>
 			<Window name="5" type="Xihad/MenuItem">
-				<Property name="XihadName" value="技能书" />
+				<Property name="IgnoreOwnerList" value="true" />
+				<Property name="SelectedTextColour" value="ff417b20" />
 			</Window>
 		</Window>
 		<Window name="Tidy" type="Xihad/Button">
@@ -140,7 +151,7 @@
 		</Window>
 	</Window>
 	
-	<Window name="LeftDialog" type="DefaultWindow">
+	<!-- <Window name="LeftDialog" type="DefaultWindow">
 		<Property name="Size" value="{{0, 500}, {0, 500}}" />
 		<Property name="Position" value="{{0, 32}, {0, 100}}" />
 		<Property name="Visible" value="false" />
@@ -169,6 +180,6 @@
 			<Property name="Position" value="{{0.05, 0}, {0.68, 0}}" />
 			<Property name="NameCardRightAligned" value="true"/>
 		</Window>
-	</Window>
+	</Window> -->
 </Window>
 </GUILayout>

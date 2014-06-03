@@ -1,4 +1,4 @@
-local Utils = require "assets.ui.StaticUtils"
+local Utils = require "ui.StaticUtils"
 local findWindow = Utils.findWindow
 
 local effectIconMap = {
@@ -58,17 +58,17 @@ function MapTileInfo:show(args)
 	for i=1,3 do
 		local left, event, tooltip = getWidgetConfig(effects[i])
 		iconWidget[i]:setProperty("LeftIcon", left)
-		iconWidget[i]:fireEvent(event, CEGUI.WindowEventArgs(iconWidget[i]))
+		Utils.fireEvent(event, iconWidget[i])
 		-- iconWidget[i]:setTooltipText(tooltip)
 	end
 	
-	window:fireEvent("FrameShow", CEGUI.WindowEventArgs:new(window))
+	Utils.fireEvent("FrameShow", window)
 	return window
 end
 
 function MapTileInfo:close()
 	local window = findWindow("MapTileInfo")
-	window:fireEvent("FrameHide", CEGUI.WindowEventArgs:new(window))
+	Utils.fireEvent("FrameHide", window)
 end
 
 return MapTileInfo
