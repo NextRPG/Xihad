@@ -50,6 +50,7 @@ namespace xihad { namespace dialogue
 			"Xihad/Image", SpeakerSupport::ICON_WINDOW_NAME);
 		iconWnd->setSize(USize(UDim(0.8f, 0), UDim(0.95f, 0)));
 		iconWnd->setProperty("VertImageFormat", "BottomAligned");
+		iconWnd->setRiseOnClickEnabled(false);
 
 		Window* textPanel = baseWnd->createChild("DefaultWindow", "TextPanel");
 		textPanel->setSize(USize(UDim(0.9f, 0), UDim(0.35f, 0)));

@@ -55,6 +55,7 @@ local BaseParcel = require "BaseParcel"
 local EquipmentItem = require "Item.EquipmentItem"
 
 local GUIController = require("assets.ui.GUIController")
+GUIController:init()
 local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0

@@ -89,30 +89,33 @@ end
 
 local function initWidget()
 	local window = Utils.findWindow("ParcelExchange")
-	
-	local bt1 = window:getChild("Tidy")
-	local bt2 = window:getChild("Complete")
-	local btSize = bt1:getPixelSize()
-	local btY = Utils.newUDim(1, -1.5*btSize.height)
-	bt1:setYPosition(btY)
-	bt2:setYPosition(btY)
-	bt1:setXPosition(Utils.newUDim(0.3, -0.5*btSize.width))
-	bt2:setXPosition(Utils.newUDim(0.7, -0.5*btSize.width))
-	g_scheduler:runOnMainThread(function()
-			bt1:subscribeEvent("Clicked", 
-				G_CEGUISubscriberSlot.ExchangeTidy)
-			bt2:subscribeEvent("Clicked", 
-				G_CEGUISubscriberSlot.ExchangeComplete)
-		end)
-
-	ParcelExchange.master:init("green", -1)
-	ParcelExchange.guest:init("red", 0)	
-	
-	-- exchangeWindow
 	local screenSz = window:getParentPixelSize()
 	local wndSz = window:getPixelSize()
 	window:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
 	window:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
+	
+	local tidyBtn = window:getChild("Tidy")
+	local okBtn = window:getChild("Complete")
+	local btSize = tidyBtn:getPixelSize()
+	local btY = Utils.newUDim(1, -1.5*btSize.height)
+	tidyBtn:setYPosition(btY)
+	okBtn:setYPosition(btY)
+	tidyBtn:setXPosition(Utils.newUDim(0.3, -0.5*btSize.width))
+	okBtn:setXPosition(Utils.newUDim(0.7, -0.5*btSize.width))
+	
+	local closeBtn = window:getChild("Close")
+	closeBtn:setXPosition(Utils.newUDim(1,-8-closeBtn:getPixelSize().width))
+	closeBtn:setYPosition(Utils.newUDim(0, 8))
+	
+	g_scheduler:runOnMainThread(function()
+			tidyBtn:subscribeEvent("Clicked", 
+				G_CEGUISubscriberSlot.ExchangeTidy)
+			okBtn:subscribeEvent("Clicked", 
+				G_CEGUISubscriberSlot.ExchangeComplete)
+		end)
+	
+	ParcelExchange.master:init("green", -1)
+	ParcelExchange.guest:init("red", 0)	
 end
 
 initWidget()

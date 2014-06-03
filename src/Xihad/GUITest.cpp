@@ -37,11 +37,11 @@ Conversation* createConversation()
 	auto& coder = CEGUI::System::getStringTranscoder();
 	speaker1 = conversation->newSpeaker(coder.stringFromStdWString(L"Â··É"));
 	speaker1->setIcon("Character/aaaa_happy");
-	speaker1->setIConRelativeX(0.2f);
+	speaker1->setIConRelativeX(0.0f);
 	speaker1->setDialoguePosition(10, -10);
 	speaker2 = conversation->newSpeaker(coder.stringFromStdWString(L"Â··É"));
 	speaker2->setIcon("Character/bbbb_sad");
-	speaker2->setIConRelativeX(0.8f);
+	speaker2->setIConRelativeX(-0.001f);
 	speaker2->setDialoguePosition(-10, -10);
 
 	return conversation;
@@ -50,8 +50,9 @@ Conversation* createConversation()
 	class DialogueController: public UserEventReceiver
 	{
 	public:
-		DialogueController(SpeakerSupport* s1, SpeakerSupport* s2) :
-			s1(s1), s2(s2)
+		DialogueController(SpeakerSupport* s1, SpeakerSupport* s2, 
+			UpdateHandler* u, GameScene* s) :
+			s1(s1), s2(s2), updater(u), scene(s)
 		{
 			auto& coder = CEGUI::System::getStringTranscoder();
 			words.push_back(coder.stringFromStdWString(
@@ -67,12 +68,10 @@ Conversation* createConversation()
 		virtual int onKeyEvent(const KeyEvent& event, int argFromPreviousReceiver) 
 		{
 			int index = std::rand() % words.size();
-			if (event.Key == KeyCode::KEY_KEY_O && event.PressedDown)
+			if (event.Key == KeyCode::KEY_KEY_A && event.PressedDown)
 			{
+				s2->deactive();
 				s1->open();
-			}
-			else if (event.Key == KeyCode::KEY_KEY_A && event.PressedDown)
-			{
 				s1->active();
 				s1->speak(words[index]);
 			}
@@ -93,6 +92,17 @@ Conversation* createConversation()
 				s1->setSpeed(1);
 				s2->setSpeed(1);
 			}
+			else if (event.Key == KeyCode::KEY_KEY_Z && !event.PressedDown)
+			{
+				s1->close();
+				s2->close();
+			}
+			else if (event.Key == KeyCode::KEY_KEY_D && !event.PressedDown)
+			{
+				scene->destroyChildHandler(updater);
+			}
+
+			//s1->speakAll();
 
 			return 0;
 		}
@@ -105,6 +115,8 @@ Conversation* createConversation()
 		std::vector<String> words;
 		SpeakerSupport* s1;
 		SpeakerSupport* s2;
+		UpdateHandler* updater;
+		GameScene* scene;
 	};
 
 
@@ -119,7 +131,7 @@ int cegui_test(int argc, const char** argv)
 	{
 		Conversation* conversation = createConversation();
 		scene->appendChildHandler(conversation);
-		scene->getControllerStack().pushReceiver(new DialogueController(speaker1, speaker2));
+		scene->getControllerStack().pushReceiver(new DialogueController(speaker1, speaker2, conversation, scene));
 		// scene->destroyChildHandler(conversation);
 		///////////////////////////////////////
 

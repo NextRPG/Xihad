@@ -303,7 +303,6 @@
 		
 		<PropertyDefinition name="XMin" initialValue="0.1" redrawOnWrite="false" type="float"/>
 		<PropertyDefinition name="XMax" initialValue="0.9" redrawOnWrite="false" type="float"/>
-		<PropertyDefinition name="OrginSize" initialValue="0.9" redrawOnWrite="false" type="USize"/>
 		
 		<PropertyDefinition name="LRelativeX" initialValue="0" redrawOnWrite="true" type="float"/>
 		<PropertyDefinition name="RRelativeX" initialValue="0" redrawOnWrite="true" type="float"/>
