@@ -94,9 +94,9 @@ end
 
 function PlayStateMachine:_changeState(msg)
 	if msg ~= nil then
-		print(self:getCurrentState(), msg)
+		-- print(self:getCurrentState(), msg)
 		self.sm:onMessage(msg)
-		print(self:getCurrentState())
+		-- print(self:getCurrentState())
 	end
 end
 

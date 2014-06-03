@@ -49,6 +49,10 @@ function ParticleLoaderEnv:getMesh(meshDesc)
 end
 
 function ParticleLoaderEnv:deferMessage(delay, msg)
+	if not self.messageReceiver then
+		error('no messageReceiver')
+	end
+	
 	g_scheduler:schedule(function ()
 		self.messageReceiver(msg)
 	end, delay)

@@ -5,11 +5,11 @@ local Leveler = {
 }
 Leveler.__index = Leveler
 
-function Leveler.new( level, grader, object )
+function Leveler.new( data, object )
 	assert(grader ~= nil)
 	local obj = setmetatable({
-			level  = level,
-			grader = grader,
+			level  = data.level,
+			grader = data.grader,
 		}, Leveler)
 	return obj
 end

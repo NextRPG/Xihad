@@ -126,6 +126,8 @@ function factory:create(team, name, data)
 				-- approaching = Approaching.fixedTarget(Location.new(4, 1))
 				approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
 			})
+	else
+		-- object:appendComponent(c'Leveler', ...)
 	end
 	
 	-- hook	
@@ -169,6 +171,39 @@ function factory:create(team, name, data)
 			end)
 		end
 	end)
+	
+	-- TODO
+	local buffEffects = {}
+	warrior:setExclusiveEffectListener({
+			onEffectBind = function (self, warrior, effect, lock)
+				print('------------- bind effect')
+				if type(effect.getFieldEquation) ~= 'function' then
+					return
+				end
+				local field, eq = effect:getFieldEquation()
+				-- local isPromote = warrior:get
+				-- buffEffects[field]:
+				
+				local ParticleLoader = require 'Particle.ParticleLoader'
+				local host = warrior:getHostObject()
+				local pobject = ParticleLoader.create('effect.ATKBuff', host)
+				pobject:setParent(host)
+				buffEffects[field] = pobject
+			end,
+			
+			onEffectUnbind = function (self, warrior, effect, lock)
+				print('------------- unbind effect')
+				if type(effect.getFieldEquation) ~= 'function' then
+					return
+				end
+				local field, eq = effect:getFieldEquation()
+				
+				if buffEffects[field] ~= nil then
+					buffEffects[field]:stop()
+				end
+			end
+		})
+	
 	
 	warrior:deactivate()
 	return object
