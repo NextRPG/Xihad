@@ -8,7 +8,8 @@ local animations = 	{
 						TextFadeIn = { "AttackDamageLabel"},
 						
 						FrameShow = { "MapTileInfo" },
-						FrameHide = { "MapTileInfo", "ParcelPanel/ParcelExchange" },
+						FrameHide = { "MapTileInfo",  },
+						PullDown = { "ParcelPanel/ParcelExchange" },
 						
 						MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 						MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },

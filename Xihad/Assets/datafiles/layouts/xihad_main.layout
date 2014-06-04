@@ -41,6 +41,7 @@
 	</Window> -->
 	<Window name="ParcelPanel" type="DefaultWindow">
 		<Property name="Size" value="{{0, 420}, {0, 300}}" />
+		<Property name="MousePassThroughEnabled" value="true"/>
 		<Window name="ParcelExchange" type="Xihad/Image">
 			<Property name="Size" value="{{0, 0}, {0, 0}}" />
 			<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />

@@ -140,6 +140,6 @@ simulator:selectWarrior('A')
 -- simulator:selectTileAt(8, 2)
 -- simulator:selectCommand('待机')
 
--- g_world:setTimeScale(3)
+-- g_world:setTimeScale(0.3)
 
 g_camera = cameraFacade

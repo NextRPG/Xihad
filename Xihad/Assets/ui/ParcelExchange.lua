@@ -32,9 +32,10 @@ function ParcelExchange:show(model)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
 
-	self.FrameWindow:setVisible(true)
+	self.FrameWindow:setProperty("Size", "{{0, 0}, {0, 0}}")
 	self.FrameWindow:setAlpha(1)
-	Utils.fireEvent("Magnify", self.FrameWindow)
+	self.FrameWindow:setVisible(true)
+	Utils.fireEvent("PullDown", self.FrameWindow)
 	return self.FrameWindow:getParent()
 end
 
