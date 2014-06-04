@@ -1,7 +1,7 @@
 #pragma once
-#include <xmemory>
 #include <Engine\dimension2d.h>
 #include <Dialogue\IDialogue.hpp>
+#include <boost\smart_ptr\scoped_ptr.hpp>
 
 namespace CEGUI
 {
@@ -77,7 +77,7 @@ namespace xihad { namespace dialogue
 
 		CEGUI::Window& baseWnd;
 		Status status;
-		std::auto_ptr<IDialogue> dialogue;
+		boost::scoped_ptr<IDialogue> dialogue;
 
 		ngn::dimension2di padding;
 		int lineSpacing;

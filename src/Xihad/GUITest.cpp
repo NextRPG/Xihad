@@ -99,7 +99,8 @@ Conversation* createConversation()
 			}
 			else if (event.Key == KeyCode::KEY_KEY_D && !event.PressedDown)
 			{
-				scene->destroyChildHandler(updater);
+				// scene->destroyChildHandler(updater);
+				updater->stop();
 			}
 
 			//s1->speakAll();
