@@ -10,7 +10,7 @@ G_CEGUISubscriberSlot = {
 	ExchangeItemHoverNil = function (e) GUIController.ParcelExchange:onItemHoverNil(e) end,
 	ExchangeComplete = function (e) GUIController.ParcelExchange:onComplete(e) end,
 	ExchangeTidy = function (e) GUIController.ParcelExchange:onTidy(e) end,
-	
+	ExchangeCancel = function (e) GUIController.ParcelExchange:onCancel(e) end,
 }
 
 function GUIController:init()

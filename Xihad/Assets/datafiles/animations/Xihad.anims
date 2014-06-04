@@ -165,6 +165,10 @@
 			<KeyFrame position="0.0" sourceProperty="Alpha" />
 			<KeyFrame position="0.3" value="1.0" progression="quadratic accelerating"/>
 		</Affector>
+		
+		<Affector property="Visible" interpolator="bool" applicationMethod="absolute">
+			<KeyFrame position="0" value="true"/>
+		</Affector>
 		<Subscription event="FrameShow" action="Start"/>
 	</AnimationDefinition>
 
@@ -172,6 +176,10 @@
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
 			<KeyFrame position="0.0" sourceProperty="Alpha" />
 			<KeyFrame position="0.3" value="0.0" progression="quadratic accelerating" />
+		</Affector>
+		<Affector property="Visible" interpolator="bool" applicationMethod="absolute">
+			<KeyFrame position="0.00" sourceProperty="Visible" />
+			<KeyFrame position="0.3" value="false" progression="discrete"/>
 		</Affector>
 		<Subscription event="FrameHide" action="Start" />
 	</AnimationDefinition>

@@ -1,21 +1,23 @@
 local Utils = require "ui.StaticUtils"
 local ParcelView = require "ui.ParcelView"
 
+local parcelWindow = Utils.findWindow("ParcelPanel/ParcelExchange")
+
 local ParcelExchange = {
 	completeListeners = {},
 	cancelListeners = {},
 	master = ParcelView.new(
-		CEGUI.toItemListbox(Utils.findWindow("ParcelExchange/MasterSlots")),
-		Utils.findWindow("ParcelExchange/MasterName"),
-		Utils.findWindow("ParcelExchange/L2RArrow"),
+		CEGUI.toItemListbox(Utils.findWindow("MasterSlots", parcelWindow)),
+		Utils.findWindow("MasterName", parcelWindow),
+		Utils.findWindow("L2RArrow", parcelWindow),
 		0.22),
 	guest = ParcelView.new(
-		CEGUI.toItemListbox(Utils.findWindow("ParcelExchange/GuestSlots")),
-		Utils.findWindow("ParcelExchange/GuestName"),
-		Utils.findWindow("ParcelExchange/R2LArrow"),
+		CEGUI.toItemListbox(Utils.findWindow("GuestSlots", parcelWindow)),
+		Utils.findWindow("GuestName", parcelWindow),
+		Utils.findWindow("R2LArrow", parcelWindow),
 		0.78),
 		
-	FrameWindow = Utils.findWindow("ParcelExchange"),
+	FrameWindow = parcelWindow,
 	_model = nil,
 }
 
@@ -29,13 +31,17 @@ function ParcelExchange:show(model)
 		guest.listbox:getPixelSize().width)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
-	
+
 	self.FrameWindow:setVisible(true)
-	return self.FrameWindow
+	self.FrameWindow:setAlpha(1)
+	Utils.fireEvent("Magnify", self.FrameWindow)
+	return self.FrameWindow:getParent()
 end
 
 function ParcelExchange:close()
-	self.FrameWindow:setVisible(false)
+	Utils.fireEvent("FrameHide", self.FrameWindow)
+	self.master:reset()
+	self.guest:reset()
 end
 
 function ParcelExchange:onItemClick(e)
@@ -61,13 +67,19 @@ end
 
 function ParcelExchange:onComplete(e)
 	for callback,_ in pairs(self.completeListeners) do
-		callback(self._model)
+		callback(self._model, "Complete")
 	end
 end
 
 function ParcelExchange:onTidy(e)
 	self.master:tidyParcel()
 	self.guest:tidyParcel()
+end
+
+function ParcelExchange:onCancel(e)
+	for callback,_ in ipairs(self.cancelListeners) do
+		callback("Cancel")
+	end
 end
 
 function ParcelExchange:_changeListeners(listener, eventType, setting)
@@ -89,31 +101,31 @@ function ParcelExchange:removeListener(listener, eventType)
 end
 
 local function initWidget()
-	local window = Utils.findWindow("ParcelExchange")
-	
-	local bt1 = window:getChild("Tidy")
-	local bt2 = window:getChild("Complete")
-	local btSize = bt1:getPixelSize()
+	local window = parcelWindow
+	local tidyBtn = window:getChild("Tidy")
+	local okBtn = window:getChild("Complete")
+	local btSize = tidyBtn:getPixelSize()
 	local btY = Utils.newUDim(1, -1.5*btSize.height)
-	bt1:setYPosition(btY)
-	bt2:setYPosition(btY)
-	bt1:setXPosition(Utils.newUDim(0.3, -0.5*btSize.width))
-	bt2:setXPosition(Utils.newUDim(0.7, -0.5*btSize.width))
+	tidyBtn:setYPosition(btY)
+	okBtn:setYPosition(btY)
+	tidyBtn:setXPosition(Utils.newUDim(0.3, -0.5*btSize.width))
+	okBtn:setXPosition(Utils.newUDim(0.7, -0.5*btSize.width))
+	
+	local closeBtn = window:getChild("Close")
+	closeBtn:setXPosition(Utils.newUDim(1,-8-closeBtn:getPixelSize().width))
+	closeBtn:setYPosition(Utils.newUDim(0, 8))
+	
 	g_scheduler:runOnMainThread(function()
-			bt1:subscribeEvent("Clicked", 
+			tidyBtn:subscribeEvent("Clicked", 
 				G_CEGUISubscriberSlot.ExchangeTidy)
-			bt2:subscribeEvent("Clicked", 
+			okBtn:subscribeEvent("Clicked", 
 				G_CEGUISubscriberSlot.ExchangeComplete)
+			closeBtn:subscribeEvent("Clicked",
+				G_CEGUISubscriberSlot.ExchangeCancel)
 		end)
-
+	
 	ParcelExchange.master:init("green", -1)
 	ParcelExchange.guest:init("red", 0)	
-	
-	-- exchangeWindow
-	local screenSz = window:getParentPixelSize()
-	local wndSz = window:getPixelSize()
-	window:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
-	window:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
 end
 
 initWidget()
