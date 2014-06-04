@@ -7,11 +7,10 @@ require 'XihadWarrior'				-- init warrior fields
 
 ------------------------------------------------------------------------------
 local Painter = require 'Chessboard.Painter'
+local UIFacade= require 'GUI.UIFacade'
 local GUISystem   = require 'GUI.GUISystem'
 local functional  = require 'std.functional'
 local sCoroutine  = require 'std.sCoroutine'
-local TileInfoView= require 'GUI.TileInfoView'
-local CommandView = require 'GUI.CommandView'
 local TaskScheduler = require 'Scheduler.TaskScheduler'
 local LevelFactory 	= require 'Level.XihadLevelFactory'
 local WarriorFactory= require 'Warrior.WarriorFactory'
@@ -37,19 +36,34 @@ local XihadBattleTeam = require 'GameFlow.XihadBattleTeam'
 -- 	return resume(co, ...)
 -- end
 
+
+------------------------------------------------------------------------------
+-- create g_scheduler
+g_scheduler = TaskScheduler.new()
+g_scene:appendUpdateHandler {
+	onUpdate = functional.bindself(g_scheduler, 'onUpdate')
+}
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+-- init gui module
+g_cursor:setVisible(false)
+local guiSystemController = GUISystem.init()
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
 -- ADD LIGHT
 local sun = g_scene:createObject(c'sun')
 local lightControl = sun:appendComponent(c'Light')
 lightControl:castShadow(false)
 lightControl:setType 'direction'
 sun:concatTranslate(math3d.vector(0, 30, 0))
+------------------------------------------------------------------------------
 
--- create g_scheduler
-g_scheduler = TaskScheduler.new()
-g_scene:appendUpdateHandler {
-	onUpdate = functional.bindself(g_scheduler, 'onUpdate')
-}
 
+------------------------------------------------------------------------------
 -- Load level
 local battle = dofile('Assets/level/level_01.battle')
 local heros  = dofile('User/sav/Save1.hero')
@@ -59,42 +73,17 @@ local teamFactory = {
 }
 local loader = LevelFactory.new(teamFactory, heros)
 g_chessboard = loader:create(battle)
+------------------------------------------------------------------------------
 
--- INPUT
-local ui = {
-	showWarriorInfo = function (self, warrior)
-		print('ui info: ', warrior:getHostObject():getID())
-	end,
-	
-	showTileInfo = function (self, tile)
-		if tile then
-			print(tostring(tile:getLocation()))
-			TileInfoView.show(tile)
-		else
-			TileInfoView.hide()
-		end
-	end,
-	
-	warning = function (self, msg)
-		print(msg)
-	end,
-}
 
+------------------------------------------------------------------------------
+-- init player state machine
+local uiFacade = UIFacade.new()
 local cameraFacade = CameraFacade.new(CameraFactory.createDefault('camera'))
-g_camera = cameraFacade
-
 local painter = Painter.new()
-
 local cmdExecutor = CommandExecutor.new(cameraFacade, ExpCalculator.new())
-
-local stateMachine= PlayerStateMachine.new(ui, cameraFacade, painter, cmdExecutor)
-local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
-g_scene:pushController(controller)
-controller:drop()
-
--- init gui module
-g_cursor:setVisible(false)
-GUISystem.init()
+local stateMachine= PlayerStateMachine.new(uiFacade, cameraFacade, painter, cmdExecutor)
+uiFacade:setCommandReceiver(stateMachine)
 
 -- Auto hide cursor
 stateMachine:setBlockListener({
@@ -103,7 +92,20 @@ stateMachine:setBlockListener({
 			g_GUICursor:setVisible(not blocked)
 		end
 	})
+------------------------------------------------------------------------------
 
+
+------------------------------------------------------------------------------
+--- init controllers
+local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
+g_scene:pushController(controller)
+controller:drop()
+g_scene:pushController(guiSystemController)
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+-- set battle victory condition
 local battleManager = BattleManager.new()
 local heroTeam = XihadBattleTeam.new('Hero', PlayerController.new(stateMachine))
 local enemyTeam= XihadBattleTeam.new('Enemy', AIController.new(cmdExecutor))
@@ -117,18 +119,19 @@ battleManager:addVictoryCondition(
 
 battleManager:addVictoryCondition(
 	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
+------------------------------------------------------------------------------
 
--- Command View
-CommandView.hook(stateMachine)
 
--- Test Parcel
+------------------------------------------------------------------------------
+-- Test script
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('A')
+simulator:selectWarrior('B')
 -- -- simulator:selectTile(aTile)
-simulator:selectTileAt(3, 6)
-simulator:selectCommand('技能', 'Fire')
-simulator:selectTileAt(3, 7)
+simulator:selectTileAt(7, 2)
+simulator:selectCommand('交换')
+-- simulator:selectCommand('技能', 'Fire')
+-- simulator:selectTileAt(3, 7)
 -- -- simulator:selectTile(aTile)
 -- -- simulator:selectCommand('道具', '长矛')
 -- -- simulator:selectCommand('道具', '长矛')
@@ -137,4 +140,6 @@ simulator:selectTileAt(3, 7)
 -- simulator:selectTileAt(8, 2)
 -- simulator:selectCommand('待机')
 
-g_world:setTimeScale(3)
+-- g_world:setTimeScale(3)
+
+g_camera = cameraFacade

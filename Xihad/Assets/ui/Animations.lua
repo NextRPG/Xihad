@@ -8,7 +8,7 @@ local animations = 	{
 						TextFadeIn = { "AttackDamageLabel"},
 						
 						FrameShow = { "MapTileInfo" },
-						FrameHide = { "MapTileInfo" },
+						FrameHide = { "MapTileInfo", "ParcelPanel/ParcelExchange" },
 						
 						MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 						MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
@@ -18,8 +18,10 @@ local animations = 	{
 						MapEffectDownToThree = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 						MapEffectToZero = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 						
-						L2RArrowAnim = { "ParcelExchange/L2RArrow" },
-						R2LArrowAnim = { "ParcelExchange/R2LArrow" },
+						L2RArrowAnim = { "ParcelPanel/ParcelExchange/L2RArrow" },
+						R2LArrowAnim = { "ParcelPanel/ParcelExchange/R2LArrow" },
+						
+						Magnify = { "ParcelPanel/ParcelExchange" },
 					}
 
 for animName, targetList in pairs(animations) do

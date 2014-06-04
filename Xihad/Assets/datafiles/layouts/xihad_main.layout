@@ -39,103 +39,104 @@
 		<Property name="Text" value="确定"/>
 		<Property name="Size" value="{{0, 100}, {0, 30}}" />
 	</Window> -->
-		
-	<Window name="ParcelExchange" type="Xihad/Image">
-		<Property name="Visible" value="false" />
-		<Property name="Size" value="{{0, 380}, {0, 270}}" />
-		<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />
-		<Property name="FrameRT" value="XihadUI/Parcel/frameRT" />
-		<Property name="FrameLB" value="XihadUI/Parcel/frameLB" />
-		<Property name="FrameRB" value="XihadUI/Parcel/frameRB" />
-		<Property name="FrameL" value="XihadUI/Parcel/frameL" />
-		<Property name="FrameR" value="XihadUI/Parcel/frameR" />
-		<Property name="FrameT" value="XihadUI/Parcel/frameT" />
-		<Property name="FrameB" value="XihadUI/Parcel/frameB" />
-		<Property name="FrameM" value="XihadUI/Parcel/frameM" />
-		<Property name="TextMargin" value="14"/>
-		<Property name="Text" value="物品交换"/>
-		<Property name="VertTextFormat" value="TopAligned"/>
-		<Property name="Image" value="XihadUI/Parcel/back_image"/>
-		<Property name="VertImageFormat" value="BottomAligned"/>
-		<Property name="HorzImageFormat" value="LeftAligned"/>
-		<Window name="L2RArrow" type="Xihad/Image">
+	<Window name="ParcelPanel" type="DefaultWindow">
+		<Property name="Size" value="{{0, 420}, {0, 300}}" />
+		<Window name="ParcelExchange" type="Xihad/Image">
+			<Property name="Size" value="{{0, 0}, {0, 0}}" />
+			<Property name="FrameLT" value="XihadUI/Parcel/frameLT" />
+			<Property name="FrameRT" value="XihadUI/Parcel/frameRT" />
+			<Property name="FrameLB" value="XihadUI/Parcel/frameLB" />
+			<Property name="FrameRB" value="XihadUI/Parcel/frameRB" />
+			<Property name="FrameL" value="XihadUI/Parcel/frameL" />
+			<Property name="FrameR" value="XihadUI/Parcel/frameR" />
+			<Property name="FrameT" value="XihadUI/Parcel/frameT" />
+			<Property name="FrameB" value="XihadUI/Parcel/frameB" />
+			<Property name="FrameM" value="XihadUI/Parcel/frameM" />
+			<Property name="TextMargin" value="14"/>
+			<Property name="Text" value="物品交换"/>
+			<Property name="VertTextFormat" value="TopAligned"/>
+			<Property name="Image" value="XihadUI/Parcel/back_image"/>
+			<Property name="VertImageFormat" value="BottomAligned"/>
 			<Property name="HorzImageFormat" value="LeftAligned"/>
-			<Property name="Size" value="{{0, 48}, {0, 22}}" />
-		</Window>
-		<Window name="R2LArrow" type="Xihad/Image">
-			<Property name="HorzImageFormat" value="RightAligned"/>
-			<Property name="Size" value="{{0, 48}, {0, 22}}" />
-		</Window>
-		<Window name="MasterName" type="Xihad/Image" >
-			<Property name="Position" value="{{0, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
-			<Property name="VertTextFormat" value="BottomAligned"/>
-			<Property name="EnableTextColor" value="FFFFFFFF"/>
-		</Window>
-		<Window name="GuestName" type="Xihad/Image" >
-			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
-			<Property name="VertTextFormat" value="BottomAligned"/>
-			<Property name="EnableTextColor" value="FFFFFFFF"/>
-		</Window>
-		<Window name="MasterSlots" type="Xihad/ItemListbox">
-			<Window name="1" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ffca3a3a" />
+			<Window name="L2RArrow" type="Xihad/Image">
+				<Property name="HorzImageFormat" value="LeftAligned"/>
+				<Property name="Size" value="{{0, 48}, {0, 22}}" />
 			</Window>
-			<Window name="2" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ffca3a3a" />
+			<Window name="R2LArrow" type="Xihad/Image">
+				<Property name="HorzImageFormat" value="RightAligned"/>
+				<Property name="Size" value="{{0, 48}, {0, 22}}" />
 			</Window>
-			<Window name="3" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ffca3a3a" />
+			<Window name="MasterName" type="Xihad/Image" >
+				<Property name="Position" value="{{0, 0}, {0, 0}}" />
+				<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
+				<Property name="VertTextFormat" value="BottomAligned"/>
+				<Property name="EnableTextColor" value="FFFFFFFF"/>
 			</Window>
-			<Window name="4" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ffca3a3a" />
+			<Window name="GuestName" type="Xihad/Image" >
+				<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
+				<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
+				<Property name="VertTextFormat" value="BottomAligned"/>
+				<Property name="EnableTextColor" value="FFFFFFFF"/>
 			</Window>
-			<Window name="5" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ffca3a3a" />
+			<Window name="MasterSlots" type="Xihad/ItemListbox">
+				<Window name="1" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ffca3a3a" />
+				</Window>
+				<Window name="2" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ffca3a3a" />
+				</Window>
+				<Window name="3" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ffca3a3a" />
+				</Window>
+				<Window name="4" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ffca3a3a" />
+				</Window>
+				<Window name="5" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ffca3a3a" />
+				</Window>
 			</Window>
-		</Window>
-		<Window name="GuestSlots" type="Xihad/ItemListbox">
-			<Window name="1" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ff417b20" />
+			<Window name="GuestSlots" type="Xihad/ItemListbox">
+				<Window name="1" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ff417b20" />
+				</Window>
+				<Window name="2" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ff417b20" />
+				</Window>
+				<Window name="3" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ff417b20" />
+				</Window>
+				<Window name="4" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ff417b20" />
+				</Window>
+				<Window name="5" type="Xihad/MenuItem">
+					<Property name="IgnoreOwnerList" value="true" />
+					<Property name="SelectedTextColour" value="ff417b20" />
+				</Window>
 			</Window>
-			<Window name="2" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ff417b20" />
+			<Window name="Close" type="Xihad/ImageButton" >
+				<Property name="Size" value="{{0, 23}, {0, 23}}" />
+				<Property name="NormalImage" value="XihadUI/Parcel/close_normal" />
+				<Property name="HoverImage" value="XihadUI/Parcel/close_hover" />
+				<Property name="PushedImage" value="XihadUI/Parcel/close_push" />
+				<Property name="DisabledImage" value="XihadUI/Parcel/close_normal" />
 			</Window>
-			<Window name="3" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ff417b20" />
+			<Window name="Tidy" type="Xihad/Button">
+				<Property name="Size" value="{{0, 100}, {0, 30}}" />
+				<Property name="Text" value="整理" />
 			</Window>
-			<Window name="4" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ff417b20" />
+			<Window name="Complete" type="Xihad/Button">
+				<Property name="Size" value="{{0, 100}, {0, 30}}" />
+				<Property name="Text" value="完成" />
 			</Window>
-			<Window name="5" type="Xihad/MenuItem">
-				<Property name="IgnoreOwnerList" value="true" />
-				<Property name="SelectedTextColour" value="ff417b20" />
-			</Window>
-		</Window>
-		<Window name="Close" type="Xihad/ImageButton" >
-			<Property name="Size" value="{{0, 23}, {0, 23}}" />
-			<Property name="NormalImage" value="XihadUI/Parcel/close_normal" />
-			<Property name="HoverImage" value="XihadUI/Parcel/close_hover" />
-			<Property name="PushedImage" value="XihadUI/Parcel/close_push" />
-			<Property name="DisabledImage" value="XihadUI/Parcel/close_normal" />
-		</Window>
-		<Window name="Tidy" type="Xihad/Button">
-			<Property name="Size" value="{{0, 100}, {0, 30}}" />
-			<Property name="Text" value="整理" />
-		</Window>
-		<Window name="Complete" type="Xihad/Button">
-			<Property name="Size" value="{{0, 100}, {0, 30}}" />
-			<Property name="Text" value="完成" />
 		</Window>
 	</Window>
  
@@ -157,5 +158,11 @@
 			<Property name="Size" value="{{0, 26}, {0, 17}}" />
 		</Window>
 	</Window>
+	<Window name="Two" type="Xihad/Image">
+		<Property name="Position" value="{{0, -100}, {0, -100}}" />     
+		<Property name="Size" value="{{0,100},{0,100}}" />
+		<Property name="Text" value="" />            
+	</Window>
+	
 </Window>
 </GUILayout>

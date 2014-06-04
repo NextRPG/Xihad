@@ -11,7 +11,6 @@ g_scene:appendUpdateHandler {
 	onUpdate = functional.bindself(g_scheduler, 'onUpdate')
 }
 
-
 g_scene:requireSystem(c'Render')
 g_cursor:setVisible(false)
 local guiUpdater = createCEGUIUpdateHandler(g_engine:getWindow())
@@ -53,9 +52,10 @@ require "ui.Animations"
 local BaseItem = require "Item.BaseItem"
 local BaseParcel = require "BaseParcel"
 local EquipmentItem = require "Item.EquipmentItem"
-
-local GUIController = require("assets.ui.GUIController")
+local Utils = require "ui.StaticUtils"
+local GUIController = require("ui.GUIController")
 GUIController:init()
+
 local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
@@ -90,6 +90,7 @@ local controller = g_scene:pushController({
 		elseif e.key == "Q" then
 			GUIController:hideWindow("Command")
 			GUIController:hideWindow("MapTileInfo")
+			GUIController:hideWindow("ParcelExchange")
 		elseif e.key == "I" then
 			local aItem = BaseItem.new("伤药", "RedNumber/-", nil, 5)
 			local bItem = BaseItem.new("解毒药", "RedNumber/1", nil, 3)
@@ -115,31 +116,17 @@ local controller = g_scene:pushController({
 				return string.format('%2d', self:getCountAt(index))
 			end
 
-			local model = {}
-			function model:getMaster() 
-				local warrior = {}
-				function warrior:getName()
-					return "路飞"
-				end
-				function warrior:getParcel()
-					return pL
-				end
-				return warrior
-			end
-			
-			function model:getGuest()
-				local warrior = {}
-				function warrior:getName()
-					return "索隆"
-				end
-				function warrior:getParcel()
-					return pR
-				end
-				return warrior
-			end
-			
-			
-			GUIController:showWindow("ParcelExchange", model)
+			local model = {
+				masterName = '110',
+				masterParcel = pL,
+				guestName = '112',
+				guestParcel = pR,
+			}
+			local wnd = GUIController:showWindow("ParcelExchange", model)
+			local screenSz = wnd:getParentPixelSize()
+			local wndSz = wnd:getPixelSize()
+			wnd:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
+			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
 			-- damageNumber = damageNumber or 0
 			-- GUIController:showWindow("AttackDamage", { damage = damageNumber})
 			-- damageNumber = (damageNumber + 5)%1000	
@@ -171,4 +158,3 @@ end
 
 GUIController:subscribeEvent("Command.Select", selectListener)
 GUIController:subscribeEvent("Command.Hover", hoverListener)
-

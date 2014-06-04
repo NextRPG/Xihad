@@ -25,12 +25,16 @@ function ParcelView:_setItemEntryProperty(itemView, name, value, icon)
 end
 
 function ParcelView:_notifyDataChange()
-	local freeSlot = self.parcel:getFreeSlotCount()
+	local freeSlot = self.parcel and self.parcel:getFreeSlotCount() or 5
 	assert(freeSlot <= 5)
 	while freeSlot > 0 do
 		local itemView = self.listbox:getItemFromIndex(5-freeSlot)
 		self:_setItemEntryProperty(itemView)
 		freeSlot = freeSlot - 1
+	end
+	
+	if not self.parcel then 
+		return
 	end
 	
 	for index, item, count in self.parcel:allSlots() do
@@ -101,11 +105,18 @@ function ParcelView:tidyParcel()
 	self:_notifyDataChange()
 end
 
-function ParcelView:setModel(warrior)
-	self.label:setText(string.format("<%s>", warrior:getName()))
-	self.parcel = warrior:getParcel()
+function ParcelView:setModel(warriorName, parcel)
+	self.label:setText(string.format("<%s>", warriorName))
+	self.parcel = parcel
 	self:_notifyDataChange()
 	self.listbox:sizeToContent()
+end
+
+function ParcelView:reset()
+	self.listbox:clearAllSelections()
+	self:_stopArrowAnim()
+	self.parcel = nil
+	self:_notifyDataChange()
 end
 
 function ParcelView:relayout(adjustedWidth)

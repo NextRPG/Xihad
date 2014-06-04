@@ -113,9 +113,9 @@ function ChooseTileState:onTileSelected(tile, times)
 	
 	
 	if not tile:canStay(self:_getSource()) then
-		self.ui:warning('not stayable')
+		self.ui:showWarning('not stayable')
 	elseif not self:_canReachTile(tile) then
-		self.ui:warning('can not reach')
+		self.ui:showWarning('can not reach')
 	elseif self.selectedTile ~= tile and times == 1 then
 		self:_selectTile(tile)
 	else

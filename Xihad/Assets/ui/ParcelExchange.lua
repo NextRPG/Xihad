@@ -1,40 +1,47 @@
 local Utils = require "ui.StaticUtils"
 local ParcelView = require "ui.ParcelView"
 
+local parcelWindow = Utils.findWindow("ParcelPanel/ParcelExchange")
+
 local ParcelExchange = {
 	completeListeners = {},
 	cancelListeners = {},
 	master = ParcelView.new(
-		CEGUI.toItemListbox(Utils.findWindow("ParcelExchange/MasterSlots")),
-		Utils.findWindow("ParcelExchange/MasterName"),
-		Utils.findWindow("ParcelExchange/L2RArrow"),
+		CEGUI.toItemListbox(Utils.findWindow("MasterSlots", parcelWindow)),
+		Utils.findWindow("MasterName", parcelWindow),
+		Utils.findWindow("L2RArrow", parcelWindow),
 		0.22),
 	guest = ParcelView.new(
-		CEGUI.toItemListbox(Utils.findWindow("ParcelExchange/GuestSlots")),
-		Utils.findWindow("ParcelExchange/GuestName"),
-		Utils.findWindow("ParcelExchange/R2LArrow"),
+		CEGUI.toItemListbox(Utils.findWindow("GuestSlots", parcelWindow)),
+		Utils.findWindow("GuestName", parcelWindow),
+		Utils.findWindow("R2LArrow", parcelWindow),
 		0.78),
 		
-	FrameWindow = Utils.findWindow("ParcelExchange"),
+	FrameWindow = parcelWindow,
 	_model = nil,
 }
 
 function ParcelExchange:show(model)
 	self._model = model
 	local master, guest = self.master, self.guest
-	master:setModel(model:getMaster())
-	guest:setModel(model:getGuest())
+	master:setModel(model.masterName, model.masterParcel)
+	guest:setModel(model.guestName, model.guestParcel)
 	
 	local adjustedWidth = math.max(master.listbox:getPixelSize().width,
 		guest.listbox:getPixelSize().width)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
-	
-	return self.FrameWindow
+
+	self.FrameWindow:setVisible(true)
+	self.FrameWindow:setAlpha(1)
+	Utils.fireEvent("Magnify", self.FrameWindow)
+	return self.FrameWindow:getParent()
 end
 
 function ParcelExchange:close()
-	
+	Utils.fireEvent("FrameHide", self.FrameWindow)
+	self.master:reset()
+	self.guest:reset()
 end
 
 function ParcelExchange:onItemClick(e)
@@ -60,13 +67,19 @@ end
 
 function ParcelExchange:onComplete(e)
 	for callback,_ in pairs(self.completeListeners) do
-		callback(self._model)
+		callback(self._model, "Complete")
 	end
 end
 
 function ParcelExchange:onTidy(e)
 	self.master:tidyParcel()
 	self.guest:tidyParcel()
+end
+
+function ParcelExchange:onCancel(e)
+	for callback,_ in ipairs(self.cancelListeners) do
+		callback("Cancel")
+	end
 end
 
 function ParcelExchange:_changeListeners(listener, eventType, setting)
@@ -88,12 +101,7 @@ function ParcelExchange:removeListener(listener, eventType)
 end
 
 local function initWidget()
-	local window = Utils.findWindow("ParcelExchange")
-	local screenSz = window:getParentPixelSize()
-	local wndSz = window:getPixelSize()
-	window:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
-	window:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
-	
+	local window = parcelWindow
 	local tidyBtn = window:getChild("Tidy")
 	local okBtn = window:getChild("Complete")
 	local btSize = tidyBtn:getPixelSize()
@@ -112,6 +120,8 @@ local function initWidget()
 				G_CEGUISubscriberSlot.ExchangeTidy)
 			okBtn:subscribeEvent("Clicked", 
 				G_CEGUISubscriberSlot.ExchangeComplete)
+			closeBtn:subscribeEvent("Clicked",
+				G_CEGUISubscriberSlot.ExchangeCancel)
 		end)
 	
 	ParcelExchange.master:init("green", -1)

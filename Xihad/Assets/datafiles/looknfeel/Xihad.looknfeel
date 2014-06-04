@@ -571,6 +571,7 @@
 		<PropertyDefinition redrawOnWrite="true" initialValue="Stretched" type="VerticalFormatting" name="VertImageFormatting"/>
 		<PropertyDefinition redrawOnWrite="true" initialValue="Stretched" type="HorizontalFormatting" name="HorzImageFormatting"/>
 		<Property name="Size" value="{{0, 96}, {0, 32}}" />
+		<Property name="AlwaysOnTop" value="true" />
 		<ImagerySection name="normal">
 			<ImageryComponent>
 				<ImageProperty name="NormalImage"/>

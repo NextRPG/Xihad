@@ -6,8 +6,9 @@ local StateMachine = require 'std.StateMachine'
 local CursorFastener  = require 'Controller.CursorFastener'
 local ChooseHeroState = require 'Controller.ChooseHeroState'
 local ChooseTileState = require 'Controller.ChooseTileState'
+local TransactionState= require 'Controller.TransactionState'
 local ChooseTargetState = require 'Controller.ChooseTargetState'
-local ChooseCommandState = require 'Controller.ChooseCommandState'
+local ChooseCommandState= require 'Controller.ChooseCommandState'
 local CursorEventDispatcher = require 'Controller.CursorEventDispatcher'
 local FinishState = require 'Controller.FinishState'
 
@@ -42,6 +43,7 @@ function PlayStateMachine.new(...)
 	obj.stateControllers['ChooseTile'] 	 = ChooseTileState.new(commandList, cursorFastener, ...)
 	obj.stateControllers['ChooseCommand']= ChooseCommandState.new(commandList, cursorFastener, ...)
 	obj.stateControllers['ChooseTarget'] = ChooseTargetState.new(commandList, cursorFastener, ...)
+	obj.stateControllers['Transaction']  = TransactionState.new(commandList, cursorFastener, ...)
 	obj.stateControllers['Finish']  = FinishState.new(commandList, cursorFastener, ...)
 	
 	for stateName, state in pairs(obj.stateControllers) do
@@ -74,9 +76,12 @@ function PlayStateMachine:_initTransitions()
 	sm:setTransition('ChooseCommand', 'next', 'ChooseTarget')
 	sm:setTransition('ChooseCommand', 'done', 'Finish')
 	sm:setTransition('ChooseCommand', 'back', 'ChooseTile')
+	sm:setTransition('ChooseCommand', 'trade', 'Transaction')
 	
 	sm:setTransition('ChooseTarget', 'next', 'Finish')
 	sm:setTransition('ChooseTarget', 'back', 'ChooseCommand')
+	
+	sm:setTransition('Transaction', 'done', 'Finish')
 	
 	---
 	-- @see waitNextHero()
