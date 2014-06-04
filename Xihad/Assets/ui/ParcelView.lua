@@ -121,10 +121,11 @@ end
 
 function ParcelView:relayout(adjustedWidth)
 	local size = self.listbox:getPixelSize()
+	local wndSz = self.listbox:getParent():getParentPixelSize()
 	
 	self.listbox:setWidth(Utils.newUDim(0, adjustedWidth))
 	self.listbox:setXPosition(Utils.newUDim(self.scaleX, -0.5*adjustedWidth))
-	self.listbox:setYPosition(Utils.newUDim(0.5, -0.5*size.height))
+	self.listbox:setYPosition(Utils.newUDim(0, 0.52*0.9*wndSz.height-0.5*size.height))
 end
 
 function ParcelView:onItemHover(e)

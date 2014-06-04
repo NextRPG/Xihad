@@ -32,15 +32,13 @@ function ParcelExchange:show(model)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
 
-	self.FrameWindow:setProperty("Size", "{{0, 0}, {0, 0}}")
-	self.FrameWindow:setAlpha(1)
-	self.FrameWindow:setVisible(true)
+	-- self.FrameWindow:setProperty("Size", "{{1, 0}, {0, 0}}")
 	Utils.fireEvent("PullDown", self.FrameWindow)
 	return self.FrameWindow:getParent()
 end
 
 function ParcelExchange:close()
-	Utils.fireEvent("FrameHide", self.FrameWindow)
+	Utils.fireEvent("PullUp", self.FrameWindow)
 	self.master:reset()
 	self.guest:reset()
 end
@@ -103,10 +101,11 @@ end
 
 local function initWidget()
 	local window = parcelWindow
+	local wndSz = window:getParentPixelSize()
 	local tidyBtn = window:getChild("Tidy")
 	local okBtn = window:getChild("Complete")
 	local btSize = tidyBtn:getPixelSize()
-	local btY = Utils.newUDim(1, -1.5*btSize.height)
+	local btY = Utils.newUDim(0, 0.9*wndSz.height-1.5*btSize.height)
 	tidyBtn:setYPosition(btY)
 	okBtn:setYPosition(btY)
 	tidyBtn:setXPosition(Utils.newUDim(0.3, -0.5*btSize.width))
@@ -122,7 +121,7 @@ local function initWidget()
 			okBtn:subscribeEvent("Clicked", 
 				G_CEGUISubscriberSlot.ExchangeComplete)
 			closeBtn:subscribeEvent("Clicked",
-				G_CEGUISubscriberSlot.ExchangeCancel)
+				G_CEGUISubscriberSlot.ExchangeCancel)	
 		end)
 	
 	ParcelExchange.master:init("green", -1)

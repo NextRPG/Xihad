@@ -243,13 +243,20 @@
 		<Subscription event="DialogueOpen" action="Start" />
 	</AnimationDefinition>
 	
-	<AnimationDefinition name="PullDown" duration="0.2" replayMode="once">
+	<AnimationDefinition name="PullDown" duration="0.3" replayMode="once">
 		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
-			<KeyFrame position="0.0" value="{{0.9, 0}, {0, 0}}" />
-			<!-- <KeyFrame position="0.3" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/> -->
-			<KeyFrame position="0.2" value="{{0.9, 0}, {0.9, 0}}" progression="quadratic decelerating"/>
+			<KeyFrame position="0.0" sourceProperty="Size" />
+			<KeyFrame position="0.25" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.3" value="{{1, 0}, {0.9, 0}}" progression="quadratic decelerating"/>
 		</Affector>
 		<Subscription event="PullDown" action="Start" />
+	</AnimationDefinition>
+	<AnimationDefinition name="PullUp" duration="0.25" replayMode="once">
+		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+			<KeyFrame position="0.0" sourceProperty="Size" />
+			<KeyFrame position="0.25" value="{{1, 0}, {0, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Subscription event="PullUp" action="Start" />
 	</AnimationDefinition>
 </Animations>
 
