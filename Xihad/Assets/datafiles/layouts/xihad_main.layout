@@ -55,10 +55,14 @@
 			<Property name="FrameM" value="XihadUI/Parcel/frameM" />
 			<Property name="TextMargin" value="14"/>
 			<Property name="Text" value="物品交换"/>
-			<Property name="Image" value="XihadUI/Parcel/back_image"/>
-			<Property name="VertImageFormat" value="TopAligned"/>
-			<Property name="HorzImageFormat" value="LeftAligned"/>
 			<Property name="VertTextFormat" value="TopAligned"/>
+			<Window name="BackImage" type="Xihad/Image">
+				<Property name="Position" value="{{0.00001, 0}, {0, 0}}" />
+				<Property name="Size" value="{{0, 380}, {0, 270}}" />
+				<Property name="Image" value="XihadUI/Parcel/back_image"/>
+				<Property name="VertImageFormat" value="BottomAligned"/>
+				<Property name="HorzImageFormat" value="LeftAligned"/>
+			</Window>
 			<Window name="L2RArrow" type="Xihad/Image">
 				<Property name="HorzImageFormat" value="LeftAligned"/>
 				<Property name="Size" value="{{0, 48}, {0, 22}}" />
@@ -68,7 +72,7 @@
 				<Property name="Size" value="{{0, 48}, {0, 22}}" />
 			</Window>
 			<Window name="MasterName" type="Xihad/Image" >
-				<Property name="Position" value="{{0, 0}, {0, 0}}" />
+				<Property name="Position" value="{{0.00001, 0}, {0, 0}}" />
 				<Property name="Size" value="{{0.5, 0}, {0, 60}}" />
 				<Property name="VertTextFormat" value="BottomAligned"/>
 				<Property name="EnableTextColor" value="FFFFFFFF"/>
