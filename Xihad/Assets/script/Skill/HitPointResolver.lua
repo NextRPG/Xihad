@@ -1,4 +1,4 @@
-local base = require 'Skill.ToWarriorResolver'
+local base = require 'Skill.ToComponentResolver'
 local Location  = require 'route.Location'
 local Algorithm = require 'std.Algorithm'
 local HitPointResolver = {
@@ -12,7 +12,7 @@ HitPointResolver.__index = HitPointResolver
 setmetatable(HitPointResolver, base)
 
 function HitPointResolver.new(nature, hitPointIncr, attenuation)
-	local obj = setmetatable(base.new(), HitPointResolver)
+	local obj = setmetatable(base.new('Warrior'), HitPointResolver)
 	obj.nature = nature
 	obj.hitPointIncr = hitPointIncr
 	obj.attenuation  = attenuation	

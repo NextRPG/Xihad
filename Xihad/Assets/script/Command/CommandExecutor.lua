@@ -148,8 +148,8 @@ function CommandExecutor:useItem(warrior, itemName)
 	-- TODO
 	print(usage)
 	
-	AsConditionFactory.waitTimer(0.5)
 	if item:occupyRound() then
+		AsConditionFactory.waitTimer(0.5)
 		warrior:deactivate()
 	end
 end

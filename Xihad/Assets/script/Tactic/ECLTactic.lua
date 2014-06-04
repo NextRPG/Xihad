@@ -68,7 +68,7 @@ function ECLTactic:_get_enemy(tile, warrior)
 end
 
 function ECLTactic:_cast_on_tile(warrior, launcherLoc, skill, centerLoc, map)
-	local tiles = skill:getImpactTiles(g_chessboard, centerLoc)
+	local tiles = skill:getImpactTiles(g_chessboard, launcherLoc, centerLoc)
 	for _, impactTile in ipairs(tiles) do
 		local affectWarrior = self:_get_enemy(impactTile, warrior)
 		if affectWarrior then

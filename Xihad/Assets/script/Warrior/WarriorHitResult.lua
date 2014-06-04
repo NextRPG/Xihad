@@ -1,4 +1,5 @@
 local Class= require 'std.Class'
+local Coordinate = require 'route.Coordinate'
 local ProbabilityValue = require 'Warrior.ProbabilityValue'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 local WarriorHitResult = {
@@ -155,19 +156,10 @@ function WarriorHitResult:onHitBegin(sourceWarrior, targetBarrier)
 	end
 	
 	if self:canRepel() then
-		local Algorithm = require 'std.Algorithm'
 		local targetWarrior = self:_checkWarrior(targetBarrier)
 		local currentLoc = targetWarrior:getLocation()
-		local dir = currentLoc - sourceWarrior:getLocation()
-		local x, y = dir:xy()
-		local nx, ny = Algorithm.sign(x), Algorithm.sign(y)
-		if math.abs(x) > math.abs(y) then
-			dir:set(nx, 0)
-		elseif math.abs(x) < math.abs(y) then
-			dir:set(0, ny)
-		else
-			dir:set(nx, ny)	
-		end
+		local dir = Coordinate.build8Directions_YAxis(
+						currentLoc - sourceWarrior:getLocation())
 		
 		local stopLoc, stopDst = currentLoc:copy(), 0
 		repeat

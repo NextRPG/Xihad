@@ -1,4 +1,4 @@
-local base = require 'Skill.ToWarriorResolver'
+local base = require 'Skill.ToComponentResolver'
 local Location = require 'route.Location'
 local RepelResolver = {
 	centerOnly = true,
@@ -8,7 +8,7 @@ RepelResolver.__index = RepelResolver
 setmetatable(RepelResolver, base)
 
 function RepelResolver.new(centerOnly, distance)
-	local obj = setmetatable(base.new(), RepelResolver)
+	local obj = setmetatable(base.new('Warrior'), RepelResolver)
 	obj.centerOnly = centerOnly
 	obj.repelDistance = math.floor(distance)
 	return obj

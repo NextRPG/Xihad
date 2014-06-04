@@ -40,36 +40,38 @@ end
 function Skill:resolve(sourceWarrior, impactLocation, chessboard)
 	local results = {}
 	
-	self.range:traverseImpactLocations(impactLocation, function(loc)
-		local tile = chessboard:getTile(loc)
-		
-		if not tile then 
-			return 
-		end
-		
-		local relativeLoc = loc - impactLocation
-		for barrier, _ in pairs(tile.barriers) do
-		repeat
-			if not barrier.newHitResult then
-				break	-- continue
+	self.range:traverseImpactLocations(
+		sourceWarrior:getLocation(), impactLocation, 
+		function(loc)	-- resolve location
+			local tile = chessboard:getTile(loc)
+			
+			if not tile then 
+				return 
 			end
 			
-			if not barrier:permitCasting(sourceWarrior, self) then
-				break	-- continue
+			local relativeLoc = loc - impactLocation
+			for barrier, _ in pairs(tile.barriers) do
+			repeat
+				if not barrier.newHitResult then
+					break	-- continue
+				end
+				
+				if not barrier:permitCasting(sourceWarrior, self) then
+					break	-- continue
+				end
+				
+				local result = barrier:newHitResult(sourceWarrior)
+				for _, resolver in ipairs(self.resolvers) do
+					resolver:resolve(sourceWarrior, barrier, relativeLoc, result)
+				end
+				
+				if result:isValid() then
+					assert(results[barrier] == nil)
+					results[barrier] = result
+				end
+			until true
 			end
-			
-			local result = barrier:newHitResult(sourceWarrior)
-			for _, resolver in ipairs(self.resolvers) do
-				resolver:resolve(sourceWarrior, barrier, relativeLoc, result)
-			end
-			
-			if result:isValid() then
-				assert(results[barrier] == nil)
-				results[barrier] = result
-			end
-		until true
-		end
-	end)
+		end)
 	
 	return results
 end
@@ -86,14 +88,15 @@ function Skill:getName()
 	return self.name
 end
 
-function Skill:getImpactTiles(chessboard, impactCenter)
+function Skill:getImpactTiles(chessboard, launcherLocation, impactCenter)
 	local array = {}
-	self.range:traverseImpactLocations(impactCenter, function (loc)
-		local tile = chessboard:getTile(loc)
-		if tile then
-			table.insert(array, tile)
-		end
-	end)
+	self.range:traverseImpactLocations(launcherLocation, impactCenter, 
+		function (loc)
+			local tile = chessboard:getTile(loc)
+			if tile then
+				table.insert(array, tile)
+			end
+		end)
 	
 	return array
 end
@@ -108,8 +111,7 @@ function Skill:getAllImpactTiles(chessboard, launcherLocation, set)
 			if tile then
 				set[tile] = true
 			end
-		end
-	)
+		end)
 	
 	return set
 end
@@ -126,8 +128,7 @@ function Skill:getLaunchableTiles(chessboard, sourceWarrior, launcherLocation, s
 			if tile:permitCasting(sourceWarrior, self) then
 				set[tile] = true
 			end
-		end
-	)
+		end)
 	
 	return set
 end

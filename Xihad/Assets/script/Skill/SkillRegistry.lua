@@ -5,13 +5,18 @@ local BuffEffect = require 'Effect.BuffEffect'
 local SleepEffect = require 'Effect.SleepEffect'
 local HitPointEffect= require 'Effect.HitPointEffect'
 local RoundRecycler = require 'Effect.RoundRecycler'
-local CastableRange = require 'route.CastableRange'
 local EffectResolver= require 'Skill.EffectResolver'
 local RepelResolver = require 'Skill.RepelResolver'
 local HitPointResolver = require 'Skill.HitPointResolver'
 local RelativeLocationParser   = require 'Skill.RelativeLocationParser'
 local P2PParticleSkillAnimator = require 'Skill.P2PParticleSkillAnimator'
 local P2TParticleSkillAnimator = require 'Skill.P2TParticleSkillAnimator'
+
+local OrderedSet= require 'std.OrderedSet'
+local CastRange = require 'route.CastRange'
+local ProjectiveImpactRange = require 'route.ProjectiveImpactRange'
+local OrientationImpactRange= require 'route.OrientationImpactRange'
+local SynthesizeRange = require 'route.SynthesizeRange'
 
 local SkillRegistry = {
 	allSkills = {},
@@ -36,13 +41,17 @@ local function addRow(mask, row)
 	return mask..row
 end
 
-local function toRange(minDst, maxDst, mask)
-	local range = CastableRange.new(minDst, maxDst)
-	for x, y in SkillRegistry.parser:parse(mask) do
-		range:addRelativeImpactLocation(Location.new(x, y))
-	end
+local function toRange(minDst, maxDst, mask, ImpactType)
+	local castRange = CastRange.new(minDst, maxDst)
 	
-	return range
+	ImpactType = ImpactType or ProjectiveImpactRange
+	local set = OrderedSet.new()
+	for x, y in SkillRegistry.parser:parse(mask) do
+		set:insert(Location.new(x, y))
+	end
+	local impactRange = ImpactType.new(set)
+	
+	return SynthesizeRange.new(castRange, impactRange)
 end
 
 local function addEffectResolver(skill, effect, probability)
@@ -79,10 +88,14 @@ local function addHitPointResolver(skill, nature, incr)
 end
 
 local mask = nil
-mask = addRow(mask, 'xox')
-mask = addRow(mask, 'o@o')
-mask = addRow(mask, 'xox')
-local range = toRange(1, 1, mask)
+-- mask = addRow(mask, 'xox')
+-- mask = addRow(mask, 'o@o')
+-- mask = addRow(mask, 'xox')
+mask = addRow(mask, 'o')
+mask = addRow(mask, 'o')
+mask = addRow(mask, 'o')
+mask = addRow(mask, '@')
+local range = toRange(1, 1, mask, OrientationImpactRange)
 local enemyOnly = { toEnemy = true, toVacancy = true, }
 local fireSkill = SkillRegistry.newSkill('Fire', range, enemyOnly, 'effect.tornado')
 addHitPointResolver(fireSkill, 'fire', -30)

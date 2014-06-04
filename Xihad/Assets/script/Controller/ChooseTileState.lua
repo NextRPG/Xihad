@@ -45,11 +45,14 @@ function ChooseTileState:onStateEnter(state, prev)
 	self.selectedTile = nil
 end
 
-function ChooseTileState:onStateExit()
+function ChooseTileState:_clear_handle()
 	self:_safeClear('reachableHandle')
 	self:_safeClear('attackableHandle')
 	self:_safeClear('selectedHandle')
-	
+end
+
+function ChooseTileState:onStateExit()
+	self:_clear_handle()
 	self:_showTileInfo(nil)
 end
 
@@ -95,6 +98,7 @@ function ChooseTileState:_confirmTile(tile)
 	-- double click or confirm click
 	self.prevSourceTile = self:_getSourceTile()
 	self.prevRotation = self:_getSourceObject():getRotation()
+	self:_clear_handle()
 	
 	local destHandle = self:_markTile(tile, 'Destination')
 	self:_fastenCursorWhen(function ()

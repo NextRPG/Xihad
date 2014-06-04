@@ -69,7 +69,8 @@ end
 function ChooseTargetState:_showImpactTiles()
 	local skill = self:_getSkill()
 	local center= self.hoveringTile:getLocation()
-	local range = skill:getImpactTiles(g_chessboard, center)
+	local launcherLoc = self:_getSource():getLocation()
+	local range = skill:getImpactTiles(g_chessboard, launcherLoc, center)
 	self:_markRange(range, 'Impact', 'impactHanlde')
 end
 
