@@ -1,12 +1,14 @@
 #pragma once
+#include <boost\scoped_ptr.hpp>
 #include <Engine\dimension2d.h>
 #include <Dialogue\IDialogue.hpp>
-#include <boost\smart_ptr\scoped_ptr.hpp>
+#include <list>
 
 namespace CEGUI
 {
 	class Window;
 	class String;
+	class AnimationInstance;
 }
 
 namespace xihad { namespace dialogue
@@ -14,6 +16,15 @@ namespace xihad { namespace dialogue
 	using CEGUI::String;
 	class SpeakerSupport
 	{
+	public:
+		enum Status 
+		{
+			CLOSE,
+			OPEN,
+			DEACTIVE,
+			ACTIVE,
+		};
+
 	public:
 		SpeakerSupport(CEGUI::Window& wnd, 
 			const CEGUI::String& name, 
@@ -30,7 +41,7 @@ namespace xihad { namespace dialogue
 
 		void setIcon(const String& icon);
 
-		void setIConRelativeX(float xPercent);
+		void setIconRelativeX(float xPercent);
 
 		void setDialoguePosition(float x, float y);
 
@@ -40,12 +51,22 @@ namespace xihad { namespace dialogue
 
 		void setSpeed(float level);
 
+
 		CEGUI::Window* getWindow()
 		{
 			return &baseWnd;
 		}
 
 		void updateSubtitle(float deltaTime);
+
+		Status getStatus() const
+		{
+			return status;
+		}
+
+		bool isTicking() const;
+
+		bool canStop() const;
 
 	public:
 		static const CEGUI::String TEXT_WINDOW_NAME;
@@ -66,18 +87,13 @@ namespace xihad { namespace dialogue
 
 		void initWidget();
 
-	private:
-		enum Status 
-		{
-			CLOSE = 0,
-			OPEN = 1,
-			DEACTIVE = 2,
-			ACTIVE = 3,
-		};
+		void instanceAnimation(const String& anim, CEGUI::Window* target);
 
+	private:
 		CEGUI::Window& baseWnd;
-		Status status;
 		boost::scoped_ptr<IDialogue> dialogue;
+		Status status;
+		std::list<CEGUI::AnimationInstance*> anims;
 
 		ngn::dimension2di padding;
 		int lineSpacing;

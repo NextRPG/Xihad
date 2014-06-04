@@ -111,7 +111,7 @@ namespace xihad { namespace dialogue
 		return true;
 	}
 
-	void SpeakerSupport::setIConRelativeX( float xPercent )
+	void SpeakerSupport::setIconRelativeX( float xPercent )
 	{
 		assert(xPercent >= -1 && xPercent <= 1);
 
@@ -233,9 +233,12 @@ namespace xihad { namespace dialogue
 
 	void SpeakerSupport::updateSubtitle(float deltaTime)
 	{
+		if (!dialogue) 
+			return;
+
 		if (checkActive())
 		{
-			if (dialogue->getVisibility() == dialogue->endVisibility())
+			if (!isTicking())
 				getTextWindow()->getChild(AUTO_NEXT)->setVisible(true);
 			else
 				dialogue->onUpdate(deltaTime);
@@ -251,20 +254,46 @@ namespace xihad { namespace dialogue
 		textWnd->setSize(USize(UDim(0, 0), UDim(0, 0)));
 		textWnd->getChild(AUTO_NEXT)->setVisible(false);
 
-		AnimationManager& animMgr = AnimationManager::getSingleton();
-		animMgr.instantiateAnimation(DIALOGUE_OPEN)->setTargetWindow(&baseWnd);
-		animMgr.instantiateAnimation(DIALOGUE_CLOSE)->setTargetWindow(&baseWnd);
-		
-		animMgr.instantiateAnimation(LIGHTER_ANIM_EVENT)->setTargetWindow(iconWnd);
-		animMgr.instantiateAnimation(DARKER_ANIM_EVENT)->setTargetWindow(iconWnd);
+		instanceAnimation(DIALOGUE_OPEN, &baseWnd);
+		instanceAnimation(DIALOGUE_CLOSE, &baseWnd);
 
-		animMgr.instantiateAnimation(MAGNIFY_ANIM_EVENT)->setTargetWindow(textWnd);
-		animMgr.instantiateAnimation(SHRINK_ANIM_EVENT)->setTargetWindow(textWnd);
+		instanceAnimation(LIGHTER_ANIM_EVENT, iconWnd);
+		instanceAnimation(DARKER_ANIM_EVENT, iconWnd);
+
+		instanceAnimation(MAGNIFY_ANIM_EVENT, textWnd);
+		instanceAnimation(SHRINK_ANIM_EVENT, textWnd);
 	}
 
 	bool SpeakerSupport::checkActive()
 	{
-		return dialogue.get() && status == ACTIVE;
+		return dialogue && status == ACTIVE;
+	}
+
+	bool SpeakerSupport::isTicking() const
+	{
+		if (!dialogue)
+			return false;
+
+		return dialogue->getVisibility() != dialogue->endVisibility();
+	}
+
+	bool SpeakerSupport::canStop() const
+	{
+		for (AnimationInstance* ai : anims)
+		{
+			if (ai->isRunning())
+				return false;
+		}
+
+		return true;
+	}
+
+	void SpeakerSupport::instanceAnimation( const String& anim, CEGUI::Window* target )
+	{
+		AnimationManager& animMgr = AnimationManager::getSingleton();
+		AnimationInstance* animInstance = animMgr.instantiateAnimation(anim);
+		animInstance->setTargetWindow(target);
+		anims.push_back(animInstance);
 	}
 
 }}

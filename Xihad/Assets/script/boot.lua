@@ -29,13 +29,6 @@ local XihadBattleTeam = require 'GameFlow.XihadBattleTeam'
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 
---- Code for debug coroutines
--- local resume = coroutine.resume
--- coroutine.resume = function(co, ...)
--- 	print('resuming from ', coroutine.running(), ' to ', co)
--- 	return resume(co, ...)
--- end
-
 
 ------------------------------------------------------------------------------
 -- create g_scheduler
@@ -121,6 +114,21 @@ battleManager:addVictoryCondition(
 	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
 ------------------------------------------------------------------------------
 
+sCoroutine.start(function()
+		local ConversationDirector = require 'Conversation.ConversationDirector'
+		local director = ConversationDirector.new()
+		local aaa = director:newSpeaker('AAA')
+		local bbb = director:newSpeaker('BBB')
+		director:start()
+		
+		aaa:setIcon('Character/aaaa_happy')
+		bbb:setIcon('Character/bbbb_sad')
+		
+		director:wait(aaa, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		director:wait(bbb, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		
+		director:stop()
+	end)
 
 ------------------------------------------------------------------------------
 -- Test script

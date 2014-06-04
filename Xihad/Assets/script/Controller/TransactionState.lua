@@ -4,11 +4,11 @@ local XihadTileSet = require 'Chessboard.XihadTileSet'
 local ObjectAction = require 'HighAction.ObjectAction'
 local ActionFactory= require 'Action.ActionFactory'
 local ActionAdapter= require 'Action.ActionAdapter'
-local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local TransactionState = setmetatable({
 	tradableHandle = nil,
 	transactingWarrior = nil,
+	sourceOnLeft = false,
 }, base)
 TransactionState.__index = TransactionState
 
@@ -24,9 +24,21 @@ function TransactionState:_getExchanableArray()
 	return Table.extractKeys(self:_getExchanableSet())
 end
 
+local function getScreenXOf(warrior)
+	local worldPos = warrior:getHostObject():getTranslate()
+	return (g_collision:getScreenCoordFromPosition(worldPos))
+end
+
 function TransactionState:_beginTransaction(warrior)
+	local source = self:_getSource()
 	self.transactingWarrior = warrior
-	self.ui:showTransaction(self:_getSource(), warrior)	
+	self.sourceOnLeft = getScreenXOf(source) < getScreenXOf(warrior)
+	
+	local left, right = source, warrior
+	if not self.sourceOnLeft then
+		left, right = right, left
+	end
+	self.ui:showTransaction(left, right)
 end
 
 function TransactionState:_closeTransaction()
@@ -77,18 +89,25 @@ function TransactionState:_apply_transaction(model)
 	local master, guest = self:_getSource(), self.transactingWarrior
 	local masterView, guestView = model.masterParcel, model.guestParcel
 	
+	if not self.sourceOnLeft then
+		masterView, guestView = guestView, masterView
+	end
 	self.executor:transact(master, guest, masterView, guestView)
 end
 
-function TransactionState:onUICommand(model)
-	if not self:isTransacting() then
-		print('No transactingWarrior')
-		return
+function TransactionState:onUICommand(command, model)
+	if command == 'Complete' then
+		if not self:isTransacting() then
+			io.stderr:write('No transactingWarrior')
+			return
+		end
+
+		self:_apply_transaction(model)
+		self:_closeTransaction()
+		return 'done'
+	elseif command == 'Cancel' then
+		return self:onBack()
 	end
-	
-	self:_apply_transaction(model)
-	self:_closeTransaction()
-	return 'done'
 end
 
 function TransactionState:_from_to_rot(from, to)
@@ -100,7 +119,6 @@ function TransactionState:_face_to_face(obj1, obj2)
 	local action2 = self:_from_to_rot(obj2, obj1)
 	local parallel = ActionFactory.parallel{ action1, action2 }
 	ActionAdapter.fit(obj1, parallel)
-	-- AsConditionFactory.waitAction(parallel)
 end
 
 function TransactionState:onTileSelected(tile)

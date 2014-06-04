@@ -27,6 +27,11 @@ namespace xihad { namespace dialogue
 				return endElement == other.endElement && endLetter == other.endLetter;
 			}
 
+			bool operator!=(const SDialogueVisibility& other) const
+			{
+				return !((*this) == other);
+			}
+
 			TextElements::const_iterator endElement;	// after current visible element
 			LetterIter endLetter;						// after current visible letter
 		};

@@ -21,3 +21,22 @@ end
 speaker:speak('fsdgjlaksjglksdjalgdsj')
 speaker:speak('fsdgjlaksjglksdjalgdsj')
 speaker:speak('fsdgjlaksjglksdjalgdsj')
+
+local conv = Dialogue.newConversation()
+local aaa = conversation:newSpeaker('AAA')
+-- 
+
+local bbb = conversation:newSpeaker('BBB')
+-- 
+
+conv:speak(aaa, '')
+conv:speak()
+conv:speak()
+conv:close(aaa)
+conv:execute(function (camera, )
+	
+end)
+
+conv:execute(function ()
+	
+end)

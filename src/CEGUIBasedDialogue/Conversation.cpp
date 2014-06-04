@@ -11,28 +11,26 @@ namespace xihad { namespace dialogue
 {
 	using namespace CEGUI;
 
-	Conversation::Conversation()
+	Conversation::Conversation() : stopPendding(false)
 	{
 
 	}
 
 	Conversation::~Conversation()
 	{
-
 	}
 
 	void Conversation::onDestroy()
 	{
-		std::for_each(speakers.begin(), speakers.end(), 
-		[](SpeakerSupport* p)
+		System& system = System::getSingleton();
+		Window* root = system.getDefaultGUIContext().getRootWindow();
+
+		for (SpeakerSupport* p : speakers)
 		{
 			Window* wnd = p->getWindow();
 			delete p; 
-
-			Window* root = System::getSingleton().
-				getDefaultGUIContext().getRootWindow();
 			root->destroyChild(wnd);
-		});
+		}
 	}
 
 	SpeakerSupport* Conversation::newSpeaker( const String& name, 
@@ -72,16 +70,26 @@ namespace xihad { namespace dialogue
 
 	void Conversation::onUpdate( const ngn::Timeline& tl)
 	{
-		std::for_each(speakers.begin(), speakers.end(), 
-		[&](SpeakerSupport* p)
+		bool verifyStop = true;
+		for (SpeakerSupport* p : speakers)
 		{
 			p->updateSubtitle(tl.getLastTimeChange());
-		});
+			if (!p->canStop())
+				verifyStop = false;
+		}
+
+		if (stopPendding && verifyStop)
+			this->stop();
 	}
 
 	void Conversation::onStop()
 	{
 
+	}
+
+	void Conversation::requestStop()
+	{
+		stopPendding = true;
 	}
 
 }}

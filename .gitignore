@@ -19,6 +19,7 @@
 *sublime*
 
 CEGUIIrrlichtRenderer*.dll
+CEGUIBasedDialogue.dll
 CEGUI.dll
 UnitTest.dll
 math3d.dll
