@@ -69,7 +69,6 @@ function ChooseCommandState:onHoverCommand(command, subcommand)
 end
 
 function ChooseCommandState:onUICommand(command, subcommand, type)
-	print(command, subcommand, type)
 	if type == 'Select' then
 		return self:onSelectCommand(command, subcommand)
 	elseif type == 'Hover' then

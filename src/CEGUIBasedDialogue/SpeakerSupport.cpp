@@ -111,7 +111,7 @@ namespace xihad { namespace dialogue
 		return true;
 	}
 
-	void SpeakerSupport::setIConRelativeX( float xPercent )
+	void SpeakerSupport::setIconRelativeX( float xPercent )
 	{
 		assert(xPercent >= -1 && xPercent <= 1);
 
@@ -233,9 +233,12 @@ namespace xihad { namespace dialogue
 
 	void SpeakerSupport::updateSubtitle(float deltaTime)
 	{
+		if (!dialogue) 
+			return;
+
 		if (checkActive())
 		{
-			if (dialogue->getVisibility() == dialogue->endVisibility())
+			if (!isTicking())
 				getTextWindow()->getChild(AUTO_NEXT)->setVisible(true);
 			else
 				dialogue->onUpdate(deltaTime);
@@ -264,7 +267,15 @@ namespace xihad { namespace dialogue
 
 	bool SpeakerSupport::checkActive()
 	{
-		return dialogue.get() && status == ACTIVE;
+		return dialogue && status == ACTIVE;
+	}
+
+	bool SpeakerSupport::isTicking() const
+	{
+		if (!dialogue)
+			return false;
+
+		return dialogue->getVisibility() != dialogue->endVisibility();
 	}
 
 }}

@@ -66,7 +66,7 @@ end
 
 function ParcelExchange:onComplete(e)
 	for callback,_ in pairs(self.completeListeners) do
-		callback(self._model, "Complete")
+		callback("Complete", self._model)
 	end
 end
 
@@ -76,7 +76,7 @@ function ParcelExchange:onTidy(e)
 end
 
 function ParcelExchange:onCancel(e)
-	for callback,_ in ipairs(self.cancelListeners) do
+	for callback, _ in pairs(self.cancelListeners) do
 		callback("Cancel")
 	end
 end

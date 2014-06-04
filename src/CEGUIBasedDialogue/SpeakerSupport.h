@@ -1,5 +1,5 @@
 #pragma once
-#include <xmemory>
+#include <boost\scoped_ptr.hpp>
 #include <Engine\dimension2d.h>
 #include <Dialogue\IDialogue.hpp>
 
@@ -14,6 +14,15 @@ namespace xihad { namespace dialogue
 	using CEGUI::String;
 	class SpeakerSupport
 	{
+	public:
+		enum Status 
+		{
+			CLOSE,
+			OPEN,
+			DEACTIVE,
+			ACTIVE,
+		};
+
 	public:
 		SpeakerSupport(CEGUI::Window& wnd, 
 			const CEGUI::String& name, 
@@ -30,7 +39,7 @@ namespace xihad { namespace dialogue
 
 		void setIcon(const String& icon);
 
-		void setIConRelativeX(float xPercent);
+		void setIconRelativeX(float xPercent);
 
 		void setDialoguePosition(float x, float y);
 
@@ -40,12 +49,20 @@ namespace xihad { namespace dialogue
 
 		void setSpeed(float level);
 
+
 		CEGUI::Window* getWindow()
 		{
 			return &baseWnd;
 		}
 
 		void updateSubtitle(float deltaTime);
+
+		Status getStatus() const
+		{
+			return status;
+		}
+
+		bool isTicking() const;
 
 	public:
 		static const CEGUI::String TEXT_WINDOW_NAME;
@@ -67,17 +84,9 @@ namespace xihad { namespace dialogue
 		void initWidget();
 
 	private:
-		enum Status 
-		{
-			CLOSE = 0,
-			OPEN = 1,
-			DEACTIVE = 2,
-			ACTIVE = 3,
-		};
-
 		CEGUI::Window& baseWnd;
 		Status status;
-		std::auto_ptr<IDialogue> dialogue;
+		boost::scoped_ptr<IDialogue> dialogue;
 
 		ngn::dimension2di padding;
 		int lineSpacing;

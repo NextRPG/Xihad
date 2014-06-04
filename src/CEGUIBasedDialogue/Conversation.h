@@ -33,9 +33,9 @@ namespace xihad { namespace dialogue
 		virtual void onStop() override;
 
 		virtual void onDestroy() override;
+
 	private:
 		typedef std::list<SpeakerSupport*> Container;
-		 
 		Container speakers;
 	};
 }}

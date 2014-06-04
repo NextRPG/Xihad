@@ -18,21 +18,19 @@ namespace xihad { namespace dialogue
 
 	Conversation::~Conversation()
 	{
-
 	}
 
 	void Conversation::onDestroy()
 	{
-		std::for_each(speakers.begin(), speakers.end(), 
-		[](SpeakerSupport* p)
+		System& system = System::getSingleton();
+		Window* root = system.getDefaultGUIContext().getRootWindow();
+
+		for (SpeakerSupport* p : speakers)
 		{
 			Window* wnd = p->getWindow();
 			delete p; 
-
-			Window* root = System::getSingleton().
-				getDefaultGUIContext().getRootWindow();
 			root->destroyChild(wnd);
-		});
+		}
 	}
 
 	SpeakerSupport* Conversation::newSpeaker( const String& name, 
