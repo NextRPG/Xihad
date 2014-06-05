@@ -2,11 +2,13 @@
 #include <boost\scoped_ptr.hpp>
 #include <Engine\dimension2d.h>
 #include <Dialogue\IDialogue.hpp>
+#include <list>
 
 namespace CEGUI
 {
 	class Window;
 	class String;
+	class AnimationInstance;
 }
 
 namespace xihad { namespace dialogue
@@ -65,6 +67,8 @@ namespace xihad { namespace dialogue
 
 		bool isTicking() const;
 
+		bool canStop() const;
+
 	public:
 		static const CEGUI::String TEXT_WINDOW_NAME;
 		static const CEGUI::String ICON_WINDOW_NAME;
@@ -84,10 +88,13 @@ namespace xihad { namespace dialogue
 
 		void initWidget();
 
+		void instanceAnimation(const String& anim, CEGUI::Window* target);
+
 	private:
 		CEGUI::Window& baseWnd;
-		Status status;
 		boost::scoped_ptr<IDialogue> dialogue;
+		Status status;
+		std::list<CEGUI::AnimationInstance*> anims;
 
 		ngn::dimension2di padding;
 		int lineSpacing;

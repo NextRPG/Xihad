@@ -11,7 +11,7 @@ namespace xihad { namespace dialogue
 {
 	using namespace CEGUI;
 
-	Conversation::Conversation()
+	Conversation::Conversation() : stopPendding(false)
 	{
 
 	}
@@ -70,16 +70,26 @@ namespace xihad { namespace dialogue
 
 	void Conversation::onUpdate( const ngn::Timeline& tl)
 	{
-		std::for_each(speakers.begin(), speakers.end(), 
-		[&](SpeakerSupport* p)
+		bool verifyStop = true;
+		for (SpeakerSupport* p : speakers)
 		{
 			p->updateSubtitle(tl.getLastTimeChange());
-		});
+			if (!p->canStop())
+				verifyStop = false;
+		}
+
+		if (stopPendding && verifyStop)
+			this->stop();
 	}
 
 	void Conversation::onStop()
 	{
 
+	}
+
+	void Conversation::requestStop()
+	{
+		stopPendding = true;
 	}
 
 }}

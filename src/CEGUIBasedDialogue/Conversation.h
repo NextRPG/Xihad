@@ -25,6 +25,8 @@ namespace xihad { namespace dialogue
 			int lineSpace = 0,
 			int width = 500, int height = 500);
 
+		void requestStop();
+
 	protected:
 		virtual void onStart() override;
 
@@ -37,5 +39,7 @@ namespace xihad { namespace dialogue
 	private:
 		typedef std::list<SpeakerSupport*> Container;
 		Container speakers;
+		
+		bool stopPendding;
 	};
 }}

@@ -59,6 +59,7 @@ namespace xihad { namespace dialogue
 	{
 		luaT_defRegsBgn(conv_reg)
 			luaT_lnamedfunc(newSpeaker),
+			luaT_mnamedfunc(Conversation, requestStop),
 		luaT_defRegsEnd
 		MetatableFactory<Conversation, UpdateHandler>::create(L, conv_reg);
 

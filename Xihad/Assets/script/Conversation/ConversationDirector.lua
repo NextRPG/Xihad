@@ -54,9 +54,15 @@ end
 function ConversationDirector:stop()
 	g_scene:popController()
 	
+<<<<<<< HEAD
 	g_scheduler:schedule(function ()
 		self.impl:stop()
 	end, 0.5)
+=======
+	-- g_scheduler:schedule(function ()
+		self.impl:requestStop()
+	-- end, 0.5)
+>>>>>>> 32e7930ff0d158de2b9b5daf12741f6f945e40fd
 end
 
 function ConversationDirector:_create(name, 
@@ -100,6 +106,7 @@ end
 function ConversationDirector:_speak_and_wait(text)
 	self.waitingSpeaker:speak(text)
 	coroutine.yield()
+<<<<<<< HEAD
 end
 
 function ConversationDirector:wait(speaker, text)
