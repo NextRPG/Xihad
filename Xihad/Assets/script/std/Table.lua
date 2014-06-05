@@ -23,6 +23,15 @@ function Table.keys(t)
 	return wrapped, s, v
 end
 
+function Table.toSet(array)
+	local set = {}
+	for _, value in ipairs(array) do
+		set[value] = true
+	end
+	
+	return set
+end
+
 function Table.extractKeys(t)
 	local keys = {}
 	for k,v in pairs(t) do

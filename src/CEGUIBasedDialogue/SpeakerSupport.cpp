@@ -169,6 +169,7 @@ namespace xihad { namespace dialogue
 
 	void SpeakerSupport::speak( const String& content )
 	{
+		this->active();
 		dialogue.reset(generateDialog(content));
 		getTextWindow()->getChild(AUTO_NEXT)->setVisible(false);
 	}

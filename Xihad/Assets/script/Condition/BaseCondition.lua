@@ -15,8 +15,8 @@ function BaseCondition:_updateCondition()
 end
 
 function BaseCondition:checkCondition()
-	if not self.satisfied then
-		self:_updateCondition()
+	if not self.satisfied and self:_updateCondition() then
+		self:setSatisfied()
 	end
 end
 

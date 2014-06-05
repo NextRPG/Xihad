@@ -2,6 +2,7 @@
 #include "SpeakerSupport.h"
 #include <CEGUI/String.h>
 #include "Conversation.h"
+#include <CppBase/StringConventer.h>
 
 using namespace luaT;
 namespace xihad { namespace dialogue
@@ -10,12 +11,12 @@ namespace xihad { namespace dialogue
 
 	luaT_static void setIcon(SpeakerSupport* speaker, const char* icon) 
 	{
-		speaker->setIcon(icon);
+		speaker->setIcon(reinterpret_cast<const CEGUI::utf8*>(icon));
 	}}
 	
 	luaT_static void speak(SpeakerSupport* speaker, const char* text) 
 	{
-		speaker->speak(text);
+		speaker->speak(reinterpret_cast<const CEGUI::utf8*>(text));
 	}}
 	
 	luaT_static int getStatus(lua_State* L) 
@@ -25,7 +26,7 @@ namespace xihad { namespace dialogue
 		assert(stat >= 0 && stat < 4);
 
 		const char* statStr[] = {
-			"close", "open", "deactive", "active",
+			"close", "deactive", "deactive", "active",
 		};
 		lua_pushstring(L, statStr[stat]);
 		return 1;
@@ -41,7 +42,8 @@ namespace xihad { namespace dialogue
 		luaT_variable(L, 6, int, width);
 		luaT_variable(L, 7, int, height);
 
-		SpeakerSupport* ret = conv->newSpeaker(name, 
+		SpeakerSupport* ret = conv->newSpeaker(
+			reinterpret_cast<const CEGUI::utf8*>(name), 
 			ngn::dimension2di(paddingX, paddingY), lineSpace, width, height);
 		
 		luaT::push<SpeakerSupport*>(L, ret);
@@ -63,11 +65,11 @@ namespace xihad { namespace dialogue
 
 		luaT_defRegsBgn(speaker_reg)
 			luaT_mnamedfunc(SpeakerSupport, open),
-			luaT_mnamedfunc(SpeakerSupport, close),
-			luaT_mnamedfunc(SpeakerSupport, active),
-			luaT_mnamedfunc(SpeakerSupport, deactive),
-			luaT_cnamedfunc(setIcon),
 			luaT_cnamedfunc(speak),
+			luaT_mnamedfunc(SpeakerSupport, deactive),
+			luaT_mnamedfunc(SpeakerSupport, close),
+
+			luaT_cnamedfunc(setIcon),
 			luaT_mnamedfunc(SpeakerSupport, setIconRelativeX),
 			luaT_mnamedfunc(SpeakerSupport, setDialoguePosition),
 			luaT_mnamedfunc(SpeakerSupport, speakAll),
@@ -85,7 +87,8 @@ namespace xihad { namespace dialogue
 		return 1;
 	}
 
-	extern "C" __declspec(dllexport) int luaopen_CEGUIBasedDialogue( lua_State* L )
+	extern "C" __declspec(dllexport) 
+	int luaopen_CEGUIBasedDialogue( lua_State* L )
 	{
 		return luaopen_Conversation_impl(L);
 	}

@@ -9,6 +9,7 @@ local ChooseTileState = setmetatable({
 	prevSourceTile 	= nil,
 	
 	promotingTile = nil,
+	reachableTiles= nil,
 }, base)
 ChooseTileState.__index = ChooseTileState
 
@@ -34,12 +35,16 @@ function ChooseTileState:onStateEnter(state, prev)
 		self:_restoreState()
 		self:_focusObject(self:_getSourceObject())
 	else
+		-- TODO update reachables tiles
 		self:_fastenCursorWhen(function ()
 			self:_focusObject(self:_getSourceObject())
 		end)
 	end
 	
-	self:_markRange(self:_getReachables(), 'Reachable', 'reachableHandle')
+	local reachableArray = self:_getReachables()
+	self:_markRange(reachableArray, 'Reachable', 'reachableHandle')
+	self.reachableTiles = Table.toSet(reachableArray)
+	
 	self.prevRotation = nil
 	self.prevSourceTile = nil
 	self.selectedTile = nil
@@ -54,6 +59,7 @@ end
 function ChooseTileState:onStateExit()
 	self:_clear_handle()
 	self:_showTileInfo(nil)
+	self.reachableTiles = nil
 end
 
 function ChooseTileState:onBack()
@@ -70,7 +76,7 @@ function ChooseTileState:needCDWhenHover()
 end
 
 function ChooseTileState:_canReachTile(tile)
-	return g_chessboard:canReach(self:_getSource(), tile:getLocation())
+	return self.reachableTiles[tile] == true
 end
 
 function ChooseTileState:_moveWarrior(destLocation)
@@ -131,18 +137,18 @@ function ChooseTileState:_showAttackRange(tile)
 	local attackRange = skillCaster:getCastableTiles(tile:getLocation())
 	
 	self:_markRange(Table.extractKeys(attackRange), 'Attack', 'attackableHandle')
-	self.promotingTile = tile
 end
 
 function ChooseTileState:_makePromote(tile)
 	self:_showTileInfo(tile)
 	self:_showAttackRange(tile)
+	self.promotingTile = tile
 end
 
 function ChooseTileState:_updatePromote(tile)
 	self:_safeClear('attackableHandle')
-	self.promotingTile = nil
 	
+	self.promotingTile = nil
 	if self:_canReachTile(tile) then
 		self:_makePromote(tile)
 	else
