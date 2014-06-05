@@ -31,6 +31,7 @@ namespace xihad { namespace dialogue
 
 		void open();
 
+		// Deprecated
 		void active();
 
 		void deactive();

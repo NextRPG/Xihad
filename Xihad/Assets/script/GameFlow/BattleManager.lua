@@ -13,6 +13,11 @@ local BattleManager = {
 }
 BattleManager.__index = BattleManager
 
+local commandCheckerListener = {}
+function commandCheckerListener:onChecked(command)
+	command()
+end
+
 function BattleManager.new()
 	local m = setmetatable({
 			teams  = {},
@@ -22,9 +27,7 @@ function BattleManager.new()
 	Class.delegateClosure(victoryListener, 'onChecked', m, 'onTeamWon')
 	m.victoryChecker = ExclusiveChecker.new(victoryListener)
 	
-	m.commandChecker = BaseChecker.new({
-			onChecked = function(command) command() end
-		})
+	m.commandChecker = BaseChecker.new(commandCheckerListener)
 	
 	return m
 end

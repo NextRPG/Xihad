@@ -104,7 +104,6 @@ local heroTeam = XihadBattleTeam.new('Hero', PlayerController.new(stateMachine))
 local enemyTeam= XihadBattleTeam.new('Enemy', AIController.new(cmdExecutor))
 battleManager:addTeam(heroTeam)
 battleManager:addTeam(enemyTeam)
-battleManager:startBattle()
 
 local ConditionFactory = require 'Condition.ConditionFactory'
 battleManager:addVictoryCondition(
@@ -114,18 +113,40 @@ battleManager:addVictoryCondition(
 	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
 ------------------------------------------------------------------------------
 
-sCoroutine.start(function()
-		local ConversationDirector = require 'Conversation.ConversationDirector'
+local ConversationDirector = require 'Conversation.ConversationDirector'
+local BaseCondition = require 'Condition.BaseCondition'
+local cond = BaseCondition.new()
+function cond:_updateCondition()
+	return true
+	-- return battleManager:getCurrentRound() == 2
+end
+battleManager:addCommandCondition(cond, 
+	function()
 		local director = ConversationDirector.new()
-		local aaa = director:newSpeaker('AAA')
-		local bbb = director:newSpeaker('BBB')
+		local aaa = director:newSpeaker('吴志强', 'Character/aaaa_happy')
+		aaa:setIconRelativeX(0.1)
+		aaa:setDialoguePosition(10, -10)
+		
+		local bbb = director:newSpeaker('陈青猪', 'Character/bbbb_sad')
+		bbb:setIconRelativeX(-0.1)
+		bbb:setDialoguePosition(-10, -10)
+		
+		local ccc = director:newSpeaker('CCC', 'Character/aaaa_happy')
+		ccc:setDialoguePosition(10, -10)
+		ccc:setIconRelativeX(0.1)
+		
 		director:start()
 		
-		aaa:setIcon('Character/aaaa_happy')
-		bbb:setIcon('Character/bbbb_sad')
 		
-		director:wait(aaa, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-		director:wait(bbb, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		--- close -(O)-> deactive -(S)-> active -(D)-> deactive -(C)-> close
+		bbb:open()
+		director:waitLong(aaa, { '陈青青你个大傻逼', '傻逼比比比比' })
+		-- aaa:close()
+		
+		-- director:wait(ccc, 'xxxx')
+		
+		director:wait(bbb, '我就是煞笔啊')
+		director:wait(aaa, '哈哈哈哈')
 		
 		director:stop()
 	end)
@@ -134,7 +155,7 @@ sCoroutine.start(function()
 -- Test script
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('A')
+-- simulator:selectWarrior('A')
 -- -- simulator:selectTile(aTile)
 -- simulator:selectTileAt(8, 1)
 -- simulator:selectCommand('交换')
@@ -148,6 +169,7 @@ simulator:selectWarrior('A')
 -- simulator:selectTileAt(8, 2)
 -- simulator:selectCommand('待机')
 
--- g_world:setTimeScale(0.3)
+-- g_world:setTimeScale(0.1)
 
 g_camera = cameraFacade
+battleManager:startBattle()

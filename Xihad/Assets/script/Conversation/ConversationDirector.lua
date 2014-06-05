@@ -1,8 +1,15 @@
 require 'CEGUIBasedDialogue'		-- load dialogue module
 
+
+local _default_arg = {
+	paddingX = 0, paddingY = 0,
+	width = 500,  height= 500,
+	lineSpace= 0,
+}
 local ConversationDirector = {
 	waitingSpeaker = nil,
 	blockedThread  = nil,
+	defaultArg = _default_arg,
 	impl = nil,
 }
 ConversationDirector.__index = ConversationDirector
@@ -47,17 +54,20 @@ end
 function ConversationDirector:stop()
 	g_scene:popController()
 	
-	-- g_scheduler:schedule(function ()
+	g_scheduler:schedule(function ()
 		self.impl:stop()
-	-- end, 0.5)
+	end, 0.5)
 end
 
-local defaultArg = {
-	paddingX = 0, paddingY = 0,
-	width = 500,  height= 500,
-	lineSpace= 0,
-}
-function ConversationDirector:newSpeaker(name, args)
+function ConversationDirector:_create(name, 
+		paddingX, paddingY, lineSpace, width, height)
+	return self.impl:newSpeaker(name, 
+				paddingX, paddingY, lineSpace, width, height)
+end
+
+function ConversationDirector:newSpeaker(name, icon, args)
+	local defaultArg = self.defaultArg
+	
 	args = args or defaultArg
 	local paddingX  = args.paddingX or defaultArg.paddingX
 	local paddingY  = args.paddingY or defaultArg.paddingY
@@ -65,18 +75,45 @@ function ConversationDirector:newSpeaker(name, args)
 	local width = args.width or defaultArg.width	
 	local height= args.height or defaultArg.height
 	
-	return self.impl:newSpeaker(name, 
-				paddingX, paddingY, lineSpace, width, height)
+	local speaker = self:_create(name, 
+						paddingX, paddingY, lineSpace, width, height)
+	
+	speaker:setIcon(icon)
+	return speaker
+end
+
+function ConversationDirector:_pre_speak(speaker)
+	assert(not self.waitingSpeaker)
+	
+	speaker:open()
+	
+	self.waitingSpeaker= speaker
+	self.blockedThread = coroutine.running()
+end
+
+function ConversationDirector:_after_speak()
+	self.waitingSpeaker:deactive()
+	self.waitingSpeaker= nil
+	self.blockedThread = nil
+end
+
+function ConversationDirector:_speak_and_wait(text)
+	self.waitingSpeaker:speak(text)
+	coroutine.yield()
 end
 
 function ConversationDirector:wait(speaker, text)
-	speaker:open()
-	speaker:active()
-	speaker:speak(text)
-	self.waitingSpeaker= speaker
-	self.blockedThread = coroutine.running()
-	coroutine.yield()
-	-- speaker:close()
+	self:_pre_speak(speaker)
+	self:_speak_and_wait(text)
+	self:_after_speak()
+end
+
+function ConversationDirector:waitLong(speaker, textArray)
+	self:_pre_speak(speaker)
+	for _, text in ipairs(textArray) do
+		self:_speak_and_wait(text)
+	end
+	self:_after_speak()
 end
 
 return ConversationDirector

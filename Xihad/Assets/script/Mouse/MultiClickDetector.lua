@@ -29,6 +29,8 @@ end
 
 function MultiClickDetector:_schedule(timeout)
 	local callback = functional.bindself(self, '_timeout')
+	
+	assert(not self.task)
 	self.task = self.scheduler:schedule(callback, timeout)
 end
 
@@ -50,15 +52,29 @@ function MultiClickDetector:_exceedsMaxTimes()
 	return self.maxTimes > 0 and self.clickTimes >= self.maxTimes
 end
 
+function MultiClickDetector:_check_task_pending()
+	assert(self.task and not self.task:hasStarted())
+end
+
+function MultiClickDetector:_inc_click_times()
+	self.clickTimes = self.clickTimes + 1
+	assert(self.maxTimes <= 0 or self.clickTimes <= self.maxTimes)
+end
+
 function MultiClickDetector:onMouseEvent(e)
 	if e.type ~= self.pressType then
 		return 1
 	end
 	
+	if self:_exceedsMaxTimes() then
+		self:_check_task_pending()
+		return 0
+	end
+	
 	local x, y = g_cursor:getPosition()
 	local finished = true
 	if self.clickTimes == 0 or not self:_moved(x, y) then
-		self.clickTimes = self.clickTimes + 1
+		self:_inc_click_times()
 		finished = self:_exceedsMaxTimes()
 	end
 	
@@ -67,7 +83,7 @@ function MultiClickDetector:onMouseEvent(e)
 		assert(finished and self.clickTimes == 1)
 		self:_schedule(0)
 	elseif finished then
-		assert(self.task and not self.task:hasStarted())
+		self:_check_task_pending()
 		self.scheduler:adjustTask(self.task, 0)
 	else
 		self.lastClickX, self.lastClickY = x, y

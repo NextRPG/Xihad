@@ -41,11 +41,11 @@ function ConditionFactory.beatWarriorsWithTag(tag)
 		for object in g_scene:objectsWithTag(tag) do
 			local warrior = object:findComponent(c'Warrior')
 			if warrior and not warrior:isDead() then
-				return
+				return false
 			end
 		end
 		
-		self:setSatisfied()
+		return true
 	end
 	
 	return cond
