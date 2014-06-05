@@ -87,10 +87,6 @@ local controller = g_scene:pushController({
 					[3] = { attrName = "攻击力", effectLevel = getRandomEffectValue() },
 				}
  			})
-		elseif e.key == "Q" then
-			GUIController:hideWindow("Command")
-			GUIController:hideWindow("MapTileInfo")
-			GUIController:hideWindow("ParcelExchange")
 		elseif e.key == "I" then
 			local aItem = BaseItem.new("伤药", "RedNumber/-", nil, 5)
 			local bItem = BaseItem.new("解毒药", "RedNumber/1", nil, 3)
@@ -123,13 +119,17 @@ local controller = g_scene:pushController({
 				guestParcel = pR,
 			}
 			local wnd = GUIController:showWindow("ParcelExchange", model)
-			local screenSz = wnd:getParentPixelSize()
 			local wndSz = wnd:getPixelSize()
 			wnd:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
 			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
-			-- damageNumber = damageNumber or 0
-			-- GUIController:showWindow("AttackDamage", { damage = damageNumber})
-			-- damageNumber = (damageNumber + 5)%1000	
+		elseif e.key == "N" then
+			local wnd= GUIController:showWindow("Notification", "获得了道具@item1和@item2", 
+				{ item2="长矛"}, {item2="FF00FF00"})
+			local wndSz = wnd:getPixelSize()
+			wnd:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
+			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
+		elseif e.key == "Q" then
+			GUIController:hideWindow("Notification")
 		else
 			handled = 1
 		end
@@ -147,14 +147,16 @@ local controller = g_scene:pushController({
 })
 controller:drop()
 
-local function hoverListener(parent, child, eventType)
+GUIController:subscribeEvent("Command.Select", function (parent, child, eventType)
+	GUIController:hideWindow("Command")
+end)
+GUIController:subscribeEvent("Command.Hover", function (parent, child, eventType)
 	print(parent, child, eventType)
-end
+end)
 
-local function selectListener(parent, child, eventType)
-	GUIController:unsubscribeEvent("Command.Hover", hoverListener)
-	print(parent, child, eventType)
-end
-
-GUIController:subscribeEvent("Command.Select", selectListener)
-GUIController:subscribeEvent("Command.Hover", hoverListener)
+GUIController:subscribeEvent("ParcelExchange.Complete", function (type)
+	GUIController:hideWindow("ParcelExchange")
+end)
+GUIController:subscribeEvent("ParcelExchange.Cancel", function (type)
+	GUIController:hideWindow("ParcelExchange")
+end)

@@ -5,12 +5,12 @@ local animMgr = CEGUI.AnimationManager:getSingleton()
 animMgr:loadAnimationsFromXML("Xihad.anims")
 
 local animations = 	{ 
-						TextFadeIn = { "AttackDamageLabel"},
-						
 						FrameShow = { "MapTileInfo" },
 						FrameHide = { "MapTileInfo" },
 						PullDown = { "ParcelPanel/ParcelExchange" },
 						PullUp = { "ParcelPanel/ParcelExchange" },
+						Unfold = { "NotificationPanel/Notification" },
+						Fold = { "NotificationPanel/Notification" },
 						
 						MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 						MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },

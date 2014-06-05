@@ -17,6 +17,7 @@ function GUIController:init()
 	self.Command = require "ui.Command"
 	self.MapTileInfo = require "ui.MapTileInfo"
 	self.ParcelExchange = require "ui.ParcelExchange"
+	self.Notification = require "ui.Notification"
 end
 
 --[[
@@ -71,12 +72,12 @@ end
 	AttackDamage	
 		- args : { damage = 20, position = { x = 300, y = 200 } }
 --]]-------------------------------------------------------------------------------
-function GUIController:showWindow(name, args)
-	return self[name]:show(args)
+function GUIController:showWindow(name, ...)
+	return self[name]:show(...)
 end
 
 function GUIController:hideWindow(name)
-	return self[name]:close()
+	self[name]:close()
 end
 
 --------------------- EventHandler --------------------------

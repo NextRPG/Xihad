@@ -101,6 +101,8 @@ function ParcelView:init(color, offset)
 end
 
 function ParcelView:tidyParcel()
+	self.listbox:clearAllSelections()
+	self:_stopArrowAnim()
 	self.parcel:tidy()
 	self:_notifyDataChange()
 end

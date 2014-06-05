@@ -130,4 +130,13 @@
     <Image height="23" name="Parcel/close_push" width="23" xPos="356" yPos="82" />
     <Image height="23" name="Parcel/close_hover" width="23" xPos="382" yPos="82" />
     <Image height="23" name="Parcel/close_normal" width="23" xPos="407" yPos="82" />
+    <Image height="4" name="Notice/frameM" width="4" xPos="461" yPos="28" />
+    <Image height="22" name="Notice/frameLB" width="18" xPos="440" yPos="56" />
+    <Image height="19" name="Notice/frameT" width="4" xPos="461" yPos="5" />
+    <Image height="4" name="Notice/frameR" width="22" xPos="505" yPos="28" />
+    <Image height="19" name="Notice/frameRT" width="22" xPos="505" yPos="5" />
+    <Image height="22" name="Notice/frameB" width="4" xPos="462" yPos="56" />
+    <Image height="19" name="Notice/frameLT" width="18" xPos="440" yPos="5" />
+    <Image height="22" name="Notice/frameRB" width="22" xPos="505" yPos="56" />
+    <Image height="4" name="Notice/frameL" width="18" xPos="440" yPos="28" />
 </Imageset>

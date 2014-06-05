@@ -1,7 +1,11 @@
 local StaticUtils = {}
 
-function StaticUtils.findWindow(name, parentWindow)
+function StaticUtils.findWindow(name, parentWindow, recursive)
 	parentWindow = parentWindow or CEGUI.System:getSingleton():getDefaultGUIContext():getRootWindow()
+	if recursive then 
+		return parentWindow:getChildRecursive(name)
+	end
+	
 	return parentWindow:getChild(name)
 end
 

@@ -2,43 +2,12 @@
 <GUILayout version="4">
 <Window name="root" type="DefaultWindow">
 	<Property name="MousePassThroughEnabled" value="true" />
-	<Window name="AttackDamageLabel" type="DefaultWindow">
-		<Property name="Size" value="{{0, 80}, {0,37}" />
-		<Property name="Disabled" value="true" />
-		<Property name="Alpha" value="0.0"/>
-		<Window name="Sign" type="Xihad/Image">
-			<Property name="Position" value="{{0, 0}, {0, 0}}" />  
-			<Property name="Size" value="{{0.25,0},{1,0}}" />
-			<Property name="Image" value="RedNumber/-" />            
-		</Window>
-		<Window name="One" type="Xihad/Image">
-			<Property name="Position" value="{{0.25, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.25,0},{1,0}}" />
-			<Property name="Image" value="" />            
-		</Window>
-		<Window name="Two" type="Xihad/Image">
-			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />     
-			<Property name="Size" value="{{0.25,0},{1,0}}" />
-			<Property name="Image" value="" />            
-		</Window>
-		<Window name="Three" type="Xihad/Image">
-			<Property name="Position" value="{{0.75, 0}, {0, 0}}" />
-			<Property name="Size" value="{{0.25,0},{1,0}}" />
-			<Property name="Image" value="" />            
-		</Window>
-	</Window>
-	
 	<Window name="CommandWindow" type="Xihad/PopupMenu">
 		<Property name="AutoCloseNestedPopups" value="true" />
 		<Property name="FadeInTime" value="0.2" />
 		<Property name="FadeOutTime" value="0.2" />
 	</Window>
 	
-	<!-- <Window name="testButton" type="Xihad/Button">
-		<Property name="Font" value="fangzheng-14" />
-		<Property name="Text" value="确定"/>
-		<Property name="Size" value="{{0, 100}, {0, 30}}" />
-	</Window> -->
 	<Window name="ParcelPanel" type="DefaultWindow">
 		<Property name="Size" value="{{0, 380}, {0, 300}}" />
 		<Property name="MousePassThroughEnabled" value="true"/>
@@ -62,6 +31,7 @@
 				<Property name="Image" value="XihadUI/Parcel/back_image"/>
 				<Property name="VertImageFormat" value="BottomAligned"/>
 				<Property name="HorzImageFormat" value="LeftAligned"/>
+				<Property name="MousePassThroughEnabled" value="true"/>
 			</Window>
 			<Window name="L2RArrow" type="Xihad/Image">
 				<Property name="HorzImageFormat" value="LeftAligned"/>
@@ -169,5 +139,23 @@
 		<Property name="Text" value="" />            
 	</Window>
 	
+	<Window name="NotificationPanel" type="DefaultWindow">
+		<Property name="Size" value="{{0, 200}, {0, 50}}" />
+		<Window name="Notification" type="Xihad/Image">
+			<Property name="Size" value="{{0, 0}, {1, 0}}" />
+			<Property name="EnableTextColor" value="FFFFFFFF" />
+			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
+			<Property name="FrameLT" value="XihadUI/Notice/frameLT" />
+			<Property name="FrameRT" value="XihadUI/Notice/frameRT" />
+			<Property name="FrameLB" value="XihadUI/Notice/frameLB" />
+			<Property name="FrameRB" value="XihadUI/Notice/frameRB" />
+			<Property name="FrameL" value="XihadUI/Notice/frameL" />
+			<Property name="FrameR" value="XihadUI/Notice/frameR" />
+			<Property name="FrameT" value="XihadUI/Notice/frameT" />
+			<Property name="FrameB" value="XihadUI/Notice/frameB" />
+			<Property name="FrameM" value="XihadUI/Notice/frameM" />
+			<Property name="TextMargin" value="20"/>
+		</Window>
+	</Window>	
 </Window>
 </GUILayout>
