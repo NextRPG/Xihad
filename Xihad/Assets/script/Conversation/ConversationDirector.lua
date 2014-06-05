@@ -53,16 +53,7 @@ end
 
 function ConversationDirector:stop()
 	g_scene:popController()
-	
-<<<<<<< HEAD
-	g_scheduler:schedule(function ()
-		self.impl:stop()
-	end, 0.5)
-=======
-	-- g_scheduler:schedule(function ()
-		self.impl:requestStop()
-	-- end, 0.5)
->>>>>>> 32e7930ff0d158de2b9b5daf12741f6f945e40fd
+	self.impl:requestStop()
 end
 
 function ConversationDirector:_create(name, 
@@ -84,7 +75,10 @@ function ConversationDirector:newSpeaker(name, icon, args)
 	local speaker = self:_create(name, 
 						paddingX, paddingY, lineSpace, width, height)
 	
-	speaker:setIcon(icon)
+	if icon then
+		speaker:setIcon(icon)
+	end
+	
 	return speaker
 end
 

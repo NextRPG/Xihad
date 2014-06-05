@@ -113,42 +113,28 @@ battleManager:addVictoryCondition(
 	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
 ------------------------------------------------------------------------------
 
-local ConversationDirector = require 'Conversation.ConversationDirector'
+local XihadConversation = require 'Conversation.XihadConversation'
 local BaseCondition = require 'Condition.BaseCondition'
 local cond = BaseCondition.new()
 function cond:_updateCondition()
-	return true
-	-- return battleManager:getCurrentRound() == 2
+	-- return true
+	return battleManager:getCurrentRound() == 2
 end
+
 battleManager:addCommandCondition(cond, 
 	function()
-		local director = ConversationDirector.new()
-		local aaa = director:newSpeaker('吴志强', 'Character/aaaa_happy')
-		aaa:setIconRelativeX(0.1)
-		aaa:setDialoguePosition(10, -10)
+		local conv = XihadConversation.new()
+		local aSpeaker = conv:addWarrior('A')
+		local bSpeaker = conv:addWarrior('B')
 		
-		local bbb = director:newSpeaker('陈青猪', 'Character/bbbb_sad')
-		bbb:setIconRelativeX(-0.1)
-		bbb:setDialoguePosition(-10, -10)
-		
-		local ccc = director:newSpeaker('CCC', 'Character/aaaa_happy')
-		ccc:setDialoguePosition(10, -10)
-		ccc:setIconRelativeX(0.1)
-		
-		director:start()
-		
+		conv:start()
 		
 		--- close -(O)-> deactive -(S)-> active -(D)-> deactive -(C)-> close
-		bbb:open()
-		director:waitLong(aaa, { '陈青青你个大傻逼', '傻逼比比比比' })
-		-- aaa:close()
+		aSpeaker:speak('等等')
+		bSpeaker:speak('caonima')
+		aSpeaker:speak({'hahah', 'hhhh'})
 		
-		-- director:wait(ccc, 'xxxx')
-		
-		director:wait(bbb, '我就是煞笔啊')
-		director:wait(aaa, '哈哈哈哈')
-		
-		director:stop()
+		conv:stop()
 	end)
 
 ------------------------------------------------------------------------------

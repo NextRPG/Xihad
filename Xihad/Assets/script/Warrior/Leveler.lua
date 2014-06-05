@@ -25,7 +25,7 @@ end
 ---
 -- @return level-up information
 function Leveler:_obtainExp(exp)
-	local object = self:getHostObject()
+	local warrior = self:findPeer(c'Warrior')
 	
 	while exp > 0 do
 		local maxGain = self:getNextLevelExp()
@@ -33,7 +33,7 @@ function Leveler:_obtainExp(exp)
 		if used >= maxGain then
 			self.exp = self.exp + used
 			
-			coroutine.yield(used, self.grader:promote(object, self.level+1))
+			coroutine.yield(used, self.grader:promote(warrior, self.level+1))
 			self.level = self.level + 1
 		else
 			coroutine.yield(used)
