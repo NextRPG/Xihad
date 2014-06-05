@@ -93,7 +93,6 @@ local mask = nil
 -- mask = addRow(mask, 'xox')
 mask = addRow(mask, 'o')
 mask = addRow(mask, 'o')
-mask = addRow(mask, 'o')
 mask = addRow(mask, '@')
 local range = toRange(1, 1, mask, OrientationImpactRange)
 local enemyOnly = { toEnemy = true, toVacancy = true, }

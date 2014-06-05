@@ -1,8 +1,8 @@
 local RegionDeterminer = {
 	centerSeparator = nil,
-	padingX = 10,
-	padingY = 10,
-	relativeX = 0.1,
+	padingX = nil,
+	padingY = nil,
+	relativeX = nil,
 }
 RegionDeterminer.__index = RegionDeterminer
 
@@ -10,9 +10,9 @@ function RegionDeterminer.new(centerSeparator, padingX, padingY, relativeX)
 	assert(type(centerSeparator) == 'number')
 	return setmetatable({
 			centerSeparator = centerSeparator,
-			padingX = math.abs(padingX),
-			padingY = math.abs(padingY),
-			relativeX = math.abs(relativeX),
+			padingX = math.abs(padingX or 10),
+			padingY = math.abs(padingY or 10),
+			relativeX = math.abs(relativeX or 0.1),
 		}, RegionDeterminer)
 end
 
@@ -25,12 +25,12 @@ end
 function RegionDeterminer:updatePosition(speaker, speakerPos, rest)
 	local onLeft
 	if rest:getCount() ~= 1 then
-		local windowWidth = 1
 		onLeft = speakerPos.x < self.centerSeparator
 	else
 		onLeft = speakerPos.x < rest:getPosition(1).x
 	end
 	
+	-- onLeft = true
 	self:_set_position(speaker, onLeft)
 	return onLeft and 'left' or 'right'
 end
