@@ -106,7 +106,6 @@ end
 function ConversationDirector:_speak_and_wait(text)
 	self.waitingSpeaker:speak(text)
 	coroutine.yield()
-<<<<<<< HEAD
 end
 
 function ConversationDirector:wait(speaker, text)
