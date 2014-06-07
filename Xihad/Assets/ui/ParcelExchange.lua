@@ -32,13 +32,12 @@ function ParcelExchange:show(model)
 	master:relayout(adjustedWidth)
 	guest:relayout(adjustedWidth)
 
-	-- self.FrameWindow:setProperty("Size", "{{1, 0}, {0, 0}}")
-	Utils.fireEvent("PullDown", self.FrameWindow)
+	Utils.fireEvent("_Open", self.FrameWindow)
 	return self.FrameWindow:getParent()
 end
 
 function ParcelExchange:close()
-	Utils.fireEvent("PullUp", self.FrameWindow)
+	Utils.fireEvent("_Close", self.FrameWindow)
 	self.master:reset()
 	self.guest:reset()
 end
@@ -99,8 +98,8 @@ function ParcelExchange:removeListener(listener, eventType)
 	return self:_changeListeners(listener, eventType, nil)
 end
 
-local function initWidget()
-	local window = parcelWindow
+function ParcelExchange:init()
+	local window = self.FrameWindow
 	local wndSz = window:getParentPixelSize()
 	local tidyBtn = window:getChild("Tidy")
 	local okBtn = window:getChild("Complete")
@@ -127,7 +126,5 @@ local function initWidget()
 	ParcelExchange.master:init("green", -1)
 	ParcelExchange.guest:init("red", 0)	
 end
-
-initWidget()
 
 return ParcelExchange

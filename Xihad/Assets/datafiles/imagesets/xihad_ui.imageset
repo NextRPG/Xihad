@@ -139,4 +139,5 @@
     <Image height="19" name="Notice/frameLT" width="18" xPos="440" yPos="5" />
     <Image height="22" name="Notice/frameRB" width="22" xPos="505" yPos="56" />
     <Image height="4" name="Notice/frameL" width="18" xPos="440" yPos="28" />
+    <Image height="11" name="Notice/blackM" width="10" xPos="359" yPos="110" />
 </Imageset>

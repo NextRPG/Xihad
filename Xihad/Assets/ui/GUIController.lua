@@ -18,6 +18,13 @@ function GUIController:init()
 	self.MapTileInfo = require "ui.MapTileInfo"
 	self.ParcelExchange = require "ui.ParcelExchange"
 	self.Notification = require "ui.Notification"
+	self.FightStart = require "ui.FightStart"
+	
+	for k,v in pairs(self) do
+		if type(v) == "table" and v.init then
+			v:init()
+		end
+	end
 end
 
 --[[
