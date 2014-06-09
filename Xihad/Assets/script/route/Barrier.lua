@@ -25,6 +25,14 @@ function Barrier:permitCasting( warrior, skill )
 	return false
 end
 
+function Barrier:getSurveyType(warrior)
+	return nil
+end
+
+function Barrier:onSurveyed(warrior)
+	return false, nil -- success, message
+end
+
 function Barrier:getActionPointCost( warrior )
 	return 0
 end

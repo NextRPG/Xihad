@@ -1,11 +1,9 @@
+local Window = require 'GUI.Window'
 local functional = require 'std.functional'
-local TileInfoView= require 'GUI.TileInfoView'
 local CommandView = require 'GUI.CommandView'
+local TileInfoView= require 'GUI.TileInfoView'
 local TransactionView = require 'GUI.TransactionView'
-local GUIController = require 'ui.GUIController'
-local UIFacade = {
-	commandReceiver = nil,
-}
+local UIFacade = {}
 UIFacade.__index = UIFacade
 
 function UIFacade.new()
@@ -31,12 +29,17 @@ function UIFacade:showTileInfo(tile)
 	end
 end
 
+function UIFacade:showCenterMessage(fmt, valueDict, colorDict)
+	local Notification = require 'ui.Notification'
+	
+	Window.placeCenter(Notification:show(fmt, valueDict, colorDict))
+end
+
 function UIFacade:showWarning(msg)
 	print(msg)
 end
 
 function UIFacade:showCommandView(sourceWarrior)
-	-- Command View
 	CommandView.show(sourceWarrior)
 end
 

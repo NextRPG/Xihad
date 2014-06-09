@@ -1,5 +1,6 @@
 local Table= require 'std.Table'
 local base = require 'Controller.PlayerState'
+local BarrierUtil = require 'Barrier.BarrierUtil'
 local ChooseTileState = setmetatable({
 	selectedHandle	= nil,
 	reachableHandle = nil,
@@ -24,7 +25,7 @@ end
 function ChooseTileState:_restoreState()
 	assert(self.prevSourceTile)
 	self:_getSourceBarrier():setTile(self.prevSourceTile)
-	self:_getSourceBarrier():synchronizeTranslate()
+	BarrierUtil.synchronizeTranslate(self:_getSourceBarrier())
 	
 	assert(self.prevRotation)
 	self:_getSourceObject():resetRotation(self.prevRotation)

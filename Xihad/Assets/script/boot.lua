@@ -71,12 +71,12 @@ g_chessboard = loader:create(battle)
 
 ------------------------------------------------------------------------------
 -- init player state machine
-local uiFacade = UIFacade.new()
-local cameraFacade = CameraFacade.new(CameraFactory.createDefault('camera'))
-local painter = Painter.new()
-local cmdExecutor = CommandExecutor.new(cameraFacade, ExpCalculator.new())
-local stateMachine= PlayerStateMachine.new(uiFacade, cameraFacade, painter, cmdExecutor)
-uiFacade:setCommandReceiver(stateMachine)
+local ui = UIFacade.new()
+local painter= Painter.new()
+local camera = CameraFacade.new(CameraFactory.createDefault('camera'))
+local executor = CommandExecutor.new(camera, ui, ExpCalculator.new())
+local stateMachine = PlayerStateMachine.new(ui, camera, painter, executor)
+ui:setCommandReceiver(stateMachine)
 
 -- Auto hide cursor
 stateMachine:setBlockListener({
@@ -90,9 +90,10 @@ stateMachine:setBlockListener({
 
 ------------------------------------------------------------------------------
 --- init controllers
-local controller = ControllerAdapter.new(PCInputTransformer.new(stateMachine))
-g_scene:pushController(controller)
+local controller = g_scene:pushController(
+	ControllerAdapter.new(PCInputTransformer.new(stateMachine)))
 controller:drop()
+
 g_scene:pushController(guiSystemController)
 ------------------------------------------------------------------------------
 
@@ -101,7 +102,7 @@ g_scene:pushController(guiSystemController)
 -- set battle victory condition
 local battleManager = BattleManager.new()
 local heroTeam = XihadBattleTeam.new('Hero', PlayerController.new(stateMachine))
-local enemyTeam= XihadBattleTeam.new('Enemy', AIController.new(cmdExecutor))
+local enemyTeam= XihadBattleTeam.new('Enemy', AIController.new(executor))
 battleManager:addTeam(heroTeam)
 battleManager:addTeam(enemyTeam)
 
@@ -113,16 +114,10 @@ battleManager:addVictoryCondition(
 	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
 ------------------------------------------------------------------------------
 
-local XihadConversation = require 'Conversation.XihadConversation'
-local BaseCondition = require 'Condition.BaseCondition'
-local cond = BaseCondition.new()
-function cond:_updateCondition()
-	-- return true
-	return battleManager:getCurrentRound() == 2
-end
-
-battleManager:addCommandCondition(cond, 
+battleManager:addCommandCondition(
+	ConditionFactory.roundExceed(1), 
 	function()
+		local XihadConversation = require 'Conversation.XihadConversation'
 		local conv = XihadConversation.new()
 		local aSpeaker = conv:addWarrior('A')
 		local bSpeaker = conv:addWarrior('B')
@@ -137,16 +132,25 @@ battleManager:addCommandCondition(cond,
 		conv:stop()
 	end)
 
+
 ------------------------------------------------------------------------------
 -- Test script
+local Location = require 'route.Location'
+local tile = g_chessboard:getTile(Location.new(1, 1))
+
+local ItemRegistry= require 'Item.ItemRegistry'
+local TreasureBarrier = require 'Barrier.TreasureBarrier'
+local treasure = TreasureBarrier.new(ItemRegistry.findItemByName('伤药'))
+treasure:setTile(tile)
+
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
--- simulator:selectWarrior('A')
+simulator:selectWarrior('A')
 -- -- simulator:selectTile(aTile)
--- simulator:selectTileAt(8, 1)
+-- simulator:selectTileAt(4, 7)
 -- simulator:selectCommand('交换')
 -- simulator:selectCommand('技能', 'Fire')
--- simulator:selectTileAt(8, 2)
+-- simulator:selectTileAt(3, 7)
 -- -- simulator:selectTile(aTile)
 -- -- simulator:selectCommand('道具', '长矛')
 -- -- simulator:selectCommand('道具', '长矛')
@@ -157,5 +161,5 @@ local simulator = InputSimulator.new(stateMachine)
 
 -- g_world:setTimeScale(0.1)
 
-g_camera = cameraFacade
+g_camera = camera
 battleManager:startBattle()

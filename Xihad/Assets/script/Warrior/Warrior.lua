@@ -93,7 +93,7 @@ function Warrior:exchangables(startLoc)
 	}
 	
 	local iter = functional.bind1(Array.elements, locations)
-	local filter = function (tile)
+	local function filter(tile)
 		local adjWarrior = tile:getWarrior()
 		if adjWarrior and adjWarrior:isLeagueWith(self) then
 			local adjHasItem = adjWarrior:findPeer(c'Parcel'):hasItem()

@@ -1,7 +1,7 @@
 local Window = require 'GUI.Window'
 local functional   = require 'std.functional'
 local XihadTileSet = require 'Chessboard.XihadTileSet'
-local GUIController= require 'ui.GUIController'
+local CommandWindow= require 'ui.Command'
 local CommandView = {
 	skillEntry= '技能',
 	itemEntry = '道具',
@@ -55,11 +55,11 @@ function CommandView.hook(listener)
 end
 
 function CommandView.setHoverListener(hoverListener)
-	GUIController:subscribeEvent('Command.Hover', hoverListener)
+	CommandWindow:addListener(hoverListener, 'Hover')
 end
 	
 function CommandView.setSelectListener(selectListener)
-	GUIController:subscribeEvent('Command.Select', selectListener)
+	CommandWindow:addListener(selectListener, 'Select')
 end
 
 function CommandView.setList(entry, list)
@@ -78,6 +78,12 @@ end
 function CommandView.show(warrior)
 	local viewData = {}
 	
+	local tile = warrior:findPeer(c'Barrier'):getTile()
+	local stype= tile:getSurveyType()
+	if stype then
+		table.insert(viewData, { name = stype })
+	end
+	
 	local skillEntry= CommandView._addEntry(viewData, 'skillEntry', true)
 	local skillList = CommandView._createSkillList(warrior:findPeer(c'SkillCaster'))
 	CommandView.setList(skillEntry, skillList)
@@ -90,7 +96,7 @@ function CommandView.show(warrior)
 	CommandView._addEntry(viewData, 'swapEntry', nil, not canExchange)
 	CommandView._addEntry(viewData, 'stdbyEntry')
 	
-	local wnd = GUIController:showWindow('Command', viewData)
+	local wnd = CommandWindow:show(viewData)
 	local w, h = g_window:getScreenSize()
 	Window.setPosition(wnd, w/2+50, h/2-80)
 	
@@ -98,7 +104,7 @@ function CommandView.show(warrior)
 end
 
 function CommandView.close()
-	GUIController:hideWindow('Command')
+	CommandWindow:close()
 end
 
 return CommandView

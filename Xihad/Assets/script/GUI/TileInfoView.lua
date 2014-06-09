@@ -1,5 +1,5 @@
 local Window = require 'GUI.Window'
-local GUIController= require 'ui.GUIController'
+local TileInfoWindow = require 'ui.MapTileInfo'
 local TileInfoView = {
 	viewX = 10,
 	viewY = 10,
@@ -11,12 +11,12 @@ function TileInfoView.show(tile)
 	tileWindowArg.effects = {}
 	-- { attrName = "攻击力", effectLevel = getRandomEffectValue() },
 	
-	local wnd = GUIController:showWindow("MapTileInfo", tileWindowArg)
+	local wnd = TileInfoWindow:show(tileWindowArg)
 	Window.setPosition(wnd, TileInfoView.viewX, TileInfoView.viewY)
 end
 
 function TileInfoView.hide()
-	GUIController:hideWindow('MapTileInfo')
+	TileInfoWindow:close()
 end
 
 return TileInfoView

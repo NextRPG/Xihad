@@ -71,10 +71,7 @@ end
 ------------------------------------------------------------------------------
 -- apply begin
 function WarriorHitResult:_getNormalDamage(sourceWarrior, targetWarrior)
-	local skillDamage = self:randomDamage()
-	local atk = sourceWarrior:getATK()
-	local dfs = targetWarrior:getDFS()
-	return math.max(atk + skillDamage - dfs, 0)
+	return self:randomDamage()
 end
 
 function WarriorHitResult:_getHitRate(sourceWarrior, targetWarrior)

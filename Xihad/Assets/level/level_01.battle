@@ -2,7 +2,6 @@ local robber =
 {
 	career = '强盗',
 	model = 'reimu',
-	-- level = 1,
 	exp = 50,
 	skills = {
 		['Fire'] = 10,
@@ -73,5 +72,9 @@ local battle = {
 	chessboardWidth = 17,
 	terrain = terrainData,
 }
+
+function battle.callback()
+	-- TODO add script
+end
 
 return battle

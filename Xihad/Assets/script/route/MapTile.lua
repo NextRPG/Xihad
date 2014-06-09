@@ -62,7 +62,7 @@ function MapTile:onBarrierRemoved(e)
 	self.barriers[e] = nil
 	
 	for existed, otherKey in pairs(self.barriers) do
-		existed:leaveFrom(e, optKey)
+		existed:leaveFrom(e, indexKey)
 		e:leaveFrom(existed, otherKey)
 	end
 end
@@ -103,6 +103,29 @@ function MapTile:getActionPointCost(warrior)
 	end
 	
 	return math.max(1, accum)
+end
+
+function MapTile:_find_surveyable_barrier()
+	for barrier, _ in pairs(self.barriers) do
+		local surveyType = barrier:getSurveyType(warrior)
+		if surveyType ~= nil then
+			return barrier, surveyType
+		end
+	end
+end
+
+function MapTile:getSurveyType(warrior)
+	local barrier, surveyType = self:_find_surveyable_barrier()
+	return surveyType
+end
+
+function MapTile:onSurveyed(warrior)
+	local barrier, surveyType = self:_find_surveyable_barrier()
+	if barrier then
+		return barrier:onSurveyed(warrior)
+	end
+	
+	return false
 end
 
 return MapTile

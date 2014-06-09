@@ -23,7 +23,7 @@ function Notification:_formatString(fmt, valueDict, colorDict)
 		if not value then
 			return "@"..matched 
 		end
-			
+		
 		if colorDict and colorDict[matched] then
 			value = getColorTag(colorDict[matched])..value..defaultColor
 		end

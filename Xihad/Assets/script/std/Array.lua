@@ -6,8 +6,13 @@ local Array = {
 function Array.elements(t)
 	local idx = 0
 	local function iter(t)
-		idx = idx + 1
-		return t[idx]
+		local size, value = #t, nil
+		repeat
+			idx = idx + 1
+			value = t[idx]
+		until value ~= nil or idx >= size
+		
+		return value
 	end
 	
 	return iter, t
@@ -128,8 +133,8 @@ function Array.reverse(t)
 	return t
 end
 
-function Array.copy(src)
-	local dst = {}
+function Array.copy(src, dst)
+	dst = dst or {}
 	for _, v in ipairs(src) do
 		table.insert(dst, v)
 	end

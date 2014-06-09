@@ -12,14 +12,15 @@ local WarriorMovement= require 'HighAction.WarriorMovement'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
+	uiFacade = nil,
 	cameraFacade = nil,
 	expCalculator= nil,
-	ui = nil,
 }
 CommandExecutor.__index = CommandExecutor
 
-function CommandExecutor.new(cameraFacade, expCalculator)
+function CommandExecutor.new(cameraFacade, uiFacade, expCalculator)
 	return setmetatable({
+			uiFacade = uiFacade,
 			cameraFacade = cameraFacade,
 			expCalculator= expCalculator,
 		}, CommandExecutor)
@@ -145,11 +146,22 @@ function CommandExecutor:useItem(warrior, itemName)
 	local item = ItemRegistry.findItemByName(itemName)
 	local usage= warrior:findPeer(c'Parcel'):useItem(item)
 	
-	-- TODO
-	print(usage)
+	self.uiFacade:showCenterMessage(usage)
 	
 	if item:occupyRound() then
 		AsConditionFactory.waitTimer(0.5)
+		warrior:deactivate()
+	end
+end
+
+function CommandExecutor:makeSurvey(warrior)
+	local tile = warrior:findPeer(c'Barrier'):getTile()
+	local success, message = tile:onSurveyed(warrior)
+	if message ~= nil then
+		print(message)
+	end
+	
+	if success then
 		warrior:deactivate()
 	end
 end

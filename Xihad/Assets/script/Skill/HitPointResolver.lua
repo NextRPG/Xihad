@@ -5,17 +5,19 @@ local HitPointResolver = {
 	nature = 'unkonwn', 
 	attenuation = 0,
 	hitPointIncr= nil,
+	probabilty  = 1,
 	
 	sNaturePromote = {},
 }
 HitPointResolver.__index = HitPointResolver
 setmetatable(HitPointResolver, base)
 
-function HitPointResolver.new(nature, hitPointIncr, attenuation)
+function HitPointResolver.new(nature, hitPointIncr, attenuation, probabilty)
 	local obj = setmetatable(base.new('Warrior'), HitPointResolver)
 	obj.nature = nature
 	obj.hitPointIncr = hitPointIncr
-	obj.attenuation  = attenuation	
+	obj.attenuation  = attenuation
+	obj.probabilty   = probabilty
 	return obj
 end
 
@@ -43,11 +45,18 @@ function HitPointResolver.getAddition(skillNature, warriorNature)
 	return 1
 end
 
+function HitPointResolver:_getRatio(relativeLoc)
+	local distance = relativeLoc:distance(Location.new())
+	return 1 - distance * self.attenuation
+end
+
 function HitPointResolver:_resolve(
 		sourceWarrior, targetWarrior, relativeLoc, result)
-	local distance = relativeLoc:distance(Location.new())
-	local ratio = math.max(0, 1 - distance * self.attenuation)
-		
+	local ratio = self:_getRatio(relativeLoc)
+	if ratio <= 0 then
+		return 
+	end
+	
 	local hitPointIncr = self.hitPointIncr
 	local harmful = hitPointIncr <= 0
 	if harmful then
@@ -62,10 +71,10 @@ function HitPointResolver:_resolve(
 	
 	hitPointIncr = hitPointIncr * ratio
 	
-	if harmful and hitPointIncr <= 0 then
-		result:addDamage(-hitPointIncr, 1)
-	elseif not harmful and hitPointIncr >= 0 then
-		result:addRecovery(hitPointIncr, 1)
+	if harmful then
+		result:addDamage(self.probabilty, -hitPointIncr)
+	else
+		result:addRecovery(self.probabilty, hitPointIncr)
 	end
 end
 

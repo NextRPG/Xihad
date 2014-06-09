@@ -106,6 +106,11 @@ function Parcel:dropItemAt(itemIndex, delta)
 	self:onDropItem(item, delta)
 end
 
+-- function Parcel:gainItem(item, delta)
+-- 	local success = pcall(base.gainItem, self, item, delta)
+-- 	-- TODO
+-- end
+
 function Parcel:dropItem(item, delta)
 	base.dropItem(self, item, delta)
 	self:onDropItem(item, delta)

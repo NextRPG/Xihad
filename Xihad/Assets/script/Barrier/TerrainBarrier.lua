@@ -86,13 +86,13 @@ function TerrainBarrier:getActionPointCost( warrior )
 	return selectResult('apcost', self.type, warrior)
 end
 
-function TerrainBarrier:synchronizeTranslate()
-	local aabb = self:findPeer(c'Render'):getAABB()
-	local _, height, _ = aabb:extent():xyz()
-	local center = self:getTile():getCenterVector()
-	center:set(nil, -height, nil)
-	self:getHostObject():resetTranslate(center)
-end
+-- function TerrainBarrier:synchronizeTranslate()
+-- 	local aabb = self:findPeer(c'Render'):getAABB()
+-- 	local _, height, _ = aabb:extent():xyz()
+-- 	local center = self:getTile():getCenterVector()
+-- 	center:set(nil, -height, nil)
+-- 	self:getHostObject():resetTranslate(center)
+-- end
 
 -- function TerrainBarrier:setTile( tile ) 
 -- 	if not self.tile then
@@ -146,16 +146,20 @@ function TerrainBarrier:popColor()
 end
 
 function TerrainBarrier:inhabitWith(other, optKey)
-	local warrior = other:findPeer(c'Warrior')
-	if warrior then
-		self.effect:copy():bindSticky(warrior, self)
+	if optKey == WarriorBarrier.getOptUniqueKey() then
+		local warrior = other:findPeer(c'Warrior')
+		if warrior then
+			self.effect:copy():bindSticky(warrior, self)
+		end
 	end
 end
 
 function TerrainBarrier:leaveFrom(other, optKey)
-	local warrior = other:findPeer(c'Warrior')
-	if warrior then
-		warrior:unbindStickyEffects(self)
+	if optKey == WarriorBarrier.getOptUniqueKey() then
+		local warrior = other:findPeer(c'Warrior')
+		if warrior then
+			warrior:unbindStickyEffects(self)
+		end
 	end
 end
 

@@ -10,12 +10,12 @@ function BaseCondition.new(listener)
 		}, BaseCondition)
 end
 
-function BaseCondition:_updateCondition()
+function BaseCondition:_updateCondition(context)
 	error('no implementation by default')
 end
 
-function BaseCondition:checkCondition()
-	if not self.satisfied and self:_updateCondition() then
+function BaseCondition:checkCondition(context)
+	if not self.satisfied and self:_updateCondition(context) then
 		self:setSatisfied()
 	end
 end

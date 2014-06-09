@@ -1,6 +1,5 @@
 require 'CEGUIBasedDialogue'		-- load dialogue module
 
-
 local _default_arg = {
 	paddingX = 0, paddingY = 0,
 	width = 500,  height= 500,

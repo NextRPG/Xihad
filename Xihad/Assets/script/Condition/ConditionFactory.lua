@@ -58,7 +58,12 @@ end
 
 -- Round
 function ConditionFactory.roundExceed(roundCount)
+	local cond = BaseCondition.new()
+	function cond:_updateCondition(context)
+		return context:getCurrentRound() > roundCount
+	end
 	
+	return cond
 end
 
 function ConditionFactory.allOf(...)

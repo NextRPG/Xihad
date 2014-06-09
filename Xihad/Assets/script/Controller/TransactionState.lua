@@ -85,14 +85,17 @@ function TransactionState:needCDWhenHover()
 	return false
 end
 
+function TransactionState:_get_corresponding_view(model)
+	if self.sourceOnLeft then
+		return model.masterParcel, model.guestParcel
+	else
+		return model.guestParcel, model.masterParcel
+	end
+end
+
 function TransactionState:_apply_transaction(model)
 	local master, guest = self:_getSource(), self.transactingWarrior
-	local masterView, guestView = model.masterParcel, model.guestParcel
-	
-	if not self.sourceOnLeft then
-		masterView, guestView = guestView, masterView
-	end
-	self.executor:transact(master, guest, masterView, guestView)
+	self.executor:transact(master, guest, self:_get_corresponding_view(model))
 end
 
 function TransactionState:onUICommand(command, model)
