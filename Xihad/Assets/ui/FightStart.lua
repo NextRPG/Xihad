@@ -36,10 +36,7 @@ function FightStart:init()
 	self.conText = self.conShadow:getChild("Condition")
 	local sz = panel:getPixelSize()
 
-	self.vicShadow:setText("胜利条件")
-	self.vicText:setText("胜利条件")
 	local textSz = self:_relayout(self.vicText, self.vicShadow)
-	
 	local panelT = self.vicShadow:getParent()
 	local panelB = self.conShadow:getParent()
 	

@@ -1,0 +1,29 @@
+local Utils = require "ui.StaticUtils"
+local ParcelView = require "ui.ParcelView"
+
+local Progress = {}
+
+local function checkRange(progress)
+	assert(progress < 1.0 and progress >= 0)
+end
+
+function Progress:show(currentProgress, targetProgress, isOverStep)
+	checkRange(currentProgress)
+	checkRange(targetProgress)
+	
+	self.window:setProgress(currentProgress)
+	self.window:setProperty("TargetProgress", targetProgress)
+	self.window:setProperty("CurrentProgressValue", math.floor(currentProgress*100))
+	self.window:setProperty("TargetProgressValue", math.floor(targetProgress*100))
+	
+	Utils.fireEvent("_Open", self.window)
+	Utils.fireEvent(isOverStep and "_GrowOver" or "_Grow", self.window)
+	return self.window:getParent()
+end
+
+function Progress:init()
+	local parent = Utils.findWindow("GainExpPanel")
+	self.window = CEGUI.toProgressBar(parent:getChild("GainExp"))
+end
+
+return Progress

@@ -19,6 +19,7 @@ function GUIController:init()
 	self.ParcelExchange = require "ui.ParcelExchange"
 	self.Notification = require "ui.Notification"
 	self.FightStart = require "ui.FightStart"
+	self.GainExp = require "ui.Progress"
 	
 	for k,v in pairs(self) do
 		if type(v) == "table" and v.init then

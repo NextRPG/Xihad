@@ -73,8 +73,9 @@ local controller = g_scene:pushController({
 			-- 	[3] = { name = "交换", disabled = true, },
 			-- 	[4] = { name = "待机", },
 			-- })
-			GUIController:showWindow("FightStart", "敌全灭")
 			
+			-- GUIController:showWindow("FightStart", "敌全灭")
+			local wnd = GUIController:showWindow("GainExp", 0.65, 0.34, true)
 		elseif e.key == "M" then
 			local function getRandomEffectValue()
 				local result = math.random(-3, 3)

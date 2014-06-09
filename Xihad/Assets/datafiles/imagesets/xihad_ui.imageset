@@ -139,5 +139,18 @@
     <Image height="19" name="Notice/frameLT" width="18" xPos="440" yPos="5" />
     <Image height="22" name="Notice/frameRB" width="22" xPos="505" yPos="56" />
     <Image height="4" name="Notice/frameL" width="18" xPos="440" yPos="28" />
-    <Image height="11" name="Notice/blackM" width="10" xPos="359" yPos="110" />
+    <Image height="11" name="Notice/blackM" width="10" xPos="360" yPos="117" />
+    <Image height="16" name="Progress/frameLT" width="19" xPos="124" yPos="145" />
+    <Image height="23" name="Progress/frameLB" width="19" xPos="124" yPos="161" />
+    <Image height="16" name="Progress/frameRT" width="20" xPos="244" yPos="145" />
+    <Image height="23" name="Progress/frameRB" width="20" xPos="244" yPos="161" />
+    <Image height="16" name="Progress/frameT" width="3" xPos="233" yPos="145" />
+    <Image height="23" name="Progress/frameB" width="3" xPos="233" yPos="161" />
+    <Image height="10" name="Progress/bar" width="13" xPos="145" yPos="161" />
+    <Image height="10" name="Progress/cursorRT" width="7" xPos="299" yPos="151" />
+    <Image height="10" name="Progress/cursorRB" width="7" xPos="299" yPos="161" />
+    <Image height="10" name="Progress/cursorLB" width="7" xPos="266" yPos="161" />
+    <Image height="10" name="Progress/cursorLT" width="7" xPos="265" yPos="151" />
+    <Image height="10" name="Progress/cursorT" width="2" xPos="277" yPos="151" />
+    <Image height="10" name="Progress/cursorB" width="2" xPos="277" yPos="161" />
 </Imageset>

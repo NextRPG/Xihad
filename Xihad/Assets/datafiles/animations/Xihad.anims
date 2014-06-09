@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <Animations>
+	
 	<AnimationDefinition name="MapEffectUpToOne" autoStart="false" duration="1.0" replayMode="loop">
 		<Affector property="RightIconVertFormat" interpolator="String" applicationMethod="absolute">
 			<KeyFrame position="0" value="BottomAligned" />
@@ -318,6 +319,52 @@
 			<KeyFrame position="1.7" value="{{2, 0}, {0, 0}}" progression="quadratic accelerating"/>
 		</Affector>
 		<Subscription event="_Start" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="ProgressGrow" duration="1" replayMode="once">
+		<Affector property="CurrentProgress" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0" sourceProperty="CurrentProgress" />
+			<KeyFrame position="1" sourceProperty="TargetProgress" progression="quadratic decelerating"/>
+		</Affector>
+		<Affector property="CurrentProgressValue" interpolator="uint" applicationMethod="absolute">
+			<KeyFrame position="0" sourceProperty="CurrentProgressValue" />
+			<KeyFrame position="1" sourceProperty="TargetProgressValue" progression="quadratic decelerating"/>
+		</Affector>
+		<Subscription event="_Grow" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="ProgressGrowOver" duration="1.5" replayMode="once">
+		<Affector property="CurrentProgress" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.5" sourceProperty="CurrentProgress" />
+			<KeyFrame position="0.99" value="0.99" progression="linear" />
+			<KeyFrame position="1.0" value="0" progression="discrete"/>
+			<KeyFrame position="1.5" sourceProperty="TargetProgress" progression="quadratic decelerating" />
+		</Affector>
+		<Affector property="CurrentProgressValue" interpolator="uint" applicationMethod="absolute">
+			<KeyFrame position="0.5" sourceProperty="CurrentProgressValue"/>
+			<KeyFrame position="0.99" value="99" progression="linear"/>
+			<KeyFrame position="1.0" value="0" progression="discrete" />
+			<KeyFrame position="1.5" sourceProperty="TargetProgressValue" progression="quadratic decelerating"/>
+		</Affector>
+		<Subscription event="_GrowOver" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="UnfoldNFold" duration="2.1" replayMode="once" >
+		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+			<KeyFrame position="0" value="{{0, 0}, {1, 0}}" />
+			<KeyFrame position="0.1" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.0" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.1" value="{{0, 0}, {1, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0" value="{{0.5, 0}, {0, 0}}" />
+			<KeyFrame position="0.1" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.0" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.1" value="{{0.5, 0}, {0, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		
+		
+		<Subscription event="_Open" action="Start" />
 	</AnimationDefinition>
 </Animations>
 
