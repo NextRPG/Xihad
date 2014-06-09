@@ -37,15 +37,8 @@ function Notification:_replaceString(fmt, valueDict)
 end
 
 function Notification:_updateText(fmt, valueDict, colorDict)
-	local font = self.window:getFont()
-	local extent = font:getTextExtent(self:_replaceString(fmt, valueDict))
-	local line = font:getFontHeight()
-	local margin = self.window:getProperty("TextMargin")
-	
-	local width = Utils.newUDim(0, extent + 2*margin)
-	local height = Utils.newUDim(0, line + 2*margin)
-	local parent = self.window:getParent()
-	parent:setSize(CEGUI.USize:new(width, height))
+	self.window:getParent():setSize(Utils.sizeToWrapText(
+		self.window, self:_replaceString(fmt, valueDict)))
 	
 	self.window:setText(self:_formatString(fmt, valueDict, colorDict))
 end
@@ -53,20 +46,12 @@ end
 function Notification:show(fmt, valueDict, colorDict)
 	assert(type(fmt) == "string")
 	self:_updateText(fmt, valueDict, colorDict)
-	Utils.fireEvent("Unfold", self.window)
+	Utils.fireEvent("_Open", self.window)
 	return self.window:getParent()
 end
 
 function Notification:close()
-	Utils.fireEvent("Fold", self.window)
-end
-
-function Notification:addListener(listener, eventType)
-	print("I have no listener")
-end
-
-function Notification:removeListener(listener, eventType)
-	print("I have no listener")
+	Utils.fireEvent("_Close", self.window)
 end
 
 return Notification

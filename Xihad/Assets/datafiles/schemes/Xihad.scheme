@@ -7,12 +7,14 @@
 	<Font filename="simhei-14.font" />
 	<Font filename="fangzheng-14.font" />
 	<Font filename="fangzheng2-14.font" />
+	<Font filename="Fangzheng-L.font" />
 	<LookNFeel filename="Xihad.looknfeel" />	
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 
 	
 	<FalagardMapping windowType="Xihad/MapTileInfo" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/RoundedRectangle" />
 	<FalagardMapping windowType="Xihad/Button" targetType="CEGUI/PushButton" renderer="Core/Button" lookNFeel="Xihad/Button" />
+	<FalagardMapping windowType="Xihad/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar" lookNFeel="Xihad/ProgressBar" />
 	
 	<FalagardMapping windowType="Xihad/DoubleIcon" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/DoubleIcon" />
 	<FalagardMapping windowType="Xihad/Image" targetType="DefaultWindow" renderer="Core/Default" lookNFeel="Xihad/Image" />

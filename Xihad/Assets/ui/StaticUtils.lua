@@ -33,4 +33,23 @@ end
 function StaticUtils.fireEvent(eventName, window)
 	window:fireEvent(eventName, CEGUI.WindowEventArgs:new(window))
 end
+
+function StaticUtils.sizeToWrapText(window, text)
+	local text = text or window:getText()
+
+	local font
+	if window:getProperty("Font") ~= "" then
+		font = CEGUI.FontManager:getSingleton():get(window:getProperty("Font"))
+	else
+		font = window:getGUIContext():getDefaultFont()
+	end
+	
+	local extent = font:getTextExtent(text)
+	local line = font:getFontHeight()
+	local margin = window:getProperty("TextMargin")
+	
+	local width = StaticUtils.newUDim(0, extent + 2*margin)
+	local height = StaticUtils.newUDim(0, line + 2*margin)
+	return CEGUI.USize:new(width, height)
+end
 return StaticUtils

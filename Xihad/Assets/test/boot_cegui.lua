@@ -60,19 +60,22 @@ local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
 		if e.key == "C" then
-			GUIController:showWindow("Command",
-				{ 	
-				[1] = { name = "技能", 
-						hover = true,
-						list = {[1] = {name = "技能1", value = "3" }, 
-								[2] = {name = "技能2", value = "10", disabled = true }, 
-								[3] = {name = "技能3", value = "E" }, 
-								},
-					  } ,
-				[2] = { name = "道具", },
-				[3] = { name = "交换", disabled = true, },
-				[4] = { name = "待机", },
-			})
+			-- GUIController:showWindow("Command",
+			-- 	{ 	
+			-- 	[1] = { name = "技能", 
+			-- 			hover = true,
+			-- 			list = {[1] = {name = "技能1", value = "3" }, 
+			-- 					[2] = {name = "技能2", value = "10", disabled = true }, 
+			-- 					[3] = {name = "技能3", value = "E" }, 
+			-- 					},
+			-- 		  } ,
+			-- 	[2] = { name = "道具", },
+			-- 	[3] = { name = "交换", disabled = true, },
+			-- 	[4] = { name = "待机", },
+			-- })
+			
+			-- GUIController:showWindow("FightStart", "敌全灭")
+			local wnd = GUIController:showWindow("GainExp", 0.65, 0.34, true)
 		elseif e.key == "M" then
 			local function getRandomEffectValue()
 				local result = math.random(-3, 3)
@@ -130,6 +133,7 @@ local controller = g_scene:pushController({
 			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
 		elseif e.key == "Q" then
 			GUIController:hideWindow("Notification")
+			GUIController:hideWindow("FightStart")
 		else
 			handled = 1
 		end

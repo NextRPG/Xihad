@@ -141,6 +141,7 @@
 	
 	<Window name="NotificationPanel" type="DefaultWindow">
 		<Property name="Size" value="{{0, 200}, {0, 50}}" />
+		<Property name="MousePassThroughEnabled" value="true" />
 		<Window name="Notification" type="Xihad/Image">
 			<Property name="Size" value="{{0, 0}, {1, 0}}" />
 			<Property name="EnableTextColor" value="FFFFFFFF" />
@@ -157,5 +158,58 @@
 			<Property name="TextMargin" value="20"/>
 		</Window>
 	</Window>	
+	
+	<Window name="FightStartPanel" type="DefaultWindow" >
+		<Property name="MousePassThroughEnabled" value="true" />
+		<Property name="Size" value="{{1, 0}, {0.25, 0}}" />
+		<Property name="Position" value="{{0, 0}, {0.375, 0}}" />
+		<Window name="FightStart" type="Xihad/Image" >
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Alpha" value="0.6" />
+			<Property name="Size" value="{{1, 0}, {0, 0}}" />
+			<Property name="Position" value="{{0, 0}, {0.5, 0}}" />
+			<Property name="FrameM" value="XihadUI/Notice/blackM" />
+			<Window name="PanelT" type="DefaultWindow" >
+				<Property name="MousePassThroughEnabled" value="true" />
+				<Window name="VictoryShadow" type="Xihad/Image">
+					<Property name="Text" value="胜利条件" />
+					<Property name="Font" value="Fangzheng-L" />
+					<Property name="InheritsAlpha" value="false" />
+					<Property name="EnableTextColor" value="FF000000" />
+					<Property name="TextMargin" value="5"/>
+					<Window name="Victory" type="Xihad/Image">
+						<Property name="Text" value="胜利条件" />
+						<Property name="Font" value="Fangzheng-L" />
+						<Property name="EnableTextColor" value="FFFFFFFF" />
+						<Property name="VertTextFormat" value="TopAligned"/>
+						<Property name="HorzTextFormat" value="LeftAligned"/>
+					</Window>
+				</Window>
+			</Window>
+			<Window name="PanelB" type="DefaultWindow" >
+				<Property name="MousePassThroughEnabled" value="true" />
+				<Window name="ConditionShadow" type="Xihad/Image">
+					<Property name="Font" value="Fangzheng-L" />
+					<Property name="InheritsAlpha" value="false" />
+					<Property name="EnableTextColor" value="FF000000" />
+					<Property name="TextMargin" value="5"/>
+					<Window name="Condition" type="Xihad/Image">
+						<Property name="Font" value="Fangzheng-L" />
+						<Property name="EnableTextColor" value="FFFFFFFF" />
+						<Property name="VertTextFormat" value="TopAligned"/>
+						<Property name="HorzTextFormat" value="LeftAligned"/>
+					</Window>
+				</Window>
+			</Window>
+		</Window>
+	</Window>
+	
+	<Window name="GainExpPanel" type="DefaultWindow">
+		<Property name="MousePassThroughEnabled" value="true"/>
+		<Property name="Size" value="{{0, 250}, {0, 39}}" />
+		<Window name="GainExp" type="Xihad/ProgressBar">
+			<Property name="Size" value="{{0, 0}, {1, 0}}" />
+		</Window>
+	</Window>
 </Window>
 </GUILayout>

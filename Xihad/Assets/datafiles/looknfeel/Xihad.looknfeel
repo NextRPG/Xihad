@@ -1,6 +1,253 @@
 <?xml version="1.0" ?>
 <Falagard version="7">
 	
+	<WidgetLook name="Xihad/ProgressBar">
+		<PropertyDefinition name="HorzMargin" initialValue="20" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="CursorWidth" initialValue="40" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="ProgressPadding" initialValue="3" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="TextFrontColor" initialValue="FF412502" redrawOnWrite="true" type="ColourRect"/>
+		<PropertyDefinition name="TextBackColor" initialValue="FFf9dcab" redrawOnWrite="true" type="ColourRect"/>
+		
+		<PropertyDefinition name="CurrentProgressValue" initialValue="0" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="TargetProgressValue" initialValue="0" redrawOnWrite="true" type="uint"/>
+		<PropertyDefinition name="TargetProgress" initialValue="" redrawOnWrite="true" type="float"/>
+		
+		<Property name="CurrentProgress" value="0"/>
+		<Property name="Text" value="EXP" />
+		<!-- <Property name="Size" value="{{0, 250}, {0, 39}}" /> -->
+		<Property name="StepSize" value="0.01" />
+		<NamedArea name="ProgressArea">
+			<Area>
+				<Dim type="LeftEdge">
+					<OperatorDim op="Add">
+						<PropertyDim name="HorzMargin"/>
+						<OperatorDim op="Add">
+							<FontDim type="HorzExtent"/>
+							<PropertyDim name="ProgressPadding"/>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="Width">
+					<OperatorDim op="Subtract">
+						<UnifiedDim scale="1" type="Width" />
+						<OperatorDim op="Add">
+							<OperatorDim op="Add">
+								<PropertyDim name="HorzMargin"/>
+								<PropertyDim name="HorzMargin"/>
+							</OperatorDim>
+							<OperatorDim op="Add">
+								<PropertyDim name="CursorWidth" />
+								<OperatorDim op="Add">
+									<FontDim type="HorzExtent"/>
+									<PropertyDim name="ProgressPadding"/>
+								</OperatorDim>
+							</OperatorDim>
+						</OperatorDim>
+					</OperatorDim>
+				</Dim>
+				<Dim type="TopEdge"><ImageDim name="XihadUI/Progress/frameT" dimension="Height"/></Dim>
+				<Dim type="Height"><ImageDim name="XihadUI/Progress/bar" dimension="Height"/></Dim>
+			</Area>
+		</NamedArea>
+		<ImagerySection name="frame">
+			<FrameComponent>
+				<Area>
+					<Dim type="LeftEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="RightEdge"><UnifiedDim scale="1" type="RightEdge"/></Dim>
+					<Dim type="BottomEdge"><UnifiedDim scale="1" type="BottomEdge"/></Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="XihadUI/Progress/frameLT"/>
+				<Image component="TopRightCorner" name="XihadUI/Progress/frameRT"/>
+				<Image component="BottomLeftCorner" name="XihadUI/Progress/frameLB"/>
+				<Image component="BottomRightCorner" name="XihadUI/Progress/frameRB"/>
+				<Image component="TopEdge" name="XihadUI/Progress/frameT"/>
+				<Image component="BottomEdge" name="XihadUI/Progress/frameB"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="label">
+			<TextComponent>
+				<Area>
+					<Dim type="LeftEdge"><PropertyDim name="HorzMargin"/></Dim>
+					<Dim type="TopEdge"><AbsoluteDim value="0"/></Dim>
+					<Dim type="Width"><FontDim type="HorzExtent"/></Dim>
+					<Dim type="Height">
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Progress/frameT" dimension="Height"/>
+							<ImageDim name="XihadUI/Progress/frameT" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<VertFormat type="CentreAligned" />
+				<HorzFormat type="CentreAligned" />
+			</TextComponent>
+		</ImagerySection>
+		<ImagerySection name="progress">
+			<FrameComponent>
+				<Area>
+					<Dim type="Width">
+						<OperatorDim op="Multiply">
+							<PropertyDim name="CurrentProgress"/>
+							<UnifiedDim scale="1" type="Width"/>
+						</OperatorDim>
+					</Dim>
+				</Area>
+				<Image component="Background" name="XihadUI/Progress/bar"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="cursor_frame">
+			<FrameComponent>
+				<Area>
+					<Dim type="TopEdge">
+						<OperatorDim op="Subtract">
+							<ImageDim name="XihadUI/Progress/frameT" dimension="Height"/>
+							<ImageDim name="XihadUI/Progress/cursorT" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height">
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Progress/cursorT" dimension="Height"/>
+							<ImageDim name="XihadUI/Progress/cursorB" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="LeftEdge">
+						<OperatorDim op="Add">
+							<OperatorDim op="Add">
+								<PropertyDim name="HorzMargin"/>
+								<FontDim type="HorzExtent"/>
+							</OperatorDim>
+							<OperatorDim op="Add">
+								<PropertyDim name="ProgressPadding" />
+								<OperatorDim op="Multiply">
+									<PropertyDim name="CurrentProgress"/>
+									<OperatorDim op="Subtract">
+										<UnifiedDim scale="1" type="Width" />
+										<OperatorDim op="Add">
+											<OperatorDim op="Add">
+												<PropertyDim name="HorzMargin"/>
+												<PropertyDim name="HorzMargin"/>
+											</OperatorDim>
+											<OperatorDim op="Add">
+												<PropertyDim name="CursorWidth" />
+												<OperatorDim op="Add">
+													<FontDim type="HorzExtent"/>
+													<PropertyDim name="ProgressPadding"/>
+												</OperatorDim>
+											</OperatorDim>
+										</OperatorDim>
+									</OperatorDim>
+								</OperatorDim>
+							</OperatorDim>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Width">
+						<PropertyDim name="CursorWidth"/>
+					</Dim>
+				</Area>
+				<Image component="TopLeftCorner" name="XihadUI/Progress/cursorLT"/>
+				<Image component="TopRightCorner" name="XihadUI/Progress/cursorRT"/>
+				<Image component="BottomLeftCorner" name="XihadUI/Progress/cursorLB"/>
+				<Image component="BottomRightCorner" name="XihadUI/Progress/cursorRB"/>
+				<Image component="TopEdge" name="XihadUI/Progress/cursorT"/>
+				<Image component="BottomEdge" name="XihadUI/Progress/cursorB"/>
+			</FrameComponent>
+		</ImagerySection>
+		<ImagerySection name="cursor_label" >
+			<TextComponent>
+				<Area>
+					<Dim type="TopEdge">
+						<OperatorDim op="Subtract">
+							<ImageDim name="XihadUI/Progress/frameT" dimension="Height"/>
+							<ImageDim name="XihadUI/Progress/cursorT" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Height">
+						<OperatorDim op="Add">
+							<ImageDim name="XihadUI/Progress/cursorT" dimension="Height"/>
+							<ImageDim name="XihadUI/Progress/cursorB" dimension="Height"/>
+						</OperatorDim>
+					</Dim>
+					<Dim type="LeftEdge">
+						<OperatorDim op="Add">
+							<OperatorDim op="Add">
+								<PropertyDim name="HorzMargin"/>
+								<FontDim type="HorzExtent"/>
+							</OperatorDim>
+							<OperatorDim op="Add">
+								<PropertyDim name="ProgressPadding" />
+								<OperatorDim op="Multiply">
+									<PropertyDim name="CurrentProgress"/>
+									<OperatorDim op="Subtract">
+										<UnifiedDim scale="1" type="Width" />
+										<OperatorDim op="Add">
+											<OperatorDim op="Add">
+												<PropertyDim name="HorzMargin"/>
+												<PropertyDim name="HorzMargin"/>
+											</OperatorDim>
+											<OperatorDim op="Add">
+												<PropertyDim name="CursorWidth" />
+												<OperatorDim op="Add">
+													<FontDim type="HorzExtent"/>
+													<PropertyDim name="ProgressPadding"/>
+												</OperatorDim>
+											</OperatorDim>
+										</OperatorDim>
+									</OperatorDim>
+								</OperatorDim>
+							</OperatorDim>
+						</OperatorDim>
+					</Dim>
+					<Dim type="Width">
+						<PropertyDim name="CursorWidth"/>
+					</Dim>
+				</Area>
+				<TextProperty name="CurrentProgressValue" />
+				<VertFormat type="CentreAligned" />
+				<HorzFormat type="CentreAligned" />
+			</TextComponent>
+		</ImagerySection>
+		<StateImagery name="Enabled">
+			<Layer>
+				<Section section="frame"/>
+				<Section section="label">
+					<ColourProperty name="TextFrontColor" />
+				</Section>
+				<Section section="cursor_frame"/>
+				<Section section="cursor_label">
+					<ColourProperty name="TextBackColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="Disabled">
+			<Layer>
+				<Section section="frame">
+					<Colours topLeft="FF7F7F7F" bottomLeft="FF7F7F7F" topRight="FF7F7F7F" bottomRight="FF7F7F7F"/>
+				</Section>
+				<Section section="label">
+					<ColourProperty name="TextFrontColor" />
+				</Section>
+				<Section section="cursor">
+					<Colours topLeft="FF7F7F7F" bottomLeft="FF7F7F7F" topRight="FF7F7F7F" bottomRight="FF7F7F7F"/>
+				</Section>
+				<Section section="cursor_label">
+					<ColourProperty name="TextBackColor" />
+				</Section>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="EnabledProgress">
+			<Layer>
+				<Section section="progress"/>
+			</Layer>
+		</StateImagery>
+		<StateImagery name="DisabledProgress">
+			<Layer>
+				<Section section="progress">
+					<Colours topLeft="FF7F7F7F" bottomLeft="FF7F7F7F" topRight="FF7F7F7F" bottomRight="FF7F7F7F"/>
+				</Section>
+			</Layer>
+		</StateImagery>
+	</WidgetLook>
+	
 	<!--
 	*****************************************************************
 		Xihad/DoubleIcon
@@ -1518,9 +1765,9 @@
 		
 		<ImagerySection name="main">
 			<FrameComponent>
-                <Image component="TopEdge" name="XihadUI/VertScrollBarT" />
-                <Image component="Background" name="XihadUI/VertScrollBarM" />
-                <Image component="BottomEdge" name="XihadUI/VertScrollBarB" />
+				<Image component="TopEdge" name="XihadUI/VertScrollBarT" />
+				<Image component="Background" name="XihadUI/VertScrollBarM" />
+				<Image component="BottomEdge" name="XihadUI/VertScrollBarB" />
 			</FrameComponent>	
 		</ImagerySection>
 		<StateImagery name="Enabled">
