@@ -336,13 +336,13 @@
 	<AnimationDefinition name="ProgressGrowOver" duration="1.5" replayMode="once">
 		<Affector property="CurrentProgress" interpolator="float" applicationMethod="absolute">
 			<KeyFrame position="0.5" sourceProperty="CurrentProgress" />
-			<KeyFrame position="0.99" value="0.99" progression="linear" />
-			<KeyFrame position="1.0" value="0" progression="discrete"/>
+			<KeyFrame position="0.99" value="1" progression="linear" />
+			<KeyFrame position="1.0" value="0.01" progression="discrete"/>
 			<KeyFrame position="1.5" sourceProperty="TargetProgress" progression="quadratic decelerating" />
 		</Affector>
 		<Affector property="CurrentProgressValue" interpolator="uint" applicationMethod="absolute">
 			<KeyFrame position="0.5" sourceProperty="CurrentProgressValue"/>
-			<KeyFrame position="0.99" value="99" progression="linear"/>
+			<KeyFrame position="0.99" value="100" progression="linear"/>
 			<KeyFrame position="1.0" value="0" progression="discrete" />
 			<KeyFrame position="1.5" sourceProperty="TargetProgressValue" progression="quadratic decelerating"/>
 		</Affector>
@@ -365,6 +365,15 @@
 		
 		
 		<Subscription event="_Open" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MouseClick" duration="1.1" replayMode="loop" autoStart="true" >
+		<Affector property="Image" interpolator="String" applicationMethod="absolute">
+			<KeyFrame position="0" value="XihadUI/Notice/mouse_normal"/>
+			<KeyFrame position="0.5" value="XihadUI/Notice/mouse_lclick"/>
+			<KeyFrame position="0.6" value="XihadUI/Notice/mouse_normal"/>
+			<KeyFrame position="1.1" value="XihadUI/Notice/mouse_normal"/>
+		</Affector>
 	</AnimationDefinition>
 </Animations>
 

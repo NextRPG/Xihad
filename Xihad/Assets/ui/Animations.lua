@@ -22,6 +22,8 @@ local animations =
 	ProgressGrow = { "GainExpPanel/GainExp" },
 	ProgressGrowOver = { "GainExpPanel/GainExp" },
 	
+	MouseClick = { "NotificationPanel/Notification/Mouse"}, 
+	
 	MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 	MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 	MapEffectUpToThree = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },

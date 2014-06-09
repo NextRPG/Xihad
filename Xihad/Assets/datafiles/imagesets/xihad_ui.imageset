@@ -153,4 +153,6 @@
     <Image height="10" name="Progress/cursorLT" width="7" xPos="265" yPos="151" />
     <Image height="10" name="Progress/cursorT" width="2" xPos="277" yPos="151" />
     <Image height="10" name="Progress/cursorB" width="2" xPos="277" yPos="161" />
+    <Image height="19" name="Notice/mouse_normal" width="14" xPos="387" yPos="113" />
+    <Image height="19" name="Notice/mouse_lclick" width="14" xPos="407" yPos="113" />
 </Imageset>
