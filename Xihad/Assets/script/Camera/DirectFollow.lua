@@ -24,7 +24,6 @@ function DirectFollow:setFreeElevation(degree)
 	self.tangent = math.tan(Trigonometry.toRadian(degree))
 end
 
--- TODO 接口化
 function DirectFollow:_toGround(vector)
 	vector:set(nil, 0, nil)
 	return vector

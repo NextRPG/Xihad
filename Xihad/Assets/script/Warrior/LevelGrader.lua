@@ -31,8 +31,7 @@ function LevelGrader:promote(warrior, atLevel)
 		result:setNewSkills(skillList)
 	end
 	
-	result.properties = {}
-	for pname, _ in pairs(warrior:allProperties) do
+	for pname, _ in warrior:allProperties() do
 		local pinc = self.propertyIncrements[pname]
 		if pinc ~= nil then
 			result:setPropertyInc(pname, pinc(warrior, atLevel))

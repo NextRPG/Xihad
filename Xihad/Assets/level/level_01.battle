@@ -1,13 +1,13 @@
 local robber = 
 {
-	career = '强盗',
+	career = 'WARRIOR',
 	model = 'reimu',
 	exp = 50,
 	skills = {
 		['Fire'] = 10,
 	},
 	properties = {
-		MHP = 250,
+		MHP = 50,
 		ATK = 25,
 		DFS = 5,
 		MTK = 5,
@@ -21,14 +21,14 @@ local robberLocations =
 	-- { x = 7,  y = 7, prefab = 1, rotation = 180, },
 	-- { x = 10, y = 9, prefab = 1, rotation = 180, },
 	-- { x = 5,  y = 9, prefab = 1, rotation = 180, },
-	-- { x = 9,  y = 7, prefab = 1, rotation = 180, },
+	{ x = 9,  y = 7, prefab = 1, rotation = 180, },
 	{ x = 3,  y = 7, prefab = 1, rotation = 180, },
 }
 
 local heroLocations = 
 {
 	{ x = 4, y = 2, prefab = 'A', rotation = 0, },
-	{ x = 6, y = 2, prefab = 'B', rotation = 0, },
+	-- { x = 6, y = 2, prefab = 'B', rotation = 0, },
 	-- { x = 8, y = 2, prefab = 'D', rotation = 0, },
 }
 
@@ -73,8 +73,34 @@ local battle = {
 	terrain = terrainData,
 }
 
-function battle.callback()
-	-- TODO add script
+function battle.callback(battleManager, executor, camera, ui)
+	local Algorithm = require 'std.Algorithm'
+	local ConditionFactory = require 'Condition.ConditionFactory'
+	
+	battleManager:addVictoryCondition(
+		ConditionFactory.beatWarrior('Enemy', Algorithm.all_of), 'Hero')
+	
+	battleManager:addVictoryCondition(
+		ConditionFactory.beatWarrior('Hero', Algorithm.all_of), 'Enemy')
+
+	-- battleManager:addCommandCondition(
+	-- 	ConditionFactory.roundExceed(1), 
+	-- 	function()
+	-- 		local XihadConversation = require 'Conversation.XihadConversation'
+	-- 		local conv = XihadConversation.new()
+	-- 		local aSpeaker = conv:addWarrior('A')
+	-- 		local bSpeaker = conv:addWarrior('B')
+			
+	-- 		conv:start()
+			
+	-- 		--- close -(O)-> deactive -(S)-> active -(D)-> deactive -(C)-> close
+	-- 		aSpeaker:speak('等等')
+	-- 		bSpeaker:speak('caonima')
+	-- 		aSpeaker:speak({'hahah', 'hhhh'})
+			
+	-- 		conv:stop()
+	-- 	end)
+	
 end
 
 return battle

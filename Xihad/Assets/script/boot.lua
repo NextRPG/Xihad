@@ -106,39 +106,16 @@ local enemyTeam= XihadBattleTeam.new('Enemy', AIController.new(executor))
 battleManager:addTeam(heroTeam)
 battleManager:addTeam(enemyTeam)
 
-local ConditionFactory = require 'Condition.ConditionFactory'
-battleManager:addVictoryCondition(
-	ConditionFactory.beatWarriorsWithTag('Enemy'), 'Hero')
-
-battleManager:addVictoryCondition(
-	ConditionFactory.beatWarriorsWithTag('Hero'), 'Enemy')
-------------------------------------------------------------------------------
-
-battleManager:addCommandCondition(
-	ConditionFactory.roundExceed(1), 
-	function()
-		local XihadConversation = require 'Conversation.XihadConversation'
-		local conv = XihadConversation.new()
-		local aSpeaker = conv:addWarrior('A')
-		local bSpeaker = conv:addWarrior('B')
-		
-		conv:start()
-		
-		--- close -(O)-> deactive -(S)-> active -(D)-> deactive -(C)-> close
-		aSpeaker:speak('等等')
-		bSpeaker:speak('caonima')
-		aSpeaker:speak({'hahah', 'hhhh'})
-		
-		conv:stop()
-	end)
-
+if battle.callback then
+	battle.callback(battleManager, executor, camera, ui)
+end
 
 ------------------------------------------------------------------------------
 -- Test script
 local Location = require 'route.Location'
 local tile = g_chessboard:getTile(Location.new(1, 1))
 
-local ItemRegistry= require 'Item.ItemRegistry'
+local ItemRegistry = require 'Item.ItemRegistry'
 local TreasureBarrier = require 'Barrier.TreasureBarrier'
 local treasure = TreasureBarrier.new(ItemRegistry.findItemByName('伤药'))
 treasure:setTile(tile)
@@ -147,10 +124,10 @@ local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
 simulator:selectWarrior('A')
 -- -- simulator:selectTile(aTile)
--- simulator:selectTileAt(4, 7)
+simulator:selectTileAt(3, 4)
 -- simulator:selectCommand('交换')
--- simulator:selectCommand('技能', 'Fire')
--- simulator:selectTileAt(3, 7)
+simulator:selectCommand('技能', 'Fire')
+simulator:selectTileAt(3, 5)
 -- -- simulator:selectTile(aTile)
 -- -- simulator:selectCommand('道具', '长矛')
 -- -- simulator:selectCommand('道具', '长矛')
@@ -159,7 +136,7 @@ simulator:selectWarrior('A')
 -- simulator:selectTileAt(8, 2)
 -- simulator:selectCommand('待机')
 
--- g_world:setTimeScale(0.1)
+-- g_world:setTimeScale(10)
 
 g_camera = camera
 battleManager:startBattle()

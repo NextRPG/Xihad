@@ -1,6 +1,6 @@
 local Algo = {}
 
-function Algo.all_of(t, f)
+function Algo.all_of_t(t, f)
 	for k,v in pairs(t) do
 		if not f(k, v) then
 			return false
@@ -10,7 +10,7 @@ function Algo.all_of(t, f)
 	return true
 end
 
-function Algo.none_of(t, f)
+function Algo.none_of_t(t, f)
 	for k,v in pairs(t) do
 		if f(k, v) then
 			return false
@@ -20,7 +20,7 @@ function Algo.none_of(t, f)
 	return true
 end
 
-function Algo.any_of(t, f)
+function Algo.any_of_t(t, f)
 	for k,v in pairs(t) do
 		if f(k, v) then
 			return true
@@ -30,7 +30,7 @@ function Algo.any_of(t, f)
 	return false
 end
 
-function Algo.find(t, value)
+function Algo.find_t(t, value)
 	for k,v in pairs(t) do
 		if v == value then
 			return k
@@ -38,7 +38,7 @@ function Algo.find(t, value)
 	end
 end
 
-function Algo.find_if(t, f)
+function Algo.find_if_t(t, f)
 	for k,v in pairs(t) do
 		if f(k, v) then
 			return k
@@ -46,7 +46,7 @@ function Algo.find_if(t, f)
 	end
 end
 
-function Algo.count(t, value)
+function Algo.count_t(t, value)
 	local count = 0
 	for k,v in pairs(t) do
 		if v == value then
@@ -57,10 +57,59 @@ function Algo.count(t, value)
 	return count
 end
 
-function Algo.count_if(t, f)
+function Algo.count_if_t(t, f)
 	local count = 0
 	for k,v in pairs(t) do
 		if f(k, v) then
+			count = count + 1
+		end
+	end
+	
+	return count
+end
+
+function Algo.all_of(iter, f)
+	for _1, _2, _3 in iter() do
+		if not f(_1, _2, _3) then
+			return false
+		end
+	end
+	
+	return true
+end
+
+function Algo.none_of(iter, f)
+	for _1, _2, _3 in iter() do
+		if f(_1, _2, _3) then
+			return false
+		end
+	end
+	
+	return true
+end
+
+function Algo.any_of(iter, f)
+	for _1, _2, _3 in iter() do
+		if f(_1, _2, _3) then
+			return true
+		end
+	end
+	
+	return false
+end
+
+function Algo.find_if(iter, f)
+	for _1, _2, _3 in iter() do
+		if f(_1, _2, _3) then
+			return _1, _2, _3
+		end
+	end
+end
+
+function Algo.count_if(iter, f)
+	local count = 0
+	for _1, _2, _3 in iter() do
+		if f(_1, _2, _3) then
 			count = count + 1
 		end
 	end

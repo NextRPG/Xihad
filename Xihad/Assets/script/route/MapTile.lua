@@ -72,26 +72,26 @@ function MapTile:findBarrierByKey(key)
 end
 
 function MapTile:isVacancy()
-	return algo.all_of(self.barriers, function (e, v)
+	return algo.all_of_t(self.barriers, function (e, v)
 		return e:keepVacancy()
 	end)
 end
 
 function MapTile:permitCasting(warrior, skill)
 	return 	skill:canCastToVacancy() and self:isVacancy() or
-			algo.any_of(self.barriers, function(e, v)
+			algo.any_of_t(self.barriers, function(e, v)
 				return e:permitCasting(warrior, skill)
 			end)
 end
 
 function MapTile:canPass(warrior)
-	return algo.all_of(self.barriers, function(e, v)
+	return algo.all_of_t(self.barriers, function(e, v)
 		return e:canPass(warrior)
 	end)
 end
 
 function MapTile:canStay(warrior)
-	return algo.all_of(self.barriers, function(e, v)
+	return algo.all_of_t(self.barriers, function(e, v)
 		return e:canStay(warrior)
 	end)
 end

@@ -1,6 +1,5 @@
 local base = require 'Skill.ToComponentResolver'
 local Location  = require 'route.Location'
-local Algorithm = require 'std.Algorithm'
 local HitPointResolver = {
 	nature = 'unkonwn', 
 	attenuation = 0,

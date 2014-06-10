@@ -36,7 +36,6 @@ function ChooseTileState:onStateEnter(state, prev)
 		self:_restoreState()
 		self:_focusObject(self:_getSourceObject())
 	else
-		-- TODO update reachables tiles
 		self:_fastenCursorWhen(function ()
 			self:_focusObject(self:_getSourceObject())
 		end)

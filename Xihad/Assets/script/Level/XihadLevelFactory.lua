@@ -45,7 +45,7 @@ function XLoader:createPrefab(team, data, name)
 	self:_checkTeam(team)
 	self.idx = self.idx + 1
 	
-	name = name or data.career..self.idx
+	name = name or tostring(data.career)..self.idx
 	return self.teamFactories[team]:create(team, name, data)
 end
 

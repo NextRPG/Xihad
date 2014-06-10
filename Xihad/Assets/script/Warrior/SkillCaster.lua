@@ -90,18 +90,13 @@ end
 
 function SkillCaster:learnSkill(skill, initialCount)
 	assert(type(initialCount) == 'number' and initialCount > 0)
-	if not self.skillInitCount[skill] then
-		self.skillRestCount[skill] = initialCount
-	else
-		local delta = initialCount - self.skillInitCount[skill]
-		if delta > 0 then
-			local prev = self.skillRestCount[skill]
-			local curr = math.max(initialCount, prev + delta)
-			self.skillRestCount[skill] = curr
-		end
+	local prevInit = self.skillInitCount[skill] or 0
+	local delta = initialCount - prevInit
+	if delta > 0 then
+		local prevRest = self.skillRestCount[skill] or 0
+		self.skillInitCount[skill] = prevInit + delta
+		self.skillRestCount[skill] = prevRest + delta
 	end
-	
-	self.skillInitCount[skill] = initialCount
 end
 
 function SkillCaster:forgetSkill(skill)

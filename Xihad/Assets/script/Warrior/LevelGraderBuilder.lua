@@ -28,11 +28,11 @@ function LevelGraderBuilder:setPropertyPromoter(pname, promoter)
 	self.propertyPromoters[pname] = promoter
 end
 
-function LevelGraderBuilder:addSkillAtLevel(level, skill)
+function LevelGraderBuilder:addSkillAtLevel(level, skill, count)
 	assert(type(level) == 'number' and skill ~= nil)
 	
 	local list = Table.get_or_new_table(self.skillsToLearn, level)
-	table.insert(list, skill)
+	table.insert(list, { skill = skill, count = count })
 end
 
 function LevelGraderBuilder:create()

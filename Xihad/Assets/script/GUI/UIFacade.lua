@@ -22,7 +22,6 @@ end
 
 function UIFacade:showTileInfo(tile)
 	if tile then
-		print(tostring(tile:getLocation()))
 		TileInfoView.show(tile)
 	else
 		TileInfoView.hide()

@@ -60,7 +60,6 @@ function CommandExecutor:_faceToTarget(warrior, targetTile, results)
 	
 	local parallel = ActionFactory.parallel(actions)
 	ActionAdapter.fit(object, parallel)
-	-- AsConditionFactory.waitAction(parallel)
 end
 
 function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results)
@@ -100,8 +99,27 @@ function CommandExecutor:_gainExp(warrior)
 	if not leveler then return end
 	
 	local exp = self.expCalculator:getResult()
+	local totalUsed = 0
 	print(warrior:getHostObject():getID(), 'gain exp', exp)
-	-- leveler:obtainExp(exp, callback)
+	
+	print(string.format('Current level: %d', leveler:getLevel()))
+	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
+	print('---------------------------------------------')
+	leveler:obtainExp(exp, 
+		function(usedExp, result)
+			totalUsed = totalUsed + usedExp
+			print(string.format('usedExp: %d', usedExp))
+			print(tostring(result))
+			
+			if result ~= nil then
+				result:apply(warrior)
+			end
+		end)
+	print('---------------------------------------------')
+	print(string.format('Current level: %d', leveler:getLevel()))
+	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
+	
+	assert(totalUsed == exp)
 end
 
 function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
@@ -176,8 +194,8 @@ function CommandExecutor:transact(master, guest, masterView, guestView)
 	master:deactivate()
 end
 
-function CommandExecutor:standBy(warrior)
-	warrior:deactivate()
+function CommandExecutor:standBy(warrior, mode)
+	warrior:deactivate(mode)
 end
 
 function CommandExecutor:execute(cmdList)
@@ -186,8 +204,7 @@ function CommandExecutor:execute(cmdList)
 	local command, subCommand = cmdList:getCommand()
 	
 	if cmdList:getLocation() == warrior:getLocation() and command == '待机' then
-		self:standBy(warrior)
-		-- TODO Don't wait fade out
+		self:standBy(warrior, 'immediate')
 		return
 	end
 	
@@ -202,8 +219,6 @@ function CommandExecutor:execute(cmdList)
 	elseif command == '道具' then
 		self:useItem(warrior, subCommand)
 	end
-	
-	-- TODO Wait fade out
 end
 
 return CommandExecutor

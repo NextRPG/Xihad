@@ -23,10 +23,9 @@ end
 function CommandView._createSkillList(skillCaster)
 	local list = {}
 	for skill, rest, total in skillCaster:allSkills() do
-		-- TODO show total?
 		table.insert(list, {
 				name = skill:getName(),
-				value= string.format('%2s', rest),
+				value= string.format('%2d/%2d', rest, total),
 				disabled = not skillCaster:canCast(skill),
 			})
 	end
