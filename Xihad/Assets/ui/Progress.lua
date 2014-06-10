@@ -4,7 +4,7 @@ local ParcelView = require "ui.ParcelView"
 local Progress = {}
 
 local function checkRange(progress)
-	assert(progress < 1.0 and progress >= 0)
+	assert(progress <= 1.0 and progress >= 0)
 end
 
 function Progress:show(currentProgress, targetProgress, isOverStep)

@@ -36,16 +36,21 @@ function Notification:_replaceString(fmt, valueDict)
 	return (string.gsub(fmt, "@(%w+)", valueDict or {}))
 end
 
-function Notification:_updateText(fmt, valueDict, colorDict)
-	self.window:getParent():setSize(Utils.sizeToWrapText(
-		self.window, self:_replaceString(fmt, valueDict)))
+function Notification:_update(fmt, valueDict, colorDict)
+	local sz = Utils.sizeToWrapText(
+		self.window, self:_replaceString(fmt, valueDict))
 	
+	local mouseIcon = self.window:getChild("Mouse")
+	local iconSz = mouseIcon:getPixelSize()
+	mouseIcon:setXPosition(Utils.newUDim(0, sz.width.offset - iconSz.width - 20))
+	mouseIcon:setYPosition(Utils.newUDim(0, sz.height.offset - iconSz.height - 10))
+	self.window:getParent():setSize(sz)
 	self.window:setText(self:_formatString(fmt, valueDict, colorDict))
 end
 
 function Notification:show(fmt, valueDict, colorDict)
 	assert(type(fmt) == "string")
-	self:_updateText(fmt, valueDict, colorDict)
+	self:_update(fmt, valueDict, colorDict)
 	Utils.fireEvent("_Open", self.window)
 	return self.window:getParent()
 end

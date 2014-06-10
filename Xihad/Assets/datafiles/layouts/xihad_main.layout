@@ -140,10 +140,10 @@
 	</Window>
 	
 	<Window name="NotificationPanel" type="DefaultWindow">
-		<Property name="Size" value="{{0, 200}, {0, 50}}" />
 		<Property name="MousePassThroughEnabled" value="true" />
 		<Window name="Notification" type="Xihad/Image">
 			<Property name="Size" value="{{0, 0}, {1, 0}}" />
+			<Property name="MousePassThroughEnabled" value="true" />
 			<Property name="EnableTextColor" value="FFFFFFFF" />
 			<Property name="Position" value="{{0.5, 0}, {0, 0}}" />
 			<Property name="FrameLT" value="XihadUI/Notice/frameLT" />
@@ -155,7 +155,10 @@
 			<Property name="FrameT" value="XihadUI/Notice/frameT" />
 			<Property name="FrameB" value="XihadUI/Notice/frameB" />
 			<Property name="FrameM" value="XihadUI/Notice/frameM" />
-			<Property name="TextMargin" value="20"/>
+			<Property name="TextMargin" value="28"/>
+			<Window name="Mouse" type="Xihad/Image">
+				<Property name="Size" value="{{0, 14}, {0, 19}}" />
+ 			</Window>
 		</Window>
 	</Window>	
 	
