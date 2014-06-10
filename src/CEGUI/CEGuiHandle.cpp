@@ -88,15 +88,23 @@ namespace xihad { namespace cegui
 		CEGUI::WindowManager::getSingleton().cleanDeadPool();
 	}
 
+	void CEGUIHandle::updateCursorPosition()
+	{
+		irr::gui::ICursorControl* cursor = d_device->getCursorControl();
+		irr::core::vector2di irrPosition = cursor->getPosition();
+		CEGUI::Vector2f pos(irrPosition.X, irrPosition.Y);
+
+		CEGUI::System& guiSystem = CEGUI::System::getSingleton();
+		guiSystem.getDefaultGUIContext().getMouseCursor().setPosition(pos);
+	}
+
 	void CEGUIHandle::update(float delta)
 	{
 		checkWindowResize();
 
-		CEGUI::System& gui_system(CEGUI::System::getSingleton());
-
-		gui_system.injectTimePulse(delta);
-
-		gui_system.getDefaultGUIContext().injectTimePulse(delta);
+		CEGUI::System& guiSystem = CEGUI::System::getSingleton();
+		guiSystem.injectTimePulse(delta);
+		guiSystem.getDefaultGUIContext().injectTimePulse(delta);
 	}
 
 	void CEGUIHandle::checkWindowResize()

@@ -13,6 +13,7 @@ local CameraMovement	= require 'HighAction.CameraMovement'
 local CameraFacade = {
 	battleOffset= math3d.vector(8, 18, 15),
 	tradeOffset = math3d.vector(15, 15, 0),
+	levelUpOffset = math3d.vector(15, 8, -8),
 	battleHeightRatio= 0,
 	tradeHeightRatio = -0.1,
 	
@@ -27,7 +28,9 @@ local CameraFacade = {
 	
 	focusedObject = nil,
 	spanTranslate = nil,
-	spanLookDir   = nil,
+	spanLookDir= nil,
+	xDirection = nil,
+	zDirection = nil,
 	
 	autoResetListener = nil,
 }
@@ -91,14 +94,19 @@ function CameraFacade:_setSmartCameraEnabled(b)
 	self.aimingControl:setEnabled(b)
 end
 
+function CameraFacade:_calculate_by_offset(offsetSourceVec)
+	local x, y, z = offsetSourceVec:xyz()
+	return self.focusedObject:getTranslate() + 
+			self.xDirection * x + math3d.vector(0, y, 0) + self.zDirection * z
+end
+
 function CameraFacade:_calculateTranslateZ(zDirection, offsetSourceVec)
-	local yDirection = math3d.vector(0, 1, 0)
 	local oldTranslate = self.focusedObject:getTranslate()
 	
 	zDirection:set(nil, 0, nil)
 	zDirection:normalize()
 	
-	local xDirection= zDirection:cross(yDirection)
+	local xDirection= zDirection:cross(math3d.vector(0, 1, 0))
 	xDirection:normalize()
 	
 	local cameraPosition = self.cameraObject:getTranslate()
@@ -106,8 +114,10 @@ function CameraFacade:_calculateTranslateZ(zDirection, offsetSourceVec)
 		xDirection = -xDirection
 	end
 	
-	local x, y, z = offsetSourceVec:xyz()
-	return oldTranslate + xDirection*x + yDirection*y + zDirection*z
+	self.xDirection = xDirection
+	self.zDirection = zDirection
+	
+	return self:_calculate_by_offset(offsetSourceVec)
 end
 
 function CameraFacade:_calculateTranslate(newTarget, offsetSourceVec)
@@ -124,14 +134,17 @@ function CameraFacade:_waitCameraMove()
 	AsConditionFactory.waitAction(action)
 end
 
+function CameraFacade:_descend_dir(newTranslate, newLookDir)
+	self.spanTranslate = SpanVariable.new(nil, newTranslate)
+	self.spanLookDir = SpanVariable.new(nil, newLookDir)
+	self:_waitCameraMove()
+end
+
 function CameraFacade:_descend(newTranslate, targetPos, ratio)
 	local newLookDir = targetPos - newTranslate
 	newLookDir:set(nil, Vector.getY(newLookDir)*ratio, nil)
 	
-	self.spanTranslate = SpanVariable.new(nil, newTranslate)
-	self.spanLookDir = SpanVariable.new(nil, newLookDir)
-	
-	self:_waitCameraMove()
+	self:_descend_dir(newTranslate, newLookDir)
 end
 
 function CameraFacade:descendIntoBattle(targetTile)
@@ -156,6 +169,26 @@ function CameraFacade:descendIntoTransaction(guestObject)
 	self:_descend(newTranslate, targetPos, self.tradeHeightRatio)
 end
 
+function CameraFacade:_descend_more()
+	local newTranslate = self:_calculate_by_offset(self.levelUpOffset)
+	self:_descend_dir(newTranslate, -self.xDirection, 0)
+end
+
+function CameraFacade:_protect_origin(callback)
+	local originTranslate = self.spanTranslate.origin
+	local originLookdir = self.spanLookDir.origin
+	
+	callback()
+		
+	self.spanTranslate.origin = originTranslate
+	self.spanLookDir.origin = originLookdir
+end
+
+function CameraFacade:descendMore()
+	assert(self.xDirection ~= nil)
+	self:_protect_origin(functional.bindself(self, '_descend_more'))
+end
+
 function CameraFacade:ascendBack()
 	assert(self.spanTranslate, 'Illegal state to ascend away battle')
 	
@@ -164,6 +197,8 @@ function CameraFacade:ascendBack()
 	
 	self:_waitCameraMove()
 	self:_setSmartCameraEnabled(true)
+	self.xDirection = nil
+	self.zDirection = nil
 end
 
 function CameraFacade:_lockedMove(speed, lookTarget)

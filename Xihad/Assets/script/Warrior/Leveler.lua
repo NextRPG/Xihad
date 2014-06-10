@@ -19,6 +19,13 @@ function Leveler:getLevel()
 	return self.level
 end
 
+function Leveler:getExpPercent(extra)
+	extra = extra or 0
+	local total = self:getNextLevelExp()
+	assert(total > 0)
+	return (self.exp + extra) / total
+end
+
 function Leveler:getRestExpToNext()
 	return self:getNextLevelExp() - self:getCurrentExp()
 end

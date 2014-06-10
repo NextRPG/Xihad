@@ -1,5 +1,5 @@
 local base = require 'route.BaseImpactRange'
-local Coordinate = require 'route.Coordinate'
+local Coordinate2D = require 'route.Coordinate2D'
 local OrientationImpactRange = setmetatable({}, base)
 OrientationImpactRange.__index = OrientationImpactRange
 
@@ -8,7 +8,7 @@ function OrientationImpactRange.new(relativeLocationSet)
 end
 
 function OrientationImpactRange:_createTransform(launcherCenter, impactCenter)
-	local coord = Coordinate.build8Directions(impactCenter - launcherCenter)
+	local coord = Coordinate2D.build8Directions(impactCenter - launcherCenter)
 	return function (impactLoc)
 		return coord:transform(impactLoc)
 	end

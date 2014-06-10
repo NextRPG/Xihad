@@ -38,8 +38,6 @@ function ConversationDirector:start()
 		onMouseEvent = function(self, event, arg)
 			if event.type == "lPressed" then
 				conv:step()
-			elseif event.type == 'mouseMoved' then
-				return 1
 			end
 			
 			return 0

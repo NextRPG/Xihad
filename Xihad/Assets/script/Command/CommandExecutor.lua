@@ -105,13 +105,34 @@ function CommandExecutor:_gainExp(warrior)
 	print(string.format('Current level: %d', leveler:getLevel()))
 	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
 	print('---------------------------------------------')
+	
+	local descendMore = false
 	leveler:obtainExp(exp, 
 		function(usedExp, result)
 			totalUsed = totalUsed + usedExp
 			print(string.format('usedExp: %d', usedExp))
 			print(tostring(result))
 			
+			-- local p1 = leveler:getExpPercent()
+			-- local p2 = leveler:getExpPercent(usedExp)
+			-- local running = coroutine.running()
+			-- local times = 0
+			-- self.uiFacade:showExpProgressBar(p1, p2, function ()
+			-- 	times = times + 1
+			-- 	if times == 2 then
+			-- 		g_scheduler:schedule(function() coroutine.resume(running) end)
+			-- 	end
+			-- end)
+			-- coroutine.yield()
+			
 			if result ~= nil then
+				if not descendMore then
+					self.cameraFacade:descendMore()
+					descendMore = true
+				end
+				
+				-- show level up panel
+				
 				result:apply(warrior)
 			end
 		end)
@@ -164,7 +185,12 @@ function CommandExecutor:useItem(warrior, itemName)
 	local item = ItemRegistry.findItemByName(itemName)
 	local usage= warrior:findPeer(c'Parcel'):useItem(item)
 	
-	self.uiFacade:showCenterMessage(usage)
+	---
+	-- TODO
+	-- 1. 需要最小长度
+	-- 2. 高度太大
+	-- 3. 某些情况下才需要点击消失，有时是自动消失
+	self.uiFacade:showConfirmMessage(usage)
 	
 	if item:occupyRound() then
 		AsConditionFactory.waitTimer(0.5)

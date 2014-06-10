@@ -10,7 +10,7 @@ end
 function Window.placeCenter(wnd)
 	local wndSz = wnd:getPixelSize()
 	wnd:setXPosition(StaticUtils.newUDim(0.5, -wndSz.width*0.5))
-	wnd:setYPosition(StaticUtils.newUDim(0.5, -wndSz.height*0.5))
+	wnd:setYPosition(StaticUtils.newUDim(0.2, -wndSz.height*0.5))
 end
 
 return Window

@@ -1,30 +1,7 @@
 local Vector = require 'math.Vector'
 local Trigonometry  = require 'math.Trigonometry'
-local ActionAdapter = require 'Action.ActionAdapter'
-local ActionFactory = require 'Action.ActionFactory'
-local SpanVariable  = require 'Action.SpanVariable'
 local TimedAction	= require 'Action.TimedAction'
-local ObjectAction  = require 'HighAction.ObjectAction'
-local CameraAction  = require 'HighAction.CameraAction'
 local CameraMovement = {}
-
--- 锁定 lookDirection 后移动
-function CameraMovement.lockedMove(cameraObject, spanTranslate, duration, lerp)
-	local cameraControl = cameraObject:findComponent(c'Camera')
-	cameraControl:setTargetFixed(false)
-	
-	return ObjectAction.move(cameraObject, spanTranslate, duration, lerp)
-end
-
-function CameraMovement.freelyMove(cameraObject, spanTranslate, spanLookDir, speed, lerp)
-	local moveAction = ObjectAction.move(cameraObject, spanTranslate, speed, lerp)
-	
-	local duration = moveAction.duration
-	local cameraControl = cameraObject:findComponent(c'Camera')
-	local lookDirAction = CameraAction.lookDir(cameraControl, spanLookDir, duration, lerp)
-	
-	return ActionFactory.parallel( { moveAction, lookDirAction } )
-end
 
 function CameraMovement.slide(cameraObject, spanTranslate, spanLookDir, speed, lerp)
 	local cameraControl = cameraObject:findComponent(c'Camera')

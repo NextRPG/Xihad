@@ -1,5 +1,5 @@
 local Class= require 'std.Class'
-local Coordinate = require 'route.Coordinate'
+local Coordinate2D = require 'route.Coordinate2D'
 local ProbabilityValue = require 'Warrior.ProbabilityValue'
 local AsConditionFactory = require 'Async.AsConditionFactory'
 local WarriorHitResult = {
@@ -155,7 +155,7 @@ function WarriorHitResult:onHitBegin(sourceWarrior, targetBarrier)
 	if self:canRepel() then
 		local targetWarrior = self:_checkWarrior(targetBarrier)
 		local currentLoc = targetWarrior:getLocation()
-		local dir = Coordinate.build8Directions_YAxis(
+		local dir = Coordinate2D.build8Directions_YAxis(
 						currentLoc - sourceWarrior:getLocation())
 		
 		local stopLoc, stopDst = currentLoc:copy(), 0

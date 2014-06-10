@@ -4,7 +4,7 @@ local ParcelView = require "ui.ParcelView"
 local Notification = {
 	completeListeners = {},
 	cancelListeners = {},
-	window = Utils.findWindow("Notification", nil, true)
+	window = nil,
 }
 
 local function getColorTag(color)
@@ -57,6 +57,10 @@ end
 
 function Notification:close()
 	Utils.fireEvent("_Close", self.window)
+end
+
+function Notification:init()
+	self.window = Utils.findWindow("Notification", nil, true)
 end
 
 return Notification

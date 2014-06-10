@@ -1,5 +1,7 @@
 local Window = require 'GUI.Window'
+local Progress = require 'ui.Progress'
 local functional = require 'std.functional'
+local Notification = require 'ui.Notification'
 local CommandView = require 'GUI.CommandView'
 local TileInfoView= require 'GUI.TileInfoView'
 local TransactionView = require 'GUI.TransactionView'
@@ -28,10 +30,19 @@ function UIFacade:showTileInfo(tile)
 	end
 end
 
-function UIFacade:showCenterMessage(fmt, valueDict, colorDict)
-	local Notification = require 'ui.Notification'
-	
+function UIFacade:showConfirmMessage(fmt, valueDict, colorDict)
 	Window.placeCenter(Notification:show(fmt, valueDict, colorDict))
+	local controller = g_scene:pushController({
+			onMouseEvent = function(self, e)
+				if e.type == 'lPressed' then
+					Notification:close()
+					g_scene:popController()
+				end
+				
+				return 0
+			end
+		})
+	controller:drop()
 end
 
 function UIFacade:showWarning(msg)
@@ -56,6 +67,10 @@ end
 
 function UIFacade:closeTransaction()
 	TransactionView.close()
+end
+
+function UIFacade:showExpProgressBar(p1, p2, callback)
+	Progress:show(p1, p2, callback)
 end
 
 return UIFacade

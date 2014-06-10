@@ -122,12 +122,12 @@ treasure:setTile(tile)
 
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
-simulator:selectWarrior('A')
--- -- simulator:selectTile(aTile)
-simulator:selectTileAt(3, 4)
--- simulator:selectCommand('交换')
-simulator:selectCommand('技能', 'Fire')
-simulator:selectTileAt(3, 5)
+-- simulator:selectWarrior('A')
+-- -- -- simulator:selectTile(aTile)
+-- simulator:selectTileAt(3, 4)
+-- -- simulator:selectCommand('交换')
+-- simulator:selectCommand('技能', 'Fire')
+-- simulator:selectTileAt(3, 5)
 -- -- simulator:selectTile(aTile)
 -- -- simulator:selectCommand('道具', '长矛')
 -- -- simulator:selectCommand('道具', '长矛')
@@ -136,7 +136,7 @@ simulator:selectTileAt(3, 5)
 -- simulator:selectTileAt(8, 2)
 -- simulator:selectCommand('待机')
 
--- g_world:setTimeScale(10)
+-- g_world:setTimeScale(3)
 
 g_camera = camera
 battleManager:startBattle()
