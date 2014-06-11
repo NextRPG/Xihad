@@ -155,7 +155,7 @@
 			<Property name="FrameT" value="XihadUI/Notice/frameT" />
 			<Property name="FrameB" value="XihadUI/Notice/frameB" />
 			<Property name="FrameM" value="XihadUI/Notice/frameM" />
-			<Property name="TextMargin" value="28"/>
+			<Property name="TextMargin" value="20"/>
 			<Window name="Mouse" type="Xihad/Image">
 				<Property name="Size" value="{{0, 14}, {0, 19}}" />
  			</Window>

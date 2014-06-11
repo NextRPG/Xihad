@@ -70,7 +70,7 @@ function UIFacade:closeTransaction()
 end
 
 function UIFacade:showExpProgressBar(p1, p2, callback)
-	Progress:show(p1, p2, callback)
+	Window.placeCenter(Progress:show(p1, p2, callback))
 end
 
 return UIFacade

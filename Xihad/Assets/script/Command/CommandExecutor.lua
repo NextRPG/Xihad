@@ -9,7 +9,8 @@ local ItemRegistry = require 'Item.ItemRegistry'
 local SkillRegistry= require 'Skill.SkillRegistry'
 local ConcurrentJobs = require 'std.ConcurrentJobs'
 local WarriorMovement= require 'HighAction.WarriorMovement'
-local AsConditionFactory = require 'Async.AsConditionFactory'
+local ParticleLoadEnv = require 'Particle.ParticleLoadEnv'
+local AsConditionFactory= require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
 	uiFacade = nil,
@@ -94,48 +95,59 @@ function CommandExecutor:_applyBattleResults(source, results, lis)
 	jobs:join()
 end
 
+function CommandExecutor:_show_exp_progress(leveler, usedExp)
+	local p1 = leveler:getExpPercent()
+	local p2 = leveler:getExpPercent(usedExp)
+	local running = coroutine.running()
+	local times = 0
+	self.uiFacade:showExpProgressBar(p1, p2, function ()
+		times = times + 1
+		if times == 2 then
+			g_scheduler:schedule(function() coroutine.resume(running) end)
+		end
+	end)
+	coroutine.yield()
+end
+
+function CommandExecutor:_level_up(warrior, result)
+	local env = ParticleLoadEnv.newSingle(warrior:getHostObject())
+	env:inflate('effect.level_up')
+	-- show level up panel
+	
+	AsConditionFactory.waitTimer(2)
+	
+	result:apply(warrior)
+end
+
 function CommandExecutor:_gainExp(warrior)
 	local leveler = warrior:findPeer(c'Leveler')
 	if not leveler then return end
 	
 	local exp = self.expCalculator:getResult()
 	local totalUsed = 0
-	print(warrior:getHostObject():getID(), 'gain exp', exp)
+	print(warrior:getName(), 'gain exp', exp)
 	
 	print(string.format('Current level: %d', leveler:getLevel()))
 	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
 	print('---------------------------------------------')
-	
 	local descendMore = false
-	leveler:obtainExp(exp, 
-		function(usedExp, result)
-			totalUsed = totalUsed + usedExp
-			print(string.format('usedExp: %d', usedExp))
-			print(tostring(result))
-			
-			-- local p1 = leveler:getExpPercent()
-			-- local p2 = leveler:getExpPercent(usedExp)
-			-- local running = coroutine.running()
-			-- local times = 0
-			-- self.uiFacade:showExpProgressBar(p1, p2, function ()
-			-- 	times = times + 1
-			-- 	if times == 2 then
-			-- 		g_scheduler:schedule(function() coroutine.resume(running) end)
-			-- 	end
-			-- end)
-			-- coroutine.yield()
-			
-			if result ~= nil then
-				if not descendMore then
-					self.cameraFacade:descendMore()
-					descendMore = true
-				end
-				
-				-- show level up panel
-				
-				result:apply(warrior)
-			end
-		end)
+	leveler:obtainExp(exp, function(usedExp, result)
+		totalUsed = totalUsed + usedExp
+		print(string.format('usedExp: %d', usedExp))
+		print(tostring(result))
+		
+		self:_show_exp_progress(leveler, usedExp)
+		
+		if not result then return end
+		
+		if not descendMore then
+			self.cameraFacade:descendMore()
+			descendMore = true
+		end
+		
+		self:_level_up(warrior, result)
+	end)
+	
 	print('---------------------------------------------')
 	print(string.format('Current level: %d', leveler:getLevel()))
 	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
@@ -186,9 +198,7 @@ function CommandExecutor:useItem(warrior, itemName)
 	local usage= warrior:findPeer(c'Parcel'):useItem(item)
 	
 	---
-	-- TODO
-	-- 1. 需要最小长度
-	-- 2. 高度太大
+	-- TODO:
 	-- 3. 某些情况下才需要点击消失，有时是自动消失
 	self.uiFacade:showConfirmMessage(usage)
 	

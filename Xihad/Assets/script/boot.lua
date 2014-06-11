@@ -122,9 +122,9 @@ treasure:setTile(tile)
 
 local InputSimulator = require 'Controller.InputSimulator'
 local simulator = InputSimulator.new(stateMachine)
--- simulator:selectWarrior('A')
+simulator:selectWarrior('A')
 -- -- -- simulator:selectTile(aTile)
--- simulator:selectTileAt(3, 4)
+simulator:selectTileAt(3, 4)
 -- -- simulator:selectCommand('交换')
 -- simulator:selectCommand('技能', 'Fire')
 -- simulator:selectTileAt(3, 5)

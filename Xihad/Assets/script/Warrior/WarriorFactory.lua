@@ -184,9 +184,12 @@ function factory:create(team, name, data)
 				-- local isPromote = warrior:get
 				-- buffEffects[field]:
 				
-				local ParticleLoader = require 'Particle.ParticleLoader'
+				local ParticleLoadEnv = require 'Particle.ParticleLoadEnv'
 				local host = warrior:getHostObject()
-				local pobject = ParticleLoader.create('effect.ATKBuff', host)
+				local env = ParticleLoadEnv.newSingle(host)
+				env:inflate('effect.ATKBuff')
+				
+				local pobject = env:getParticleObject()
 				pobject:setParent(host)
 				buffEffects[field] = pobject
 			end,

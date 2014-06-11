@@ -5,6 +5,10 @@ local Notification = {
 	completeListeners = {},
 	cancelListeners = {},
 	window = nil,
+	MinLength = 200,
+	Padding = 30,
+	IconOffsetX = -20,
+	IconOffsetY = -10,
 }
 
 local function getColorTag(color)
@@ -39,11 +43,16 @@ end
 function Notification:_update(fmt, valueDict, colorDict)
 	local sz = Utils.sizeToWrapText(
 		self.window, self:_replaceString(fmt, valueDict))
+	sz.width.offset = sz.width.offset + self.Padding
+	sz.width.offset = math.max(sz.width.offset, self.MinLength)
+	
 	
 	local mouseIcon = self.window:getChild("Mouse")
 	local iconSz = mouseIcon:getPixelSize()
-	mouseIcon:setXPosition(Utils.newUDim(0, sz.width.offset - iconSz.width - 20))
-	mouseIcon:setYPosition(Utils.newUDim(0, sz.height.offset - iconSz.height - 10))
+	local pos = CEGUI.UVector2:new(
+		Utils.newUDim(0, sz.width.offset - iconSz.width + self.IconOffsetX),
+		Utils.newUDim(0, sz.height.offset - iconSz.height + self.IconOffsetY))
+	mouseIcon:setPosition(pos)
 	self.window:getParent():setSize(sz)
 	self.window:setText(self:_formatString(fmt, valueDict, colorDict))
 end
