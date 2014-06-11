@@ -24,6 +24,10 @@ function Progress:show(currentProgress, targetProgress, callback, isOverStep)
 	return self.window:getParent()
 end
 
+function Progress:close()
+	Utils.fireEvent("_Close", self.window)
+end
+
 function Progress:init()
 	local parent = Utils.findWindow("GainExpPanel")
 	self.window = CEGUI.toProgressBar(parent:getChild("GainExp"))

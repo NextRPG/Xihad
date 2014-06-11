@@ -155,4 +155,12 @@
     <Image height="10" name="Progress/cursorB" width="2" xPos="277" yPos="161" />
     <Image height="19" name="Notice/mouse_normal" width="14" xPos="387" yPos="113" />
     <Image height="19" name="Notice/mouse_lclick" width="14" xPos="407" yPos="113" />
+    <Image height="16" name="LevelUp/frameLT" width="21" xPos="530" yPos="2" />
+    <Image height="16" name="LevelUp/frameLB" width="21" xPos="530" yPos="18" />
+    <Image height="16" name="LevelUp/frameRT" width="21" xPos="576" yPos="2" />
+    <Image height="16" name="LevelUp/frameRB" width="21" xPos="576" yPos="18" />
+    <Image height="16" name="LevelUp/frameT" width="5" xPos="557" yPos="2" />
+    <Image height="16" name="LevelUp/frameB" width="5" xPos="557" yPos="18" />
+    <Image height="97" name="LevelUp/round" width="96" xPos="444" yPos="83" />
+    <Image height="41" name="LevelUp/arrow" width="83" xPos="359" yPos="139" />
 </Imageset>

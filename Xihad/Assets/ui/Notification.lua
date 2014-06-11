@@ -1,5 +1,4 @@
 local Utils = require "ui.StaticUtils"
-local ParcelView = require "ui.ParcelView"
 
 local Notification = {
 	completeListeners = {},
@@ -40,7 +39,7 @@ function Notification:_replaceString(fmt, valueDict)
 	return (string.gsub(fmt, "@(%w+)", valueDict or {}))
 end
 
-function Notification:_update(fmt, valueDict, colorDict)
+function Notification:_update(fmt, valueDict, colorDict, iconHide)
 	local sz = Utils.sizeToWrapText(
 		self.window, self:_replaceString(fmt, valueDict))
 	sz.width.offset = sz.width.offset + self.Padding
@@ -53,14 +52,15 @@ function Notification:_update(fmt, valueDict, colorDict)
 		Utils.newUDim(0, sz.width.offset - iconSz.width + self.IconOffsetX),
 		Utils.newUDim(0, sz.height.offset - iconSz.height + self.IconOffsetY))
 	mouseIcon:setPosition(pos)
+	mouseIcon:setVisible(not iconHide)
 	self.window:getParent():setSize(sz)
 	self.window:setText(self:_formatString(fmt, valueDict, colorDict))
 end
 
-function Notification:show(fmt, valueDict, colorDict)
+function Notification:show(fmt, valueDict, colorDict, autoClose)
 	assert(type(fmt) == "string")
-	self:_update(fmt, valueDict, colorDict)
-	Utils.fireEvent("_Open", self.window)
+	self:_update(fmt, valueDict, colorDict, autoClose)
+	Utils.fireEvent(autoClose and "_OpenClose" or "_Open", self.window)
 	return self.window:getParent()
 end
 

@@ -214,5 +214,84 @@
 			<Property name="Size" value="{{0, 0}, {1, 0}}" />
 		</Window>
 	</Window>
+	
+	<Window name="LevelUp" type="DefaultWindow">
+		<Property name="MousePassThroughEnabled" value="true" />
+		<Window name="MArea" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 168}, {0, 100}}" />
+			<Property name="Position" value="{{0, 0}, {0, 0}}" />
+			<Window name="Arrow" type="Xihad/Image">
+				<Property name="Alpha" value="0" />
+				<Property name="Size" value="{{0, 84}, {0, 100}}" />
+				<Property name="Position" value="{{0.3, 0}, {0, 0}}" />
+				<Property name="Image" value="XihadUI/LevelUp/arrow"/>
+				<Property name="VertImageFormat" value="BottomAligned" />
+			</Window>
+		</Window>
+		<Window name="LArea" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 200}, {0, 78}}" />
+			<Property name="Position" value="{{0, 0}, {0, 22}}" />
+			<Window name="LastLevel" type="Xihad/Image">
+				<Property name="Size" value="{{0, 78}, {0, 78}}" />
+				<Property name="Position" value="{{0, 50}, {0, 0}}" />
+				<Property name="Alpha" value="0" />
+				<Property name="Image" value="XihadUI/LevelUp/round"/>
+				<Property name="Text" value="LV9" />
+				<Property name="EnableTextColor" value="FFFFFFFF" />
+				<Property name="HorzImageFormat" value="Stretched" />
+				<Property name="VertImageFormat" value="Stretched" />
+			</Window>
+		</Window>
+		<Window name="RArea" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 94}, {0, 94}}" />
+			<Property name="Position" value="{{0, 156}, {0, 6}}" />
+			<Window name="NewLevel" type="Xihad/Image">
+				<Property name="Size" value="{{0, 94}, {0, 94}}" />
+				<Property name="Font" value="Fangzheng-M" />
+				<Property name="Text" value="LV10" />
+				<Property name="Alpha" value="0" />
+				<Property name="EnableTextColor" value="FFFFFFFF" />
+				<Property name="Image" value="XihadUI/LevelUp/round"/>
+				<Property name="HorzImageFormat" value="Stretched" />
+				<Property name="VertImageFormat" value="Stretched" />
+			</Window>
+		</Window>
+		
+		<Window name="BArea1" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 240}, {0, 94}}" />
+			<Property name="Position" value="{{0, 0}, {0, 110}}" />
+			<Window name="Board1" type="Xihad/Image">
+				<Property name="Size" value="{{1, 0}, {0, 32}}" />
+				<Property name="FrameLT" value="XihadUI/LevelUp/frameLT" />
+				<Property name="FrameRT" value="XihadUI/LevelUp/frameRT" />
+				<Property name="FrameLB" value="XihadUI/LevelUp/frameLB" />
+				<Property name="FrameRB" value="XihadUI/LevelUp/frameRB" />
+				<Property name="FrameT" value="XihadUI/LevelUp/frameT" />
+				<Property name="FrameB" value="XihadUI/LevelUp/frameB" />
+			</Window>
+		</Window>
+		<Window name="BArea2" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Window name="Board2" type="Xihad/Image">
+				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+			</Window>
+		</Window>
+		<Window name="BArea3" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Window name="Board3" type="Xihad/Image">
+				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+			</Window>
+		</Window>
+		<Window name="BArea4" type="DefaultWindow">
+			<Property name="MousePassThroughEnabled" value="true" />
+			<Window name="Board4" type="Xihad/Image">
+				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+			</Window>
+		</Window>
+	</Window>
 </Window>
 </GUILayout>
