@@ -56,12 +56,21 @@ local Utils = require "ui.StaticUtils"
 local GUIController = require("ui.GUIController")
 GUIController:init()
 
+
+local CommandView = require 'ui.Command'
+local FightStartView = require 'ui.FightStart'
+local ExpProgressBar = require 'ui.Progress'
+local LevelUpView = require 'ui.LevelUp'
+local MapTileInfoView = require 'ui.MapTileInfo'
+local ParcelExchangeView = require 'ui.ParcelExchange'
+local Notification = require 'ui.Notification'
+
 local controller = g_scene:pushController({
 	onKeyDown = function (self, e, param)
 		local handled = 0
 		if e.key == "C" then
-			GUIController:showWindow("Command",
-				{ 	
+			local wnd = CommandView:show(
+			{ 	
 				[1] = { name = "技能", 
 						hover = true,
 						list = {[1] = {name = "技能1", value = "3" }, 
@@ -73,18 +82,17 @@ local controller = g_scene:pushController({
 				[3] = { name = "交换", disabled = true, },
 				[4] = { name = "待机", },
 			})
+			Utils.followMouse(wnd)
 			
-			-- GUIController:showWindow("FightStart", "敌全灭")
-			-- local wnd = GUIController:showWindow("GainExp", 0.1, 1)
-			local LevelUpView = require "ui.LevelUp"
+			-- FightStartView:show("敌全灭")
+			-- ExpProgressBar:show(0.1, 1)
 			LevelUpView:show()
-			
 		elseif e.key == "M" then
 			local function getRandomEffectValue()
 				local result = math.random(-3, 3)
 				return result
 			end
- 			GUIController:showWindow("MapTileInfo",
+			MapTileInfoView:show(
  			{
  				name = "草地",
 				effects = {
@@ -124,20 +132,20 @@ local controller = g_scene:pushController({
 				guestName = '112',
 				guestParcel = pR,
 			}
-			local wnd = GUIController:showWindow("ParcelExchange", model)
+			local wnd = ParcelExchangeView:show(model)
 			local wndSz = wnd:getPixelSize()
 			wnd:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
 			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
 		elseif e.key == "N" then
-			local wnd= GUIController:showWindow("Notification", "获得了道具@item1和@item2", 
+			local wnd = Notification:show("获得了道具@item1和@item2", 
 				{ item2="长矛"}, {item2="FF00FF00"})
 			local wndSz = wnd:getPixelSize()
 			wnd:setXPosition(Utils.newUDim(0.5, -wndSz.width*0.5))
 			wnd:setYPosition(Utils.newUDim(0.5, -wndSz.height*0.5))
 		elseif e.key == "Q" then
-			GUIController:hideWindow("Notification")
-			GUIController:hideWindow("FightStart")
-			GUIController:hideWindow("GainExp")
+			Notification:close()
+			FightStartView:close()
+			ExpProgressBar:close()
 		else
 			handled = 1
 		end
@@ -155,16 +163,16 @@ local controller = g_scene:pushController({
 })
 controller:drop()
 
-GUIController:subscribeEvent("Command.Select", function (parent, child, eventType)
-	GUIController:hideWindow("Command")
-end)
-GUIController:subscribeEvent("Command.Hover", function (parent, child, eventType)
+CommandView:addListener(function (parent, child, eventType)
+	CommandView:close()
+end, "Select")
+CommandView:addListener(function (parent, child, eventType)
 	print(parent, child, eventType)
-end)
+end, "Hover")
 
-GUIController:subscribeEvent("ParcelExchange.Complete", function (type)
-	GUIController:hideWindow("ParcelExchange")
-end)
-GUIController:subscribeEvent("ParcelExchange.Cancel", function (type)
-	GUIController:hideWindow("ParcelExchange")
-end)
+ParcelExchangeView:addListener(function (type)
+	ParcelExchangeView:close()
+end, "Complete")
+ParcelExchangeView:addListener(function (type)
+	ParcelExchangeView:close()
+end, "Cancel")
