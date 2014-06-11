@@ -44,9 +44,9 @@ context:setRootWindow(root)
 context:setDefaultFont(CEGUI.FontManager:getSingleton():get("fangzheng-14"))
 context:getMouseCursor():setDefaultImage("TaharezLook/MouseArrow")
 
+
 -- load animation
 require "ui.Animations"
-
 
 -- ont only for test but an example for you.
 local BaseItem = require "Item.BaseItem"
@@ -75,7 +75,10 @@ local controller = g_scene:pushController({
 			-- })
 			
 			-- GUIController:showWindow("FightStart", "敌全灭")
-			local wnd = GUIController:showWindow("GainExp", 0.65, 0.34, true)
+			-- local wnd = GUIController:showWindow("GainExp", 0.1, 1)
+			local LevelUpView = require "ui.LevelUp"
+			LevelUpView:show()
+			
 		elseif e.key == "M" then
 			local function getRandomEffectValue()
 				local result = math.random(-3, 3)
@@ -134,10 +137,11 @@ local controller = g_scene:pushController({
 		elseif e.key == "Q" then
 			GUIController:hideWindow("Notification")
 			GUIController:hideWindow("FightStart")
+			GUIController:hideWindow("GainExp")
 		else
 			handled = 1
 		end
-
+			
 	 	return handled
 	end 
 	,

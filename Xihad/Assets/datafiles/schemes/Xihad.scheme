@@ -6,8 +6,8 @@
 	<Imageset filename="character.imageset" />
 	<Font filename="simhei-14.font" />
 	<Font filename="fangzheng-14.font" />
-	<Font filename="fangzheng2-14.font" />
 	<Font filename="Fangzheng-L.font" />
+	<Font filename="Fangzheng-M.font" />
 	<LookNFeel filename="Xihad.looknfeel" />	
 	<WindowRendererSet filename="CEGUICoreWindowRendererSet" />
 

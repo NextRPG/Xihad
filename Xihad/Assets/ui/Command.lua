@@ -1,6 +1,5 @@
 local Utils = require "ui.StaticUtils"
 local findWindow = Utils.findWindow
-local followMouse = Utils.followMouse
 
 local function getIcon(name)
 	-- TODO

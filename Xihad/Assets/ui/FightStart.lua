@@ -1,5 +1,4 @@
 local Utils = require "ui.StaticUtils"
-local ParcelView = require "ui.ParcelView"
 
 local FightStart = {}
 

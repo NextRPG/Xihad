@@ -10,19 +10,23 @@ local animations =
 	FrameHide = { "MapTileInfo" },
 	PullDown = { "ParcelPanel/ParcelExchange" },
 	PullUp = { "ParcelPanel/ParcelExchange" },
-	Unfold = { "NotificationPanel/Notification", "GainExpPanel/GainExp"},
-	Fold = { "NotificationPanel/Notification", "GainExpPanel/GainExp"},
-	UnfoldNFold = { "GainExpPanel/GainExp" },
+	Unfold = { "NotificationPanel/Notification"},
+	Fold = { "NotificationPanel/Notification"},
+	UnfoldAndFold = { "NotificationPanel/Notification"},
+	MouseClick = { "NotificationPanel/Notification/Mouse"}, 
+	Unfold_F = { "GainExpPanel/GainExp" },
+	Fold_F = { "GainExpPanel/GainExp" },
 	
 	TVOpenClose = { "FightStartPanel/FightStart" },
-	
 	FlyToLeft = { "FightStartPanel/FightStart/PanelT/VictoryShadow",  },
 	FlyToRight = { "FightStartPanel/FightStart/PanelB/ConditionShadow" },
 	
 	ProgressGrow = { "GainExpPanel/GainExp" },
 	ProgressGrowOver = { "GainExpPanel/GainExp" },
 	
-	MouseClick = { "NotificationPanel/Notification/Mouse"}, 
+	MoveIn = { "LevelUp/LArea/LastLevel", },
+	DelayedMoveIn = { "LevelUp/MArea/Arrow" },
+	DelayedFadeIn = { "LevelUp/RArea/NewLevel" },
 	
 	MapEffectUpToOne = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },
 	MapEffectUpToTwo = { "MapTileInfo/Attr1", "MapTileInfo/Attr2", "MapTileInfo/Attr3" },

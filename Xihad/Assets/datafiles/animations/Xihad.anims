@@ -140,27 +140,6 @@
 		<Subscription event="ArrowAnimStop" action="Stop" />
 	</AnimationDefinition>
 	
-	<AnimationDefinition name="TextFadeIn" duration="1.5" replayMode="once">
-		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
-			<KeyFrame position="0" value="0.0" />
-			<KeyFrame position="0.3" value="1.0" progression="quadratic decelerating" />
-			<KeyFrame position="1.0" value="1.0" />
-			<KeyFrame position="1.49" value="0.0" progression="quadratic accelerating" />
-		</Affector>
-
-		<Affector property="Size" interpolator="USize" applicationMethod="relative multiply">
-			<KeyFrame position="1.0" value="1.0" />
-			<KeyFrame position="1.49" value="1.5" progression="quadratic accelerating" />
-			<KeyFrame position="1.5" value="1.0" />
-		</Affector>
-
-		<Affector property="Disabled" interpolator="bool" applicationMethod="absolute">
-			<KeyFrame position="1.5" value="true"/>
-		</Affector>
-
-		<Subscription event="Enabled" action="Start" />
-	</AnimationDefinition>
-
 	<AnimationDefinition name="FrameShow" duration="0.3" replayMode="once">
 		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
 			<KeyFrame position="0.0" sourceProperty="Alpha" />
@@ -285,6 +264,22 @@
 		<Subscription event="_Close" action="Start" />
 	</AnimationDefinition>
 	
+	<AnimationDefinition name="UnfoldAndFold" duration="2.1" replayMode="once" >
+		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+			<KeyFrame position="0.0" sourceProperty="Size" />
+			<KeyFrame position="0.3" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="1.8" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.1" value="{{0, 0}, {1, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0.0" sourceProperty="Position" />
+			<KeyFrame position="0.3" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="1.8" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="2.1" value="{{0.5, 0}, {0, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Subscription event="_OpenClose" action="Start" />
+	</AnimationDefinition>
+
 	<AnimationDefinition name="TVOpenClose" duration="1.9" replayMode="once">
 		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
 			<KeyFrame position="0.0" value="{{1, 0}, {0, 0}}" />
@@ -321,14 +316,14 @@
 		<Subscription event="_Start" action="Start" />
 	</AnimationDefinition>
 	
-	<AnimationDefinition name="ProgressGrow" duration="1" replayMode="once">
+	<AnimationDefinition name="ProgressGrow" duration="1.5" replayMode="once">
 		<Affector property="CurrentProgress" interpolator="float" applicationMethod="absolute">
-			<KeyFrame position="0" sourceProperty="CurrentProgress" />
-			<KeyFrame position="1" sourceProperty="TargetProgress" progression="quadratic decelerating"/>
+			<KeyFrame position="0.5" sourceProperty="CurrentProgress" />
+			<KeyFrame position="1.5" sourceProperty="TargetProgress" progression="linear"/>
 		</Affector>
 		<Affector property="CurrentProgressValue" interpolator="uint" applicationMethod="absolute">
-			<KeyFrame position="0" sourceProperty="CurrentProgressValue" />
-			<KeyFrame position="1" sourceProperty="TargetProgressValue" progression="quadratic decelerating"/>
+			<KeyFrame position="0.5" sourceProperty="CurrentProgressValue" />
+			<KeyFrame position="1.5" sourceProperty="TargetProgressValue" progression="linear"/>
 		</Affector>
 		<Subscription event="_Grow" action="Start" />
 	</AnimationDefinition>
@@ -349,22 +344,28 @@
 		<Subscription event="_GrowOver" action="Start" />
 	</AnimationDefinition>
 	
-	<AnimationDefinition name="UnfoldNFold" duration="2.1" replayMode="once" >
+	<AnimationDefinition name="Unfold_F" duration="0.1" replayMode="once" >
 		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
 			<KeyFrame position="0" value="{{0, 0}, {1, 0}}" />
 			<KeyFrame position="0.1" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="2.0" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="2.1" value="{{0, 0}, {1, 0}}" progression="quadratic accelerating"/>
 		</Affector>
 		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
 			<KeyFrame position="0" value="{{0.5, 0}, {0, 0}}" />
 			<KeyFrame position="0.1" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="2.0" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
-			<KeyFrame position="2.1" value="{{0.5, 0}, {0, 0}}" progression="quadratic accelerating"/>
 		</Affector>
-		
-		
 		<Subscription event="_Open" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="Fold_F" duration="0.1" replayMode="once" >
+		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+			<KeyFrame position="0" value="{{1, 0}, {1, 0}}"/>
+			<KeyFrame position="0.1" value="{{0, 0}, {1, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0" value="{{0, 0}, {0, 0}}"/>
+			<KeyFrame position="0.1" value="{{0.5, 0}, {0, 0}}" progression="quadratic accelerating"/>
+		</Affector>
+		<Subscription event="_Close" action="Start" />
 	</AnimationDefinition>
 	
 	<AnimationDefinition name="MouseClick" duration="1.1" replayMode="loop" autoStart="true" >
@@ -374,6 +375,49 @@
 			<KeyFrame position="0.6" value="XihadUI/Notice/mouse_normal"/>
 			<KeyFrame position="1.1" value="XihadUI/Notice/mouse_normal"/>
 		</Affector>
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="MoveIn" duration="0.3" replayMode="once">
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0.0" sourceProperty="Position"/>
+			<KeyFrame position="0.3" value="{{0, 0}, {0, 0}}" progression="quadratic decelerating"/>
+		</Affector>
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.0" value="0" />
+			<KeyFrame position="0.2" value="0.3" progression="linear"/>
+			<KeyFrame position="0.3" value="1" progression="quadratic decelerating"/>
+		</Affector>
+		<Subscription event="_Start" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="DelayedMoveIn" duration="0.7" replayMode="once">
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0.3" sourceProperty="Position"/>
+			<KeyFrame position="0.5" value="{{0.5, 0}, {0, 0}}" progre5sion="quadratic decelerating"/>
+		</Affector>
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.3" value="0" />
+			<KeyFrame position="0.5" value="1" progression="quadratic decelerating"/>
+		</Affector>
+		<Subscription event="_Start" action="Start" />
+	</AnimationDefinition>
+	
+	<AnimationDefinition name="DelayedFadeIn" duration="1.0" replayMode="once">
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.5" value="0" />
+			<KeyFrame position="0.7" value="1" progression="quadratic accelerating"/>
+		</Affector>
+		<Affector property="Size" interpolator="USize" applicationMethod="absolute">
+			<KeyFrame position="0.5" value="{{0.9, 0}, {0.9, 0}}" />
+			<KeyFrame position="0.65" value="{{1, 0}, {1, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.7" value="{{0.9, 0}, {0.9, 0}}" progression="quadratic decelerating"/>
+		</Affector>
+		<Affector property="Position" interpolator="UVector2" applicationMethod="absolute">
+			<KeyFrame position="0.5" value="{{0.05, 0}, {0.05, 0}}"/>
+			<KeyFrame position="0.65" value="{{0, 0}, {0, 0}}" progression="quadratic accelerating"/>
+			<KeyFrame position="0.7" value="{{0.05, 0}, {0.05, 0}}" progression="quadratic decelerating"/>
+		</Affector>
+		<Subscription event="_Start" action="Start" />
 	</AnimationDefinition>
 </Animations>
 
