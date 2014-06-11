@@ -259,7 +259,6 @@
 				<Property name="VertImageFormat" value="Stretched" />
 			</Window>
 		</Window>
-		
 		<Window name="BArea1" type="DefaultWindow">
 			<Property name="MousePassThroughEnabled" value="true" />
 			<Property name="Size" value="{{0, 240}, {0, 94}}" />
@@ -276,20 +275,23 @@
 		</Window>
 		<Window name="BArea2" type="DefaultWindow">
 			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 240}, {0, 94}}" />
 			<Window name="Board2" type="Xihad/Image">
-				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+				<Property name="Image" value=""/>
 			</Window>
 		</Window>
 		<Window name="BArea3" type="DefaultWindow">
 			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 240}, {0, 94}}" />
 			<Window name="Board3" type="Xihad/Image">
-				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+				<Property name="Image" value=""/>
 			</Window>
 		</Window>
 		<Window name="BArea4" type="DefaultWindow">
 			<Property name="MousePassThroughEnabled" value="true" />
+			<Property name="Size" value="{{0, 240}, {0, 94}}" />
 			<Window name="Board4" type="Xihad/Image">
-				<!-- <Property name="Image" value="XihadUI/LevelUp/round"/> -->
+				<Property name="Image" value=""/>
 			</Window>
 		</Window>
 	</Window>

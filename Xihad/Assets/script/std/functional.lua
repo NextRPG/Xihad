@@ -54,6 +54,7 @@ end
 
 function functional.bindself(t, fname)
 	local f = t[fname]
+	assert(f, fname)
 	return functional.bind1(f, t)
 end
 

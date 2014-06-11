@@ -52,4 +52,11 @@ function StaticUtils.sizeToWrapText(window, text)
 	local height = StaticUtils.newUDim(0, line + 2*margin)
 	return CEGUI.USize:new(width, height)
 end
+
+function StaticUtils.subscribeEvent(target, eventName, func)
+	g_scheduler:runOnMainThread(function()
+		target:subscribeEvent(eventName, func)
+	end)
+end
+
 return StaticUtils

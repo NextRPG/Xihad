@@ -1,5 +1,6 @@
 local Utils = require "ui.StaticUtils"
 local ParcelView = { }
+local subscribeEvent = Utils.subscribeEvent
 ParcelView.__index = ParcelView
 
 function ParcelView.new(listbox, label, arrow, scaleX)
@@ -77,7 +78,7 @@ end
 ---------------------------------------------------------------
 	-- public method
 ---------------------------------------------------------------
-function ParcelView:init(color, offset)
+function ParcelView:init(color, offset, clickHandler)
 	local arrowSz = self.arrow:getPixelSize()
 	self.arrow:setXPosition(Utils.newUDim(0.5, offset*arrowSz.width))
 	
@@ -89,13 +90,15 @@ function ParcelView:init(color, offset)
 			item:setProperty("HoverFrame"..fc, 
 				"XihadUI/Menu/"..color.."_hover_item"..fc)
 		end
-		g_scheduler:runOnMainThread(function()
-			item:subscribeEvent("Clicked", 
-				G_CEGUISubscriberSlot.ExchangeItemClick)
-			item:subscribeEvent("MouseEntersArea", 
-				G_CEGUISubscriberSlot.ExchangeItemHover)
-			item:subscribeEvent("MouseLeavesArea", 
-				G_CEGUISubscriberSlot.ExchangeItemHoverNil)
+		
+		local functional = require 'std.functional'
+		subscribeEvent(item, "Clicked", clickHandler)
+		subscribeEvent(item, "MouseEntersArea", 
+			functional.bindself(self, "_onItemHover"))
+		
+		subscribeEvent(item, "MouseLeavesArea", function (e)
+			if not CEGUI then return end
+			self:_onItemHoverNil(e)
 		end)
 	end
 end
@@ -130,7 +133,7 @@ function ParcelView:relayout(adjustedWidth)
 	self.listbox:setYPosition(Utils.newUDim(0, 0.52*0.9*wndSz.height-0.5*size.height))
 end
 
-function ParcelView:onItemHover(e)
+function ParcelView:_onItemHover(e)
 	local itemEntry = CEGUI.toMenuItem(CEGUI.toWindowEventArgs(e).window)
 	if itemEntry:getOwnerList() == self.listbox then
 		if itemEntry:isDisabled() or self:_isItemEntrySelected() then 
@@ -140,7 +143,7 @@ function ParcelView:onItemHover(e)
 	end
 end
 
-function ParcelView:onItemHoverNil(e)
+function ParcelView:_onItemHoverNil(e)
 	local itemEntry = CEGUI.toMenuItem(CEGUI.toWindowEventArgs(e).window)
 	if itemEntry:getOwnerList() == self.listbox then
 		if itemEntry:isDisabled() or self:_isItemEntrySelected() then 

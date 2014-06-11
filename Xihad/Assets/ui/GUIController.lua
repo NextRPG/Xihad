@@ -4,13 +4,6 @@ G_CEGUISubscriberSlot = {
 	CommandSelect = function (e) GUIController.Command:onSelect(e) end,
 	CommandHover = function (e) GUIController.Command:onHover(e) end,
 	CommandHoverNil = function (e) GUIController.Command:onHoverNil(e) end,
-	
-	ExchangeItemClick = function (e) GUIController.ParcelExchange:onItemClick(e) end,
-	ExchangeItemHover = function (e) GUIController.ParcelExchange:onItemHover(e) end,
-	ExchangeItemHoverNil = function (e) GUIController.ParcelExchange:onItemHoverNil(e) end,
-	ExchangeComplete = function (e) GUIController.ParcelExchange:onComplete(e) end,
-	ExchangeTidy = function (e) GUIController.ParcelExchange:onTidy(e) end,
-	ExchangeCancel = function (e) GUIController.ParcelExchange:onCancel(e) end,
 }
 
 function GUIController:init()

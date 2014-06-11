@@ -6,7 +6,12 @@ local function getIcon(name)
 	return "RedNumber/-"
 end
 
-local function addMenuItems(parent, itemList, receiveHover)
+local Command = {
+	clickListeners = {},
+	hoverListeners = {}
+}
+
+function Command:_addMenuItems(parent, itemList, receiveHover)
 	for _,options in ipairs(itemList) do
 		local item = CEGUI.toMenuItem(CEGUI.WindowManager:getSingleton():createWindow("Xihad/MenuItem"))
 		
@@ -27,26 +32,20 @@ local function addMenuItems(parent, itemList, receiveHover)
 		if options.disabled then item:setDisabled(true) end
 		if options.list then 
 			local child = CEGUI.toPopupMenu(CEGUI.WindowManager:getSingleton():createWindow("Xihad/PopupMenu"))
-			addMenuItems(child, options.list, receiveHover or options.hover)
+			self:_addMenuItems(child, options.list, receiveHover or options.hover)
 			item:setPopupMenu(child)
 		end
 		parent:addItem(item)
 		
-		g_scheduler:runOnMainThread(function()
-				item:subscribeEvent("Clicked", G_CEGUISubscriberSlot.CommandSelect)
-				
-				if receiveHover then
-					item:subscribeEvent("MouseEntersArea", G_CEGUISubscriberSlot.CommandHover)
-					item:subscribeEvent("MouseLeavesArea", G_CEGUISubscriberSlot.CommandHoverNil)	
-				end
-			end)
+		local subscribeEvent = Utils.subscribeEvent
+		local functional = require "std.functional"
+		subscribeEvent(item, "Clicked", functional.bindself(self, "_onSelect"))
+		if receiveHover and not options.disabled then 
+			subscribeEvent(item, "MouseEntersArea", functional.bindself(self, "_onHover"))
+			subscribeEvent(item, "MouseLeavesArea", functional.bindself(self, "_onHoverNil"))
+		end
 	end
 end
-
-local Command = {
-	clickListeners = {},
-	hoverListeners = {}
-}
 --[[------------------------------------------------------------------------
 	CommandWindow 	
 		+ 可选参数：
@@ -67,11 +66,9 @@ local Command = {
 function Command:show(args)
 	local command = CEGUI.toPopupMenu(findWindow("CommandWindow"))
 	command:resetList()
-	addMenuItems(command, args)
+	self:_addMenuItems(command, args)
 		
-	followMouse(command)
 	command:openPopupMenu()
-	
 	return command
 end
 
@@ -97,21 +94,21 @@ local function explainEvent(e)
 	return parentName, childName
 end
 
-function Command:onHover(e)
+function Command:_onHover(e)
 	local parentName, childName = explainEvent(e)
 	for callback,_ in pairs(self.hoverListeners) do
 		callback(parentName, childName, "Hover")
 	end
 end
 
-function Command:onSelect(e)
+function Command:_onSelect(e)
 	local parentName, childName = explainEvent(e)
 	for callback,_ in pairs(self.clickListeners) do
 		callback(parentName, childName, "Select")
 	end
 end
 
-function Command:onHoverNil(e)
+function Command:_onHoverNil(e)
 	for callback,_ in pairs(self.hoverListeners) do
 		callback(nil, nil, "Hover")
 	end

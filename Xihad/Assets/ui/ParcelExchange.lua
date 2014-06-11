@@ -42,39 +42,25 @@ function ParcelExchange:close()
 	self.guest:reset()
 end
 
-function ParcelExchange:onItemClick(e)
+function ParcelExchange:_onItemClick(e)
 	local itemEntry = CEGUI.toMenuItem(CEGUI.toWindowEventArgs(e).window)
 	
 	self.master:onItemClick(itemEntry, self.guest)
 	self.guest:onItemClick(itemEntry, self.master)
 end
 
-function ParcelExchange:onItemHover(e)
-	self.master:onItemHover(e)
-	self.guest:onItemHover(e)
-end
-
-function ParcelExchange:onItemHoverNil(e)
-	if not CEGUI then
-		return 
-	end
-	
-	self.master:onItemHoverNil(e)
-	self.guest:onItemHoverNil(e)
-end
-
-function ParcelExchange:onComplete(e)
+function ParcelExchange:_onComplete(e)
 	for callback,_ in pairs(self.completeListeners) do
 		callback("Complete", self._model)
 	end
 end
 
-function ParcelExchange:onTidy(e)
+function ParcelExchange:_onTidy(e)
 	self.master:tidyParcel()
 	self.guest:tidyParcel()
 end
 
-function ParcelExchange:onCancel(e)
+function ParcelExchange:_onCancel(e)
 	for callback, _ in pairs(self.cancelListeners) do
 		callback("Cancel")
 	end
@@ -114,17 +100,16 @@ function ParcelExchange:init()
 	closeBtn:setXPosition(Utils.newUDim(1,-8-closeBtn:getPixelSize().width))
 	closeBtn:setYPosition(Utils.newUDim(0, 8))
 	
-	g_scheduler:runOnMainThread(function()
-			tidyBtn:subscribeEvent("Clicked", 
-				G_CEGUISubscriberSlot.ExchangeTidy)
-			okBtn:subscribeEvent("Clicked", 
-				G_CEGUISubscriberSlot.ExchangeComplete)
-			closeBtn:subscribeEvent("Clicked",
-				G_CEGUISubscriberSlot.ExchangeCancel)	
-		end)
+	local subscribeEvent = Utils.subscribeEvent
+	local functional = require 'std.functional'
+
+	subscribeEvent(tidyBtn, "Clicked", functional.bindself(self, '_onTidy'))
+	subscribeEvent(okBtn, "Clicked", functional.bindself(self, '_onComplete'))
+	subscribeEvent(closeBtn, "Clicked", functional.bindself(self, '_onCancel'))
 	
-	ParcelExchange.master:init("green", -1)
-	ParcelExchange.guest:init("red", 0)	
+	local itemClickHandler = functional.bindself(self, '_onItemClick')
+	ParcelExchange.master:init("green", -1, itemClickHandler)
+	ParcelExchange.guest:init("red", 0, itemClickHandler)	
 end
 
 return ParcelExchange
