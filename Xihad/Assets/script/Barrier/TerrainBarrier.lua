@@ -21,17 +21,7 @@ function TerrainBarrier.new(type, object)
 	assert(type and TerrainRegistry.passable[type])
 	o.type = type
 	o.colors = {}
-	o.effect = CompositeEffect.new()
-	
-	-- TODO REMOVE
-	-- local Equation = require 'Warrior.Equation'
-	-- local BuffEffect = require 'Effect.BuffEffect'
-	-- local HitPointEffect = require 'Effect.HitPointEffect'
-	-- o:addEffect(BuffEffect.new('ATK', Equation.new(-10)))
-	-- o:addEffect(BuffEffect.new('DFS', Equation.new(10)))
-	-- if o.type == 1 then
-	-- 	o:addEffect(HitPointEffect.new(-25))
-	-- end
+	o.effect = CompositeEffect.new() -- TODO shared effect
 	
 	-- TODO FIX
 	for _, mat in object:findComponent(c'Render'):materials() do
@@ -86,13 +76,13 @@ function TerrainBarrier:getActionPointCost( warrior )
 	return selectResult('apcost', self.type, warrior)
 end
 
-function TerrainBarrier:synchronizeTranslate()
-	local aabb = self:findPeer(c'Render'):getAABB()
-	local _, height, _ = aabb:extent():xyz()
-	local center = self:getTile():getCenterVector()
-	center:set(nil, -height, nil)
-	self:getHostObject():resetTranslate(center)
-end
+-- function TerrainBarrier:synchronizeTranslate()
+-- 	local aabb = self:findPeer(c'Render'):getAABB()
+-- 	local _, height, _ = aabb:extent():xyz()
+-- 	local center = self:getTile():getCenterVector()
+-- 	center:set(nil, -height, nil)
+-- 	self:getHostObject():resetTranslate(center)
+-- end
 
 -- function TerrainBarrier:setTile( tile ) 
 -- 	if not self.tile then
@@ -146,16 +136,20 @@ function TerrainBarrier:popColor()
 end
 
 function TerrainBarrier:inhabitWith(other, optKey)
-	local warrior = other:findPeer(c'Warrior')
-	if warrior then
-		self.effect:copy():bindSticky(warrior, self)
+	if optKey == WarriorBarrier.getOptUniqueKey() then
+		local warrior = other:findPeer(c'Warrior')
+		if warrior then
+			self.effect:copy():bindSticky(warrior, self)
+		end
 	end
 end
 
 function TerrainBarrier:leaveFrom(other, optKey)
-	local warrior = other:findPeer(c'Warrior')
-	if warrior then
-		warrior:unbindStickyEffects(self)
+	if optKey == WarriorBarrier.getOptUniqueKey() then
+		local warrior = other:findPeer(c'Warrior')
+		if warrior then
+			warrior:unbindStickyEffects(self)
+		end
 	end
 end
 

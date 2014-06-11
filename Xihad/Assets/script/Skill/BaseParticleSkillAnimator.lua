@@ -1,4 +1,4 @@
-local ParticleLoader = require 'Particle.ParticleLoader'
+local ParticleLoadEnv = require 'Particle.ParticleLoadEnv'
 local BaseParticleSkillAnimator = {
 	particleFile = nil,
 	magicAnim = 'magic1',
@@ -34,17 +34,16 @@ function BaseParticleSkillAnimator:animate(sourceObject, targetTile, listener)
 	self:_animateSource(sourceObject)
 	local targetObject = self:_getTargetObject(targetTile)
 	
-	local particleObject = 
-		ParticleLoader.create(self.particleFile, sourceObject, targetObject, 
-			function (message)
-				if message == 'attack begin' then
-					listener:onAttackBegin()
-				elseif message == 'attack end' then
-					listener:onAttackEnd()
-				elseif message == 'destroy' then
-					particleObject:stop()
-				end
-			end)
+	local env = ParticleLoadEnv.new(sourceObject, targetObject, 
+		function (message)
+			if message == 'attack begin' then
+				listener:onAttackBegin()
+			elseif message == 'attack end' then
+				listener:onAttackEnd()
+			end
+		end)
+	
+	env:inflate(self.particleFile)
 end
 
 return BaseParticleSkillAnimator

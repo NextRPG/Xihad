@@ -3,7 +3,11 @@ local Utils = require "ui.StaticUtils"
 local Notification = {
 	completeListeners = {},
 	cancelListeners = {},
-	window = Utils.findWindow("Notification", nil, true)
+	window = nil,
+	MinLength = 200,
+	Padding = 30,
+	IconOffsetX = -20,
+	IconOffsetY = -10,
 }
 
 local function getColorTag(color)
@@ -22,7 +26,7 @@ function Notification:_formatString(fmt, valueDict, colorDict)
 		if not value then
 			return "@"..matched 
 		end
-			
+		
 		if colorDict and colorDict[matched] then
 			value = getColorTag(colorDict[matched])..value..defaultColor
 		end
@@ -38,11 +42,16 @@ end
 function Notification:_update(fmt, valueDict, colorDict, iconHide)
 	local sz = Utils.sizeToWrapText(
 		self.window, self:_replaceString(fmt, valueDict))
+	sz.width.offset = sz.width.offset + self.Padding
+	sz.width.offset = math.max(sz.width.offset, self.MinLength)
+	
 	
 	local mouseIcon = self.window:getChild("Mouse")
 	local iconSz = mouseIcon:getPixelSize()
-	mouseIcon:setXPosition(Utils.newUDim(0, sz.width.offset - iconSz.width - 20))
-	mouseIcon:setYPosition(Utils.newUDim(0, sz.height.offset - iconSz.height - 10))
+	local pos = CEGUI.UVector2:new(
+		Utils.newUDim(0, sz.width.offset - iconSz.width + self.IconOffsetX),
+		Utils.newUDim(0, sz.height.offset - iconSz.height + self.IconOffsetY))
+	mouseIcon:setPosition(pos)
 	mouseIcon:setVisible(not iconHide)
 	self.window:getParent():setSize(sz)
 	self.window:setText(self:_formatString(fmt, valueDict, colorDict))
@@ -57,6 +66,10 @@ end
 
 function Notification:close()
 	Utils.fireEvent("_Close", self.window)
+end
+
+function Notification:init()
+	self.window = Utils.findWindow("Notification", nil, true)
 end
 
 return Notification

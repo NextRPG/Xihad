@@ -15,6 +15,7 @@
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IFileSystem.h>
 #include "WorldRender3D/IrrlichtComponentSystem.h"
+#include "irrlicht/IMeshSceneNode.h"
 
 using namespace irr;
 using namespace scene;
@@ -34,8 +35,12 @@ int launchScript(int argc, const char** argv)
 // 		auto irrSystem = 
 // 			(render3d::IrrlichtComponentSystem*) scene->requireSystem("Render");
 // 		ISceneManager* smgr = irrSystem->getSceneManager();
-// 		smgr->getFileSystem()->addFileArchive("assets/level/koumakan");
-// 		smgr->loadScene("koumakan.irr");
+// 		IMeshSceneNode* mesh = smgr->addMeshSceneNode(smgr->getMesh("Assets/model/village/village.3ds"));
+// 		for (int i = 0; i < mesh->getMaterialCount(); ++i)
+// 		{
+// 			mesh->getMaterial(i).MaterialType = video::EMT_SOLID;
+// 		}
+
 		// Usually, frame rate adjuster should be the last frame observer.
 		// So, give it a big order
 // 		FrameRateAdjuster* adj = new FrameRateAdjuster(1.f/60);

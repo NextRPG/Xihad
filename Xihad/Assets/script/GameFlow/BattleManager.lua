@@ -87,8 +87,8 @@ end
 function BattleManager:onCheckPoint()
 	_check_coroutine_yieldable()
 	
-	self.commandChecker:onCheckPoint()
-	self.victoryChecker:onCheckPoint()
+	self.commandChecker:onCheckPoint(self)
+	self.victoryChecker:onCheckPoint(self)
 	if self.winTeam ~= nil then
 		return 'stop'
 	end

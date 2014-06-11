@@ -9,17 +9,19 @@ local ItemRegistry = require 'Item.ItemRegistry'
 local SkillRegistry= require 'Skill.SkillRegistry'
 local ConcurrentJobs = require 'std.ConcurrentJobs'
 local WarriorMovement= require 'HighAction.WarriorMovement'
-local AsConditionFactory = require 'Async.AsConditionFactory'
+local ParticleLoadEnv = require 'Particle.ParticleLoadEnv'
+local AsConditionFactory= require 'Async.AsConditionFactory'
 
 local CommandExecutor = {
+	uiFacade = nil,
 	cameraFacade = nil,
 	expCalculator= nil,
-	ui = nil,
 }
 CommandExecutor.__index = CommandExecutor
 
-function CommandExecutor.new(cameraFacade, expCalculator)
+function CommandExecutor.new(cameraFacade, uiFacade, expCalculator)
 	return setmetatable({
+			uiFacade = uiFacade,
 			cameraFacade = cameraFacade,
 			expCalculator= expCalculator,
 		}, CommandExecutor)
@@ -59,7 +61,6 @@ function CommandExecutor:_faceToTarget(warrior, targetTile, results)
 	
 	local parallel = ActionFactory.parallel(actions)
 	ActionAdapter.fit(object, parallel)
-	-- AsConditionFactory.waitAction(parallel)
 end
 
 function CommandExecutor:_playSkillAnimation(warrior, skill, targetTile, results)
@@ -94,13 +95,64 @@ function CommandExecutor:_applyBattleResults(source, results, lis)
 	jobs:join()
 end
 
+function CommandExecutor:_show_exp_progress(leveler, usedExp)
+	local p1 = leveler:getExpPercent()
+	local p2 = leveler:getExpPercent(usedExp)
+	local running = coroutine.running()
+	local times = 0
+	self.uiFacade:showExpProgressBar(p1, p2, function ()
+		times = times + 1
+		if times == 2 then
+			g_scheduler:schedule(function() coroutine.resume(running) end)
+		end
+	end)
+	coroutine.yield()
+end
+
+function CommandExecutor:_level_up(warrior, result)
+	local env = ParticleLoadEnv.newSingle(warrior:getHostObject())
+	env:inflate('effect.level_up')
+	-- show level up panel
+	
+	AsConditionFactory.waitTimer(2)
+	
+	result:apply(warrior)
+end
+
 function CommandExecutor:_gainExp(warrior)
 	local leveler = warrior:findPeer(c'Leveler')
 	if not leveler then return end
 	
 	local exp = self.expCalculator:getResult()
-	print(warrior:getHostObject():getID(), 'gain exp', exp)
-	-- leveler:obtainExp(exp, callback)
+	local totalUsed = 0
+	print(warrior:getName(), 'gain exp', exp)
+	
+	print(string.format('Current level: %d', leveler:getLevel()))
+	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
+	print('---------------------------------------------')
+	local descendMore = false
+	leveler:obtainExp(exp, function(usedExp, result)
+		totalUsed = totalUsed + usedExp
+		print(string.format('usedExp: %d', usedExp))
+		print(tostring(result))
+		
+		self:_show_exp_progress(leveler, usedExp)
+		
+		if not result then return end
+		
+		if not descendMore then
+			self.cameraFacade:descendMore()
+			descendMore = true
+		end
+		
+		self:_level_up(warrior, result)
+	end)
+	
+	print('---------------------------------------------')
+	print(string.format('Current level: %d', leveler:getLevel()))
+	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
+	
+	assert(totalUsed == exp)
 end
 
 function CommandExecutor:_getBattleResults(warrior, skill, targetLocation)
@@ -145,11 +197,25 @@ function CommandExecutor:useItem(warrior, itemName)
 	local item = ItemRegistry.findItemByName(itemName)
 	local usage= warrior:findPeer(c'Parcel'):useItem(item)
 	
-	-- TODO
-	print(usage)
+	---
+	-- TODO:
+	-- 3. 某些情况下才需要点击消失，有时是自动消失
+	self.uiFacade:showConfirmMessage(usage)
 	
 	if item:occupyRound() then
 		AsConditionFactory.waitTimer(0.5)
+		warrior:deactivate()
+	end
+end
+
+function CommandExecutor:makeSurvey(warrior)
+	local tile = warrior:findPeer(c'Barrier'):getTile()
+	local success, message = tile:onSurveyed(warrior)
+	if message ~= nil then
+		print(message)
+	end
+	
+	if success then
 		warrior:deactivate()
 	end
 end
@@ -164,8 +230,8 @@ function CommandExecutor:transact(master, guest, masterView, guestView)
 	master:deactivate()
 end
 
-function CommandExecutor:standBy(warrior)
-	warrior:deactivate()
+function CommandExecutor:standBy(warrior, mode)
+	warrior:deactivate(mode)
 end
 
 function CommandExecutor:execute(cmdList)
@@ -174,8 +240,7 @@ function CommandExecutor:execute(cmdList)
 	local command, subCommand = cmdList:getCommand()
 	
 	if cmdList:getLocation() == warrior:getLocation() and command == '待机' then
-		self:standBy(warrior)
-		-- TODO Don't wait fade out
+		self:standBy(warrior, 'immediate')
 		return
 	end
 	
@@ -190,8 +255,6 @@ function CommandExecutor:execute(cmdList)
 	elseif command == '道具' then
 		self:useItem(warrior, subCommand)
 	end
-	
-	-- TODO Wait fade out
 end
 
 return CommandExecutor

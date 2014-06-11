@@ -35,10 +35,12 @@ function ChooseCommandState:onSelectCommand(command, subcommand)
 	end
 	
 	if command == '待机' then
-		self.executor:standBy(self.commandList:getSource())
+		self.executor:standBy(self:_getSource())
 	elseif command == '道具' then
 		self.executor:useItem(self:_getSource(), subcommand)
-	end	
+	else -- survey command
+		self.executor:makeSurvey(self:_getSource())
+	end
 	
 	if self:_getSource():isActive() then
 		self.ui:updateCommandView(self:_getSource())

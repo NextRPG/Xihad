@@ -13,14 +13,14 @@ function ExclusiveChecker:onConditionSatisfied(condition)
 	end
 end
 
-function ExclusiveChecker:onCheckPoint()
+function ExclusiveChecker:onCheckPoint(context)
 	if not self._listener then
 		return
 	end
 	
 	for condition, _ in pairs(self.conditions) do
 		assert(condition:getSatisfiedListener() == self)
-		condition:checkCondition()
+		condition:checkCondition(context)
 		if condition:isSatisfied() then
 			assert(self._listener == nil)
 			return

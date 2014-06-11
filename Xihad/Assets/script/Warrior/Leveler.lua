@@ -6,8 +6,9 @@ local Leveler = {
 Leveler.__index = Leveler
 
 function Leveler.new( data, object )
-	assert(grader ~= nil)
+	assert(data.grader ~= nil)
 	local obj = setmetatable({
+			exp    = data.exp,
 			level  = data.level,
 			grader = data.grader,
 		}, Leveler)
@@ -18,38 +19,59 @@ function Leveler:getLevel()
 	return self.level
 end
 
+function Leveler:getExpPercent(extra)
+	extra = extra or 0
+	local total = self:getNextLevelExp()
+	assert(total > 0)
+	return (self.exp + extra) / total
+end
+
+function Leveler:getRestExpToNext()
+	return self:getNextLevelExp() - self:getCurrentExp()
+end
+
+function Leveler:getCurrentExp()
+	return self.exp
+end
+
 function Leveler:getNextLevelExp()
 	return self.grader:getNextLevelExp(self.level)
 end
 
----
--- @return level-up information
-function Leveler:_obtainExp(exp)
-	local warrior = self:findPeer(c'Warrior')
-	
-	while exp > 0 do
-		local maxGain = self:getNextLevelExp()
-		local used = math.min(maxGain, exp)
-		if used >= maxGain then
-			self.exp = self.exp + used
-			
-			coroutine.yield(used, self.grader:promote(warrior, self.level+1))
-			self.level = self.level + 1
-		else
-			coroutine.yield(used)
-		end
+function Leveler:_reset_to_next()
+	self.exp = 0
+	self.level = self.level + 1
+end
+
+function Leveler:_do_promote()
+	return self.grader:promote(self:findPeer(c'Warrior'), self.level + 1)
+end
+
+function Leveler:_to_next_level(usedExp, callback)
+	callback(usedExp, self:_do_promote())
+	self:_reset_to_next()
+end
+
+function Leveler:_obtainExp(exp, callback)
+	local nextExp = self.exp + exp
+	while true do
+		local full = self:getNextLevelExp()
+		assert(full > self.exp)
 		
-		exp = exp - used
+		if nextExp < full then break end
+		
+		self:_to_next_level(full - self.exp, callback)
+		nextExp = nextExp - full
 	end
+	
+	callback(nextExp - self.exp)
+	self.exp = nextExp
 end
 
 function Leveler:obtainExp(exp, callback)
-	local co = coroutine.wrap(function()
-			return self:_obtainExp(exp)
-		end)
-	
-	for usedExp, levelUpInfo in co() do
-		callback(usedExp, levelUpInfo)
+	assert(exp >= 0)
+	if exp > 0 then 
+		self:_obtainExp(exp, callback)
 	end
 end
 

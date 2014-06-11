@@ -14,7 +14,7 @@ local Warrior = {
 	career = nil,
 	active = true,
 	
-	hitPoint   = 0,
+	hitPoint   = 1,
 	properties = nil,
 	
 	bindPoint  = nil,
@@ -52,7 +52,6 @@ function Warrior.new( data, object )
 	
 	o:_initProperty('HitPoint')
 	o:_initProperty('Dead')
-	o:_setHitPoint(o:getMHP())	-- TODO REFACTOR
 	return o
 end
 
@@ -93,7 +92,7 @@ function Warrior:exchangables(startLoc)
 	}
 	
 	local iter = functional.bind1(Array.elements, locations)
-	local filter = function (tile)
+	local function filter(tile)
 		local adjWarrior = tile:getWarrior()
 		if adjWarrior and adjWarrior:isLeagueWith(self) then
 			local adjHasItem = adjWarrior:findPeer(c'Parcel'):hasItem()
@@ -151,12 +150,12 @@ function Warrior:activate()
 end
 
 -- Invoke when round over
-function Warrior:deactivate()
+function Warrior:deactivate(mode)
 	assert(self.active)
 	self.active = false
 	
-	for listener,_ in pairs(self.roundListeners) do
-		listener:onRoundEnd(self)
+	for listener, _ in pairs(self.roundListeners) do
+		listener:onRoundEnd(self, mode)
 	end
 end
 

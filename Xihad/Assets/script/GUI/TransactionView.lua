@@ -1,10 +1,10 @@
 local Window = require 'GUI.Window'
-local GUIController= require 'ui.GUIController'
 local TransactionView = {}
 
 function TransactionView.hook(receiver)
-	GUIController:subscribeEvent("ParcelExchange.Complete", receiver)
-	GUIController:subscribeEvent("ParcelExchange.Cancel", receiver)
+	local TransactionWindow = require 'ui.ParcelExchange'
+	TransactionWindow:addListener(receiver, 'Complete')
+	TransactionWindow:addListener(receiver, 'Cancel')
 end
 
 local function copyParcel(warrior)
@@ -12,6 +12,7 @@ local function copyParcel(warrior)
 end
 
 function TransactionView.show(srcWarrior, dstWarrior)
+	local TransactionWindow = require 'ui.ParcelExchange'
 	local model = {
 		masterName = srcWarrior:getName(),
 		masterParcel = copyParcel(srcWarrior),
@@ -19,14 +20,15 @@ function TransactionView.show(srcWarrior, dstWarrior)
 		guestParcel = copyParcel(dstWarrior),
 	}
 	
-	local wnd = GUIController:showWindow("ParcelExchange", model)
+	local wnd = TransactionWindow:show(model)
 	local screenWidth = g_window:getScreenSize()
 	local size= wnd:getPixelSize()
 	Window.setPosition(wnd, (screenWidth - size.width) / 2, 50)
 end
 
 function TransactionView.close()
-	GUIController:hideWindow('ParcelExchange')
+	local TransactionWindow = require 'ui.ParcelExchange'
+	TransactionWindow:close()
 end
 
 return TransactionView

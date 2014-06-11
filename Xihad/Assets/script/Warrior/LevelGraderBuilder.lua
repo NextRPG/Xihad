@@ -1,7 +1,8 @@
 local Table = require 'std.Table'
 local LevelGrader = require 'Warrior.LevelGrader'
 local LevelGraderBuilder = {
-	expToNextLevel= nil,	-- level -> exp
+	nextLevelExpCalculator = nil,	-- level -> exp
+	propertyPromoters = nil,
 	skillsToLearn = nil,	-- level -> skills
 }
 LevelGraderBuilder.__index = LevelGraderBuilder
@@ -13,24 +14,32 @@ function LevelGraderBuilder.new()
 end
 
 function LevelGraderBuilder:_init()
-	self.expToNextLevel= {}
+	self.nextLevelExpCalculator = nil
+	self.propertyPromoters = {}
 	self.skillsToLearn = {}
 end
 
-function LevelGraderBuilder:setExpToNextLevel(exp)
-	table.insert(self.expToNextLevel, exp)
-	return #self.expToNextLevel
+function LevelGraderBuilder:setNextLevelExpCalculator(nextLevelExpCalculator)
+	self.nextLevelExpCalculator = nextLevelExpCalculator
 end
 
-function LevelGraderBuilder:addSkillAtLevel(level, skill)
+function LevelGraderBuilder:setPropertyPromoter(pname, promoter)
+	assert(type(promoter) == 'function')
+	self.propertyPromoters[pname] = promoter
+end
+
+function LevelGraderBuilder:addSkillAtLevel(level, skill, count)
 	assert(type(level) == 'number' and skill ~= nil)
 	
 	local list = Table.get_or_new_table(self.skillsToLearn, level)
-	table.insert(list, skill)
+	table.insert(list, { skill = skill, count = count })
 end
 
 function LevelGraderBuilder:create()
-	local grader = LevelGrader.new(self.expToNextLevel, self.skillsToLearn)
+	local grader = LevelGrader.new(
+						self.nextLevelExpCalculator, self.skillsToLearn, 
+						self.propertyPromoters)
+	
 	self:_init()
 	return grader
 end

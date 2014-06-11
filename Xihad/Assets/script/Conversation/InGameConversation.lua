@@ -51,7 +51,7 @@ function InGameConversation:_prepare_region_for(region, forSpeaker)
 end
 
 function InGameConversation:_close_speaker_except(speaker, except)
-	local region = Algorithm.find(self.regions, speaker)
+	local region = Algorithm.find_t(self.regions, speaker)
 	if region ~= nil and region ~= except then
 		self:_close_speaker_wait(speaker)
 		self.regions[region] = nil	-- remove

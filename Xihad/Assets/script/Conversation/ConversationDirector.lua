@@ -1,6 +1,5 @@
 require 'CEGUIBasedDialogue'		-- load dialogue module
 
-
 local _default_arg = {
 	paddingX = 0, paddingY = 0,
 	width = 500,  height= 500,
@@ -39,8 +38,6 @@ function ConversationDirector:start()
 		onMouseEvent = function(self, event, arg)
 			if event.type == "lPressed" then
 				conv:step()
-			elseif event.type == 'mouseMoved' then
-				return 1
 			end
 			
 			return 0

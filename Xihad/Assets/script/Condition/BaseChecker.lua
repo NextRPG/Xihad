@@ -33,10 +33,10 @@ function BaseChecker:onConditionSatisfied(condition)
 	self._listener:onChecked(userdata)
 end
 
-function BaseChecker:onCheckPoint()
+function BaseChecker:onCheckPoint(context)
 	for condition, _ in pairs(self.conditions) do
 		assert(condition:getSatisfiedListener() == self)
-		condition:checkCondition()
+		condition:checkCondition(context)
 	end
 end
 

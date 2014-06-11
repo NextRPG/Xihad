@@ -23,18 +23,10 @@ function factory.new(team)
 						local spanColor = SpanColor.new(nil, Color.new(Color.white))
 						local action = RenderAction.diffuse(render, spanColor, duration)
 						ActionAdapter.fit(render:getHostObject(), action)
-						
-						-- spanColor = SpanColor.new(nil, Color.new(Color.white))
-						-- action = RenderAction.ambient(render, spanColor, duration)
-						-- ActionAdapter.fit(render:getHostObject(), action)
-						
-						-- if coroutine.running() then
-						-- 	AsConditionFactory.waitAction(action)
-						-- end
 					end
 				end,
 				
-				onRoundEnd = function (self, warrior)
+				onRoundEnd = function (self, warrior, mode)
 					local render = warrior:findPeer(c'Render')
 					
 					if render then
@@ -42,13 +34,9 @@ function factory.new(team)
 						local action = RenderAction.diffuse(render, spanColor, duration)
 						ActionAdapter.fit(render:getHostObject(), action)
 						
-						-- local spanColor = SpanColor.new(nil, Color.new(0xff555555))
-						-- action = RenderAction.ambient(render, spanColor, duration)
-						-- ActionAdapter.fit(render:getHostObject(), action)
-						
-						-- if coroutine.running() then
-						-- 	AsConditionFactory.waitAction(action)
-						-- end
+						if coroutine.running() and mode ~= 'immediate' then
+							AsConditionFactory.waitAction(action)
+						end
 					end
 				end
 			}
@@ -65,6 +53,11 @@ end
 function factory:create(team, name, data)
 	local object = g_scene:createObject(c(name))
 	
+	if type(data.career) == 'string' then
+		local CareerRegistry = require 'Career.CareerRegistry'
+		data.career = CareerRegistry.findCareerByName(data.career)
+	end
+	
 	-- Warrior
 	data.team = team
 	local warrior = object:appendComponent(c'Warrior', data)
@@ -76,11 +69,11 @@ function factory:create(team, name, data)
 	anim:playAnimation(c"idle")
 	anim:setTransitionTime(0.15)
 	warrior:addRoundListener(self.highlightActiveWarrior)
-
+	
 	local parcel = object:appendComponent(c'Parcel')
 	local equiper= object:appendComponent(c'Equiper')
 	local barrier= object:appendComponent(c'WarriorBarrier')
-	local skillCaster = object:appendComponent(c'SkillCaster')
+	local caster = object:appendComponent(c'SkillCaster')
 	
 	-- TODO remove
 	if data.model == 'ninja' then
@@ -90,12 +83,18 @@ function factory:create(team, name, data)
 	object:addTag(c'Warrior')
 	object:addTag(c(team))
 	
+	if data.tags then
+		for _, tag in ipairs(data.tags) do
+			object:addTag(c(tag))
+		end
+	end
+	
 	-- learn skills
 	if data.skills then
 		local skill
 		for skillName, count in pairs(data.skills) do
 			skill = SkillRegistry.findSkillByName(skillName)
-			skillCaster:learnSkill(skill, count)
+			caster:learnSkill(skill, count)
 		end
 	end
 	
@@ -127,7 +126,8 @@ function factory:create(team, name, data)
 				approaching = Approaching.enemyGrader(EnemyGrader.nearest(), 'Hero'),
 			})
 	else
-		-- object:appendComponent(c'Leveler', ...)
+		data.grader = data.career:getGrader()
+		object:appendComponent(c'Leveler', data)
 	end
 	
 	-- hook	
@@ -184,9 +184,12 @@ function factory:create(team, name, data)
 				-- local isPromote = warrior:get
 				-- buffEffects[field]:
 				
-				local ParticleLoader = require 'Particle.ParticleLoader'
+				local ParticleLoadEnv = require 'Particle.ParticleLoadEnv'
 				local host = warrior:getHostObject()
-				local pobject = ParticleLoader.create('effect.ATKBuff', host)
+				local env = ParticleLoadEnv.newSingle(host)
+				env:inflate('effect.ATKBuff')
+				
+				local pobject = env:getParticleObject()
 				pobject:setParent(host)
 				buffEffects[field] = pobject
 			end,

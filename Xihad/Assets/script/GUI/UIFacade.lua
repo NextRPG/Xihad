@@ -1,11 +1,11 @@
+local Window = require 'GUI.Window'
+local Progress = require 'ui.Progress'
 local functional = require 'std.functional'
-local TileInfoView= require 'GUI.TileInfoView'
+local Notification = require 'ui.Notification'
 local CommandView = require 'GUI.CommandView'
+local TileInfoView= require 'GUI.TileInfoView'
 local TransactionView = require 'GUI.TransactionView'
-local GUIController = require 'ui.GUIController'
-local UIFacade = {
-	commandReceiver = nil,
-}
+local UIFacade = {}
 UIFacade.__index = UIFacade
 
 function UIFacade.new()
@@ -24,11 +24,25 @@ end
 
 function UIFacade:showTileInfo(tile)
 	if tile then
-		print(tostring(tile:getLocation()))
 		TileInfoView.show(tile)
 	else
 		TileInfoView.hide()
 	end
+end
+
+function UIFacade:showConfirmMessage(fmt, valueDict, colorDict)
+	Window.placeCenter(Notification:show(fmt, valueDict, colorDict))
+	local controller = g_scene:pushController({
+			onMouseEvent = function(self, e)
+				if e.type == 'lPressed' then
+					Notification:close()
+					g_scene:popController()
+				end
+				
+				return 0
+			end
+		})
+	controller:drop()
 end
 
 function UIFacade:showWarning(msg)
@@ -36,7 +50,6 @@ function UIFacade:showWarning(msg)
 end
 
 function UIFacade:showCommandView(sourceWarrior)
-	-- Command View
 	CommandView.show(sourceWarrior)
 end
 
@@ -54,6 +67,10 @@ end
 
 function UIFacade:closeTransaction()
 	TransactionView.close()
+end
+
+function UIFacade:showExpProgressBar(p1, p2, callback)
+	Window.placeCenter(Progress:show(p1, p2, callback))
 end
 
 return UIFacade

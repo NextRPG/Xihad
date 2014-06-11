@@ -1,5 +1,5 @@
 local Location = require 'route.Location'
-
+local BarrierUtil = require 'Barrier.BarrierUtil'
 local BaseFactory = { 
 }
 BaseFactory.__index = BaseFactory
@@ -28,7 +28,7 @@ end
 
 function BaseFactory:setBarrierTile(barrier, tile)
 	barrier:setTile(tile)
-	barrier:synchronizeTranslate()
+	BarrierUtil.synchronizeTranslate(barrier)
 end
 
 function BaseFactory:initWarrior(board, object, loc)

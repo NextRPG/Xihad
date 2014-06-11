@@ -160,7 +160,8 @@ function PlayerState:_onWarrior(warriorObj, times, heroFunc, enemyFunc)
 end
 
 function PlayerState:onWarriorSelected(warriorObj, times)
-	return self:_onWarrior(warriorObj, times, 'onHeroSelected', 'onEnemySelected')
+	return self:_onWarrior(warriorObj, times, 
+					'onHeroSelected', 'onEnemySelected')
 end
 
 function PlayerState:onTileSelected(tile, times)

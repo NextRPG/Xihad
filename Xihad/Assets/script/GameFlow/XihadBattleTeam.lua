@@ -1,7 +1,5 @@
 local base = require 'GameFlow.BattleTeam'
 local Iterator = require 'std.Iterator'
-local functional = require 'std.functional'
-
 local XihadBattleTeam = setmetatable({}, base)
 XihadBattleTeam.__index = XihadBattleTeam
 

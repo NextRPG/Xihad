@@ -46,6 +46,8 @@ namespace xihad { namespace cegui
 		const CEGUI::IrrlichtEventPusher* getEventPusher();
 
 	private:
+		void updateCursorPosition();
+
 		void checkWindowResize();
 
 		void initialiseResourceGroupDirectories();
