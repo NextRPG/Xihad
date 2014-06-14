@@ -66,12 +66,14 @@ namespace luaT
 	template <>
 	inline void push_<LuaRef>(lua_State* L, LuaRef& ref)
 	{
-		ref.pushSelf();
+		ref.pushOnto(L);
 	}
 
 	template <>
 	inline bool is_<LuaRef>(lua_State* L, int idx)
 	{
+		(void) L;
+		(void) idx;
 		return true;
 	}
 

@@ -32,6 +32,7 @@ namespace luaT
 	{
 		bool operator==(const Nil& o) const 
 		{
+			(void) o;
 			return true;
 		}
 	};

@@ -52,12 +52,14 @@ namespace luaT
 	template <>
 	inline void push_<Nil>(lua_State* L, Nil& type)
 	{
+		(void) type;
 		lua_pushnil(L);
 	}
 
 	template <>
 	inline void push_<Thread>(lua_State* L, Thread& type)
 	{
+		(void) type;
 		lua_pushthread(L);
 	}
 

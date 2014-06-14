@@ -1,20 +1,30 @@
 #include "CEGuiHandle.h"
-#include <CEGUI/CEGUI.h>
+#include <CEGUI/Font.h>
 #include <CEGUI/System.h>
+#include <CEGUI/Scheme.h>
+#include <CEGUI/XMLParser.h>
 #include <CEGUI/GUIContext.h>
+#include <CEGUI/ImageManager.h>
+#include <CEGUI/WindowManager.h>
+#include <CEGUI/AnimationManager.h>
+#include <CEGUI/falagard/WidgetLookManager.h>
 #include <CEGUI/ScriptModules/Lua/ScriptModule.h>
+
+#ifdef snprintf
+#	undef  snprintf	// Suppress macro redefine warning
+#endif
 #include <CEGUIIrrlichtRenderer/ImageCodec.h>
 #include <CEGUIIrrlichtRenderer/ResourceProvider.h>
 #include <CEGUIIrrlichtRenderer/Renderer.h>
 #include <CEGUIIrrlichtRenderer/EventPusher.h>
+
 #include <Engine/Timeline.h>
 #include <irrlicht/IrrlichtDevice.h>
-#include <limits.h>
 
 #ifdef _MAX_PATH
-#define PATH_MAX _MAX_PATH
+#	define PATH_MAX _MAX_PATH
 #else
-#define PATH_MAX 260
+#	define PATH_MAX 260
 #endif
 
 namespace xihad { namespace cegui
@@ -93,7 +103,7 @@ namespace xihad { namespace cegui
 	{
 		irr::gui::ICursorControl* cursor = d_device->getCursorControl();
 		irr::core::vector2di irrPosition = cursor->getPosition();
-		CEGUI::Vector2f pos(irrPosition.X, irrPosition.Y);
+		CEGUI::Vector2f pos((float) irrPosition.X, (float) irrPosition.Y);
 
 		CEGUI::System& guiSystem = CEGUI::System::getSingleton();
 		guiSystem.getDefaultGUIContext().getMouseCursor().setPosition(pos);

@@ -335,7 +335,7 @@ void IrrlichtTexture::freeIrrlichtTexture()
 std::string IrrlichtTexture::getUniqueName()
 {
     char tmp[32];
-    sprintf(tmp, "irr_tex_%d", d_textureNumber++);
+    sprintf_s(tmp, 32, "irr_tex_%d", d_textureNumber++);
 
     return std::string(tmp);
 }

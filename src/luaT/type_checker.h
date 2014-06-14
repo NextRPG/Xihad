@@ -174,6 +174,8 @@ namespace luaT
 	template <>
 	inline Nil to_<Nil>(lua_State* L, int idx)
 	{
+		(void) L;
+		(void) idx;
 		return Nil();
 	}
 

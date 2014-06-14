@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CEGUI/Size.h"
-#include "Engine/irr_ptr.h"
+#include <CEGUI/Size.h>
+#include <Engine/irr_ptr.h>
 
 struct lua_State;
 

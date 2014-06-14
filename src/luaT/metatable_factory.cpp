@@ -7,8 +7,12 @@ namespace luaT
 {
 	void GeneralMetatableFactory::create( lua_State* L, const char* name, luaL_Reg* regs, lua_CFunction gc )
 	{
-		int success = luaL_newmetatable(L, name);
-		xassert(success && "Metatable for this name has been used.");
+		int notExist = luaL_newmetatable(L, name);
+		if (!notExist) 
+		{
+			xassert(notExist && "Metatable for this name has been used.");
+			return;
+		}
 
 		if (gc != NULL) setField(L, -1, "__gc", gc);
 
@@ -22,7 +26,8 @@ namespace luaT
 		lua_setfield(L, -2, "__index");
 
 		// load self to package.
-		if (regs != NULL) luaL_register(L, NULL, regs);	
+		if (regs != NULL) 
+			luaL_register(L, NULL, regs);	
 	}
 
 

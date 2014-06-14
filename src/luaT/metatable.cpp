@@ -9,6 +9,7 @@ namespace luaT
 		luaL_getmetatable(L, name);
 
 		bool noMetatable = lua_isnil(L, -1);
+		(void) noMetatable;
 		xassert(!noMetatable && 
 			"Did you register your lib? No Metatable for this metatableName.");
 	}
@@ -18,6 +19,7 @@ namespace luaT
 		objIdx = normalIndex(L, objIdx);
 		Metatable::byName(L, name);
 		bool noMetatable = lua_isnil(L, -1);
+		(void) noMetatable;
 		xassert(!noMetatable && "Did you register your lib? No Metatable for this metatableName.");
 
 		lua_setmetatable(L, objIdx);

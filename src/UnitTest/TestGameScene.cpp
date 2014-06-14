@@ -1,5 +1,5 @@
 #include "CppUnitTest.h"
-#include "Engine\GameScene.h"
+#include <Engine\GameScene.h>
 #include "Engine\GameObject.h"
 #include "Engine\Timeline.h"
 
