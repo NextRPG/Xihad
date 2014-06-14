@@ -12,12 +12,12 @@ namespace xihad { namespace script
 		return luaT::pcall(L, 1, 0, libName);
 	}
 
-	void LuaUtil::outputErrorMessage( lua_State* L, const char* desc, int msgIdx )
+	void LuaUtil::outputErrorMessage(lua_State* L, const char* desc, int msgIdx)
 	{
 		cerr << "---- lua error ----\n";
 
 		if (desc != nullptr) 
-			cerr << desc << "\n";
+			cerr << desc << ": ";
 
 		cerr << lua_tostring(L, msgIdx) << "\n";
 		cerr << "==== lua error ====" << endl;
@@ -40,7 +40,7 @@ namespace xihad { namespace script
 	{
 		if (!callSelf(table, funcName, optional))
 		{
-			outputErrorMessage(table.getState());
+			outputErrorMessage(table.getState(), funcName);
 			lua_pop(table.getState(), 1);
 		}
 	}
@@ -86,10 +86,11 @@ namespace xihad { namespace script
 		StackMemo memo(L);
 
 		lua_getglobal(L, "debug");
-		if (!lua_isnil(L, -1))
+		if (!lua_isnil(L, -1)) // when debug module loaded
 		{
 			lua_getfield(L, -1, "traceback");
-			if (!lua_isnil(L, -1) && lua_pcall(L, 0, 1, 0) == 0)
+			lua_pushthread(L);
+			if (lua_pcall(L, 1, 1, 0) == 0)
 			{
 				if (const char* tracer = lua_tostring(L, -1))
 					return string(tracer);

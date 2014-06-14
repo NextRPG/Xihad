@@ -1,4 +1,16 @@
-local class = {}
+local class = {
+	indexGlobalMetatable = { __index = _G },
+}
+
+function class.collect(f, metatable)
+	-- This collects globals defined in the given function.
+	local collector = setmetatable({}, class.indexGlobalMetatable)
+	
+	-- Call function in collector environment
+	setfenv(f, collector)()
+	
+	return setmetatable(collector, metatable)
+end
 
 function class.delegate(type, delegated, field, delegating)
 	delegating = delegating or delegated

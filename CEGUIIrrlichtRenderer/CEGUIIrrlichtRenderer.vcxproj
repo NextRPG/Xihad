@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\src\CEGUIIrrlichtRenderer\Readme.txt" />
-    <Text Include="..\src\CEGUI\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\CEGUIIrrlichtRenderer\RenderTarget.inl" />

@@ -81,6 +81,7 @@ namespace xihad { namespace cegui
 
 		CEGUI::Renderer* gui_renderer(gui_system.getRenderer());
 
+		updateCursorPosition();
 		gui_renderer->beginRendering();
 		gui_system.getDefaultGUIContext().draw();
 		gui_renderer->endRendering();

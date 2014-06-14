@@ -32,6 +32,7 @@ function ChooseTileState:_restoreState()
 end
 
 function ChooseTileState:onStateEnter(state, prev)
+	error('hahaha')
 	if prev == 'ChooseCommand' then
 		self:_restoreState()
 		self:_focusObject(self:_getSourceObject())

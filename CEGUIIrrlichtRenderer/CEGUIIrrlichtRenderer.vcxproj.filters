@@ -15,7 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\src\CEGUI\Readme.txt" />
     <Text Include="..\src\CEGUIIrrlichtRenderer\Readme.txt" />
   </ItemGroup>
   <ItemGroup>

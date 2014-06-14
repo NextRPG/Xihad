@@ -4,6 +4,7 @@
 #include <iostream>
 #include "luaT\stack_memo.h"
 #include "ScriptEngine\LuaComponentSystem.h"
+#include "ScriptEngine\LuaUtil.h"
 
 // #define ProfileForSceneLoading
 
@@ -19,7 +20,7 @@ namespace xihad
 		lua_State* L = lcs->getLuaState();
 		if (luaL_loadfile(L, scriptName) || lua_pcall(L, 0, 0, 0))
 		{
-			cerr << "SCRIPT ERR: " << lua_tostring(L, -1) << endl;
+			script::LuaUtil::outputErrorMessage(L, "Loading scene");
 			lua_pop(L, 1);
 			scene->destroy();
 			scene = nullptr;

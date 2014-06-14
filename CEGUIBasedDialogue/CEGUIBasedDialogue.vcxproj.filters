@@ -72,7 +72,4 @@
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="CEGUIBasedDialogue.vcxproj.user" />
-  </ItemGroup>
 </Project>

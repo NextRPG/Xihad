@@ -50,41 +50,41 @@ namespace xihad { namespace cegui
 		CEGUI::System* ceguiSystem = CEGUI::System::getSingletonPtr();
 		if (!ceguiSystem) return handled;
 
+		CEGUI::GUIContext& context = ceguiSystem->getDefaultGUIContext();
 		switch (e)
 		{
 			//! Left mouse button was pressed down.
 		case EMIE_LMOUSE_PRESSED_DOWN:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonDown(CEGUI::LeftButton);
+			handled = context.injectMouseButtonDown(CEGUI::LeftButton);
 			break;
 			//! Right mouse button was pressed down.
 		case EMIE_RMOUSE_PRESSED_DOWN:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonDown(CEGUI::RightButton);
+			handled = context.injectMouseButtonDown(CEGUI::RightButton);
 			break;
 			//! Middle mouse button was pressed down.
 		case EMIE_MMOUSE_PRESSED_DOWN:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonDown(CEGUI::MiddleButton);
+			handled = context.injectMouseButtonDown(CEGUI::MiddleButton);
 			break;
 			//! Left mouse button was left up.
 		case EMIE_LMOUSE_LEFT_UP:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonUp(CEGUI::LeftButton);
+			handled = context.injectMouseButtonUp(CEGUI::LeftButton);
 			break;
 			//! Right mouse button was left up.
 		case EMIE_RMOUSE_LEFT_UP:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonUp(CEGUI::RightButton);
+			handled = context.injectMouseButtonUp(CEGUI::RightButton);
 			break;
 			//! Middle mouse button was left up.
 		case EMIE_MMOUSE_LEFT_UP:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseButtonUp(CEGUI::MiddleButton);
+			handled = context.injectMouseButtonUp(CEGUI::MiddleButton);
 			break;
 			//! The mouse cursor changed its position.
 		case EMIE_MOUSE_MOVED:
-			handled = ceguiSystem->getDefaultGUIContext().injectMousePosition(
-				static_cast<float>(x), static_cast<float>(y));
+			handled = context.injectMousePosition((float) x, (float) y);
 			break;
 			//! The mouse wheel was moved. Use Wheel value in event data to find out
 			//! in what direction and how fast.
 		case EMIE_MOUSE_WHEEL:
-			handled = ceguiSystem->getDefaultGUIContext().injectMouseWheelChange(w);
+			handled = context.injectMouseWheelChange(w);
 			break;
 		default:
 			break;

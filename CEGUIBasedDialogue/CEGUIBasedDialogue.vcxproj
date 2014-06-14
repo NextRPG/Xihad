@@ -32,9 +32,6 @@
     <ClInclude Include="..\src\CEGUIBasedDialogue\ITypedContent.h" />
     <ClInclude Include="..\src\CEGUIBasedDialogue\SpeakerSupport.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="CEGUIBasedDialogue.vcxproj.user" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{702E7CE5-4A90-4957-910E-A7B8063405BE}</ProjectGuid>
     <RootNamespace>CEGUIBasedDialogue</RootNamespace>
