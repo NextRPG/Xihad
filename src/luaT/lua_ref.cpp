@@ -64,8 +64,11 @@
 
 	 bool LuaRef::operator==( const LuaRef& other ) const
 	 {
+		 if (this->L != other.L)
+			 return false;
+
 		this->pushSelf();
-		other.pushOnto(L);
+		other.pushSelf();
 		int equal = lua_equal(L, -1, -2);
 		lua_pop(L, 2);
 

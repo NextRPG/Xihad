@@ -2,4 +2,6 @@
 
 struct lua_State;
 
-lua_State* toMainState(lua_State* L);
+namespace luaT {
+	lua_State* toMainState(lua_State* L);
+}
