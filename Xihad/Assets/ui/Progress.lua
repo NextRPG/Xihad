@@ -34,6 +34,7 @@ function Progress:init()
 end
 
 function Progress:onAnimationEnded(e)
+	print('Progress::onAnimationEnded')
 	if self.callback then
 		self.callback()
 	end

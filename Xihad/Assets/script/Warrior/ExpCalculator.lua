@@ -36,11 +36,11 @@ end
 function ExpCalculator:complete(targetBarrier)
 	local targetWarrior = targetBarrier:findPeer(c'Warrior')
 	if targetWarrior ~= nil then
-		self:_add_exp(self.damageAccum)
-		self:_add_exp(self.recoveryAccum)
+		self:_add_exp(self.damageAccum / 10)
+		self:_add_exp(self.recoveryAccum / 10)
 		
 		if self.dead then
-			self:_add_exp(100)
+			self:_add_exp(10)
 		end
 	end
 	

@@ -1,2 +1,10 @@
 require 'Assets.script.AllPackages'
-return require 'effect.tornado'
+-- return dofile('Assets/effect/ice_broken.lua')
+-- return dofile('Assets/effect/explosion.lua')
+-- 	return dofile('Assets/effect/lightning.lua')
+-- return dofile('Assets/effect/fire.lua')
+-- return dofile('Assets/effect/sword.lua')
+-- return dofile('Assets/effect/dark_blade.lua')
+-- return dofile('Assets/effect/level_up.lua')
+-- return dofile('Assets/effect/ATKBuff.lua')
+return dofile('Assets/effect/tornado.lua')

@@ -204,7 +204,7 @@ return function(pnode, f, env, scale)
 	local tarPos = env:getPosition(tar)
 	local direction = tarPos - srcPos
 	
-	local len = direction:length() * 3
+	local len = direction:length()
 	direction:normalize()
 	local startPos = srcPos
 	local layer = 25

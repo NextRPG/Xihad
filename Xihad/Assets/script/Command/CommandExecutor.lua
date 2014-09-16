@@ -151,6 +151,7 @@ function CommandExecutor:_gainExp(warrior)
 	print('---------------------------------------------')
 	print(string.format('Current level: %d', leveler:getLevel()))
 	print(string.format('Exp to next level: %d', leveler:getRestExpToNext()))
+	self.uiFacade:closeExpProgressBar()
 	
 	assert(totalUsed == exp)
 end

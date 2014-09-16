@@ -73,4 +73,8 @@ function UIFacade:showExpProgressBar(p1, p2, callback)
 	Window.placeCenter(Progress:show(p1, p2, callback))
 end
 
+function UIFacade:closeExpProgressBar()
+	Progress:close()
+end
+
 return UIFacade

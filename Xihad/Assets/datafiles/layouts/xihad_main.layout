@@ -217,6 +217,7 @@
 	
 	<Window name="LevelUp" type="DefaultWindow">
 		<Property name="MousePassThroughEnabled" value="true" />
+		<Property name="Visible" value="false"/>
 		<Window name="MArea" type="DefaultWindow">
 			<Property name="MousePassThroughEnabled" value="true" />
 			<Property name="Size" value="{{0, 168}, {0, 100}}" />
